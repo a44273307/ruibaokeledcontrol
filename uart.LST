@@ -1,0 +1,208 @@
+C51 COMPILER V9.05   UART                                                                  06/02/2023 22:56:24 PAGE 1   
+
+
+C51 COMPILER V9.05, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN uart.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE uart.c LARGE BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /************************************************************************************
+   2          Copyright,  LCE STUDIO  
+   3          程序名称：串口通信（晶振频率18.432MHz）  
+   4          功能说明: 串口1和串口3初始化,字符发送与字符串发送函数,波特率9600bps
+   5          程序版本：1.0 （2014/06）
+   6          阿里旺旺：rob1983
+   7          淘宝店铺：http://shop67639654.taobao.com 
+   8          ************************************************************************************/ 
+   9          
+  10          #include "stc15f2k60s2.h"
+  11          #include "intrins.h"
+  12          #include "uart.h"
+  13          //#include "main.h"
+  14           bit busy4;
+  15           bit busy2;
+  16           bit busy3;
+  17          //bit busy4;
+  18          //void SendData(unsigned char ch);
+  19          //void SendString(char *s);
+  20          //void UartInit(void);
+  21          //void U3SendData(unsigned char ch);
+  22          //void U3SendString(char *s);
+  23          //void U2SendData(unsigned char ch);
+  24          //void U2SendString(char *s);
+  25          
+  26          
+  27          /*----------------------------
+  28          定时器0初始化
+  29          ----------------------------*/
+  30          
+  31          void Timer0Init(void)           //2毫秒@24.000MHz
+  32          {
+  33   1      
+  34   1      
+  35   1              AUXR |= 0x80;           //定时器时钟1T模式
+  36   1              TMOD &= 0xF0;           //设置定时器模式
+  37   1              TL0 = 0X9A;             //设置定时初值
+  38   1              TH0 = 0XA9;             //设置定时初值
+  39   1      //      TL0 = 0x20;             //设置定时初值
+  40   1      //      TH0 = 0xD1;             //设置定时初值
+  41   1              TF0 = 0;                //清除TF0标志
+  42   1              PT0 = 1;
+  43   1              ET0 = 1;
+  44   1              TR0 = 1;                //定时器0开始计时
+  45   1              EA=1;
+  46   1      }
+  47          /*----------------------------
+  48          串口初始化
+  49          ----------------------------*/
+  50          
+  51          void UartInit(void)             //115200@24.000MHz
+  52          {
+  53   1              SCON = 0x50;            //8位数据,可变波特率
+  54   1              AUXR |= 0x40;           //定时器1时钟为Fosc,即1T
+  55   1              AUXR &= 0xFE;           //串口1选择定时器1为波特率发生器
+C51 COMPILER V9.05   UART                                                                  06/02/2023 22:56:24 PAGE 2   
+
+  56   1              TMOD &= 0x0F;           //设定定时器1为16位自动重装方式
+  57   1              TL1 = 0x8F;             //设定定时初值
+  58   1              TH1 = 0xFD;             //设定定时初值
+  59   1              ET1 = 0;                //禁止定时器1中断
+  60   1              TR1 = 1;                //启动定时器1
+  61   1              ES=1;
+  62   1              //      ES=0;//关闭串口0中断
+  63   1              EA=1;
+  64   1      }
+  65          void Uart23Init(void)           //115200@24.000MHz
+  66          {
+  67   1              S3CON = 0x10;           //8位数据,可变波特率
+  68   1              S3CON &= 0xBF;          //串口3选择定时器2为波特率发生器
+  69   1              S2CON = 0x50;           //8位数据,可变波特率
+  70   1              AUXR |= 0x04;           //定时器2时钟为Fosc,即1T
+  71   1              T2L = 0x8F;             //设定定时初值
+  72   1              T2H = 0xFD;             //设定定时初值
+  73   1              AUXR |= 0x10;           //启动定时器2
+  74   1              IE2 |= 0x01;                 //使能串口2中断
+  75   1              IE2 |= 0x08;                 //使能串口3中断
+  76   1              EA=1;
+  77   1              P_SW2 = (P_SW2 & ~2) | (0 & 0x02);      //切换IO
+  78   1              //      //IE2&=0xFE关闭串口2
+  79   1      //      IE2&=0xF7;      //关闭串口3
+  80   1      }
+  81          void Uart4Init(void)            //9600bps@24.000MHz     .串口4
+  82          {
+  83   1              S4CON = 0x10;           //8位数据,可变波特率
+  84   1              S4CON |= 0x40;          //串口4选择定时器4为波特率发生器
+  85   1              T4T3M |= 0x20;          //定时器4时钟为Fosc,即1T
+  86   1              T4L = 0x8F;             //设定定时初值
+  87   1              T4H = 0xFD;             //设定定时初值
+  88   1              T4T3M |= 0x80;          //启动定时器4   
+  89   1              S4CON &= ~(1<<5);       //禁止多机通讯方式
+  90   1              S4CON &= ~(1<<7);       // 8位数据, 1位起始位, 1位停止位, 无校验
+  91   1              IE2   |=  (1<<4);       //允许中断
+  92   1              //IE2&=0xEF关闭串口4
+  93   1              S4CON |=  (1<<4);       //允许接收
+  94   1      //      P_SW2 &= ~4;            //切换到 P0.2 P0.3
+  95   1      }
+  96          
+  97          
+  98          /*----------------------------
+  99          通过串口1发送串口数据
+ 100          ----------------------------*/
+ 101          //void SendData(unsigned char ch)
+ 102          //{
+ 103          //    TI     =   0;  //清零串口发送完成中断请求标志
+ 104          //    SBUF   =   ch;
+ 105          //    while(TI ==0); //等待发送完成
+ 106          //}
+ 107          
+ 108          //void sendbyte1(unsigned char ch)
+ 109          //{
+ 110          //    TI     =   0;  //清零串口发送完成中断请求标志
+ 111          //    SBUF   =   ch;
+ 112          //    while(TI ==0); //等待发送完成
+ 113          //}
+ 114          
+ 115          
+ 116          void sendbyte1(unsigned char ch)
+ 117          {
+C51 COMPILER V9.05   UART                                                                  06/02/2023 22:56:24 PAGE 3   
+
+ 118   1              int i;
+ 119   1              // EA=0;
+ 120   1          TI     =   0;  //清零串口发送完成中断请求标志
+ 121   1          SBUF   =   ch;
+ 122   1          while(TI ==0) //等待发送完成
+ 123   1              {
+ 124   2                      // for(i=0;i<2000; i++){
+ 125   2                      //      if(     TI) break;
+ 126   2                      // }
+ 127   2                      // break;
+ 128   2      
+ 129   2      
+ 130   2      
+ 131   2              }
+ 132   1              EA=1;
+ 133   1      }
+*** WARNING C280 IN LINE 118 OF uart.c: 'i': unreferenced local variable
+ 134          
+ 135          /*----------------------------
+ 136          通过串口2发送串口数据
+ 137          ----------------------------*/
+ 138          void sendbyte2(unsigned char ch)
+ 139          {
+ 140   1         while (busy2);               //等待前面的数据发送完成                      //获取校验位P (PSW.
+ 141   1              busy2 = 1;
+ 142   1          S2BUF = ch;                //写数据到UART2数据寄存器
+ 143   1      }
+ 144          
+ 145          
+ 146          
+ 147          
+ 148          /*----------------------------
+ 149          通过串口3发送串口数据
+ 150          ----------------------------*/
+ 151          void sendbyte3(unsigned char ch)
+ 152          {
+ 153   1          while (busy3);               //等待前面的数据发送完成
+ 154   1                busy3 = 1;
+ 155   1          S3BUF = ch;                //写数据到UART2数据寄存器
+ 156   1      }
+ 157          
+ 158          /*----------------------------
+ 159          通过串口4发送串口数据
+ 160          ----------------------------*/
+ 161          void sendbyte4(unsigned char ch)
+ 162          {
+ 163   1          while (busy4);               //等待前面的数据发送完成
+ 164   1                busy4 = 1;
+ 165   1          S4BUF = ch;                //写数据到UART2数据寄存器
+ 166   1      }
+ 167          int debug=1;
+ 168          void PrintString(const char *puts)
+ 169          {
+ 170   1              if (debug==0)
+ 171   1              {
+ 172   2                      return ;
+ 173   2              }
+ 174   1              
+ 175   1          for (; *puts != 0;  puts++)  sendbyte1(*puts);      //遇到停止符0结束
+ 176   1      }
+ 177          
+ 178          
+C51 COMPILER V9.05   UART                                                                  06/02/2023 22:56:24 PAGE 4   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    177    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

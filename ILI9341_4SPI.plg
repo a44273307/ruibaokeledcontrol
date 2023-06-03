@@ -9,7 +9,7 @@ Project File Date:  06/02/2023
 <h2>Output:</h2>
 Build target 'Target 1'
 compiling modbus.c...
-modbus.c(565): warning C280: 'huart': unreferenced local variable
+modbus.c(576): warning C280: 'huart': unreferenced local variable
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_PRINTF2?MAIN
@@ -35,6 +35,6 @@ linking...
     SEGMENT: ?PR?_LOW4BITSTOONEBYTE?MODBUS
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HEXTOOLEDASC?MODBUS
-Program Size: data=23.4 xdata=915 code=4113
+Program Size: data=23.4 xdata=915 code=4561
 creating hex file from "ILI9341_4SPI"...
 "ILI9341_4SPI" - 0 Error(s), 13 Warning(s).

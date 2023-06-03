@@ -148,13 +148,14 @@ void main()
 	UartInit();
 	
 	Uart4Init();
+	PrintString("system is ok\n");
 	while (1)
 	{
 		delay_ms(2);
 		// printf("0000000000");
 		if(recover==1)
 		{
-			PrintString("000000000\n");
+			
 			jishouokjisuan();
 			recover=0;
 		}

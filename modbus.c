@@ -14,6 +14,8 @@
 
 #include "MODBUS.h"
 #include "uart.h"
+#include "stc15f2k60s2.h"
+#include <string.h>
 // #include "sys.h"
 // #include "delay.h"
 // #include "usart.h"
@@ -135,7 +137,7 @@ void chuankou1jisuuan(unsigned char ans)
 {
         Modbus_Rcv_Buff[Modbus_Rcv_Cnt]=ans;
 	Modbus_Rcv_Cnt++;
-        rectimes=5;
+        rectimes=2;
 }
 int recover=0;
 void time1msjisuan()
@@ -152,11 +154,20 @@ void time1msjisuan()
 
 void Modbus_Cmd(void);
 void Modbus_Exe(void);
+void chuliguankji()
+{
+    if(0==strcmp(Modbus_Rcv_Buff,"@STCISP#"))
+    {
+        IAP_CONTR=0x60;
+    }
+        // @STCISP#
+}
 void jishouokjisuan()
 {
+        chuliguankji();
 	Modbus_Cmd_flag=1;//数据接受完,,进入中断标志位..
 	Modbus_Cmd();     //数据处理,,          
-	Modbus_Exe();     //处理完发...     
+	Modbus_Exe();     //处理完发...    
         Modbus_ClearBuff();//弄完了清理缓冲区     
 }
 

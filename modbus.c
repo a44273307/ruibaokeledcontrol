@@ -140,6 +140,26 @@ void chuankou1jisuuan(unsigned char ans)
         rectimes=2;
 }
 int recover=0;
+int bijiao(const char *a,const char *b)
+{
+        int i;
+        for(i=0;i<6;i++)
+        {
+            if(a[i]!=b[i])
+            {
+                return 0;
+            }
+        }
+        return 1;
+}
+
+void chuliguankji()
+{
+    if(1==bijiao(Modbus_Rcv_Buff,"@STCISP#"))
+    {
+        IAP_CONTR=0x60;
+    }
+}
 void time1msjisuan()
 {
     if(rectimes>0)
@@ -147,6 +167,7 @@ void time1msjisuan()
         rectimes--;
         if(rectimes==0)
         {
+           chuliguankji();
             recover=1;
         }
     }    
@@ -154,17 +175,10 @@ void time1msjisuan()
 
 void Modbus_Cmd(void);
 void Modbus_Exe(void);
-void chuliguankji()
-{
-    if(0==strcmp(Modbus_Rcv_Buff,"@STCISP#"))
-    {
-        IAP_CONTR=0x60;
-    }
-        // @STCISP#
-}
+
 void jishouokjisuan()
 {
-        chuliguankji();
+        
 	Modbus_Cmd_flag=1;//数据接受完,,进入中断标志位..
 	Modbus_Cmd();     //数据处理,,          
 	Modbus_Exe();     //处理完发...    

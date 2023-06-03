@@ -18,12 +18,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+bit busy;
 
 uint weishu1,weishu2,weishu3,weishu4;
-uchar buf1[100];
-uchar buf2[100];
-uchar buf3[100];
-uchar buf4[100];
+
 uint temp1,temp2,temp3,temp4;
 
 
@@ -82,9 +80,14 @@ void printf2(char *puts)
 void io_inint()
 {
 	P0M1 = 0;	P0M0 = 0;	//设置P0.0~P0.7为准双向口
-	P1M1 = 0;	P1M0 = 0;	//设置P1.0~P1.7为准双向口
+	    P1M0 = 0x00;                                //设置P1.0为ADC口
+    P1M1 = 0x80;
+
+
+	// P1M1 = 0;	P1M0 = 0;	//设置P1.0~P1.7为准双向口
 	P2M1 = 0;	P2M0 = 0;	//设置P2.0~P2.7为准双向口 
-	P3M1 = 0;	P3M0 = 0;	//设置P3.0~P3.7为准双向口
+	    P3M0 = 0;
+    P3M1 = 0;
 	P4M1 = 0;	P4M0 = 0;	//设置P4.0~P4.7为准双向口
 	P5M1 = 0;	P5M0 = 0;	//设置P5.0~P5.7为准双向口
 }
@@ -129,14 +132,128 @@ void Delay1ms()		//@24.000MHz
 
 void delay_ms(int m)
 {
-	int x,y;
+	int x;
 	for(x=m;x>0;x--)
 	{
 		Delay1ms();
 	}
 	
 }
+void Start()
+{uint i=0;
+    busy = 1;
+    I2CMSCR = 0x81;                             //发送START命令
+    while (busy&&i<6000)i++;
+}
 
+void SendData(char dat)
+{uint i=0;
+    I2CTXD = dat;                               //写数据到数据缓冲区
+    busy = 1;
+    I2CMSCR = 0x82;                             //发送SEND命令
+    while (busy&&i<6000)i++;
+}
+
+void RecvACK()
+{uint i=0;
+    busy = 1;
+    I2CMSCR = 0x83;                             //发送读ACK命令
+    while (busy&&i<6000)i++;
+}
+
+char RecvData()
+{uint i=0;
+    busy = 1;
+    I2CMSCR = 0x84;                             //发送RECV命令
+    while (busy&&i<6000)i++;
+    return I2CRXD;
+}
+
+void SendACK()
+{uint i=0;
+    I2CMSST = 0x00;                             //设置ACK信号
+    busy = 1;
+    I2CMSCR = 0x85;                             //发送ACK命令
+    while (busy&&i<6000)i++;
+}
+
+void SendNAK()
+{uint i=0;
+    I2CMSST = 0x01;                             //设置NAK信号
+    busy = 1;
+    I2CMSCR = 0x85;                             //发送ACK命令
+    while (busy&&i<6000)i++;
+}
+
+void Stop()
+{uint i=0;
+    busy = 1;
+    I2CMSCR = 0x86;                             //发送STOP命令
+    while (busy&&i<6000)i++;
+}
+void I2C_Isr() interrupt 24
+{
+    _push_(P_SW2);
+    P_SW2 |= 0x80;
+    if (I2CMSST & 0x40)
+    {
+        I2CMSST &= ~0x40;                       //清中断标志
+        busy = 0;
+    }
+    _pop_(P_SW2);
+}
+sbit out1=P1^6;  //
+sbit out2=P3^2;
+void deanyan()
+ {  
+	int sw1=2000;
+	int sw2=3000;
+	Start();                                    //发送起始命令
+    SendData(0xc2);                             //发送设备地址+写命令
+    RecvACK();
+    SendData(0x60);                             //发送存储地址高字节
+    RecvACK();
+    SendData(sw1/16);                             //发送存储地址低字节
+    RecvACK();
+    SendData((sw1%16)<<4);                             //写测试数据1
+    RecvACK();
+    Stop();                                     //发送停止命令
+
+    Start();                                    //发送起始命令
+    SendData(0xc0);                             //发送设备地址+写命令
+    RecvACK();
+    SendData(0x60);                             //发送存储地址高字节
+    RecvACK();
+    SendData(sw2/16);                             //发送存储地址低字节
+    RecvACK();
+    SendData((sw2%16)<<4);                             //写测试数据1
+    RecvACK();
+    Stop();
+		
+		Start();                                    //发送起始命令
+    SendData(0xc2);                             //发送设备地址+写命令
+    RecvACK();
+    SendData(0x60);                             //发送存储地址高字节
+    RecvACK();
+    SendData(sw1/16);                             //发送存储地址低字节
+    RecvACK();
+    SendData((sw1%16)<<4);                             //写测试数据1
+    RecvACK();
+    Stop();                                     //发送停止命令
+
+    Start();                                    //发送起始命令
+    SendData(0xc0);                             //发送设备地址+写命令
+    RecvACK();
+    SendData(0x60);                             //发送存储地址高字节
+    RecvACK();
+    SendData(sw2/16);                             //发送存储地址低字节
+    RecvACK();
+    SendData((sw2%16)<<4);                             //写测试数据1
+    RecvACK();
+    Stop();
+	
+		  
+ }
 void main()		                                       
 {
 	
@@ -149,13 +266,22 @@ void main()
 	
 	Uart4Init();
 	PrintString("system is ok\n");
+	P_SW2 = 0x80;
+    I2CCFG = 0xe0;                              //使能I2C主机模式
+    I2CMSST = 0x00;
+	 EA = 1;
+	out2=1;
+	delay_ms(10);
+	Modbus_ClearBuff();
+delay_ms(200);
+deanyan();
 	while (1)
 	{
 		delay_ms(2);
 		// printf("0000000000");
 		if(recover==1)
 		{
-			
+			// deanyan();
 			jishouokjisuan();
 			recover=0;
 		}
@@ -170,12 +296,6 @@ uint time,lv_bo;
 void Timer0() interrupt 1
 {
 	time1msjisuan();
-}
-char buffxxx[100]="";
-char buffweizhi=0;
-void dealrecI(char c)
-{
-	
 }
 void UARTInterrupt(void) interrupt 4
 {

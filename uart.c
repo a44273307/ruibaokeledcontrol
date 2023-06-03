@@ -54,7 +54,7 @@ void UartInit(void)		//115200@24.000MHz
 	AUXR |= 0x40;		//定时器1时钟为Fosc,即1T
 	AUXR &= 0xFE;		//串口1选择定时器1为波特率发生器
 	TMOD &= 0x0F;		//设定定时器1为16位自动重装方式
-	TL1 = 0xCC;			//设置定时初始值
+	TL1 = 0xE8;			//设置定时初始值
 	TH1 = 0xFF;			//设置定时初始值
 	ET1 = 0;		//禁止定时器1中断
 	TR1 = 1;		//启动定时器1
@@ -115,7 +115,6 @@ void Uart4Init(void)		//9600bps@24.000MHz	.串口4
 
 void sendbyte1(unsigned char ch)
 {
-	int i;
 	// EA=0;
     TI     =   0;  //清零串口发送完成中断请求标志
     SBUF   =   ch;

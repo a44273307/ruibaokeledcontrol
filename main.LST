@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 1   
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   53          sbit x6 = P0^2;
   54          sbit x7 = P0^3; 
   55          
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 2   
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 2   
 
   56          sbit x8 = P0^4; 
   57          sbit x9 = P5^2;
@@ -91,8 +91,8 @@ line level    source
   80          void io_inint()
   81          {
   82   1              P0M1 = 0;       P0M0 = 0;       //设置P0.0~P0.7为准双向口
-  83   1                  P1M0 = 0x00;                                //设置P1.0为ADC口
-  84   1          P1M1 = 0x80;
+  83   1                  // P1M0 = 0x00;                                //设置P1.0为ADC口
+  84   1          // P1M1 = 0x80;
   85   1      
   86   1      
   87   1              // P1M1 = 0;    P1M0 = 0;       //设置P1.0~P1.7为准双向口
@@ -126,7 +126,7 @@ line level    source
  115   1              for(i=0;i<10;i++)
  116   1              {
  117   2                      sprintf(datatmp,"x%d %d\n",i,xinget(i));
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 3   
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 3   
 
  118   2                      PrintString(datatmp);
  119   2              }
@@ -156,7 +156,7 @@ line level    source
  143          {uint i=0;
  144   1          busy = 1;
  145   1          I2CMSCR = 0x81;                             //发送START命令
- 146   1          while (busy&&i<6000)i++;
+ 146   1          while (busy)i++;
  147   1      }
  148          
  149          void SendData(char dat)
@@ -164,21 +164,21 @@ line level    source
  151   1          I2CTXD = dat;                               //写数据到数据缓冲区
  152   1          busy = 1;
  153   1          I2CMSCR = 0x82;                             //发送SEND命令
- 154   1          while (busy&&i<6000)i++;
+ 154   1          while (busy)i++;
  155   1      }
  156          
  157          void RecvACK()
  158          {uint i=0;
  159   1          busy = 1;
  160   1          I2CMSCR = 0x83;                             //发送读ACK命令
- 161   1          while (busy&&i<6000)i++;
+ 161   1          while (busy)i++;
  162   1      }
  163          
  164          char RecvData()
  165          {uint i=0;
  166   1          busy = 1;
  167   1          I2CMSCR = 0x84;                             //发送RECV命令
- 168   1          while (busy&&i<6000)i++;
+ 168   1          while (busy)i++;
  169   1          return I2CRXD;
  170   1      }
  171          
@@ -187,24 +187,24 @@ line level    source
  174   1          I2CMSST = 0x00;                             //设置ACK信号
  175   1          busy = 1;
  176   1          I2CMSCR = 0x85;                             //发送ACK命令
- 177   1          while (busy&&i<6000)i++;
+ 177   1          while (busy)i++;
  178   1      }
  179          
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 4   
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 4   
 
  180          void SendNAK()
  181          {uint i=0;
  182   1          I2CMSST = 0x01;                             //设置NAK信号
  183   1          busy = 1;
  184   1          I2CMSCR = 0x85;                             //发送ACK命令
- 185   1          while (busy&&i<6000)i++;
+ 185   1          while (busy)i++;
  186   1      }
  187          
  188          void Stop()
  189          {uint i=0;
  190   1          busy = 1;
  191   1          I2CMSCR = 0x86;                             //发送STOP命令
- 192   1          while (busy&&i<6000)i++;
+ 192   1          while (busy)i++;
  193   1      }
  194          void I2C_Isr() interrupt 24
  195          {
@@ -219,179 +219,198 @@ line level    source
  204   1      }
  205          sbit out1=P1^6;  //
  206          sbit out2=P3^2;
- 207          void deanyan()
- 208           {  
- 209   1              int sw1=2000;
- 210   1              int sw2=3000;
- 211   1              Start();                                    //发送起始命令
- 212   1          SendData(0xc2);                             //发送设备地址+写命令
- 213   1          RecvACK();
- 214   1          SendData(0x60);                             //发送存储地址高字节
- 215   1          RecvACK();
- 216   1          SendData(sw1/16);                             //发送存储地址低字节
- 217   1          RecvACK();
- 218   1          SendData((sw1%16)<<4);                             //写测试数据1
- 219   1          RecvACK();
- 220   1          Stop();                                     //发送停止命令
- 221   1      
- 222   1          Start();                                    //发送起始命令
- 223   1          SendData(0xc0);                             //发送设备地址+写命令
- 224   1          RecvACK();
- 225   1          SendData(0x60);                             //发送存储地址高字节
- 226   1          RecvACK();
- 227   1          SendData(sw2/16);                             //发送存储地址低字节
- 228   1          RecvACK();
- 229   1          SendData((sw2%16)<<4);                             //写测试数据1
- 230   1          RecvACK();
- 231   1          Stop();
- 232   1                      
- 233   1                      Start();                                    //发送起始命令
- 234   1          SendData(0xc2);                             //发送设备地址+写命令
- 235   1          RecvACK();
- 236   1          SendData(0x60);                             //发送存储地址高字节
- 237   1          RecvACK();
- 238   1          SendData(sw1/16);                             //发送存储地址低字节
- 239   1          RecvACK();
- 240   1          SendData((sw1%16)<<4);                             //写测试数据1
- 241   1          RecvACK();
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 5   
+ 207          
+ 208          sbit led1 = P3 ^ 7;
+ 209          sbit led2 = P3 ^ 6;
+ 210          
+ 211          
+ 212          void deanyan()
+ 213           {  
+ 214   1              uint sw1=2000;
+ 215   1              uint sw2=3000;
+ 216   1              Start();        // 发送起始命令
+ 217   1        SendData(0xc2); // 发送设备地址+写命令
+ 218   1        RecvACK();
+ 219   1        SendData(0x60); // 发送存储地址高字节
+ 220   1        RecvACK();
+ 221   1        SendData(sw1 / 16); // 发送存储地址低字节
+ 222   1        RecvACK();
+ 223   1        SendData((sw1 % 16) << 4); // 写测试数据1
+ 224   1        RecvACK();
+ 225   1        Stop(); // 发送停止命令
+ 226   1      
+ 227   1        Start();        // 发送起始命令
+ 228   1        SendData(0xc0); // 发送设备地址+写命令
+ 229   1        RecvACK();
+ 230   1        SendData(0x60); // 发送存储地址高字节
+ 231   1        RecvACK();
+ 232   1        SendData(sw2 / 16); // 发送存储地址低字节
+ 233   1        RecvACK();
+ 234   1        SendData((sw2 % 16) << 4); // 写测试数据1
+ 235   1        RecvACK();
+ 236   1        Stop();
+ 237   1      
+ 238   1        Start();        // 发送起始命令
+ 239   1        SendData(0xc2); // 发送设备地址+写命令
+ 240   1        RecvACK();
+ 241   1        SendData(0x60); // 发送存储地址高字节
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 5   
 
- 242   1          Stop();                                     //发送停止命令
- 243   1      
- 244   1          Start();                                    //发送起始命令
- 245   1          SendData(0xc0);                             //发送设备地址+写命令
- 246   1          RecvACK();
- 247   1          SendData(0x60);                             //发送存储地址高字节
- 248   1          RecvACK();
- 249   1          SendData(sw2/16);                             //发送存储地址低字节
- 250   1          RecvACK();
- 251   1          SendData((sw2%16)<<4);                             //写测试数据1
- 252   1          RecvACK();
- 253   1          Stop();
- 254   1              
- 255   1                        
- 256   1       }
- 257          void main()                                                    
- 258          {
+ 242   1        RecvACK();
+ 243   1        SendData(sw1 / 16); // 发送存储地址低字节
+ 244   1        RecvACK();
+ 245   1        SendData((sw1 % 16) << 4); // 写测试数据1
+ 246   1        RecvACK();
+ 247   1        Stop(); // 发送停止命令
+ 248   1      
+ 249   1        Start();        // 发送起始命令
+ 250   1        SendData(0xc0); // 发送设备地址+写命令
+ 251   1        RecvACK();
+ 252   1        SendData(0x60); // 发送存储地址高字节
+ 253   1        RecvACK();
+ 254   1        SendData(sw2 / 16); // 发送存储地址低字节
+ 255   1        RecvACK();
+ 256   1        SendData((sw2 % 16) << 4); // 写测试数据1
+ 257   1        RecvACK();
+ 258   1        Stop();
  259   1              
- 260   1              io_inint();
- 261   1              Uart23Init();
- 262   1              
- 263   1              
- 264   1              Timer0Init();
- 265   1              UartInit();
- 266   1              
- 267   1              Uart4Init();
- 268   1              PrintString("system is ok\n");
- 269   1              P_SW2 = 0x80;
- 270   1          I2CCFG = 0xe0;                              //使能I2C主机模式
- 271   1          I2CMSST = 0x00;
- 272   1               EA = 1;
- 273   1              out2=1;
- 274   1              delay_ms(10);
- 275   1              Modbus_ClearBuff();
- 276   1      delay_ms(200);
- 277   1      deanyan();
- 278   1              while (1)
- 279   1              {
- 280   2                      delay_ms(2);
- 281   2                      // printf("0000000000");
- 282   2                      if(recover==1)
- 283   2                      {
- 284   3                              // deanyan();
- 285   3                              jishouokjisuan();
- 286   3                              recover=0;
- 287   3                      }
- 288   2              }
- 289   1      }
- 290                   
- 291                   
- 292          
- 293                   
- 294                   
- 295          uint time,lv_bo;
- 296          void Timer0() interrupt 1
- 297          {
- 298   1              time1msjisuan();
- 299   1      }
- 300          void UARTInterrupt(void) interrupt 4
- 301          {
- 302   1              unsigned char ans;
- 303   1              if (RI)
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 6   
+ 260   1                        
+ 261   1       }
+ 262          void main()                                                    
+ 263          {
+ 264   1              
+ 265   1              io_inint();
+ 266   1              Uart23Init();
+ 267   1              
+ 268   1              
+ 269   1              Timer0Init();
+ 270   1              UartInit();
+ 271   1              
+ 272   1              Uart4Init();
+ 273   1              PrintString("system is ok\n");
+ 274   1              P_SW2 = 0x80;
+ 275   1          I2CCFG = 0xe0;                              //使能I2C主机模式
+ 276   1          I2CMSST = 0x00;
+ 277   1               EA = 1;
+ 278   1              out2=1;
+ 279   1              out1 = 1;
+ 280   1              delay_ms(10);
+ 281   1              Modbus_ClearBuff();
+ 282   1      
+ 283   1              while (1)
+ 284   1              {
+ 285   2                      delay_ms(200);
+ 286   2                          //  en=1;
+ 287   2            led1 = 0;
+ 288   2            led2 = 1;
+ 289   2            deanyan();
+ 290   2      
+ 291   2            led1 = 1;
+ 292   2            led2 = 0;
+ 293   2      
+ 294   2                      PrintString("xxx is ok\n");
+ 295   2              }
+ 296   1      
+ 297   1              while (1)
+ 298   1              {
+ 299   2                      delay_ms(2);
+ 300   2                      // printf("0000000000");
+ 301   2                      if(recover==1)
+ 302   2                      {
+ 303   3                              // deanyan();
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 6   
 
- 304   1              {
- 305   2                      RI = 0;
- 306   2                      ans=SBUF;
- 307   2                      chuankou1jisuuan(ans);
- 308   2              }
- 309   1              else
- 310   1              {
- 311   2                      TI = 0;
- 312   2              }
- 313   1              if (TI) //发送中断..
- 314   1              {
- 315   2                      TI = 0;
- 316   2              }
- 317   1      }
- 318          
- 319          void uart2(void ) interrupt 8 
+ 304   3                              jishouokjisuan();
+ 305   3                              recover=0;
+ 306   3                      }
+ 307   2              }
+ 308   1      }
+ 309                   
+ 310                   
+ 311          
+ 312                   
+ 313                   
+ 314          uint time,lv_bo;
+ 315          void Timer0() interrupt 1
+ 316          {
+ 317   1              time1msjisuan();
+ 318   1      }
+ 319          void UARTInterrupt(void) interrupt 4
  320          {
- 321   1        if (S2CON & S2RI)
- 322   1              {
- 323   2                      S2CON &= ~S2RI;         
- 324   2                      temp2 = S2BUF;
- 325   2              }
- 326   1        if (S2CON & S2TI)
- 327   1          {
- 328   2                              //y1=0;
- 329   2              S2CON &= ~S2TI;         //清除S2TI位
- 330   2              busy2 = 0;               //清忙标志
- 331   2          }  
- 332   1      }
- 333          
- 334            
- 335          
- 336          
- 337          void Uart3() interrupt 17 using 1
- 338          {
- 339   1          if (S3CON & S3RI)
- 340   1          {
- 341   2              S3CON &= ~S3RI;         //??S3RI?
- 342   2              temp3 = S3BUF;
- 343   2                                      
- 344   2         }
- 345   1      if (S3CON & S3TI)
+ 321   1              unsigned char ans;
+ 322   1              if (RI)
+ 323   1              {
+ 324   2                      RI = 0;
+ 325   2                      ans=SBUF;
+ 326   2                      chuankou1jisuuan(ans);
+ 327   2              }
+ 328   1              else
+ 329   1              {
+ 330   2                      TI = 0;
+ 331   2              }
+ 332   1              if (TI) //发送中断..
+ 333   1              {
+ 334   2                      TI = 0;
+ 335   2              }
+ 336   1      }
+ 337          
+ 338          void uart2(void ) interrupt 8 
+ 339          {
+ 340   1        if (S2CON & S2RI)
+ 341   1              {
+ 342   2                      S2CON &= ~S2RI;         
+ 343   2                      temp2 = S2BUF;
+ 344   2              }
+ 345   1        if (S2CON & S2TI)
  346   1          {
- 347   2              S3CON &= ~S3TI;         //清除S3TI位
- 348   2              busy3 = 0;               //清忙标志
- 349   2          }
- 350   1      }
- 351          
- 352          void Uart4() interrupt 18 
- 353          {
- 354   1          if (S4CON & S4RI)
- 355   1          {
- 356   2              S4CON &= ~S4RI;         //??S4RI?
- 357   2              temp4=S4BUF;
- 358   2         }
- 359   1      if(TI4)
- 360   1              {
- 361   2                      CLR_TI4();
- 362   2                      busy4 = 0;               //清忙标志
- 363   2              }
- 364   1      }
- 365          
-C51 COMPILER V9.05   MAIN                                                                  06/03/2023 21:26:09 PAGE 7   
+ 347   2                              //y1=0;
+ 348   2              S2CON &= ~S2TI;         //清除S2TI位
+ 349   2              busy2 = 0;               //清忙标志
+ 350   2          }  
+ 351   1      }
+ 352          
+ 353            
+ 354          
+ 355          
+ 356          void Uart3() interrupt 17 using 1
+ 357          {
+ 358   1          if (S3CON & S3RI)
+ 359   1          {
+ 360   2              S3CON &= ~S3RI;         //??S3RI?
+ 361   2              temp3 = S3BUF;
+ 362   2                                      
+ 363   2         }
+ 364   1      if (S3CON & S3TI)
+ 365   1          {
+C51 COMPILER V9.05   MAIN                                                                  06/03/2023 22:13:12 PAGE 7   
 
- 366          
- 367          
+ 366   2              S3CON &= ~S3TI;         //清除S3TI位
+ 367   2              busy3 = 0;               //清忙标志
+ 368   2          }
+ 369   1      }
+ 370          
+ 371          void Uart4() interrupt 18 
+ 372          {
+ 373   1          if (S4CON & S4RI)
+ 374   1          {
+ 375   2              S4CON &= ~S4RI;         //??S4RI?
+ 376   2              temp4=S4BUF;
+ 377   2         }
+ 378   1      if(TI4)
+ 379   1              {
+ 380   2                      CLR_TI4();
+ 381   2                      busy4 = 0;               //清忙标志
+ 382   2              }
+ 383   1      }
+ 384          
+ 385          
+ 386          
 *** WARNING C291 IN LINE 110 OF main.c: not every exit path returns a value
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1123    ----
-   CONSTANT SIZE    =     22    ----
+   CODE SIZE        =   1023    ----
+   CONSTANT SIZE    =     33    ----
    XDATA SIZE       =     20      17
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

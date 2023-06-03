@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 1   
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE MODBUS
@@ -62,7 +62,7 @@ line level    source
   52          //º¯Êý¹¦ÄÜ£ºÖðÎ»¼ÆËã·¨CRC16Ð£Ñé£¬ÔÚModbusÖÐCRC½á¹ûÒª½øÐÐ¸ßµÍ×Ö½Ú½»»»£¬¼´µÍ×Ö½ÚÔÚÇ°£¬¸ß×Ö½ÚÔÚºó
   53          //Èë¿Ú²ÎÊý£ºpuchMsgÊÇÒª½øÐÐCRCÐ£ÑéµÄÏûÏ¢£»usDataLenÊÇÏûÏ¢ÖÐ×Ö½ÚÊý
   54          //³ö¿Ú²ÎÊý£º¼ÆËã³öÀ´µÄCRCÐ£ÑéÂë£¬16Î»³¤¶È
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 2   
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 2   
 
   55          //×îºóÐÞ¸Ä£º2015.11.29
   56          //±¸×¢£º
@@ -126,7 +126,7 @@ line level    source
  114   1              Modbus_Timeout_Cnt = 0;
  115   1              Modbus_Rcv_Cnt = 0;
  116   1              Modbus_Rcv_flag = 0;
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 3   
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 3   
 
  117   1              Modbus_Cmd_flag = 0;
  118   1              Modbus_Exe_flag = 0;
@@ -173,513 +173,512 @@ line level    source
  159   1          {
  160   2              IAP_CONTR=0x60;
  161   2          }
- 162   1              // @STCISP#
- 163   1      }
- 164          void time1msjisuan()
- 165          {
- 166   1          if(rectimes>0)
- 167   1          {
- 168   2              rectimes--;
- 169   2              if(rectimes==0)
- 170   2              {
- 171   3                 chuliguankji();
- 172   3                  recover=1;
- 173   3              }
- 174   2          }    
- 175   1      }
- 176          
- 177          void Modbus_Cmd(void);
- 178          void Modbus_Exe(void);
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 4   
+ 162   1      }
+ 163          void time1msjisuan()
+ 164          {
+ 165   1          if(rectimes>0)
+ 166   1          {
+ 167   2              rectimes--;
+ 168   2              if(rectimes==0)
+ 169   2              {
+ 170   3                 chuliguankji();
+ 171   3                  recover=1;
+ 172   3              }
+ 173   2          }    
+ 174   1      }
+ 175          
+ 176          void Modbus_Cmd(void);
+ 177          void Modbus_Exe(void);
+ 178          
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 4   
 
- 179          
- 180          void jishouokjisuan()
- 181          {
- 182   1              
- 183   1              Modbus_Cmd_flag=1;//Êý¾Ý½ÓÊÜÍê,,½øÈëÖÐ¶Ï±êÖ¾Î»..
- 184   1              Modbus_Cmd();     //Êý¾Ý´¦Àí,,          
- 185   1              Modbus_Exe();     //´¦ÀíÍê·¢...    
- 186   1              Modbus_ClearBuff();//ÅªÍêÁËÇåÀí»º³åÇø     
- 187   1      }
- 188          
- 189          char dmatime=0;
- 190          void DMA1_Channel2_IRQHandler(void)
- 191          {
- 192   1      
- 193   1      }
- 194          //----------------------------------------------------------------------------//
- 195          //º¯Êý¹¦ÄÜ£ºModbusÃüÁî½âÎöº¯Êý
- 196          //Èë¿Ú²ÎÊý£ºÎÞ
- 197          //³ö¿Ú²ÎÊý£ºÎÞ
- 198          //×îºóÐÞ¸Ä£º2015.12.11
- 199          //±¸×¢£º
- 200          //----------------------------------------------------------------------------//
- 201          void Modbus_Cmd(void)
- 202          {
- 203   1              uint8_t Modbus_CRC_Rcv_Hi;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë¸ß×Ö½Ú
- 204   1              uint8_t Modbus_CRC_Rcv_Lo;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂëµÍ×Ö½Ú
- 205   1              uint16_t Modbus_CRC_Rcv;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë
- 206   1              uint16_t Modbus_CRC_Cal;                //¸ù¾Ý½ÓÊÕµ½µÄÊý¾Ý¼ÆËã³öÀ´µÄCRCÖµ
- 207   1              
- 208   1              //----------------------------------------------------------//
- 209   1              //¿ªÊ¼ÃüÁî½âÎö
- 210   1              //----------------------------------------------------------//
- 211   1              if(Modbus_Cmd_flag == 1)
- 212   1              {
- 213   2                      if(Modbus_Rcv_Cnt > 4)                //Èç¹û½ÓÊÕµ½µÄÒ»Ö¡µÄ×Ö½ÚÊý´óÓÚ4 Ê×ÏÈÈ·±£Ö¡µÄ³¤¶ÈÔÚÕý
+ 179          void jishouokjisuan()
+ 180          {
+ 181   1              
+ 182   1              Modbus_Cmd_flag=1;//Êý¾Ý½ÓÊÜÍê,,½øÈëÖÐ¶Ï±êÖ¾Î»..
+ 183   1              Modbus_Cmd();     //Êý¾Ý´¦Àí,,          
+ 184   1              Modbus_Exe();     //´¦ÀíÍê·¢...    
+ 185   1              Modbus_ClearBuff();//ÅªÍêÁËÇåÀí»º³åÇø     
+ 186   1      }
+ 187          
+ 188          char dmatime=0;
+ 189          void DMA1_Channel2_IRQHandler(void)
+ 190          {
+ 191   1      
+ 192   1      }
+ 193          //----------------------------------------------------------------------------//
+ 194          //º¯Êý¹¦ÄÜ£ºModbusÃüÁî½âÎöº¯Êý
+ 195          //Èë¿Ú²ÎÊý£ºÎÞ
+ 196          //³ö¿Ú²ÎÊý£ºÎÞ
+ 197          //×îºóÐÞ¸Ä£º2015.12.11
+ 198          //±¸×¢£º
+ 199          //----------------------------------------------------------------------------//
+ 200          void Modbus_Cmd(void)
+ 201          {
+ 202   1              uint8_t Modbus_CRC_Rcv_Hi;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë¸ß×Ö½Ú
+ 203   1              uint8_t Modbus_CRC_Rcv_Lo;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂëµÍ×Ö½Ú
+ 204   1              uint16_t Modbus_CRC_Rcv;                //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë
+ 205   1              uint16_t Modbus_CRC_Cal;                //¸ù¾Ý½ÓÊÕµ½µÄÊý¾Ý¼ÆËã³öÀ´µÄCRCÖµ
+ 206   1              
+ 207   1              //----------------------------------------------------------//
+ 208   1              //¿ªÊ¼ÃüÁî½âÎö
+ 209   1              //----------------------------------------------------------//
+ 210   1              if(Modbus_Cmd_flag == 1)
+ 211   1              {
+ 212   2                      if(Modbus_Rcv_Cnt > 4)                //Èç¹û½ÓÊÕµ½µÄÒ»Ö¡µÄ×Ö½ÚÊý´óÓÚ4 Ê×ÏÈÈ·±£Ö¡µÄ³¤¶ÈÔÚÕý
              -³£·¶Î§
- 214   2                      {
- 215   3                              Modbus_CRC_Rcv_Lo = Modbus_Rcv_Buff[Modbus_Rcv_Cnt - 2];                          
+ 213   2                      {
+ 214   3                              Modbus_CRC_Rcv_Lo = Modbus_Rcv_Buff[Modbus_Rcv_Cnt - 2];                          
              -              //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂëµÍ×Ö½Ú
- 216   3                              Modbus_CRC_Rcv_Hi = Modbus_Rcv_Buff[Modbus_Rcv_Cnt - 1];                          
+ 215   3                              Modbus_CRC_Rcv_Hi = Modbus_Rcv_Buff[Modbus_Rcv_Cnt - 1];                          
              -              //½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë¸ß×Ö½Ú
- 217   3                              Modbus_CRC_Rcv = (uint16_t)(Modbus_CRC_Rcv_Lo << 8 | Modbus_CRC_Rcv_Hi);        //
+ 216   3                              Modbus_CRC_Rcv = (uint16_t)(Modbus_CRC_Rcv_Lo << 8 | Modbus_CRC_Rcv_Hi);        //
              -½ÓÊÕµ½µÄModbusCRCÐ£ÑéÂë£¨16Î»£©
- 218   3                              Modbus_CRC_Cal = Modbus_CRC16(Modbus_Rcv_Buff, Modbus_Rcv_Cnt - 2);               
+ 217   3                              Modbus_CRC_Cal = Modbus_CRC16(Modbus_Rcv_Buff, Modbus_Rcv_Cnt - 2);               
              -         //¸ù¾Ý½ÓÊÕµ½µÄÊý¾Ý¼ÆËãCRCÖµ
- 219   3                              if(Modbus_CRC_Cal == Modbus_CRC_Rcv)                //Èç¹û¼ÆËãµÄCRCÖµÓë½ÓÊÜµÄCRCÖµ
+ 218   3                              if(Modbus_CRC_Cal == Modbus_CRC_Rcv)                //Èç¹û¼ÆËãµÄCRCÖµÓë½ÓÊÜµÄCRCÖµ
              -ÏàµÈ
- 220   3                              {
- 221   4                                      //USART_SendByte(USART1, 0xAC);
- 222   4                                      if(Slave_Address == Modbus_Rcv_Buff[0])        //Èç¹ûÊÇ±¾»úµØÖ·
- 223   4                                      {
- 224   5                                              switch(Modbus_Rcv_Buff[1])                        //ÓÃswitch·ÖÖ§Óï
+ 219   3                              {
+ 220   4                                      //USART_SendByte(USART1, 0xAC);
+ 221   4                                      if(Slave_Address == Modbus_Rcv_Buff[0])        //Èç¹ûÊÇ±¾»úµØÖ·
+ 222   4                                      {
+ 223   5                                              switch(Modbus_Rcv_Buff[1])                        //ÓÃswitch·ÖÖ§Óï
              -¾äÀ´È·¶¨¹¦ÄÜ
- 225   5                                              {
- 226   6                                              case Modbus_ReadHoldingReg:                                       
+ 224   5                                              {
+ 225   6                                              case Modbus_ReadHoldingReg:                                       
              -         //Èç¹ûÊÇ¶Á±£´æ¼Ä´æÆ÷
- 227   6                                                      Modbus_Function = Modbus_ReadHoldingReg;        //½«´ÓÕ¾Éè
+ 226   6                                                      Modbus_Function = Modbus_ReadHoldingReg;        //½«´ÓÕ¾Éè
              -±¸ÐèÖ´ÐÐµÄ¹¦ÄÜ¸³ÖµÎª¶Á±£´æ¼Ä´æÆ÷
- 228   6                                                      Modbus_Exe_flag = 1;                                      
+ 227   6                                                      Modbus_Exe_flag = 1;                                      
              -          //Éè±¸½øÈëÃüÁîÖ´ÐÐ×´Ì¬
- 229   6                                                      break;                                                    
+ 228   6                                                      break;                                                    
              -                            //Ìø³ö·ÖÖ§Óï¾ä
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 5   
+ 229   6                                                      
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 5   
 
- 230   6                                                      
- 231   6                                              case Modbus_WriteSingleReg:
- 232   6                                                      Modbus_Function = Modbus_WriteSingleReg;        //½«´ÓÕ¾Éè
+ 230   6                                              case Modbus_WriteSingleReg:
+ 231   6                                                      Modbus_Function = Modbus_WriteSingleReg;        //½«´ÓÕ¾Éè
              -±¸ÐèÖ´ÐÐµÄ¹¦ÄÜ¸³ÖµÎªÐ´µ¥¸ö¼Ä´æÆ÷
- 233   6                                                      Modbus_Exe_flag = 1;                                      
+ 232   6                                                      Modbus_Exe_flag = 1;                                      
              -          //Éè±¸½øÈëÃüÁîÖ´ÐÐ×´Ì¬
- 234   6                                                      break;                                                    
+ 233   6                                                      break;                                                    
              -                            //Ìø³ö·ÖÖ§Óï¾ä
- 235   6                                              
- 236   6                                              case Modbus_WriteMultipleReg:
- 237   6                                                      Modbus_Function = Modbus_WriteMultipleReg;        //½«´ÓÕ¾
+ 234   6                                              
+ 235   6                                              case Modbus_WriteMultipleReg:
+ 236   6                                                      Modbus_Function = Modbus_WriteMultipleReg;        //½«´ÓÕ¾
              -Éè±¸ÐèÖ´ÐÐµÄ¹¦ÄÜ¸³ÖµÎªÐ´¶à¸ö¼Ä´æÆ÷
- 238   6                                                      Modbus_Exe_flag = 1;                                      
+ 237   6                                                      Modbus_Exe_flag = 1;                                      
              -          //Éè±¸½øÈëÃüÁîÖ´ÐÐ×´Ì¬
- 239   6                                                      break;                                                    
+ 238   6                                                      break;                                                    
              -                            //Ìø³ö·ÖÖ§Óï¾ä
- 240   6                                                      
- 241   6                                              default:
- 242   6                                                      Modbus_ErrorHandling(0x01);                //ËùÓÐ¹¦ÄÜÂë¶¼²
+ 239   6                                                      
+ 240   6                                              default:
+ 241   6                                                      Modbus_ErrorHandling(0x01);                //ËùÓÐ¹¦ÄÜÂë¶¼²
              -»·ûºÏ£¬Ôò·µ»Ø¹¦ÄÜÂë´íÎóÒì³£ÏìÓ¦±¨ÎÄ
- 243   6                                                      return;
- 244   6                                              }
- 245   5                                      }
- 246   4                                      
- 247   4                                      else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 248   4                                      {
- 249   5                                              Modbus_ClearBuff();
- 250   5                                      }
- 251   4                              }
- 252   3                              
- 253   3                              else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 254   3                              {
- 255   4                                      Modbus_ClearBuff();
- 256   4                              }
- 257   3                              
- 258   3                      }
- 259   2                      
- 260   2                      else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 261   2                      {
- 262   3                              Modbus_ClearBuff();
- 263   3                      }
- 264   2                      
- 265   2                      Modbus_Cmd_flag = 0;                //Éè±¸ÍË³öÃüÁî½âÎö×´Ì¬±êÖ¾
- 266   2              }
- 267   1      }
- 268          
- 269          //----------------------------------------------------------------------------//
- 270          //º¯Êý¹¦ÄÜ£ºModbusÃüÁîÖ´ÐÐº¯Êý
- 271          //Èë¿Ú²ÎÊý£ºÎÞ
- 272          //³ö¿Ú²ÎÊý£ºÎÞ
- 273          //×îºóÐÞ¸Ä£º2015.12.6
- 274          //±¸×¢£º
- 275          //----------------------------------------------------------------------------//
- 276          void Modbus_Exe(void)
- 277          {
- 278   1              if(Modbus_Exe_flag == 1)
- 279   1              {
- 280   2                      switch(Modbus_Function)
- 281   2                      {
- 282   3                      case Modbus_ReadHoldingReg:
- 283   3                              Modbus_ReadHoldingReg_Process();
- 284   3                              break;
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 6   
+ 242   6                                                      return;
+ 243   6                                              }
+ 244   5                                      }
+ 245   4                                      
+ 246   4                                      else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 247   4                                      {
+ 248   5                                              Modbus_ClearBuff();
+ 249   5                                      }
+ 250   4                              }
+ 251   3                              
+ 252   3                              else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 253   3                              {
+ 254   4                                      Modbus_ClearBuff();
+ 255   4                              }
+ 256   3                              
+ 257   3                      }
+ 258   2                      
+ 259   2                      else                //·ñÔòÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 260   2                      {
+ 261   3                              Modbus_ClearBuff();
+ 262   3                      }
+ 263   2                      
+ 264   2                      Modbus_Cmd_flag = 0;                //Éè±¸ÍË³öÃüÁî½âÎö×´Ì¬±êÖ¾
+ 265   2              }
+ 266   1      }
+ 267          
+ 268          //----------------------------------------------------------------------------//
+ 269          //º¯Êý¹¦ÄÜ£ºModbusÃüÁîÖ´ÐÐº¯Êý
+ 270          //Èë¿Ú²ÎÊý£ºÎÞ
+ 271          //³ö¿Ú²ÎÊý£ºÎÞ
+ 272          //×îºóÐÞ¸Ä£º2015.12.6
+ 273          //±¸×¢£º
+ 274          //----------------------------------------------------------------------------//
+ 275          void Modbus_Exe(void)
+ 276          {
+ 277   1              if(Modbus_Exe_flag == 1)
+ 278   1              {
+ 279   2                      switch(Modbus_Function)
+ 280   2                      {
+ 281   3                      case Modbus_ReadHoldingReg:
+ 282   3                              Modbus_ReadHoldingReg_Process();
+ 283   3                              break;
+ 284   3                              
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 6   
 
- 285   3                              
- 286   3                      case Modbus_WriteSingleReg:
- 287   3                              Modbus_WriteSingleReg_Process();
- 288   3                              break;
- 289   3                      
- 290   3                      case Modbus_WriteMultipleReg:
- 291   3                              Modbus_WriteMultipleReg_Process();
- 292   3                              break;
- 293   3                              
- 294   3                      }
- 295   2                      Modbus_Exe_flag = 0;
- 296   2              }
- 297   1      }
- 298          
- 299          //----------------------------------------------------------------------------//
- 300          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x03£¬¶Á±£³Ö¼Ä´æÆ÷
- 301          //Èë¿Ú²ÎÊý£ºÎÞ
- 302          //³ö¿Ú²ÎÊý£ºÎÞ
- 303          //×îºóÐÞ¸Ä£º2015.12.5
- 304          //±¸×¢£º
- 305          //----------------------------------------------------------------------------//
- 306          void Modbus_ReadHoldingReg_Process(void)
- 307          {
- 308   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
- 309   1              uint16_t StartAddress_Reg;        //Òª¶ÁÈ¡µÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
- 310   1              uint16_t Num_Reg;                        //Òª¶ÁÈ¡µÄ¼Ä´æÆ÷µÄÊýÁ¿
- 311   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
- 312   1              uint16_t i, j;                                //ÁÙÊ±±äÁ¿
- 313   1              
- 314   1              StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½Òª¶Á
+ 285   3                      case Modbus_WriteSingleReg:
+ 286   3                              Modbus_WriteSingleReg_Process();
+ 287   3                              break;
+ 288   3                      
+ 289   3                      case Modbus_WriteMultipleReg:
+ 290   3                              Modbus_WriteMultipleReg_Process();
+ 291   3                              break;
+ 292   3                              
+ 293   3                      }
+ 294   2                      Modbus_Exe_flag = 0;
+ 295   2              }
+ 296   1      }
+ 297          
+ 298          //----------------------------------------------------------------------------//
+ 299          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x03£¬¶Á±£³Ö¼Ä´æÆ÷
+ 300          //Èë¿Ú²ÎÊý£ºÎÞ
+ 301          //³ö¿Ú²ÎÊý£ºÎÞ
+ 302          //×îºóÐÞ¸Ä£º2015.12.5
+ 303          //±¸×¢£º
+ 304          //----------------------------------------------------------------------------//
+ 305          void Modbus_ReadHoldingReg_Process(void)
+ 306          {
+ 307   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
+ 308   1              uint16_t StartAddress_Reg;        //Òª¶ÁÈ¡µÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 309   1              uint16_t Num_Reg;                        //Òª¶ÁÈ¡µÄ¼Ä´æÆ÷µÄÊýÁ¿
+ 310   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
+ 311   1              uint16_t i, j;                                //ÁÙÊ±±äÁ¿
+ 312   1              
+ 313   1              StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½Òª¶Á
              -È¡µÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
- 315   1              Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //´Ó½ÓÊÕÊý¾
+ 314   1              Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //´Ó½ÓÊÕÊý¾
              -Ý»º³åÇøµÃµ½Òª¶ÁÈ¡µÄ¼Ä´æÆ÷ÊýÁ¿
- 316   1              
- 317   1              if(StartAddress_Reg < 100)                //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
- 318   1              {
- 319   2                      if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                //ÆðÊ¼µØÖ·+¼Ä´æÆ÷ÊýÁ¿Î»
+ 315   1              
+ 316   1              if(StartAddress_Reg < 100)                //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
+ 317   1              {
+ 318   2                      if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                //ÆðÊ¼µØÖ·+¼Ä´æÆ÷ÊýÁ¿Î»
              -ÓÚÕýÈ··¶Î§ÄÚ ²¢ÇÒ ¼Ä´æÆ÷ÊýÁ¿ÕýÈ·
- 320   2                      {
- 321   3                                                                                                                                                              
- 322   3                              Send_Cnt = 3 + (Num_Reg << 1) + 2;                //¼ÆËã·¢ËÍ×Ö½ÚÊýÁ¿
- 323   3                              Modbus_Send_Buff[0] = Slave_Address;                        //´ÓÕ¾µØÖ·
- 324   3                              Modbus_Send_Buff[1] = Modbus_ReadHoldingReg;        //¹¦ÄÜÂë
- 325   3                              Modbus_Send_Buff[2] = Num_Reg << 1;                                //¼Ä´æÆ÷×Ö½ÚÊýÁ
+ 319   2                      {
+ 320   3                                                                                                                                                              
+ 321   3                              Send_Cnt = 3 + (Num_Reg << 1) + 2;                //¼ÆËã·¢ËÍ×Ö½ÚÊýÁ¿
+ 322   3                              Modbus_Send_Buff[0] = Slave_Address;                        //´ÓÕ¾µØÖ·
+ 323   3                              Modbus_Send_Buff[1] = Modbus_ReadHoldingReg;        //¹¦ÄÜÂë
+ 324   3                              Modbus_Send_Buff[2] = Num_Reg << 1;                                //¼Ä´æÆ÷×Ö½ÚÊýÁ
              -¿ µÈÓÚ ¼Ä´æÆ÷ÊýÁ¿³Ë2
- 326   3                              
- 327   3                              for(i = StartAddress_Reg, j = 3; i < StartAddress_Reg + Num_Reg; i++, j += 2)     
+ 325   3                              
+ 326   3                              for(i = StartAddress_Reg, j = 3; i < StartAddress_Reg + Num_Reg; i++, j += 2)     
              -   //¶ÁÈ¡¼Ä´æÆ÷µÄÊý¾Ý
- 328   3                              {
- 329   4                                      Modbus_Send_Buff[j] = (uint8_t)(HoldingReg[i] >> 8);
- 330   4                                      Modbus_Send_Buff[j + 1] = (uint8_t)(HoldingReg[i] & 0x00FF);
- 331   4                              }
- 332   3              
- 333   3                              CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3 + (Num_Reg << 1));                     
+ 327   3                              {
+ 328   4                                      Modbus_Send_Buff[j] = (uint8_t)(HoldingReg[i] >> 8);
+ 329   4                                      Modbus_Send_Buff[j + 1] = (uint8_t)(HoldingReg[i] & 0x00FF);
+ 330   4                              }
+ 331   3              
+ 332   3                              CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3 + (Num_Reg << 1));                     
              -           //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£ÑéÂë
- 334   3                              Modbus_Send_Buff[3 + (Num_Reg << 1)] = (uint8_t)(CRC_Cal >> 8);                   
+ 333   3                              Modbus_Send_Buff[3 + (Num_Reg << 1)] = (uint8_t)(CRC_Cal >> 8);                   
              -             //ÏÈÊÇµÍ×Ö½Ú
- 335   3                              Modbus_Send_Buff[3 + (Num_Reg << 1) + 1] = (uint8_t)(CRC_Cal & 0x00FF);           
+ 334   3                              Modbus_Send_Buff[3 + (Num_Reg << 1) + 1] = (uint8_t)(CRC_Cal & 0x00FF);           
              -     //ºóÊÇ¸ß×Ö½Ú
- 336   3              
- 337   3                              //USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);                        //·
+ 335   3              
+ 336   3                              //USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);                        //·
              -¢ËÍÏìÓ¦±¨ÎÄ
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 7   
+ 337   3                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 7   
 
- 338   3                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
- 339   3                              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 340   3                      }
- 341   2                      else
- 342   2                      {
- 343   3                              Modbus_ErrorHandling(0x03);                //·Ç·¨Êý¾ÝÖµ
- 344   3                      }
- 345   2              }
- 346   1              
- 347   1              else
- 348   1              {
- 349   2                      Modbus_ErrorHandling(0x02);                        //·Ç·¨Êý¾ÝµØÖ·
- 350   2              }
- 351   1              
- 352   1      }
- 353          
- 354          //----------------------------------------------------------------------------//
- 355          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x06£¬Ð´µ¥¸ö¼Ä´æÆ÷
- 356          //Èë¿Ú²ÎÊý£ºÎÞ
- 357          //³ö¿Ú²ÎÊý£ºÎÞ
- 358          //×îºóÐÞ¸Ä£º2015.12.6
- 359          //±¸×¢£º
- 360          //----------------------------------------------------------------------------//
- 361          void Modbus_WriteSingleReg_Process(void)
- 362          {
- 363   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
- 364   1              uint16_t Address_Reg;                //ÒªÐ´ÈëµÄ¼Ä´æÆ÷µØÖ·
- 365   1              uint16_t Value_Reg;                        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷Öµ
- 366   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
- 367   1              
- 368   1              Address_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];                //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½Ò
+ 338   3                              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 339   3                      }
+ 340   2                      else
+ 341   2                      {
+ 342   3                              Modbus_ErrorHandling(0x03);                //·Ç·¨Êý¾ÝÖµ
+ 343   3                      }
+ 344   2              }
+ 345   1              
+ 346   1              else
+ 347   1              {
+ 348   2                      Modbus_ErrorHandling(0x02);                        //·Ç·¨Êý¾ÝµØÖ·
+ 349   2              }
+ 350   1              
+ 351   1      }
+ 352          
+ 353          //----------------------------------------------------------------------------//
+ 354          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x06£¬Ð´µ¥¸ö¼Ä´æÆ÷
+ 355          //Èë¿Ú²ÎÊý£ºÎÞ
+ 356          //³ö¿Ú²ÎÊý£ºÎÞ
+ 357          //×îºóÐÞ¸Ä£º2015.12.6
+ 358          //±¸×¢£º
+ 359          //----------------------------------------------------------------------------//
+ 360          void Modbus_WriteSingleReg_Process(void)
+ 361          {
+ 362   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
+ 363   1              uint16_t Address_Reg;                //ÒªÐ´ÈëµÄ¼Ä´æÆ÷µØÖ·
+ 364   1              uint16_t Value_Reg;                        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷Öµ
+ 365   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
+ 366   1              
+ 367   1              Address_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];                //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½Ò
              -ªÐ´ÈëµÄ¼Ä´æÆ÷µØÖ·
- 369   1              Value_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½ÒªÐ
+ 368   1              Value_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½ÒªÐ
              -´ÈëµÄ¼Ä´æÆ÷Öµ
- 370   1              
- 371   1              if(Address_Reg < 100)                //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
- 372   1              {
- 373   2                                                              
- 374   2                      Send_Cnt = 6 + 2;                //¼ÆËã·¢ËÍ×Ö½ÚÊýÁ¿
- 375   2                      
- 376   2                      HoldingReg[Address_Reg] = Value_Reg;                //½«ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÖµÐ´Èë¼Ä´æÆ÷
- 377   2                      
- 378   2                      Modbus_Send_Buff[0] = Slave_Address;                                                      
+ 369   1              
+ 370   1              if(Address_Reg < 100)                //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
+ 371   1              {
+ 372   2                                                              
+ 373   2                      Send_Cnt = 6 + 2;                //¼ÆËã·¢ËÍ×Ö½ÚÊýÁ¿
+ 374   2                      
+ 375   2                      HoldingReg[Address_Reg] = Value_Reg;                //½«ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÖµÐ´Èë¼Ä´æÆ÷
+ 376   2                      
+ 377   2                      Modbus_Send_Buff[0] = Slave_Address;                                                      
              -                  //´ÓÕ¾µØÖ·
- 379   2                      Modbus_Send_Buff[1] = Modbus_WriteSingleReg;                                              
+ 378   2                      Modbus_Send_Buff[1] = Modbus_WriteSingleReg;                                              
              -          //¹¦ÄÜÂë
- 380   2                      Modbus_Send_Buff[2] = (uint8_t)(Address_Reg >> 8);                                        
+ 379   2                      Modbus_Send_Buff[2] = (uint8_t)(Address_Reg >> 8);                                        
              -        //¼Ä´æÆ÷µØÖ·¸ß×Ö½Ú
- 381   2                      Modbus_Send_Buff[3] = (uint8_t)(Address_Reg & 0x00FF);                                    
+ 380   2                      Modbus_Send_Buff[3] = (uint8_t)(Address_Reg & 0x00FF);                                    
              -    //¼Ä´æÆ÷µØÖ·µÍ×Ö½Ú
- 382   2                      Modbus_Send_Buff[4] = (uint8_t)(HoldingReg[Address_Reg] >> 8);                        //¼Ä
+ 381   2                      Modbus_Send_Buff[4] = (uint8_t)(HoldingReg[Address_Reg] >> 8);                        //¼Ä
              -´æÆ÷Öµ¸ß×Ö½Ú
- 383   2                      Modbus_Send_Buff[5] = (uint8_t)(HoldingReg[Address_Reg] & 0x00FF);                //¼Ä´æÆ÷
+ 382   2                      Modbus_Send_Buff[5] = (uint8_t)(HoldingReg[Address_Reg] & 0x00FF);                //¼Ä´æÆ÷
              -ÖµµÍ×Ö½Ú
- 384   2                      
- 385   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 6);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
+ 383   2                      
+ 384   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 6);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
              -éÂë
- 386   2                      Modbus_Send_Buff[6] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
- 387   2                      Modbus_Send_Buff[7] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
- 388   2                      
- 389   2                     // USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);        //·¢ËÍÏìÓ¦±¨ÎÄ
- 390   2                      HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 8   
+ 385   2                      Modbus_Send_Buff[6] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
+ 386   2                      Modbus_Send_Buff[7] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
+ 387   2                      
+ 388   2                     // USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);        //·¢ËÍÏìÓ¦±¨ÎÄ
+ 389   2                      HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
+ 390   2                      //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 8   
 
- 391   2                      //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 392   2              }
- 393   1              
- 394   1              else
- 395   1              {
- 396   2                      Modbus_ErrorHandling(0x02);                        //·Ç·¨Êý¾ÝµØÖ·
- 397   2              }
- 398   1      }
- 399          
- 400          //----------------------------------------------------------------------------//
- 401          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x10£¬Ð´¶à¸ö¼Ä´æÆ÷
- 402          //Èë¿Ú²ÎÊý£ºÎÞ
- 403          //³ö¿Ú²ÎÊý£ºÎÞ
- 404          //×îºóÐÞ¸Ä£º2015.12.9
- 405          //±¸×¢£º
- 406          //----------------------------------------------------------------------------//
- 407          void Modbus_WriteMultipleReg_Process(void)
- 408          {
- 409   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
- 410   1              uint16_t StartAddress_Reg;        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
- 411   1              uint16_t Num_Reg;                        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷µÄÊýÁ¿
- 412   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
- 413   1              uint16_t i, j;                                //ÁÙÊ±±äÁ¿
- 414   1              
- 415   1              StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½ÒªÐ´
+ 391   2              }
+ 392   1              
+ 393   1              else
+ 394   1              {
+ 395   2                      Modbus_ErrorHandling(0x02);                        //·Ç·¨Êý¾ÝµØÖ·
+ 396   2              }
+ 397   1      }
+ 398          
+ 399          //----------------------------------------------------------------------------//
+ 400          //º¯Êý¹¦ÄÜ£º¹¦ÄÜÂë0x10£¬Ð´¶à¸ö¼Ä´æÆ÷
+ 401          //Èë¿Ú²ÎÊý£ºÎÞ
+ 402          //³ö¿Ú²ÎÊý£ºÎÞ
+ 403          //×îºóÐÞ¸Ä£º2015.12.9
+ 404          //±¸×¢£º
+ 405          //----------------------------------------------------------------------------//
+ 406          void Modbus_WriteMultipleReg_Process(void)
+ 407          {
+ 408   1              uint8_t Send_Cnt;                        //·¢ËÍ×Ö½ÚÊýÁ¿
+ 409   1              uint16_t StartAddress_Reg;        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
+ 410   1              uint16_t Num_Reg;                        //ÒªÐ´ÈëµÄ¼Ä´æÆ÷µÄÊýÁ¿
+ 411   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
+ 412   1              uint16_t i, j;                                //ÁÙÊ±±äÁ¿
+ 413   1              
+ 414   1              StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //´Ó½ÓÊÕÊý¾Ý»º³åÇøµÃµ½ÒªÐ´
              -ÈëµÄ¼Ä´æÆ÷ÆðÊ¼µØÖ·
- 416   1              Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //´Ó½ÓÊÕÊý¾
+ 415   1              Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //´Ó½ÓÊÕÊý¾
              -Ý»º³åÇøµÃµ½ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÊýÁ¿
- 417   1              
- 418   1              if(StartAddress_Reg < 100)                        //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
- 419   1              {
- 420   2                      if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                                //ÆðÊ¼µ
+ 416   1              
+ 417   1              if(StartAddress_Reg < 100)                        //¼Ä´æÆ÷ÆðÊ¼µØÖ·ÔÚÕýÈ··¶Î§ÄÚ
+ 418   1              {
+ 419   2                      if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                                //ÆðÊ¼µ
              -ØÖ·+¼Ä´æÆ÷ÊýÁ¿Î»ÓÚÕýÈ··¶Î§ÄÚ ²¢ÇÒ ¼Ä´æÆ÷ÊýÁ¿ÕýÈ·                        
- 421   2                      {
- 422   3                              for(i = StartAddress_Reg, j = 7; i < StartAddress_Reg + Num_Reg; i++, j += 2)     
+ 420   2                      {
+ 421   3                              for(i = StartAddress_Reg, j = 7; i < StartAddress_Reg + Num_Reg; i++, j += 2)     
              -   //½«ÒªÐ´ÈëµÄ¼Ä´æÆ÷ÖµÐ´Èë¼Ä´æÆ÷
- 423   3                              {
- 424   4                                      HoldingReg[i] = Modbus_Rcv_Buff[j] << 8 | Modbus_Rcv_Buff[j + 1];
- 425   4                              }
- 426   3                              Send_Cnt = 6 + 2;
- 427   3                      
- 428   3                              Modbus_Send_Buff[0] = Slave_Address;                                              
+ 422   3                              {
+ 423   4                                      HoldingReg[i] = Modbus_Rcv_Buff[j] << 8 | Modbus_Rcv_Buff[j + 1];
+ 424   4                              }
+ 425   3                              Send_Cnt = 6 + 2;
+ 426   3                      
+ 427   3                              Modbus_Send_Buff[0] = Slave_Address;                                              
              -  //´ÓÕ¾µØÖ·
- 429   3                              Modbus_Send_Buff[1] = Modbus_WriteMultipleReg;                                //¹¦
+ 428   3                              Modbus_Send_Buff[1] = Modbus_WriteMultipleReg;                                //¹¦
              -ÄÜÂë
- 430   3                              Modbus_Send_Buff[2] = (uint8_t)(StartAddress_Reg >> 8);                //¼Ä´æÆ÷ÆðÊ
+ 429   3                              Modbus_Send_Buff[2] = (uint8_t)(StartAddress_Reg >> 8);                //¼Ä´æÆ÷ÆðÊ
              -¼µØÖ·¸ß×Ö½Ú
- 431   3                              Modbus_Send_Buff[3] = (uint8_t)(StartAddress_Reg & 0x00FF);        //¼Ä´æÆ÷ÆðÊ¼µØÖ
+ 430   3                              Modbus_Send_Buff[3] = (uint8_t)(StartAddress_Reg & 0x00FF);        //¼Ä´æÆ÷ÆðÊ¼µØÖ
              -·µÍ×Ö½Ú
- 432   3                              Modbus_Send_Buff[4] = (uint8_t)(Num_Reg >> 8);                                //¼Ä
+ 431   3                              Modbus_Send_Buff[4] = (uint8_t)(Num_Reg >> 8);                                //¼Ä
              -´æÆ÷ÊýÁ¿¸ß×Ö½Ú
- 433   3                              Modbus_Send_Buff[5] = (uint8_t)(Num_Reg & 0x00FF);                        //¼Ä´æÆ÷
+ 432   3                              Modbus_Send_Buff[5] = (uint8_t)(Num_Reg & 0x00FF);                        //¼Ä´æÆ÷
              -ÊýÁ¿µÍ×Ö½Ú
- 434   3                              
- 435   3                              CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 6);                        //¼ÆËã·¢ËÍÊý¾Ý
+ 433   3                              
+ 434   3                              CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 6);                        //¼ÆËã·¢ËÍÊý¾Ý
              -µÄCRCÐ£ÑéÂë
- 436   3                              Modbus_Send_Buff[6] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
- 437   3                              Modbus_Send_Buff[7] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
- 438   3                              
- 439   3                             // USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);        //·¢ËÍÏìÓ¦±¨ÎÄ
- 440   3                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
- 441   3                              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 9   
+ 435   3                              Modbus_Send_Buff[6] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
+ 436   3                              Modbus_Send_Buff[7] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
+ 437   3                              
+ 438   3                             // USART_SendString(USART1, Modbus_Send_Buff, Send_Cnt);        //·¢ËÍÏìÓ¦±¨ÎÄ
+ 439   3                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,Send_Cnt);
+ 440   3                              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 441   3                      }
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 9   
 
- 442   3                      }
- 443   2                      
- 444   2                      else
- 445   2                      {
- 446   3                              Modbus_ErrorHandling(0x03);
- 447   3                      }
- 448   2              }
- 449   1              
- 450   1              else
- 451   1              {
- 452   2                      Modbus_ErrorHandling(0x02);
- 453   2              }
- 454   1      }
- 455          
- 456          //----------------------------------------------------------------------------//
- 457          //º¯Êý¹¦ÄÜ£º´íÎó´¦Àí
- 458          //Èë¿Ú²ÎÊý£ºErrorTypeÊÇ´íÎóÀàÐÍ
- 459          //³ö¿Ú²ÎÊý£ºÎÞ
- 460          //×îºóÐÞ¸Ä£º2015.12.11
- 461          //±¸×¢£º
- 462          //----------------------------------------------------------------------------//
- 463          void Modbus_ErrorHandling(uint8_t ErrorType)
- 464          {
- 465   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
- 466   1              
- 467   1              switch(ErrorType)                        //ÓÃswitch·ÖÖ§Óï¾äÀ´È·¶¨ModbusÒì³£Âë
- 468   1              {
- 469   2              case 0x01:                                        //·Ç·¨¹¦ÄÜÂë
- 470   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
- 471   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
- 472   2                      Modbus_Send_Buff[2] = 0x01;                                                               
+ 442   2                      
+ 443   2                      else
+ 444   2                      {
+ 445   3                              Modbus_ErrorHandling(0x03);
+ 446   3                      }
+ 447   2              }
+ 448   1              
+ 449   1              else
+ 450   1              {
+ 451   2                      Modbus_ErrorHandling(0x02);
+ 452   2              }
+ 453   1      }
+ 454          
+ 455          //----------------------------------------------------------------------------//
+ 456          //º¯Êý¹¦ÄÜ£º´íÎó´¦Àí
+ 457          //Èë¿Ú²ÎÊý£ºErrorTypeÊÇ´íÎóÀàÐÍ
+ 458          //³ö¿Ú²ÎÊý£ºÎÞ
+ 459          //×îºóÐÞ¸Ä£º2015.12.11
+ 460          //±¸×¢£º
+ 461          //----------------------------------------------------------------------------//
+ 462          void Modbus_ErrorHandling(uint8_t ErrorType)
+ 463          {
+ 464   1              uint16_t CRC_Cal;                        //CRCÐ£ÑéÂë
+ 465   1              
+ 466   1              switch(ErrorType)                        //ÓÃswitch·ÖÖ§Óï¾äÀ´È·¶¨ModbusÒì³£Âë
+ 467   1              {
+ 468   2              case 0x01:                                        //·Ç·¨¹¦ÄÜÂë
+ 469   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
+ 470   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
+ 471   2                      Modbus_Send_Buff[2] = 0x01;                                                               
              - //Òì³£Âë
- 473   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
+ 472   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
              -éÂë
- 474   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
- 475   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
- 476   2                      
- 477   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
- 478   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
- 479   2                      break;
- 480   2                      
- 481   2              case 0x02:                                        //·Ç·¨Êý¾ÝµØÖ·
- 482   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
- 483   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
- 484   2                      Modbus_Send_Buff[2] = 0x02;                                                               
+ 473   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
+ 474   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
+ 475   2                      
+ 476   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
+ 477   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
+ 478   2                      break;
+ 479   2                      
+ 480   2              case 0x02:                                        //·Ç·¨Êý¾ÝµØÖ·
+ 481   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
+ 482   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
+ 483   2                      Modbus_Send_Buff[2] = 0x02;                                                               
              - //Òì³£Âë
- 485   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
+ 484   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
              -éÂë
- 486   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
- 487   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
- 488   2                      
- 489   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
- 490   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
- 491   2                      break;
- 492   2                      
- 493   2              case 0x03:                                        //·Ç·¨Êý¾ÝÖµ
- 494   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
- 495   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
- 496   2                      Modbus_Send_Buff[2] = 0x03;                                                               
+ 485   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
+ 486   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
+ 487   2                      
+ 488   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
+ 489   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
+ 490   2                      break;
+ 491   2                      
+ 492   2              case 0x03:                                        //·Ç·¨Êý¾ÝÖµ
+ 493   2                      Modbus_Send_Buff[0] = Slave_Address;                                        //´ÓÕ¾µØÖ·
+ 494   2                      Modbus_Send_Buff[1] = Modbus_Rcv_Buff[1] + 0x80;                //Òì³£¹¦ÄÜÂë
+ 495   2                      Modbus_Send_Buff[2] = 0x03;                                                               
              - //Òì³£Âë
- 497   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
+ 496   2                      CRC_Cal = Modbus_CRC16(Modbus_Send_Buff, 3);                        //¼ÆËã·¢ËÍÊý¾ÝµÄCRCÐ£Ñ
              -éÂë
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 10  
+ 497   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 10  
 
- 498   2                      Modbus_Send_Buff[3] = (uint8_t)(CRC_Cal >> 8);                        //ÏÈÊÇµÍ×Ö½Ú
- 499   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
- 500   2                      
- 501   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
- 502   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
- 503   2                      break;
- 504   2      //        default:
- 505   2      //                return;
- 506   2                      
- 507   2              }
- 508   1              
- 509   1              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 510   1      }
- 511          
- 512          //----------------------------------------------------------------------------//
- 513          //º¯Êý¹¦ÄÜ£ºÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
- 514          //Èë¿Ú²ÎÊý£ºÎÞUSAR
- 515          //³ö¿Ú²ÎÊý£ºÎÞ
- 516          //×îºóÐÞ¸Ä£º2015.12.5
- 517          //±¸×¢£º
- 518          //----------------------------------------------------------------------------//
- 519          void Modbus_ClearBuff(void)
- 520          {
- 521   1              uint16_t i;
- 522   1              for(i = 0; i < Modbus_Max_Rcv_Buff; i++)                //Çå³ý½ÓÊÕ»º³åÇø
- 523   1              {
- 524   2                      Modbus_Rcv_Buff[i] = '\0';
- 525   2              }
- 526   1              Modbus_Rcv_Cnt = 0;                        //½ÓÊÕ×Ö½Ú¼ÆÊýÇå0
- 527   1              
- 528   1              for(i = 0; i < Modbus_Max_Send_Buff; i++)                //Çå³ý·¢ËÍ»º³åÇø
- 529   1              {
- 530   2                      Modbus_Send_Buff[i] = '\0';
- 531   2              }
- 532   1              
- 533   1      }
- 534          
- 535          //----------------------------------------------------------------------------//
- 536          //º¯Êý¹¦ÄÜ£º°ÑÒ»¸ö×Ö½ÚµÄ¸ß4Î»Ê®Áù½øÖÆÊý´æµ½ÁíÒ»¸ö×Ö½ÚµÄµÍ4Î»Àï
- 537          //Èë¿Ú²ÎÊý£ºÒ»¸ö×Ö½ÚµÄÊý¾Ý
- 538          //³ö¿Ú²ÎÊý£ºÁíÒ»¸ö×Ö½Ú
- 539          //×îºóÐÞ¸Ä£º2015.11.28
- 540          //±¸×¢£º
- 541          //----------------------------------------------------------------------------//
- 542          uint8_t High4BitsToOneByte(uint8_t Byte)
- 543          {
- 544   1              uint8_t tempByte;
- 545   1              
- 546   1              tempByte = (Byte >> 4) & 0x0F;
- 547   1              
- 548   1              return tempByte; 
- 549   1      }
- 550          
- 551          //----------------------------------------------------------------------------//
- 552          //º¯Êý¹¦ÄÜ£º°ÑÒ»¸ö×Ö½ÚµÄµÍ4Î»Ê®Áù½øÖÆÊý´æµ½ÁíÒ»¸ö×Ö½ÚµÄµÍ4Î»Àï
- 553          //Èë¿Ú²ÎÊý£ºÒ»¸ö×Ö½ÚµÄÊý¾Ý
- 554          //³ö¿Ú²ÎÊý£ºÁíÒ»¸ö×Ö½Ú
- 555          //×îºóÐÞ¸Ä£º2015.11.28
- 556          //±¸×¢£º
- 557          //----------------------------------------------------------------------------//
- 558          uint8_t Low4BitsToOneByte(uint8_t Byte)
- 559          {
-C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:26:30 PAGE 11  
+ 498   2                      Modbus_Send_Buff[4] = (uint8_t)(CRC_Cal & 0x00FF);                //ºóÊÇ¸ß×Ö½Ú
+ 499   2                      
+ 500   2                      //USART_SendString(USART1, Modbus_Send_Buff, 5);                        //·¢ËÍÒì³£ÏìÓ¦±¨ÎÄ
+ 501   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
+ 502   2                      break;
+ 503   2      //        default:
+ 504   2      //                return;
+ 505   2                      
+ 506   2              }
+ 507   1              
+ 508   1              //Modbus_ClearBuff();                //Çå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 509   1      }
+ 510          
+ 511          //----------------------------------------------------------------------------//
+ 512          //º¯Êý¹¦ÄÜ£ºÇå¿Õ½ÓÊÕÊý¾Ý»º³åÇøºÍ·¢ËÍÊý¾Ý»º³åÇø
+ 513          //Èë¿Ú²ÎÊý£ºÎÞUSAR
+ 514          //³ö¿Ú²ÎÊý£ºÎÞ
+ 515          //×îºóÐÞ¸Ä£º2015.12.5
+ 516          //±¸×¢£º
+ 517          //----------------------------------------------------------------------------//
+ 518          void Modbus_ClearBuff(void)
+ 519          {
+ 520   1              uint16_t i;
+ 521   1              for(i = 0; i < Modbus_Max_Rcv_Buff; i++)                //Çå³ý½ÓÊÕ»º³åÇø
+ 522   1              {
+ 523   2                      Modbus_Rcv_Buff[i] = '\0';
+ 524   2              }
+ 525   1              Modbus_Rcv_Cnt = 0;                        //½ÓÊÕ×Ö½Ú¼ÆÊýÇå0
+ 526   1              
+ 527   1              for(i = 0; i < Modbus_Max_Send_Buff; i++)                //Çå³ý·¢ËÍ»º³åÇø
+ 528   1              {
+ 529   2                      Modbus_Send_Buff[i] = '\0';
+ 530   2              }
+ 531   1              
+ 532   1      }
+ 533          
+ 534          //----------------------------------------------------------------------------//
+ 535          //º¯Êý¹¦ÄÜ£º°ÑÒ»¸ö×Ö½ÚµÄ¸ß4Î»Ê®Áù½øÖÆÊý´æµ½ÁíÒ»¸ö×Ö½ÚµÄµÍ4Î»Àï
+ 536          //Èë¿Ú²ÎÊý£ºÒ»¸ö×Ö½ÚµÄÊý¾Ý
+ 537          //³ö¿Ú²ÎÊý£ºÁíÒ»¸ö×Ö½Ú
+ 538          //×îºóÐÞ¸Ä£º2015.11.28
+ 539          //±¸×¢£º
+ 540          //----------------------------------------------------------------------------//
+ 541          uint8_t High4BitsToOneByte(uint8_t Byte)
+ 542          {
+ 543   1              uint8_t tempByte;
+ 544   1              
+ 545   1              tempByte = (Byte >> 4) & 0x0F;
+ 546   1              
+ 547   1              return tempByte; 
+ 548   1      }
+ 549          
+ 550          //----------------------------------------------------------------------------//
+ 551          //º¯Êý¹¦ÄÜ£º°ÑÒ»¸ö×Ö½ÚµÄµÍ4Î»Ê®Áù½øÖÆÊý´æµ½ÁíÒ»¸ö×Ö½ÚµÄµÍ4Î»Àï
+ 552          //Èë¿Ú²ÎÊý£ºÒ»¸ö×Ö½ÚµÄÊý¾Ý
+ 553          //³ö¿Ú²ÎÊý£ºÁíÒ»¸ö×Ö½Ú
+ 554          //×îºóÐÞ¸Ä£º2015.11.28
+ 555          //±¸×¢£º
+ 556          //----------------------------------------------------------------------------//
+ 557          uint8_t Low4BitsToOneByte(uint8_t Byte)
+ 558          {
+ 559   1              uint8_t tempByte;
+C51 COMPILER V9.05   MODBUS                                                                06/03/2023 21:34:06 PAGE 11  
 
- 560   1              uint8_t tempByte;
- 561   1              
- 562   1              tempByte = Byte & 0x0F;
- 563   1              
- 564   1              return tempByte; 
- 565   1      }
- 566          
- 567          //----------------------------------------------------------------------------//
- 568          //º¯Êý¹¦ÄÜ£º°ÑµÍ4Î»16½øÖÆÊý×ª»»ÎªÔÚOLED×Ö¿âÉÏ¶ÔÓ¦µÄ0~9ºÍA~F
- 569          //Èë¿Ú²ÎÊý£ºHexByteÊÇµÍ4Î»16½øÖÆÊý
- 570          //³ö¿Ú²ÎÊý£ºOLED×Ö¿âÉÏ¶ÔÓ¦µÄ0~9ºÍA~F
- 571          //×îºóÐÞ¸Ä£º2015.11.28
- 572          //±¸×¢£º
- 573          //----------------------------------------------------------------------------//
- 574          uint8_t HexToOLEDAsc(uint8_t HexByte)
- 575          {
- 576   1              if((HexByte >= 0x00) && (HexByte <= 0x09))                        //Êý×Ö0~9
- 577   1              {
- 578   2                      HexByte += 0x30;
- 579   2              }
- 580   1              else if((HexByte >= 0x0A) && (HexByte <= 0x0F))        //Êý×ÖA~F
- 581   1              {
- 582   2                      HexByte += 0x37;
- 583   2              }
- 584   1              else
- 585   1              {
- 586   2                      HexByte = 0xff;
- 587   2              }
- 588   1              
- 589   1              return HexByte; 
- 590   1      }
- 591          void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
- 592          {
- 593   1              int i;
- 594   1              for(i=0;i<Size;i++)
- 595   1              {
- 596   2                      sendbyte1(pData[i]);
- 597   2              }
- 598   1      }
-*** WARNING C280 IN LINE 591 OF modbus.c: 'huart': unreferenced local variable
+ 560   1              
+ 561   1              tempByte = Byte & 0x0F;
+ 562   1              
+ 563   1              return tempByte; 
+ 564   1      }
+ 565          
+ 566          //----------------------------------------------------------------------------//
+ 567          //º¯Êý¹¦ÄÜ£º°ÑµÍ4Î»16½øÖÆÊý×ª»»ÎªÔÚOLED×Ö¿âÉÏ¶ÔÓ¦µÄ0~9ºÍA~F
+ 568          //Èë¿Ú²ÎÊý£ºHexByteÊÇµÍ4Î»16½øÖÆÊý
+ 569          //³ö¿Ú²ÎÊý£ºOLED×Ö¿âÉÏ¶ÔÓ¦µÄ0~9ºÍA~F
+ 570          //×îºóÐÞ¸Ä£º2015.11.28
+ 571          //±¸×¢£º
+ 572          //----------------------------------------------------------------------------//
+ 573          uint8_t HexToOLEDAsc(uint8_t HexByte)
+ 574          {
+ 575   1              if((HexByte >= 0x00) && (HexByte <= 0x09))                        //Êý×Ö0~9
+ 576   1              {
+ 577   2                      HexByte += 0x30;
+ 578   2              }
+ 579   1              else if((HexByte >= 0x0A) && (HexByte <= 0x0F))        //Êý×ÖA~F
+ 580   1              {
+ 581   2                      HexByte += 0x37;
+ 582   2              }
+ 583   1              else
+ 584   1              {
+ 585   2                      HexByte = 0xff;
+ 586   2              }
+ 587   1              
+ 588   1              return HexByte; 
+ 589   1      }
+ 590          void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
+ 591          {
+ 592   1              int i;
+ 593   1              for(i=0;i<Size;i++)
+ 594   1              {
+ 595   2                      sendbyte1(pData[i]);
+ 596   2              }
+ 597   1      }
+*** WARNING C280 IN LINE 590 OF modbus.c: 'huart': unreferenced local variable
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -1,6 +1,6 @@
 Build target 'Target 1'
-compiling modbus.c...
-modbus.c(591): warning C280: 'huart': unreferenced local variable
+compiling main.c...
+main.c(110): warning C291: not every exit path returns a value
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_PRINTF2?MAIN
@@ -33,6 +33,9 @@ linking...
     SEGMENT: ?PR?MODBUS_INIT?MODBUS
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?JISHOUOKJISUAN?MODBUS
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?DMA1_CHANNEL2_IRQHANDLER?MODBUS
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
@@ -44,6 +47,6 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HEXTOOLEDASC?MODBUS
 
-Program Size: data=23.5 xdata=417 code=4741
+Program Size: data=23.5 xdata=436 code=4513
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 15 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 16 Warning(s).

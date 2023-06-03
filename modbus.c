@@ -13,7 +13,7 @@
 //----------------------------------------------------------------------------//
 
 #include "MODBUS.h"
-
+#include "uart.h"
 // #include "sys.h"
 // #include "delay.h"
 // #include "usart.h"
@@ -130,17 +130,34 @@ void Modbus_Init(void)
         //----------------------------------------------------------//
         //TIM_Cmd(TIM2, ENABLE);
 }
-void chuankou3jisuuan()
+int rectimes;
+void chuankou1jisuuan(unsigned char ans)
 {
-
+        Modbus_Rcv_Buff[Modbus_Rcv_Cnt]=ans;
+	Modbus_Rcv_Cnt++;
+        rectimes=5;
 }
+int recover=0;
+void time1msjisuan()
+{
+    if(rectimes>0)
+    {
+        rectimes--;
+        if(rectimes==0)
+        {
+            recover=1;
+        }
+    }    
+}
+
 void Modbus_Cmd(void);
 void Modbus_Exe(void);
-void time5jisuan()
+void jishouokjisuan()
 {
 	Modbus_Cmd_flag=1;//数据接受完,,进入中断标志位..
 	Modbus_Cmd();     //数据处理,,          
-	Modbus_Exe();     //处理完发...          
+	Modbus_Exe();     //处理完发...     
+        Modbus_ClearBuff();//弄完了清理缓冲区     
 }
 
 char dmatime=0;
@@ -547,5 +564,9 @@ uint8_t HexToOLEDAsc(uint8_t HexByte)
 }
 void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
 {
-	// HAL_UART_Transmit_DMA(huart, pData,Size);//打开485,然后进行传输//
+        int i;
+        for(i=0;i<Size;i++)
+        {
+                sendbyte1(pData[i]);
+        }
 }

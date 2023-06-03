@@ -12,6 +12,13 @@
 #define  uchar unsigned char	
 #include <stdio.h>
 #include <string.h>
+#include "MODBUS.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
 uint weishu1,weishu2,weishu3,weishu4;
 uchar buf1[100];
 uchar buf2[100];
@@ -108,11 +115,26 @@ void getxin()
 		PrintString(datatmp);
 	}
 }
+void Delay1ms()		//@24.000MHz
+{
+	unsigned char i, j;
+
+	i = 24;
+	j = 85;
+	do
+	{
+		while (--j);
+	} while (--i);
+}
+
 void delay_ms(int m)
 {
 	int x,y;
 	for(x=m;x>0;x--)
-	for(y=220;y>0;y--);
+	{
+		Delay1ms();
+	}
+	
 }
 
 void main()		                                       
@@ -128,8 +150,14 @@ void main()
 	Uart4Init();
 	while (1)
 	{
-		delay_ms(100);
-		PrintString("12345");
+		delay_ms(2);
+		// printf("0000000000");
+		if(recover==1)
+		{
+			PrintString("000000000\n");
+			jishouokjisuan();
+			recover=0;
+		}
 	}
 }
 	 
@@ -140,7 +168,7 @@ void main()
 uint time,lv_bo;
 void Timer0() interrupt 1
 {
-	
+	time1msjisuan();
 }
 char buffxxx[100]="";
 char buffweizhi=0;
@@ -150,11 +178,12 @@ void dealrecI(char c)
 }
 void UARTInterrupt(void) interrupt 4
 {
-	char downstr;
+	unsigned char ans;
 	if (RI)
 	{
 		RI = 0;
-		
+		ans=SBUF;
+ 		chuankou1jisuuan(ans);
 	}
 	else
 	{

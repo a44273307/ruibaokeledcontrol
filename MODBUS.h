@@ -2,15 +2,13 @@
 #define _MODBUS_H_
 
 
-// #include "sys.h"
-// #include "delay.h"
-// #include "usart.h"
+
 
 typedef unsigned char uint8_t;
 typedef unsigned char u8;
 typedef unsigned short uint16_t;
-#define Modbus_Max_Send_Buff	20
-#define Modbus_Max_Rcv_Buff	20
+#define Modbus_Max_Send_Buff	50
+#define Modbus_Max_Rcv_Buff	50
 void Modbus_ReadHoldingReg_Process(void);
 void Modbus_WriteSingleReg_Process(void);
 void Modbus_WriteMultipleReg_Process(void);
@@ -24,6 +22,11 @@ void Modbus_Init(void);
 char cuncu_485();
 void init_485();
 extern volatile uint16_t HoldingReg[100];                                //保持寄存器
+void chuankou1jisuuan(unsigned char ans);
+extern void time1msjisuan();
+void jishouokjisuan();
+
+
 
 
 #define write_485_predaowei HoldingReg[3]//运行控制预设
@@ -51,6 +54,7 @@ extern volatile uint16_t HoldingReg[100];
 
 
 
+extern int recover;
 
 #endif
 

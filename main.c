@@ -130,7 +130,6 @@ void main()
 	{
 		delay_ms(100);
 		PrintString("12345");
-		sendbyte3('a');	
 	}
 }
 	 

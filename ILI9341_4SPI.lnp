@@ -1,5 +1,6 @@
 "STARTUP.obj",
 "main.obj",
 "delay.obj",
-"uart.obj" 
+"uart.obj",
+"modbus.obj" 
 TO "ILI9341_4SPI" 

@@ -80,11 +80,8 @@ void printf2(char *puts)
 void io_inint()
 {
 	P0M1 = 0;	P0M0 = 0;	//设置P0.0~P0.7为准双向口
-	    // P1M0 = 0x00;                                //设置P1.0为ADC口
-    // P1M1 = 0x80;
-
-
-	// P1M1 = 0;	P1M0 = 0;	//设置P1.0~P1.7为准双向口
+  P1M0 = 0x00; // 设置P1.0为ADC口
+  P1M1 = 0x80;
 	P2M1 = 0;	P2M0 = 0;	//设置P2.0~P2.7为准双向口 
 	    P3M0 = 0;
     P3M1 = 0;
@@ -143,7 +140,7 @@ void Start()
 {uint i=0;
     busy = 1;
     I2CMSCR = 0x81;                             //发送START命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 
 void SendData(char dat)
@@ -151,21 +148,21 @@ void SendData(char dat)
     I2CTXD = dat;                               //写数据到数据缓冲区
     busy = 1;
     I2CMSCR = 0x82;                             //发送SEND命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 
 void RecvACK()
 {uint i=0;
     busy = 1;
     I2CMSCR = 0x83;                             //发送读ACK命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 
 char RecvData()
 {uint i=0;
     busy = 1;
     I2CMSCR = 0x84;                             //发送RECV命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
     return I2CRXD;
 }
 
@@ -174,7 +171,7 @@ void SendACK()
     I2CMSST = 0x00;                             //设置ACK信号
     busy = 1;
     I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 
 void SendNAK()
@@ -182,14 +179,14 @@ void SendNAK()
     I2CMSST = 0x01;                             //设置NAK信号
     busy = 1;
     I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 
 void Stop()
 {uint i=0;
     busy = 1;
     I2CMSCR = 0x86;                             //发送STOP命令
-    while (busy)i++;
+    while (busy && i < 6000)i++;
 }
 void I2C_Isr() interrupt 24
 {
@@ -279,7 +276,7 @@ void main()
 	out1 = 1;
 	delay_ms(10);
 	Modbus_ClearBuff();
-
+	out1 = 0;
 	while (1)
 	{
 		delay_ms(200);
@@ -287,7 +284,6 @@ void main()
       led1 = 0;
       led2 = 1;
       deanyan();
-
       led1 = 1;
       led2 = 0;
 
@@ -323,6 +319,7 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans=SBUF;
+		IAP_CONTR=0x60;
  		chuankou1jisuuan(ans);
 	}
 	else

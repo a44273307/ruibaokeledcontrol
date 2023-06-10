@@ -1,0 +1,7 @@
+*.OBJ
+*.LST
+*.M51
+*.log
+*.log.lock
+*.plg
+

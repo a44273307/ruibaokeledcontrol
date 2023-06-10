@@ -1,146 +1,208 @@
-#include "stc15f2k60s2.h"	    // 单片机STC15F2K60S2头文件,可以不再加入reg51.h
-#include <intrins.h>					// 加入此头文件后,可使用_nop_库函数
-#include "delay.h"		        // 延时函数头文件
-#include "uart.h"		        	// 串行通信函数头文件
-#define  uint unsigned int  
-#define  uchar unsigned char	
-#include <stdio.h>
-#include <string.h>
-#include "MODBUS.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "ledcontrol.h"
 
-static bit busy;
 
-void initiic()
+sbit out1 = P1 ^ 6; //
+sbit out2 = P3 ^ 2;
+
+
+sbit fen = P5 ^ 4;
+
+
+/**************************************
+延时5微秒(STC90C52RC@12M)
+不同的工作环境,需要调整此函数，注意时钟过快时需要修改
+当改用1T的MCU时,请调整此延时函数
+**************************************/
+void Delay5us()
 {
-    _push_(P_SW2);
-    P_SW2 |= 0x80;
-    P_SW2 |= 0x08;
-    _pop_(P_SW2);
-}
-void Start()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x81;                             //发送START命令
-    while (busy && i < 6000)i++;
+    unsigned char i;
+
+    i = 20;
+    while (--i)
+        ;
 }
 
-void SendData(char dat)
-{uint i=0;
-    I2CTXD = dat;                               //写数据到数据缓冲区
-    busy = 1;
-    I2CMSCR = 0x82;                             //发送SEND命令
-    while (busy && i < 6000)i++;
-}
-
-void RecvACK()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x83;                             //发送读ACK命令
-    while (busy && i < 6000)i++;
-}
-
-char RecvData()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x84;                             //发送RECV命令
-    while (busy && i < 6000)i++;
-    return I2CRXD;
-}
-
-void SendACK()
-{uint i=0;
-    I2CMSST = 0x00;                             //设置ACK信号
-    busy = 1;
-    I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy && i < 6000)i++;
-}
-
-void SendNAK()
-{uint i=0;
-    I2CMSST = 0x01;                             //设置NAK信号
-    busy = 1;
-    I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy && i < 6000)i++;
-}
-
-void Stop()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x86;                             //发送STOP命令
-    while (busy && i < 6000)i++;
-}
-void I2C_Isr() interrupt 24
+/**************************************
+延时5毫秒(STC90C52RC@12M)
+不同的工作环境,需要调整此函数
+当改用1T的MCU时,请调整此延时函数
+**************************************/
+void Delay5ms()
 {
-    _push_(P_SW2);
-    P_SW2 |= 0x80;
-    if (I2CMSST & 0x40)
+    unsigned char i, j;
+
+    i = 87;
+    j = 42;
+    do
     {
-        I2CMSST &= ~0x40;                       //清中断标志
-        busy = 0;
-    }
-    _pop_(P_SW2);
+        while (--j)
+            ;
+    } while (--i);
 }
 
-void deanyanpre()
- {  
-  uint sw1=2047;
-  uint sw2=3000;
-  sw1=HoldingReg[3];
-  sw2=HoldingReg[4];
-//   printf("***%d-%d***\n",sw2/256,sw2%256);
-  Start();        // 发送起始命令
-  SendData(0xc2); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw1 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw1 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop(); // 发送停止命令
+/**************************************
+起始信号
+**************************************/
+sbit SCL = P2 ^ 5; // IIC时钟引脚定义
+sbit SDA = P2 ^ 4; // IIC数据引脚定义
+typedef unsigned char BYTE;
 
-  Start();        // 发送起始命令
-  SendData(0xc0); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw2 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw2 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop();
+void BH1750_Start()
+{
+    SDA = 1;    // 拉高数据线
+    SCL = 1;    // 拉高时钟线
+    Delay5us(); // 延时
+    SDA = 0;    // 产生下降沿
+    Delay5us(); // 延时
+    SCL = 0;    // 拉低时钟线
+}
 
-  Start();        // 发送起始命令
-  SendData(0xc2); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw1 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw1 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop(); // 发送停止命令
+/**************************************
+停止信号
+**************************************/
+void BH1750_Stop()
+{
+    SDA = 0;    // 拉低数据线
+    SCL = 1;    // 拉高时钟线
+    Delay5us(); // 延时
+    SDA = 1;    // 产生上升沿
+    Delay5us(); // 延时
+}
 
-  Start();        // 发送起始命令
-  SendData(0xc0); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw2 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw2 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop();
-		  
- }
- 
-sbit led1 = P3 ^ 7;
-sbit led2 = P3 ^ 6;
- void deanyan()
- {
-      deanyanpre();
- }
+/**************************************
+发送应答信号
+入口参数:ack (0:ACK 1:NAK)
+**************************************/
+void BH1750_SendACK(bit ack)
+{
+    SDA = ack;  // 写应答信号
+    SCL = 1;    // 拉高时钟线
+    Delay5us(); // 延时
+    SCL = 0;    // 拉低时钟线
+    Delay5us(); // 延时
+}
+
+/**************************************
+接收应答信号
+**************************************/
+bit BH1750_RecvACK()
+{
+    SCL = 1;    // 拉高时钟线
+    Delay5us(); // 延时
+    CY = SDA;   // 读应答信号
+    SCL = 0;    // 拉低时钟线
+    Delay5us(); // 延时
+
+    return CY;
+}
+
+/**************************************
+向IIC总线发送一个字节数据
+**************************************/
+void BH1750_SendByte(BYTE dat)
+{
+    BYTE i;
+
+    for (i = 0; i < 8; i++) // 8位计数器
+    {
+        dat <<= 1;  // 移出数据的最高位
+        SDA = CY;   // 送数据口
+        SCL = 1;    // 拉高时钟线
+        Delay5us(); // 延时
+        SCL = 0;    // 拉低时钟线
+        Delay5us(); // 延时
+    }
+    BH1750_RecvACK();
+}
+
+/**************************************
+从IIC总线接收一个字节数据
+**************************************/
+BYTE BH1750_RecvByte()
+{
+    BYTE i;
+    BYTE dat = 0;
+
+    SDA = 1;                // 使能内部上拉,准备读取数据,
+    for (i = 0; i < 8; i++) // 8位计数器
+    {
+        dat <<= 1;
+        SCL = 1;    // 拉高时钟线
+        Delay5us(); // 延时
+        dat |= SDA; // 读数据
+        SCL = 0;    // 拉低时钟线
+        Delay5us(); // 延时
+    }
+    return dat;
+}
+
+//*********************************
+#define SlaveAddress 0x46 // 定义器件在IIC总线中的从地址,根据ALT  ADDRESS地址引脚不同修改
+                          // ALT  ADDRESS引脚接地时地址为0x46，接电源时地址为0xB8
+
+void Single_Write_BH1750(uchar REG_Address)
+{
+    BH1750_Start();                // 起始信号
+    BH1750_SendByte(SlaveAddress); // 发送设备地址+写信号
+    BH1750_SendByte(REG_Address);  // 内部寄存器地址，
+    //  BH1750_SendByte(REG_data);       //内部寄存器数据，
+    BH1750_Stop(); // 发送停止信号
+}
+
+//********单字节读取*****************************************
+/*
+uchar Single_Read_BH1750(uchar REG_Address)
+{  uchar REG_data;
+    BH1750_Start();                          //起始信号
+    BH1750_SendByte(SlaveAddress);           //发送设备地址+写信号
+    BH1750_SendByte(REG_Address);                   //发送存储单元地址，从0开始
+    BH1750_Start();                          //起始信号
+    BH1750_SendByte(SlaveAddress+1);         //发送设备地址+读信号
+    REG_data=BH1750_RecvByte();              //读出寄存器数据
+    BH1750_SendACK(1);
+    BH1750_Stop();                           //停止信号
+    return REG_data;
+}
+*/
+//*********************************************************
+//
+// 连续读出BH1750内部数据
+//
+//*********************************************************
+
+int Multiple_read_BH1750()
+{
+    int dis_data; // 变量
+    BYTE BUF[8]={0}; // 接收数据缓存区
+    uchar i;
+    BH1750_Start();                    // 起始信号
+    BH1750_SendByte(SlaveAddress + 1); // 发送设备地址+读信号
+
+    for (i = 0; i < 3; i++) // 连续读取2个地址数据，存储中BUF
+    {
+        BUF[i] = BH1750_RecvByte(); // BUF[0]存储0x32地址中的数据
+        if (i == 3)
+        {
+
+            BH1750_SendACK(1); // 最后一个数据需要回NOACK
+        }
+        else
+        {
+            BH1750_SendACK(0); // 回应ACK
+        }
+    }
+
+    BH1750_Stop(); // 停止信号
+    dis_data = BUF[0];
+    dis_data = (dis_data << 8) + BUF[1]; // 合成数据，即光照数据
+    return dis_data;
+    // Delay5ms();
+
+}
+
+// 初始化BH1750，根据需要请参考pdf进行修改****
+void Init_BH1750()
+{
+    Single_Write_BH1750(0x01);
+}

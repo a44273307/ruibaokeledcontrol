@@ -1,5 +1,11 @@
 {
     "files.associations": {
         "modbus.h": "c"
+    },
+    "files.exclude": {
+        "**/ILI9341_4SPI**": true,
+        "**/*.__i": true,
+        "**/*.LST": true,
+        "**/*.OBJ": true
     }
 }

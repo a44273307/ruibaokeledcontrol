@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 1   
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE MAIN
@@ -27,396 +27,413 @@ line level    source
   18          #include <string.h>
   19          #include <stdlib.h>
   20          
-  21          bit busy;
+  21          uint temp1,temp2,temp3,temp4;
   22          
   23          
-  24          uint temp1,temp2,temp3,temp4;
-  25          
-  26          
-  27          
-  28          
-  29          //sbit x0 = P4^3;
-  30          //sbit x1 = P4^4; 
-  31          //sbit x2 = P2^0; 
-  32          //sbit x3 = P2^1;  
-  33          //sbit x4 = P2^2;  
-  34          //sbit x5 = P2^3;
-  35          //sbit x6 = P2^4; 
-  36          //sbit x7 = P2^5;
-  37          //sbit x10 = P2^6;
-  38          //sbit x11 = P2^7; 
-  39          //sbit x12 = P4^5;
-  40          //sbit x13 = P4^6;
-  41          
-  42          sbit x0 = P2^4; 
-  43          sbit x1 = P2^5; 
-  44          
-  45          
-  46          sbit x2 = P2^6;  
-  47          sbit x3 = P2^7;
-  48          
-  49          sbit x4 = P4^5; 
-  50          sbit x5 = P4^6;
-  51          
-  52          sbit x6 = P0^2;
-  53          sbit x7 = P0^3; 
-  54          
-  55          sbit x8 = P0^4; 
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 2   
+  24          void io_inint()
+  25          {
+  26   1              P0M1 = 0;       P0M0 = 0;       //设置P0.0~P0.7为准双向口
+  27   1        P1M0 = 0x00; // 设置P1.0为ADC口
+  28   1        P1M1 = 0x80;
+  29   1              P2M1 = 0;       P2M0 = 0;       //设置P2.0~P2.7为准双向口 
+  30   1                  P3M0 = 0;
+  31   1          P3M1 = 0;
+  32   1              P4M1 = 0;       P4M0 = 0;       //设置P4.0~P4.7为准双向口
+  33   1              // P5M1 = 0;    P5M0 = 0;       //设置P5.0~P5.7为准双向口
+  34   1      
+  35   1                  P5M0 = 0xff; P5M1 = 0x00; 
+  36   1      
+  37   1      }
+  38          
+  39          void Delay1ms()         //@24.000MHz
+  40          {
+  41   1              unsigned char i, j;
+  42   1      
+  43   1              i = 24;
+  44   1              j = 85;
+  45   1              do
+  46   1              {
+  47   2                      while (--j);
+  48   2              } while (--i);
+  49   1      }
+  50          
+  51          void delay_ms(int m)
+  52          {
+  53   1              int x;
+  54   1              for(x=m;x>0;x--)
+  55   1              {
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 2   
 
-  56          sbit x9 = P5^2;
-  57          
-  58          
-  59          
+  56   2                      Delay1ms();
+  57   2              }
+  58   1              
+  59   1      }
   60          
-  61          sbit y0 = P2^3;  
-  62          sbit y1 = P2^2; 
-  63          sbit y2 = P2^1;
-  64          sbit y3 = P2^0;
-  65          sbit y4 = P4^4;
-  66          sbit y5 = P4^3;
-  67          
-  68          
-  69          
-  70          void printf2(char *puts)
-  71          {
-  72   1               while(*puts) 
-  73   1              {
-  74   2                      sendbyte2(*puts);
-  75   2                      puts++;
-  76   2              }
+  61          sbit out1=P1^6;  //
+  62          sbit out2=P3^2;
+  63          
+  64          extern void deanyan();
+  65          sbit fen=P5^4;
+  66          void testxx()
+  67          {
+  68   1              P5M0 = 0x00; P5M1 = 0x00; 
+  69   1               while (1)
+  70   1               {
+  71   2                      PrintString("ddd is ok\n");
+  72   2                      P5=~P5;
+  73   2                      // fen=;
+  74   2                      delay_ms(1000);
+  75   2                      
+  76   2               }
   77   1      }
   78          
-  79          void io_inint()
-  80          {
-  81   1              P0M1 = 0;       P0M0 = 0;       //设置P0.0~P0.7为准双向口
-  82   1                  P1M0 = 0x00;                                //设置P1.0为ADC口
-  83   1          P1M1 = 0x80;
-  84   1      
-  85   1      
-  86   1              // P1M1 = 0;    P1M0 = 0;       //设置P1.0~P1.7为准双向口
-  87   1              P2M1 = 0;       P2M0 = 0;       //设置P2.0~P2.7为准双向口 
-  88   1                  P3M0 = 0;
-  89   1          P3M1 = 0;
-  90   1              P4M1 = 0;       P4M0 = 0;       //设置P4.0~P4.7为准双向口
-  91   1              P5M1 = 0;       P5M0 = 0;       //设置P5.0~P5.7为准双向口
-  92   1      }
-  93          
-  94          
-  95          
-  96          
-  97          int xinget(int zhi)
+  79          /**************************************
+  80          延时5微秒(STC90C52RC@12M)
+  81          不同的工作环境,需要调整此函数，注意时钟过快时需要修改
+  82          当改用1T的MCU时,请调整此延时函数
+  83          **************************************/
+  84          void Delay5us()
+  85          {
+  86   1              unsigned char i;
+  87   1      
+  88   1              i = 20;
+  89   1              while (--i);
+  90   1      }
+  91          
+  92          /**************************************
+  93          延时5毫秒(STC90C52RC@12M)
+  94          不同的工作环境,需要调整此函数
+  95          当改用1T的MCU时,请调整此延时函数
+  96          **************************************/
+  97          void Delay5ms()
   98          {
-  99   1              if(zhi==0) return x0;
- 100   1              if(zhi==1) return x1;
- 101   1              if(zhi==2) return x2;
- 102   1              if(zhi==3) return x3;
- 103   1              if(zhi==4) return x4;
- 104   1              if(zhi==5) return x5;
- 105   1              if(zhi==6) return x6;
- 106   1              if(zhi==7) return x7;
- 107   1              if(zhi==8) return x8;
- 108   1              if(zhi==9) return x9;
- 109   1      }
- 110          void getxin()
- 111          {
- 112   1              int i;
- 113   1              char datatmp[10];
- 114   1              for(i=0;i<10;i++)
- 115   1              {
- 116   2                      sprintf(datatmp,"x%d %d\n",i,xinget(i));
- 117   2                      PrintString(datatmp);
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 3   
+  99   1      unsigned char i, j;
+ 100   1      
+ 101   1              i = 87;
+ 102   1              j = 42;
+ 103   1              do
+ 104   1              {
+ 105   2                      while (--j);
+ 106   2              } while (--i);
+ 107   1      }
+ 108          
+ 109          /**************************************
+ 110          起始信号
+ 111          **************************************/
+ 112          sbit      SCL=P2^5;      //IIC时钟引脚定义
+ 113          sbit      SDA=P2^4;      //IIC数据引脚定义
+ 114          typedef   unsigned char BYTE;
+ 115          
+ 116          void BH1750_Start()
+ 117          {
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 3   
 
- 118   2              }
- 119   1      }
- 120          void Delay1ms()         //@24.000MHz
- 121          {
- 122   1              unsigned char i, j;
- 123   1      
- 124   1              i = 24;
- 125   1              j = 85;
- 126   1              do
- 127   1              {
- 128   2                      while (--j);
- 129   2              } while (--i);
- 130   1      }
- 131          
- 132          void delay_ms(int m)
- 133          {
- 134   1              int x;
- 135   1              for(x=m;x>0;x--)
- 136   1              {
- 137   2                      Delay1ms();
- 138   2              }
- 139   1              
- 140   1      }
- 141          void Start()
- 142          {uint i=0;
- 143   1          busy = 1;
- 144   1          I2CMSCR = 0x81;                             //发送START命令
- 145   1          while (busy&&i<6000)i++;
- 146   1      }
- 147          
- 148          void SendData(char dat)
- 149          {uint i=0;
- 150   1          I2CTXD = dat;                               //写数据到数据缓冲区
- 151   1          busy = 1;
- 152   1          I2CMSCR = 0x82;                             //发送SEND命令
- 153   1          while (busy&&i<6000)i++;
- 154   1      }
- 155          
- 156          void RecvACK()
- 157          {uint i=0;
- 158   1          busy = 1;
- 159   1          I2CMSCR = 0x83;                             //发送读ACK命令
- 160   1          while (busy&&i<6000)i++;
- 161   1      }
- 162          
- 163          char RecvData()
- 164          {uint i=0;
- 165   1          busy = 1;
- 166   1          I2CMSCR = 0x84;                             //发送RECV命令
- 167   1          while (busy&&i<6000)i++;
- 168   1          return I2CRXD;
- 169   1      }
- 170          
- 171          void SendACK()
- 172          {uint i=0;
- 173   1          I2CMSST = 0x00;                             //设置ACK信号
- 174   1          busy = 1;
- 175   1          I2CMSCR = 0x85;                             //发送ACK命令
- 176   1          while (busy&&i<6000)i++;
- 177   1      }
- 178          
- 179          void SendNAK()
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 4   
+ 118   1          SDA = 1;                    //拉高数据线
+ 119   1          SCL = 1;                    //拉高时钟线
+ 120   1          Delay5us();                 //延时
+ 121   1          SDA = 0;                    //产生下降沿
+ 122   1          Delay5us();                 //延时
+ 123   1          SCL = 0;                    //拉低时钟线
+ 124   1      }
+ 125          
+ 126          /**************************************
+ 127          停止信号
+ 128          **************************************/
+ 129          void BH1750_Stop()
+ 130          {
+ 131   1          SDA = 0;                    //拉低数据线
+ 132   1          SCL = 1;                    //拉高时钟线
+ 133   1          Delay5us();                 //延时
+ 134   1          SDA = 1;                    //产生上升沿
+ 135   1          Delay5us();                 //延时
+ 136   1      }
+ 137          
+ 138          /**************************************
+ 139          发送应答信号
+ 140          入口参数:ack (0:ACK 1:NAK)
+ 141          **************************************/
+ 142          void BH1750_SendACK(bit ack)
+ 143          {
+ 144   1          SDA = ack;                  //写应答信号
+ 145   1          SCL = 1;                    //拉高时钟线
+ 146   1          Delay5us();                 //延时
+ 147   1          SCL = 0;                    //拉低时钟线
+ 148   1          Delay5us();                 //延时
+ 149   1      }
+ 150          
+ 151          /**************************************
+ 152          接收应答信号
+ 153          **************************************/
+ 154          bit BH1750_RecvACK()
+ 155          {
+ 156   1          SCL = 1;                    //拉高时钟线
+ 157   1          Delay5us();                 //延时
+ 158   1          CY = SDA;                   //读应答信号
+ 159   1          SCL = 0;                    //拉低时钟线
+ 160   1          Delay5us();                 //延时
+ 161   1      
+ 162   1          return CY;
+ 163   1      }
+ 164          
+ 165          /**************************************
+ 166          向IIC总线发送一个字节数据
+ 167          **************************************/
+ 168          void BH1750_SendByte(BYTE dat)
+ 169          {
+ 170   1          BYTE i;
+ 171   1      
+ 172   1          for (i=0; i<8; i++)         //8位计数器
+ 173   1          {
+ 174   2              dat <<= 1;              //移出数据的最高位
+ 175   2              SDA = CY;               //送数据口
+ 176   2              SCL = 1;                //拉高时钟线
+ 177   2              Delay5us();             //延时
+ 178   2              SCL = 0;                //拉低时钟线
+ 179   2              Delay5us();             //延时
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 4   
 
- 180          {uint i=0;
- 181   1          I2CMSST = 0x01;                             //设置NAK信号
- 182   1          busy = 1;
- 183   1          I2CMSCR = 0x85;                             //发送ACK命令
- 184   1          while (busy&&i<6000)i++;
- 185   1      }
- 186          
- 187          void Stop()
- 188          {uint i=0;
- 189   1          busy = 1;
- 190   1          I2CMSCR = 0x86;                             //发送STOP命令
- 191   1          while (busy&&i<6000)i++;
- 192   1      }
- 193          void I2C_Isr() interrupt 24
- 194          {
- 195   1          _push_(P_SW2);
- 196   1          P_SW2 |= 0x80;
- 197   1          if (I2CMSST & 0x40)
- 198   1          {
- 199   2              I2CMSST &= ~0x40;                       //清中断标志
- 200   2              busy = 0;
+ 180   2          }
+ 181   1          BH1750_RecvACK();
+ 182   1      }
+ 183          
+ 184          /**************************************
+ 185          从IIC总线接收一个字节数据
+ 186          **************************************/
+ 187          BYTE BH1750_RecvByte()
+ 188          {
+ 189   1          BYTE i;
+ 190   1          BYTE dat = 0;
+ 191   1      
+ 192   1          SDA = 1;                    //使能内部上拉,准备读取数据,
+ 193   1          for (i=0; i<8; i++)         //8位计数器
+ 194   1          {
+ 195   2              dat <<= 1;
+ 196   2              SCL = 1;                //拉高时钟线
+ 197   2              Delay5us();             //延时
+ 198   2              dat |= SDA;             //读数据               
+ 199   2              SCL = 0;                //拉低时钟线
+ 200   2              Delay5us();             //延时
  201   2          }
- 202   1          _pop_(P_SW2);
+ 202   1          return dat;
  203   1      }
- 204          sbit out1=P1^6;  //
- 205          sbit out2=P3^2;
- 206          void deanyan()
- 207           {  
- 208   1              int sw1=2000;
- 209   1              int sw2=3000;
- 210   1              Start();                                    //发送起始命令
- 211   1          SendData(0xc2);                             //发送设备地址+写命令
- 212   1          RecvACK();
- 213   1          SendData(0x60);                             //发送存储地址高字节
- 214   1          RecvACK();
- 215   1          SendData(sw1/16);                             //发送存储地址低字节
- 216   1          RecvACK();
- 217   1          SendData((sw1%16)<<4);                             //写测试数据1
- 218   1          RecvACK();
- 219   1          Stop();                                     //发送停止命令
- 220   1      
- 221   1          Start();                                    //发送起始命令
- 222   1          SendData(0xc0);                             //发送设备地址+写命令
- 223   1          RecvACK();
- 224   1          SendData(0x60);                             //发送存储地址高字节
- 225   1          RecvACK();
- 226   1          SendData(sw2/16);                             //发送存储地址低字节
- 227   1          RecvACK();
- 228   1          SendData((sw2%16)<<4);                             //写测试数据1
- 229   1          RecvACK();
- 230   1          Stop();
- 231   1                      
- 232   1                      Start();                                    //发送起始命令
- 233   1          SendData(0xc2);                             //发送设备地址+写命令
- 234   1          RecvACK();
- 235   1          SendData(0x60);                             //发送存储地址高字节
- 236   1          RecvACK();
- 237   1          SendData(sw1/16);                             //发送存储地址低字节
- 238   1          RecvACK();
- 239   1          SendData((sw1%16)<<4);                             //写测试数据1
- 240   1          RecvACK();
- 241   1          Stop();                                     //发送停止命令
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 5   
+ 204          
+ 205          //*********************************
+ 206          #define   SlaveAddress   0x46 //定义器件在IIC总线中的从地址,根据ALT  ADDRESS地址引脚不同修改
+ 207                                        //ALT  ADDRESS引脚接地时地址为0x46，接电源时地址为0xB8
+ 208          
+ 209          void Single_Write_BH1750(uchar REG_Address)
+ 210          {
+ 211   1          BH1750_Start();                  //起始信号
+ 212   1          BH1750_SendByte(SlaveAddress);   //发送设备地址+写信号
+ 213   1          BH1750_SendByte(REG_Address);    //内部寄存器地址，
+ 214   1        //  BH1750_SendByte(REG_data);       //内部寄存器数据，
+ 215   1          BH1750_Stop();                   //发送停止信号
+ 216   1      }
+ 217          
+ 218          //********单字节读取*****************************************
+ 219          /*
+ 220          uchar Single_Read_BH1750(uchar REG_Address)
+ 221          {  uchar REG_data;
+ 222              BH1750_Start();                          //起始信号
+ 223              BH1750_SendByte(SlaveAddress);           //发送设备地址+写信号
+ 224              BH1750_SendByte(REG_Address);                   //发送存储单元地址，从0开始 
+ 225              BH1750_Start();                          //起始信号
+ 226              BH1750_SendByte(SlaveAddress+1);         //发送设备地址+读信号
+ 227              REG_data=BH1750_RecvByte();              //读出寄存器数据
+ 228                  BH1750_SendACK(1);   
+ 229                  BH1750_Stop();                           //停止信号
+ 230              return REG_data; 
+ 231          }
+ 232          */
+ 233          //*********************************************************
+ 234          //
+ 235          //连续读出BH1750内部数据
+ 236          //
+ 237          //*********************************************************
+ 238          BYTE    BUF[8];                         //接收数据缓存区  
+ 239          void Multiple_read_BH1750()
+ 240          {   uchar i;    
+ 241   1          BH1750_Start();                          //起始信号
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 5   
 
- 242   1      
- 243   1          Start();                                    //发送起始命令
- 244   1          SendData(0xc0);                             //发送设备地址+写命令
- 245   1          RecvACK();
- 246   1          SendData(0x60);                             //发送存储地址高字节
- 247   1          RecvACK();
- 248   1          SendData(sw2/16);                             //发送存储地址低字节
- 249   1          RecvACK();
- 250   1          SendData((sw2%16)<<4);                             //写测试数据1
- 251   1          RecvACK();
- 252   1          Stop();
- 253   1              
- 254   1                        
- 255   1       }
- 256          void main()                                                    
- 257          {
- 258   1              
- 259   1              io_inint();
- 260   1              Uart23Init();
- 261   1              
- 262   1              
- 263   1              Timer0Init();
- 264   1              UartInit();
- 265   1              
- 266   1              Uart4Init();
- 267   1              PrintString("system is ok\n");
- 268   1              P_SW2 = 0x80;
- 269   1          I2CCFG = 0xe0;                              //使能I2C主机模式
- 270   1          I2CMSST = 0x00;
- 271   1               EA = 1;
- 272   1              out2=1;
- 273   1              delay_ms(10);
- 274   1              Modbus_ClearBuff();
- 275   1      delay_ms(200);
- 276   1      deanyan();
- 277   1              while (1)
- 278   1              {
- 279   2                      delay_ms(2);
- 280   2                      // printf("0000000000");
- 281   2                      if(recover==1)
- 282   2                      {
- 283   3                              // deanyan();
- 284   3                              jishouokjisuan();
- 285   3                              recover=0;
- 286   3                      }
- 287   2              }
- 288   1      }
- 289                   
- 290                   
- 291          
- 292          
- 293          
- 294          void Timer0() interrupt 1
- 295          {
- 296   1              time1msjisuan();
- 297   1      }
- 298          char buf1[100]={0};
- 299          int weizhi1=0;
- 300          void putchuankou1(char c)
- 301          {
- 302   1          
- 303   1          buf1[weizhi1++]=c;
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 6   
+ 242   1          BH1750_SendByte(SlaveAddress+1);         //发送设备地址+读信号
+ 243   1              
+ 244   1               for (i=0; i<3; i++)                      //连续读取2个地址数据，存储中BUF
+ 245   1          {
+ 246   2              BUF[i] = BH1750_RecvByte();          //BUF[0]存储0x32地址中的数据
+ 247   2              if (i == 3)
+ 248   2              {
+ 249   3      
+ 250   3                 BH1750_SendACK(1);                //最后一个数据需要回NOACK
+ 251   3              }
+ 252   2              else
+ 253   2              {               
+ 254   3                BH1750_SendACK(0);                //回应ACK
+ 255   3             }
+ 256   2         }
+ 257   1      
+ 258   1          BH1750_Stop();                          //停止信号
+ 259   1          Delay5ms();
+ 260   1      }
+ 261          
+ 262          
+ 263          //初始化BH1750，根据需要请参考pdf进行修改****
+ 264          void Init_BH1750()
+ 265          {
+ 266   1         Single_Write_BH1750(0x01);  
+ 267   1      
+ 268   1      }
+ 269          
+ 270          
+ 271          extern void initiic();
+ 272          int     dis_data;                       //变量
+ 273          void main()                                                    
+ 274          {
+ 275   1              
+ 276   1              io_inint();
+ 277   1              Uart23Init();
+ 278   1              
+ 279   1              
+ 280   1              Timer0Init();
+ 281   1              
+ 282   1              
+ 283   1              Uart4Init();
+ 284   1              
+ 285   1              P_SW2 = 0x80;
+ 286   1          I2CCFG = 0xe0;                              //使能I2C主机模式
+ 287   1          I2CMSST = 0x00;
+ 288   1               EA = 1;
+ 289   1              out2=1;
+ 290   1              out1 = 1;
+ 291   1              delay_ms(10);
+ 292   1              Modbus_ClearBuff();
+ 293   1              out1 = 0;
+ 294   1              UartInit();
+ 295   1      
+ 296   1          initiic();
+ 297   1          delay_ms(10);
+ 298   1          PrintString("system isok");
+ 299   1      
+ 300   1            Init_BH1750();       //初始化BH1750
+ 301   1            delay_ms(10);
+ 302   1          while (1)
+ 303   1              {
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 6   
 
- 304   1          if(weizhi1>80)
- 305   1          weizhi1=0;
- 306   1      }
- 307          void chuliguankji()
- 308          {
- 309   1          char* index;
- 310   1          index=strstr(buf1,"@STCISP#");
- 311   1              if(index==0)
- 312   1              {
- 313   2                      return  ;
- 314   2              }
- 315   1          IAP_CONTR=0x60;
- 316   1          
- 317   1      }
- 318          void UARTInterrupt(void) interrupt 4
- 319          {
- 320   1              unsigned char ans;
- 321   1              if (RI)
- 322   1              {
- 323   2                      RI = 0;
- 324   2                      ans=SBUF;
- 325   2              IAP_CONTR=0x60;
- 326   2                      // putchuankou1(ans);
- 327   2              // chuliguankji();
- 328   2              }
- 329   1              else
- 330   1              {
- 331   2                      TI = 0;
- 332   2              }
- 333   1              if (TI) //发送中断..
- 334   1              {
- 335   2                      TI = 0;
- 336   2              }
- 337   1      }
- 338          
- 339          void uart2(void ) interrupt 8 
+ 304   2                  Single_Write_BH1750(0x01);   // power on
+ 305   2          Single_Write_BH1750(0x10);   // H- resolution mode
+ 306   2            delay_ms(180);
+ 307   2                Multiple_Read_BH1750();       //连续读出数据，存储在BUF中
+*** WARNING C206 IN LINE 307 OF main.c: 'Multiple_Read_BH1750': missing function-prototype
+ 308   2                    dis_data=BUF[0];
+ 309   2          dis_data=(dis_data<<8)+BUF[1];//合成数据，即光照数据
+ 310   2              
+ 311   2              printf("runing %d\n",dis_data);
+ 312   2              delay_ms(10);
+ 313   2                      deanyan();
+ 314   2          }
+ 315   1              while (1)
+ 316   1              {
+ 317   2              
+ 318   2                      delay_ms(1);
+ 319   2                      // printf("0000000000");
+ 320   2                      if(recover==1)
+ 321   2                      {
+ 322   3                              // deanyan();
+ 323   3                              jishouokjisuan();
+ 324   3                              recover=0;
+ 325   3                              deanyan();
+ 326   3                      }
+ 327   2              }
+ 328   1      }
+ 329                   
+ 330                   
+ 331          
+ 332                   
+ 333                   
+ 334          uint time,lv_bo;
+ 335          void Timer0() interrupt 1
+ 336          {
+ 337   1              time1msjisuan();
+ 338   1      }
+ 339          void UARTInterrupt(void) interrupt 4
  340          {
- 341   1        if (S2CON & S2RI)
- 342   1              {
- 343   2                      S2CON &= ~S2RI;         
- 344   2                      temp2 = S2BUF;
- 345   2              }
- 346   1        if (S2CON & S2TI)
- 347   1          {
- 348   2                              //y1=0;
- 349   2              S2CON &= ~S2TI;         //清除S2TI位
- 350   2              busy2 = 0;               //清忙标志
- 351   2          }  
- 352   1      }
- 353          
- 354            
- 355          
- 356          
- 357          void Uart3() interrupt 17 using 1
- 358          {
- 359   1          if (S3CON & S3RI)
- 360   1          {
- 361   2              S3CON &= ~S3RI;         //??S3RI?
- 362   2              temp3 = S3BUF;
- 363   2                      chuankou1jisuuan(temp3);
- 364   2         }
- 365   1      if (S3CON & S3TI)
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 09:13:38 PAGE 7   
+ 341   1              unsigned char ans;
+ 342   1              if (RI)
+ 343   1              {
+ 344   2                      RI = 0;
+ 345   2                      ans=SBUF;
+ 346   2                      IAP_CONTR=0x60;
+ 347   2                      chuankou1jisuuan(ans);
+ 348   2              }
+ 349   1              else
+ 350   1              {
+ 351   2                      TI = 0;
+ 352   2              }
+ 353   1              if (TI) //发送中断..
+ 354   1              {
+ 355   2                      TI = 0;
+ 356   2              }
+ 357   1      }
+ 358          
+ 359          void uart2(void ) interrupt 8 
+ 360          {
+ 361   1        if (S2CON & S2RI)
+ 362   1              {
+ 363   2                      S2CON &= ~S2RI;         
+ 364   2                      temp2 = S2BUF;
+C51 COMPILER V9.05   MAIN                                                                  06/10/2023 17:40:23 PAGE 7   
 
- 366   1          {
- 367   2              S3CON &= ~S3TI;         //清除S3TI位
- 368   2              busy3 = 0;               //清忙标志
- 369   2          }
- 370   1      }
- 371          
- 372          void Uart4() interrupt 18 
- 373          {
- 374   1          if (S4CON & S4RI)
- 375   1          {
- 376   2              S4CON &= ~S4RI;         //??S4RI?
- 377   2              temp4=S4BUF;
- 378   2         }
- 379   1      if(TI4)
- 380   1              {
- 381   2                      CLR_TI4();
- 382   2                      busy4 = 0;               //清忙标志
- 383   2              }
- 384   1      }
- 385          
- 386          
- 387          
-*** WARNING C291 IN LINE 109 OF main.c: not every exit path returns a value
+ 365   2              }
+ 366   1        if (S2CON & S2TI)
+ 367   1          {
+ 368   2                              //y1=0;
+ 369   2              S2CON &= ~S2TI;         //清除S2TI位
+ 370   2              busy2 = 0;               //清忙标志
+ 371   2          }  
+ 372   1      }
+ 373          
+ 374            
+ 375          
+ 376          
+ 377          void Uart3() interrupt 17 using 1
+ 378          {
+ 379   1          if (S3CON & S3RI)
+ 380   1          {
+ 381   2              S3CON &= ~S3RI;         //??S3RI?
+ 382   2              temp3 = S3BUF;
+ 383   2                                      
+ 384   2         }
+ 385   1      if (S3CON & S3TI)
+ 386   1          {
+ 387   2              S3CON &= ~S3TI;         //清除S3TI位
+ 388   2              busy3 = 0;               //清忙标志
+ 389   2          }
+ 390   1      }
+ 391          
+ 392          void Uart4() interrupt 18 
+ 393          {
+ 394   1          if (S4CON & S4RI)
+ 395   1          {
+ 396   2              S4CON &= ~S4RI;         //??S4RI?
+ 397   2              temp4=S4BUF;
+ 398   2         }
+ 399   1      if(TI4)
+ 400   1              {
+ 401   2                      CLR_TI4();
+ 402   2                      busy4 = 0;               //清忙标志
+ 403   2              }
+ 404   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1174    ----
-   CONSTANT SIZE    =     31    ----
-   XDATA SIZE       =    110      18
+   CODE SIZE        =    729    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =     22    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      1    ----
+   BIT SIZE         =   ----       1
 END OF MODULE INFORMATION.
 
 

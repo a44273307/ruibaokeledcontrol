@@ -140,17 +140,24 @@ void chuankou1jisuuan(unsigned char ans)
         rectimes=2;
 }
 int recover=0;
-
+extern void chuliguankji();
 void time1msjisuan()
 {
-    if(rectimes>0)
-    {
-        rectimes--;
-        if(rectimes==0)
+        if (rectimes > 0)
         {
-            recover=1;
+                rectimes--;
+                if (rectimes == 0)
+                {
+                        recover = 1;
+                }
         }
-    }    
+        if (recover == 1)
+        {
+                chuliguankji();
+                // deanyan();
+                jishouokjisuan();
+                recover = 0;
+        }
 }
 
 void Modbus_Cmd(void);

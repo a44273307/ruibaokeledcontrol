@@ -78,12 +78,12 @@ void main()
     EA = 1;
   
     delay_ms(10);
-    Modbus_ClearBuff();
+    
   
     UartInit();
     delay_ms(10);
     PrintString("system isok");
-
+Modbus_ClearBuff();
     Init_BH1750(); // ≥ı ºªØBH1750
     delay_ms(10);
     while (1)
@@ -92,25 +92,19 @@ void main()
         Single_Write_BH1750(0x10); // H- resolution mode
         delay_ms(180);
         dis_data=Multiple_Read_BH1750();
-        printf("runing %d\n", dis_data);
+        // printf("runing %d\n", dis_data);
         delay_ms(10);
     }
     while (1)
     {
 
         delay_ms(1);
-        // printf("0000000000");
-        if (recover == 1)
-        {
-            // deanyan();
-            jishouokjisuan();
-            recover = 0;
-            deanyan();
-        }
+       
     }
 }
 
 uint time, lv_bo;
+extern void time1msjisuan();
 void Timer0() interrupt 1
 {
     time1msjisuan();
@@ -122,7 +116,7 @@ void UARTInterrupt(void) interrupt 4
     {
         RI = 0;
         ans = SBUF;
-        IAP_CONTR = 0x60;
+        // IAP_CONTR = 0x60;
         chuankou1jisuuan(ans);
     }
     else

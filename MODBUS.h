@@ -50,7 +50,16 @@ void jishouokjisuan();
 #define prekz485 HoldingReg[0x0e]//运行..
 #define kz485daowei HoldingReg[0x10]//运行..
 
+
+
+#define busLEdon HoldingReg[1]
+//电压 2-3
+//电流  4-5
+
 extern volatile uint16_t HoldingReg[100];
+
+
+
 
 
 

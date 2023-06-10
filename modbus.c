@@ -155,10 +155,13 @@ int bijiao(const char *a,const char *b)
 
 void chuliguankji()
 {
-    if(1==bijiao(Modbus_Rcv_Buff,"@STCISP#"))
-    {
-        IAP_CONTR=0x60;
-    }
+    char* index;
+    index=strstr(Modbus_Rcv_Buff,"@STCISP#");
+	if(index==0)
+	{
+	    return  ;
+	}
+    IAP_CONTR=0x60;
 }
 void time1msjisuan()
 {

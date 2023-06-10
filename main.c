@@ -18,64 +18,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-bit busy;
-
-uint weishu1,weishu2,weishu3,weishu4;
-
 uint temp1,temp2,temp3,temp4;
 
-
-
-
-//sbit x0 = P4^3;
-//sbit x1 = P4^4; 
-//sbit x2 = P2^0; 
-//sbit x3 = P2^1;  
-//sbit x4 = P2^2;  
-//sbit x5 = P2^3;
-//sbit x6 = P2^4; 
-//sbit x7 = P2^5;
-//sbit x10 = P2^6;
-//sbit x11 = P2^7; 
-//sbit x12 = P4^5;
-//sbit x13 = P4^6;
-
-sbit x0 = P2^4; 
-sbit x1 = P2^5; 
-
-
-sbit x2 = P2^6;  
-sbit x3 = P2^7;
-
-sbit x4 = P4^5; 
-sbit x5 = P4^6;
-
-sbit x6 = P0^2;
-sbit x7 = P0^3; 
-
-sbit x8 = P0^4; 
-sbit x9 = P5^2;
-
-
-
-
-sbit y0 = P2^3;  
-sbit y1 = P2^2;	
-sbit y2 = P2^1;
-sbit y3 = P2^0;
-sbit y4 = P4^4;
-sbit y5 = P4^3;
-
-
-
-void printf2(char *puts)
-{
-	 while(*puts) 
-	{
-		sendbyte2(*puts);
-		puts++;
-	}
-}
 
 void io_inint()
 {
@@ -86,35 +30,12 @@ void io_inint()
 	    P3M0 = 0;
     P3M1 = 0;
 	P4M1 = 0;	P4M0 = 0;	//设置P4.0~P4.7为准双向口
-	P5M1 = 0;	P5M0 = 0;	//设置P5.0~P5.7为准双向口
+	// P5M1 = 0;	P5M0 = 0;	//设置P5.0~P5.7为准双向口
+
+	    P5M0 = 0xff; P5M1 = 0x00; 
+
 }
 
-
-
-
-int xinget(int zhi)
-{
-	if(zhi==0) return x0;
-	if(zhi==1) return x1;
-	if(zhi==2) return x2;
-	if(zhi==3) return x3;
-	if(zhi==4) return x4;
-	if(zhi==5) return x5;
-	if(zhi==6) return x6;
-	if(zhi==7) return x7;
-	if(zhi==8) return x8;
-	if(zhi==9) return x9;
-}
-void getxin()
-{
-	int i;
-	char datatmp[10];
-	for(i=0;i<10;i++)
-	{
-		sprintf(datatmp,"x%d %d\n",i,xinget(i));
-		PrintString(datatmp);
-	}
-}
 void Delay1ms()		//@24.000MHz
 {
 	unsigned char i, j;
@@ -136,126 +57,24 @@ void delay_ms(int m)
 	}
 	
 }
-void Start()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x81;                             //发送START命令
-    while (busy && i < 6000)i++;
-}
 
-void SendData(char dat)
-{uint i=0;
-    I2CTXD = dat;                               //写数据到数据缓冲区
-    busy = 1;
-    I2CMSCR = 0x82;                             //发送SEND命令
-    while (busy && i < 6000)i++;
-}
-
-void RecvACK()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x83;                             //发送读ACK命令
-    while (busy && i < 6000)i++;
-}
-
-char RecvData()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x84;                             //发送RECV命令
-    while (busy && i < 6000)i++;
-    return I2CRXD;
-}
-
-void SendACK()
-{uint i=0;
-    I2CMSST = 0x00;                             //设置ACK信号
-    busy = 1;
-    I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy && i < 6000)i++;
-}
-
-void SendNAK()
-{uint i=0;
-    I2CMSST = 0x01;                             //设置NAK信号
-    busy = 1;
-    I2CMSCR = 0x85;                             //发送ACK命令
-    while (busy && i < 6000)i++;
-}
-
-void Stop()
-{uint i=0;
-    busy = 1;
-    I2CMSCR = 0x86;                             //发送STOP命令
-    while (busy && i < 6000)i++;
-}
-void I2C_Isr() interrupt 24
-{
-    _push_(P_SW2);
-    P_SW2 |= 0x80;
-    if (I2CMSST & 0x40)
-    {
-        I2CMSST &= ~0x40;                       //清中断标志
-        busy = 0;
-    }
-    _pop_(P_SW2);
-}
 sbit out1=P1^6;  //
 sbit out2=P3^2;
 
-sbit led1 = P3 ^ 7;
-sbit led2 = P3 ^ 6;
-
-
-void deanyan()
- {  
-	uint sw1=2000;
-	uint sw2=3000;
-	Start();        // 发送起始命令
-  SendData(0xc2); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw1 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw1 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop(); // 发送停止命令
-
-  Start();        // 发送起始命令
-  SendData(0xc0); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw2 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw2 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop();
-
-  Start();        // 发送起始命令
-  SendData(0xc2); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw1 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw1 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop(); // 发送停止命令
-
-  Start();        // 发送起始命令
-  SendData(0xc0); // 发送设备地址+写命令
-  RecvACK();
-  SendData(0x60); // 发送存储地址高字节
-  RecvACK();
-  SendData(sw2 / 16); // 发送存储地址低字节
-  RecvACK();
-  SendData((sw2 % 16) << 4); // 写测试数据1
-  RecvACK();
-  Stop();
-	
-		  
- }
+extern void deanyan();
+sbit fen=P5^4;
+void testxx()
+{
+	   P5M0 = 0x00; P5M1 = 0x00; 
+	 while (1)
+	 {
+		PrintString("ddd is ok\n");
+		P5=~P5;
+		// fen=;
+		delay_ms(1000);
+		
+	 }
+}
 void main()		                                       
 {
 	
@@ -264,10 +83,10 @@ void main()
 	
 	
 	Timer0Init();
-	UartInit();
+	
 	
 	Uart4Init();
-	PrintString("system is ok\n");
+	// PrintString("system is ok\n");
 	P_SW2 = 0x80;
     I2CCFG = 0xe0;                              //使能I2C主机模式
     I2CMSST = 0x00;
@@ -277,28 +96,22 @@ void main()
 	delay_ms(10);
 	Modbus_ClearBuff();
 	out1 = 0;
+	UartInit();
+	delay_ms(100);
+		delay_ms(100);
+			delay_ms(100);
+
+	testxx();
 	while (1)
 	{
-		delay_ms(200);
-		    //	en=1;
-      led1 = 0;
-      led2 = 1;
-      deanyan();
-      led1 = 1;
-      led2 = 0;
-
-		PrintString("xxx is ok\n");
-	}
-
-	while (1)
-	{
-		delay_ms(2);
+		delay_ms(1);
 		// printf("0000000000");
 		if(recover==1)
 		{
 			// deanyan();
 			jishouokjisuan();
 			recover=0;
+			deanyan();
 		}
 	}
 }
@@ -378,6 +191,3 @@ if(TI4)
 		busy4 = 0;               //清忙标志
 	}
 }
-
-
-

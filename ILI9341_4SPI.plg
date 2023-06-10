@@ -3,13 +3,11 @@
 <pre>
 <h1>礦ision Build Log</h1>
 <h2>Project:</h2>
-d:\瑞宝科\合一板卡\modbusces2\ILI9341_4SPI.uvproj
-Project File Date:  06/02/2023
+d:\瑞宝科\合一板卡\corotol2\ILI9341_4SPI.uvproj
+Project File Date:  06/04/2023
 
 <h2>Output:</h2>
 Build target 'Target 1'
-compiling modbus.c...
-modbus.c(591): warning C280: 'huart': unreferenced local variable
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_PRINTF2?MAIN
@@ -21,6 +19,10 @@ linking...
     SEGMENT: ?PR?SENDACK?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?SENDNAK?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_PUTCHUANKOU1?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHULIGUANKJI?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SENDBYTE3?UART
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
@@ -39,6 +41,6 @@ linking...
     SEGMENT: ?PR?_LOW4BITSTOONEBYTE?MODBUS
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_HEXTOOLEDASC?MODBUS
-Program Size: data=23.5 xdata=417 code=4741
+Program Size: data=23.5 xdata=514 code=4981
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 15 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 16 Warning(s).

@@ -20,7 +20,6 @@
 
 bit busy;
 
-uint weishu1,weishu2,weishu3,weishu4;
 
 uint temp1,temp2,temp3,temp4;
 
@@ -290,12 +289,31 @@ deanyan();
 	 
 	 
 
-	 
-	 
-uint time,lv_bo;
+
+
 void Timer0() interrupt 1
 {
 	time1msjisuan();
+}
+char buf1[100]={0};
+int weizhi1=0;
+void putchuankou1(char c)
+{
+    
+    buf1[weizhi1++]=c;
+    if(weizhi1>80)
+    weizhi1=0;
+}
+void chuliguankji()
+{
+    char* index;
+    index=strstr(buf1,"@STCISP#");
+	if(index==0)
+	{
+		return  ;
+	}
+    IAP_CONTR=0x60;
+    
 }
 void UARTInterrupt(void) interrupt 4
 {
@@ -304,7 +322,9 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans=SBUF;
- 		chuankou1jisuuan(ans);
+        IAP_CONTR=0x60;
+ 		// putchuankou1(ans);
+        // chuliguankji();
 	}
 	else
 	{
@@ -340,7 +360,7 @@ void Uart3() interrupt 17 using 1
     {
         S3CON &= ~S3RI;         //??S3RI?
         temp3 = S3BUF;
-				
+		chuankou1jisuuan(temp3);
    }
 if (S3CON & S3TI)
     {

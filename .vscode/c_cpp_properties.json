@@ -15,7 +15,7 @@
             "name": "Target 1",
             "includePath": [
                 "C:\\Keil\\C51\\INC",
-                "d:\\瑞宝科\\合一板卡\\modbusces2"
+                "d:\\瑞宝科\\合一板卡\\corotol2"
             ],
             "defines": [
                 "__C51__",

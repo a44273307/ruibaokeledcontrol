@@ -376,6 +376,11 @@
               <FileType>1</FileType>
               <FilePath>.\ledcontrol.c</FilePath>
             </File>
+            <File>
+              <FileName>modbus2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\modbus2.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

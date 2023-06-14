@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
 #define uint unsigned int
 #define uchar unsigned char
+
 
 typedef unsigned char uint8_t;
 typedef unsigned char u8;

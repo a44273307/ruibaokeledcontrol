@@ -3,6 +3,7 @@
 "delay.obj",
 "uart.obj",
 "modbus.obj",
-"ledcontrol.obj" 
+"ledcontrol.obj",
+"modbus2.obj" 
 TO "ILI9341_4SPI" 
 RAMSIZE(256) 

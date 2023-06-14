@@ -114,7 +114,7 @@ static uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)
 //最后修改：2015.11.20
 //备注：
 //----------------------------------------------------------------------------//
-void Modbus_Init(void)
+static void Modbus_Init()
 {
         uint16_t i;
         
@@ -149,7 +149,7 @@ void chuankou1jisuuan(unsigned char ans)
 	Modbus_Rcv_Cnt++;
         rectimes=2;
 }
-static int recover=0;
+ int recover=0;
 
 static void chuliguankji()
 {
@@ -162,6 +162,11 @@ static void chuliguankji()
         printf("rec @STCISP#,researt now");
     IAP_CONTR=0x60;
 }
+void chulimodbus()
+{
+        // chuliguankji();
+        jishouokjisuan();
+}            
 void time1msjisuan()
 {
         if (rectimes > 0)
@@ -169,15 +174,14 @@ void time1msjisuan()
                 rectimes--;
                 if (rectimes == 0)
                 {
+                        printf("jishouokjisuan");
                         recover = 1;
                 }
         }
-        if (recover == 1)
-        {
-                chuliguankji();
-                jishouokjisuan();
-                recover = 0;
-        }
+        // if (recover == 1)
+        // {
+        //          chulimodbus();
+        // }
 }
 
 void Modbus_Cmd(void);
@@ -206,7 +210,7 @@ static void Modbus_Cmd(void)
         uint8_t Modbus_CRC_Rcv_Lo;                //接收到的ModbusCRC校验码低字节
         uint16_t Modbus_CRC_Rcv;                //接收到的ModbusCRC校验码
         uint16_t Modbus_CRC_Cal;                //根据接收到的数据计算出来的CRC值
-        
+        // printf("Modbus_Cmd %bd %bd",Modbus_Rcv_Cnt,Modbus_Rcv_Buff[1]);
         //----------------------------------------------------------//
         //开始命令解析
         //----------------------------------------------------------//
@@ -220,6 +224,7 @@ static void Modbus_Cmd(void)
                         Modbus_CRC_Cal = Modbus_CRC16(Modbus_Rcv_Buff, Modbus_Rcv_Cnt - 2);                        //根据接收到的数据计算CRC值
                         if(Modbus_CRC_Cal == Modbus_CRC_Rcv)                //如果计算的CRC值与接受的CRC值相等
                         {
+                                printf("Modbus_CRC_Rcv ok %bd",Modbus_Rcv_Cnt);
                                 //USART_SendByte(USART1, 0xAC);
                                 if(Slave_Address == Modbus_Rcv_Buff[0])        //如果是本机地址
                                 {
@@ -237,7 +242,8 @@ static void Modbus_Cmd(void)
                                         
                                         case Modbus_WriteMultipleReg:
                                                 Modbus_Function = Modbus_WriteMultipleReg;        //将从站设备需执行的功能赋值为写多个寄存器
-                                                Modbus_Exe_flag = 1;                                                //设备进入命令执行状态
+                                                Modbus_Exe_flag = 1; 
+                                                printf("Modbus_WriteMultipleReg ok %bd",Modbus_Rcv_Cnt);                                               //设备进入命令执行状态
                                                 break;                                                                                //跳出分支语句
                                                 
                                         default:
@@ -416,7 +422,7 @@ static void Modbus_WriteMultipleReg_Process(void)
         
         StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //从接收数据缓冲区得到要写入的寄存器起始地址
         Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //从接收数据缓冲区得到要写入的寄存器数量
-        
+        printf("StartAddress_Reg %d Num_Reg %d",StartAddress_Reg,Num_Reg);
         if(StartAddress_Reg < 100)                        //寄存器起始地址在正确范围内
         {
                 if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确                        
@@ -595,6 +601,6 @@ static void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
         int i;
         for(i=0;i<Size;i++)
         {
-                sendbyte1(pData[i]);
+            sendbyte4(pData[i]);
         }
 }

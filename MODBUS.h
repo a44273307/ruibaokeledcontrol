@@ -5,16 +5,17 @@
 
 
 
-void Modbus_ClearBuff(void);
-void chuankou1jisuuan(unsigned char ans);
+extern void Modbus_ClearBuff();
+extern void chuankou1jisuuan(unsigned char ans);
 
 
 
-// extern volatile uint16_t HoldingReg[100];
+extern volatile unsigned short HoldingReg[100];
+extern void time1msjisuan();
 
-// #define regdianya HoldingReg[3]
-// #define regdianliu HoldingReg[4]
-// #define reglight   HoldingReg[5]
+#define regdianya HoldingReg[3]
+#define regdianliu HoldingReg[4]
+#define reglight   HoldingReg[5]
 
 
 

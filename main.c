@@ -8,17 +8,17 @@
 #include <intrins.h>      // 加入此头文件后,可使用_nop_库函数
 #include "delay.h"        // 延时函数头文件
 #include "uart.h"         // 串行通信函数头文件
-#define uint unsigned int
-#define uchar unsigned char
+#include "ledcontrol.h"
+#include "comhead.h"
 #include <stdio.h>
-#include <string.h>
-#include "MODBUS.h"
 
+#include "MODBUS.h"
+#include "MODBUS2.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "ledcontrol.h"
-uint temp1, temp2, temp3, temp4;
+
+uchar temp1, temp2, temp3, temp4;
 
 void io_inint()
 {
@@ -60,54 +60,72 @@ void delay_ms(int m)
     }
 }
 
-
-
+extern int recover;
+extern void chulimodbus();
 void main()
 {
     int dis_data;
     io_inint();
     Uart23Init();
-
     Timer0Init();
-
     Uart4Init();
-
-    P_SW2 = 0x80;
-    I2CCFG = 0xe0; // 使能I2C主机模式
-    I2CMSST = 0x00;
     EA = 1;
-  
-    delay_ms(10);
-    
-  
+
+    delay_ms(2);
     UartInit();
-    delay_ms(10);
     PrintString("system isok");
-Modbus_ClearBuff();
+    print4("system isok");
+    delay_ms(2);
+    Modbus_ClearBuff();
+    delay_ms(2);
     Init_BH1750(); // 初始化BH1750
-    delay_ms(10);
+
+    while (1)
+    {
+        if (recover == 1)
+        {
+            chulimodbus();
+            recover = 0;
+        }
+        delay_ms(2);
+    }
     while (1)
     {
         Single_Write_BH1750(0x01); // power on
         Single_Write_BH1750(0x10); // H- resolution mode
         delay_ms(180);
-        dis_data=Multiple_Read_BH1750();
-        // printf("runing %d\n", dis_data);
-        delay_ms(10);
-    }
-    while (1)
-    {
-
-        delay_ms(1);
-       
+        dis_data = Multiple_Read_BH1750();
+        delay_ms(2);
     }
 }
 
-uint time, lv_bo;
 extern void time1msjisuan();
 void Timer0() interrupt 1
 {
     time1msjisuan();
+}
+
+char ans1[100] = {0};
+int weizhi1 = 0;
+static void chuliguankji(char *ans1)
+{
+    char *index;
+    index = strstr(ans1, "@STCISP#");
+    if (index == 0)
+    {
+        return;
+    }
+    printf("rec @STCISP#,researt now");
+    IAP_CONTR = 0x60;
+}
+void input(char c)
+{
+    ans1[weizhi1++] = c;
+    if (weizhi1 > 80)
+    {
+        weizhi1 = 0;
+    }
+    chuliguankji(ans1);
 }
 void UARTInterrupt(void) interrupt 4
 {
@@ -116,8 +134,8 @@ void UARTInterrupt(void) interrupt 4
     {
         RI = 0;
         ans = SBUF;
-        // IAP_CONTR = 0x60;
-        chuankou1jisuuan(ans);
+        input(ans);
+        // IAP_CONTR=0x60;
     }
     else
     {
@@ -160,10 +178,12 @@ void Uart3() interrupt 17 using 1
 
 void Uart4() interrupt 18
 {
+    unsigned char ans;
     if (S4CON & S4RI)
     {
         S4CON &= ~S4RI; //??S4RI?
-        temp4 = S4BUF;
+        ans = S4BUF;
+        chuankou1jisuuan(ans);
     }
     if (TI4)
     {

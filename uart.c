@@ -54,7 +54,7 @@ void UartInit(void)		//115200@24.000MHz
 	AUXR |= 0x40;		//定时器1时钟为Fosc,即1T
 	AUXR &= 0xFE;		//串口1选择定时器1为波特率发生器
 	TMOD &= 0x0F;		//设定定时器1为16位自动重装方式
-	TL1 = 0xE8;			//设置定时初始值
+	TL1 = 0xCC;			//设置定时初始值
 	TH1 = 0xFF;			//设置定时初始值
 	ET1 = 0;		//禁止定时器1中断
 	TR1 = 1;		//启动定时器1
@@ -83,8 +83,8 @@ void Uart4Init(void)		//9600bps@24.000MHz	.串口4
 	S4CON = 0x10;		//8位数据,可变波特率
 	S4CON |= 0x40;		//串口4选择定时器4为波特率发生器
 	T4T3M |= 0x20;		//定时器4时钟为Fosc,即1T
-	T4L = 0x8F;		//设定定时初值
-	T4H = 0xFD;		//设定定时初值
+	T4L = 0xCC;		//设定定时初值
+	T4H = 0xFF;		//设定定时初值
 	T4T3M |= 0x80;		//启动定时器4	
 	S4CON &= ~(1<<5);	//禁止多机通讯方式
 	S4CON &= ~(1<<7);	// 8位数据, 1位起始位, 1位停止位, 无校验
@@ -115,18 +115,16 @@ void Uart4Init(void)		//9600bps@24.000MHz	.串口4
 
 void sendbyte1(unsigned char ch)
 {
+	int i;
 	// EA=0;
     TI     =   0;  //清零串口发送完成中断请求标志
     SBUF   =   ch;
     while(TI ==0) //等待发送完成
 	{
-		// for(i=0;i<2000; i++){
-		// 	if(	TI) break;
-		// }
-		// break;
-
-
-
+		for(i=0;i<2000; i++){
+			if(	TI) break;
+		}
+		break;
 	}
 	EA=1;
 }
@@ -153,6 +151,14 @@ void sendbyte3(unsigned char ch)
 	  busy3 = 1;
     S3BUF = ch;                //写数据到UART2数据寄存器
 }
+void print3(char *p)
+{
+	while (*p != '\0')
+	{
+		sendbyte3(*p);
+		p++;
+	}
+}
 
 /*----------------------------
 通过串口4发送串口数据
@@ -160,8 +166,16 @@ void sendbyte3(unsigned char ch)
 void sendbyte4(unsigned char ch)
 {
     while (busy4);               //等待前面的数据发送完成
-	  busy4 = 1;
+	busy4 = 1;
     S4BUF = ch;                //写数据到UART2数据寄存器
+}
+void print4(char *p)
+{
+	while (*p != '\0')
+	{
+		sendbyte4(*p);
+		p++;
+	}
 }
 int debug=1;
 void PrintString(const char *puts)

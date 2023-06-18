@@ -2,7 +2,8 @@
     "files.associations": {
         "modbus.h": "c",
         "ledcontrol.h": "c",
-        "comhead.h": "c"
+        "comhead.h": "c",
+        "delay.h": "c"
     },
     "files.exclude": {
         "**/ILI9341_4SPI**": true,

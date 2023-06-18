@@ -28,17 +28,10 @@ void Delay5us()
 不同的工作环境,需要调整此函数
 当改用1T的MCU时,请调整此延时函数
 **************************************/
+extern void delay_ms(int m);
 void Delay5ms()
 {
-    unsigned char i, j;
-
-    i = 87;
-    j = 42;
-    do
-    {
-        while (--j)
-            ;
-    } while (--i);
+    delay_ms(5);
 }
 
 /**************************************

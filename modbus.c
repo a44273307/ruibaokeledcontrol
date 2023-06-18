@@ -74,7 +74,7 @@ static char cuncu_485()
  {
 	return 1;
  }
-static uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)
+uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)
 {
         uint16_t CRC_Cal = 0xFFFF;
         uint8_t CRC_High, CRC_Low;
@@ -174,7 +174,6 @@ void time1msjisuan()
                 rectimes--;
                 if (rectimes == 0)
                 {
-                        printf("jishouokjisuan");
                         recover = 1;
                 }
         }

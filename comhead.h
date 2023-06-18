@@ -11,8 +11,8 @@
 
 
 typedef unsigned char uint8_t;
-typedef unsigned char u8;
 typedef unsigned short uint16_t;
+typedef unsigned char u8;
 
 
 

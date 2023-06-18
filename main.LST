@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 1   
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE MAIN
@@ -26,7 +26,7 @@ line level    source
   17          #include <stdio.h>
   18          #include <string.h>
   19          #include <stdlib.h>
-  20          
+  20          int delay_mszhi;
   21          uint temp1,temp2,temp3,temp4;
   22          
   23          
@@ -62,7 +62,7 @@ line level    source
   53   1        IAP_CONTR = 0;    // ??±?IAP????
   54   1        IAP_CMD = 0;      // ?????ü???????÷
   55   1        IAP_TRIG = 0;     // ??????·??????÷
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 2   
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 2   
 
   56   1        IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
   57   1        IAP_ADDRL = 0;
@@ -126,7 +126,7 @@ line level    source
  115          {
  116   1        uchar t, t1;
  117   1        p1 = IapRead(Iapid + 1);
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 3   
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 3   
 
  118   1        a_a = IapRead(Iapid + 60);
  119   1      }
@@ -190,7 +190,7 @@ line level    source
  175   1          int dizhi=Iapid+1;
  176   1          for ( i = 0; i < len_HoldingReg; i++)
  177   1          {
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 4   
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 4   
 
  178   2              dizhi=dizhi+1;
  179   2              Exxwrite(dizhi,HoldingReg[i]);
@@ -241,108 +241,111 @@ line level    source
  224   1              {
  225   2                      if (recover == 1)
  226   2              {
- 227   3                              chuliguankji();
-*** WARNING C206 IN LINE 227 OF main.c: 'chuliguankji': missing function-prototype
- 228   3                  jishouokjisuan();
- 229   3                  if(IsbuffcheckFailed())
- 230   3                  {
- 231   4                      buffchecktongbu();
- 232   4                      deanyan();
- 233   4                      writebuf();
- 234   4                  }
- 235   3                  recover = 0;
- 236   3              }
- 237   2              }
- 238   1      } 
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 5   
+ 227   3                  delay_mszhi=0;
+ 228   3                              chuliguankji();
+*** WARNING C206 IN LINE 228 OF main.c: 'chuliguankji': missing function-prototype
+ 229   3                  jishouokjisuan();
+ 230   3                  if(IsbuffcheckFailed())
+ 231   3                  {
+ 232   4                      printf("xiugaidata begin");
+ 233   4                      buffchecktongbu();
+ 234   4                      deanyan();
+ 235   4                      writebuf();
+ 236   4                      printf("xiugaidata end %d",delay_mszhi);
+ 237   4                  }
+ 238   3                  recover = 0;
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 5   
 
- 239          int delay_mszhi;         
- 240          uint time,lv_bo;
- 241          void delay_ms(int m)
- 242          {
- 243   1          delay_mszhi=m*2;
- 244   1          while (delay_mszhi>=0)
- 245   1          {
- 246   2              
- 247   2          }
- 248   1      }
- 249          void Timer0() interrupt 1
- 250          {
- 251   1              time1msjisuan();
- 252   1              delay_mszhi--;
- 253   1      }
- 254          void UARTInterrupt(void) interrupt 4
- 255          {
- 256   1              unsigned char ans;
- 257   1              if (RI)
- 258   1              {
- 259   2                      RI = 0;
- 260   2                      ans=SBUF;
- 261   2                      chuankou1jisuuan(ans);
- 262   2              }
- 263   1              else
- 264   1              {
- 265   2                      TI = 0;
- 266   2              }
- 267   1              if (TI) //发送中断..
- 268   1              {
- 269   2                      TI = 0;
- 270   2              }
- 271   1      }
- 272          
- 273          void uart2(void ) interrupt 8 
- 274          {
- 275   1        if (S2CON & S2RI)
- 276   1              {
- 277   2                      S2CON &= ~S2RI;         
- 278   2                      temp2 = S2BUF;
- 279   2              }
- 280   1        if (S2CON & S2TI)
- 281   1          {
- 282   2                              //y1=0;
- 283   2              S2CON &= ~S2TI;         //清除S2TI位
- 284   2              busy2 = 0;               //清忙标志
- 285   2          }  
- 286   1      }
- 287          
- 288            
- 289          
+ 239   3              }
+ 240   2              }
+ 241   1      } 
+ 242          int delay_mszhi;         
+ 243          uint time,lv_bo;
+ 244          void delay_ms(int m)
+ 245          {
+ 246   1          delay_mszhi=0;
+ 247   1          while (delay_mszhi<=m*2)
+ 248   1          {
+ 249   2              
+ 250   2          }
+ 251   1      }
+ 252          void Timer0() interrupt 1
+ 253          {
+ 254   1              time1msjisuan();
+ 255   1              delay_mszhi++;
+ 256   1      }
+ 257          void UARTInterrupt(void) interrupt 4
+ 258          {
+ 259   1              unsigned char ans;
+ 260   1              if (RI)
+ 261   1              {
+ 262   2                      RI = 0;
+ 263   2                      ans=SBUF;
+ 264   2                      chuankou1jisuuan(ans);
+ 265   2              }
+ 266   1              else
+ 267   1              {
+ 268   2                      TI = 0;
+ 269   2              }
+ 270   1              if (TI) //发送中断..
+ 271   1              {
+ 272   2                      TI = 0;
+ 273   2              }
+ 274   1      }
+ 275          
+ 276          void uart2(void ) interrupt 8 
+ 277          {
+ 278   1        if (S2CON & S2RI)
+ 279   1              {
+ 280   2                      S2CON &= ~S2RI;         
+ 281   2                      temp2 = S2BUF;
+ 282   2              }
+ 283   1        if (S2CON & S2TI)
+ 284   1          {
+ 285   2                              //y1=0;
+ 286   2              S2CON &= ~S2TI;         //清除S2TI位
+ 287   2              busy2 = 0;               //清忙标志
+ 288   2          }  
+ 289   1      }
  290          
- 291          void Uart3() interrupt 17 using 1
- 292          {
- 293   1          if (S3CON & S3RI)
- 294   1          {
- 295   2              S3CON &= ~S3RI;         //??S3RI?
- 296   2              temp3 = S3BUF;
- 297   2                                      
- 298   2         }
- 299   1      if (S3CON & S3TI)
- 300   1          {
-C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:17:12 PAGE 6   
+ 291            
+ 292          
+ 293          
+ 294          void Uart3() interrupt 17 using 1
+ 295          {
+ 296   1          if (S3CON & S3RI)
+ 297   1          {
+ 298   2              S3CON &= ~S3RI;         //??S3RI?
+ 299   2              temp3 = S3BUF;
+ 300   2                                      
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 16:50:31 PAGE 6   
 
- 301   2              S3CON &= ~S3TI;         //清除S3TI位
- 302   2              busy3 = 0;               //清忙标志
- 303   2          }
- 304   1      }
- 305          
- 306          void Uart4() interrupt 18 
- 307          {
- 308   1          if (S4CON & S4RI)
- 309   1          {
- 310   2              S4CON &= ~S4RI;         //??S4RI?
- 311   2              temp4=S4BUF;
- 312   2         }
- 313   1      if(TI4)
- 314   1              {
- 315   2                      CLR_TI4();
- 316   2                      busy4 = 0;               //清忙标志
- 317   2              }
- 318   1      }
+ 301   2         }
+ 302   1      if (S3CON & S3TI)
+ 303   1          {
+ 304   2              S3CON &= ~S3TI;         //清除S3TI位
+ 305   2              busy3 = 0;               //清忙标志
+ 306   2          }
+ 307   1      }
+ 308          
+ 309          void Uart4() interrupt 18 
+ 310          {
+ 311   1          if (S4CON & S4RI)
+ 312   1          {
+ 313   2              S4CON &= ~S4RI;         //??S4RI?
+ 314   2              temp4=S4BUF;
+ 315   2         }
+ 316   1      if(TI4)
+ 317   1              {
+ 318   2                      CLR_TI4();
+ 319   2                      busy4 = 0;               //清忙标志
+ 320   2              }
+ 321   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1218    ----
-   CONSTANT SIZE    =     51    ----
+   CODE SIZE        =   1276    ----
+   CONSTANT SIZE    =     86    ----
    XDATA SIZE       =     56      12
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

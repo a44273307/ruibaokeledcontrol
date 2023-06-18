@@ -94,7 +94,7 @@ void deanyanpre()
   uint sw2=3000;
 //   sw1=HoldingReg[3];
   sw2=HoldingReg[4];
-  printf("***%d-%d***\n",sw2/256,sw2%256);
+//   printf("***%d-%d***\n",sw2/256,sw2%256);
   deanyanpreadddeal(sw2);
   Start();        // 发送起始命令
   SendData(0xc2); // 发送设备地址+写命令

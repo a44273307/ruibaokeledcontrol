@@ -61,7 +61,7 @@ void init_485()
 }
 char cuncu_485()
  {
-	// printf("cuncu_485 %d",1);
+	
 	return 1;
  }
 uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)

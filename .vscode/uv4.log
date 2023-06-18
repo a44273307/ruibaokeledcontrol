@@ -1,8 +1,5 @@
 Build target 'Target 1'
-compiling main.c...
-main.c(116): warning C280: 't': unreferenced local variable
-main.c(116): warning C280: 't1': unreferenced local variable
-main.c(227): warning C206: 'chuliguankji': missing function-prototype
+compiling ledcontrol.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?INIT_EEPROM?MAIN
@@ -57,6 +54,6 @@ linking...
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?TIMER0?MAIN
 
-Program Size: data=23.5 xdata=437 code=5474
+Program Size: data=23.5 xdata=437 code=5487
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 20 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 17 Warning(s).

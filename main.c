@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+int delay_mszhi;
 uint temp1,temp2,temp3,temp4;
 
 
@@ -224,13 +224,16 @@ void main()
 	{
 		if (recover == 1)
         {
+            delay_mszhi=0;
 			chuliguankji();
             jishouokjisuan();
             if(IsbuffcheckFailed())
             {
+                printf("xiugaidata begin");
                 buffchecktongbu();
                 deanyan();
                 writebuf();
+                printf("xiugaidata end %d",delay_mszhi);
             }
             recover = 0;
         }
@@ -240,8 +243,8 @@ int delay_mszhi;
 uint time,lv_bo;
 void delay_ms(int m)
 {
-    delay_mszhi=m*2;
-    while (delay_mszhi>=0)
+    delay_mszhi=0;
+    while (delay_mszhi<=m*2)
     {
         
     }
@@ -249,7 +252,7 @@ void delay_ms(int m)
 void Timer0() interrupt 1
 {
 	time1msjisuan();
-	delay_mszhi--;
+	delay_mszhi++;
 }
 void UARTInterrupt(void) interrupt 4
 {

@@ -36,94 +36,218 @@ void io_inint()
 
 }
 
-void Delay1ms()		//@24.000MHz
-{
-	unsigned char i, j;
 
-	i = 24;
-	j = 85;
-	do
-	{
-		while (--j);
-	} while (--i);
-}
+void delay_ms(int m);
 
-void delay_ms(int m)
-{
-	int x;
-	for(x=m;x>0;x--)
-	{
-		Delay1ms();
-	}
-	
-}
 
-sbit out1=P1^6;  //
+
 sbit out2=P3^2;
 
 extern void deanyan();
 sbit fen=P5^4;
-void testxx()
+
+#define Iapid 0x0000
+uchar p1, a_a;
+void IapIdle()
 {
-	   P5M0 = 0x00; P5M1 = 0x00; 
-	 while (1)
-	 {
-		PrintString("ddd is ok\n");
-		P5=~P5;
-		// fen=;
-		delay_ms(1000);
-		
-	 }
+  IAP_CONTR = 0;    // ??±?IAP????
+  IAP_CMD = 0;      // ?????ü???????÷
+  IAP_TRIG = 0;     // ??????·??????÷
+  IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
+  IAP_ADDRL = 0;
+}
+
+uint8_t IapRead(int addr)
+{
+  uint8_t dat;
+
+  IAP_CONTR = 0x80;      // ????IAP
+  IAP_TPS = 40;          // ?è??????????12MHz
+  IAP_CMD = 1;           // ?è??IAP???ü??
+  IAP_ADDRL = addr;      // ?è??IAP?????·
+  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+  _nop_();
+  dat = IAP_DATA; // ??IAP????
+  IapIdle();      // ??±?IAP????
+
+  return dat;
+}
+
+void IapProgram(int addr, char dat)
+{
+  IAP_CONTR = 0x80;      // ????IAP
+  IAP_TPS = 40;          // ?è??????????12MHz
+  IAP_CMD = 2;           // ?è??IAP???ü??
+  IAP_ADDRL = addr;      // ?è??IAP?????·
+  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  IAP_DATA = dat;        // ??IAP????
+  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+  _nop_();
+  IapIdle(); // ??±?IAP????
+}
+
+void IapErase(int addr)
+{
+  IAP_CONTR = 0x80;      // ????IAP
+  IAP_TPS = 40;          // ?è??????????12MHz
+  IAP_CMD = 3;           // ?è??IAP?????ü??
+  IAP_ADDRL = addr;      // ?è??IAP?????·
+  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+  _nop_();               //
+  IapIdle();             // ??±?IAP????
+}
+
+//
+void write_eeprom()
+{
+  IapErase(Iapid); // ????????
+  IapProgram(Iapid + 1, p1);
+
+  IapProgram(Iapid + 60, a_a);
+}
+/******************°????????????ú????eeprom????????*****************/
+void read_eeprom()
+{
+  uchar t, t1;
+  p1 = IapRead(Iapid + 1);
+  a_a = IapRead(Iapid + 60);
+}
+/**************???ú×??ìeeprom??????*****************/
+void init_eeprom()
+{
+  read_eeprom();
+  if (a_a != 6) // ?????????ú?????????ú????eeprom
+  {
+
+    p1 = 0;
+    a_a = 6;
+
+    write_eeprom(); // ±???????
+  }
+}
+void Exxwrite(int addr, uint dat)
+{
+    addr=addr*2;
+    IapProgram(addr,dat/256);
+    IapProgram(addr+1,dat%256);
+}
+uint ExxRead(int addr)
+{
+    uint dat;
+    addr=addr*2;
+    dat=IapRead(addr);
+    dat=dat*256;
+    dat=dat+IapRead(addr+1);
+    return dat;
+}
+void writebuf();
+void initbuf()
+{
+    int i;
+    int dizhi=Iapid+1;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        HoldingReg[i]=0;
+    }
+    if(123!=ExxRead(dizhi))//没有初始化，初始化一次。。
+    {
+        Exxwrite(dizhi,123);
+        writebuf();
+    }
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        dizhi=dizhi+1;
+        HoldingReg[i]=ExxRead(dizhi);
+        if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
+        {
+            printf("HoldingReg[%d]-[%d]",i,HoldingReg[i]);
+        }
+    }
+}
+void writebuf()
+{
+    int i;
+    int dizhi=Iapid+1;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        dizhi=dizhi+1;
+        Exxwrite(dizhi,HoldingReg[i]);
+    }
+}
+// 比较值是否发生了变化。。
+uint16_t bufcheck[len_HoldingReg]={0};
+void buffchecktongbu()
+{
+    int i;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        bufcheck[i]=HoldingReg[i];
+    }
+}
+int IsbuffcheckFailed()
+{
+    int i;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+       if(bufcheck[i]!=HoldingReg[i])
+       {
+        return 1;
+       }
+    }
+    return 0;
 }
 void main()		                                       
 {
-	
 	io_inint();
+    UartInit();
 	Uart23Init();
-	
-	
 	Timer0Init();
-	
-	
 	Uart4Init();
-	// PrintString("system is ok\n");
 	P_SW2 = 0x80;
     I2CCFG = 0xe0;                              //使能I2C主机模式
     I2CMSST = 0x00;
-	 EA = 1;
+	EA = 1;
 	out2=1;
-	out1 = 1;
-	delay_ms(10);
 	Modbus_ClearBuff();
-	out1 = 0;
-	UartInit();
-	delay_ms(100);
-		delay_ms(100);
-			delay_ms(100);
-
-	testxx();
+    deanyan();
+	delay_ms(10);
+    initbuf();
+    buffchecktongbu();
 	while (1)
 	{
-		delay_ms(1);
-		// printf("0000000000");
-		if(recover==1)
-		{
-			// deanyan();
-			jishouokjisuan();
-			recover=0;
-			deanyan();
-		}
+		if (recover == 1)
+        {
+			chuliguankji();
+            jishouokjisuan();
+            if(IsbuffcheckFailed)
+            {
+                buffchecktongbu();
+                deanyan();
+                writebuf();
+            }
+            recover = 0;
+        }
 	}
-}
-	 
-	 
-
-	 
-	 
+} 
+int delay_mszhi;	 
 uint time,lv_bo;
+void delay_ms(int m)
+{
+    delay_mszhi=m*2;
+    while (delay_mszhi>=0)
+    {
+        
+    }
+}
 void Timer0() interrupt 1
 {
 	time1msjisuan();
+	delay_mszhi--;
 }
 void UARTInterrupt(void) interrupt 4
 {
@@ -132,7 +256,6 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans=SBUF;
-		IAP_CONTR=0x60;
  		chuankou1jisuuan(ans);
 	}
 	else

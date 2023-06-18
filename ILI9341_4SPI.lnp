@@ -5,3 +5,4 @@
 "modbus.obj",
 "ledcontrol.obj" 
 TO "ILI9341_4SPI" 
+RAMSIZE(256) 

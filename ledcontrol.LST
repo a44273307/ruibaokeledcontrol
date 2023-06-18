@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   LEDCONTROL                                                            06/04/2023 10:46:46 PAGE 1   
+C51 COMPILER V9.05   LEDCONTROL                                                            06/18/2023 15:06:33 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE LEDCONTROL
@@ -62,7 +62,7 @@ line level    source
   53          
   54          void SendNAK()
   55          {uint i=0;
-C51 COMPILER V9.05   LEDCONTROL                                                            06/04/2023 10:46:46 PAGE 2   
+C51 COMPILER V9.05   LEDCONTROL                                                            06/18/2023 15:06:33 PAGE 2   
 
   56   1          I2CMSST = 0x01;                             //设置NAK信号
   57   1          busy = 1;
@@ -87,77 +87,89 @@ line level    source
   76   2          }
   77   1          _pop_(P_SW2);
   78   1      }
-  79          
-  80          void deanyanpre()
-  81           {  
-  82   1        uint sw1=2047;
-  83   1        uint sw2=3000;
-  84   1        sw1=HoldingReg[3];
-  85   1        sw2=HoldingReg[4];
-  86   1        printf("***%d-%d***\n",sw2/256,sw2%256);
-  87   1        Start();        // 发送起始命令
-  88   1        SendData(0xc2); // 发送设备地址+写命令
-  89   1        RecvACK();
-  90   1        SendData(0x60); // 发送存储地址高字节
-  91   1        RecvACK();
-  92   1        SendData(sw1 / 16); // 发送存储地址低字节
-  93   1        RecvACK();
-  94   1        SendData((sw1 % 16) << 4); // 写测试数据1
-  95   1        RecvACK();
-  96   1        Stop(); // 发送停止命令
-  97   1      
-  98   1        Start();        // 发送起始命令
-  99   1        SendData(0xc0); // 发送设备地址+写命令
- 100   1        RecvACK();
- 101   1        SendData(0x60); // 发送存储地址高字节
- 102   1        RecvACK();
- 103   1        SendData(sw2 / 16); // 发送存储地址低字节
- 104   1        RecvACK();
- 105   1        SendData((sw2 % 16) << 4); // 写测试数据1
- 106   1        RecvACK();
- 107   1        Stop();
- 108   1      
- 109   1        Start();        // 发送起始命令
- 110   1        SendData(0xc2); // 发送设备地址+写命令
- 111   1        RecvACK();
- 112   1        SendData(0x60); // 发送存储地址高字节
- 113   1        RecvACK();
- 114   1        SendData(sw1 / 16); // 发送存储地址低字节
- 115   1        RecvACK();
- 116   1        SendData((sw1 % 16) << 4); // 写测试数据1
- 117   1        RecvACK();
-C51 COMPILER V9.05   LEDCONTROL                                                            06/04/2023 10:46:46 PAGE 3   
+  79          sbit out1=P1^6;  //总led输出开关。。。
+  80          void deanyanpreadddeal(int dianliu)
+  81          {
+  82   1          if(0==dianliu)
+  83   1          {
+  84   2              out1=1;
+  85   2          }
+  86   1          else
+  87   1          {
+  88   2              out1=0;
+  89   2          }
+  90   1      }
+  91          void deanyanpre()
+  92           {  
+  93   1        uint sw1=2047;
+  94   1        uint sw2=3000;
+  95   1      //   sw1=HoldingReg[3];
+  96   1        sw2=HoldingReg[4];
+  97   1        printf("***%d-%d***\n",sw2/256,sw2%256);
+  98   1        deanyanpreadddeal(sw2);
+  99   1        Start();        // 发送起始命令
+ 100   1        SendData(0xc2); // 发送设备地址+写命令
+ 101   1        RecvACK();
+ 102   1        SendData(0x60); // 发送存储地址高字节
+ 103   1        RecvACK();
+ 104   1        SendData(sw1 / 16); // 发送存储地址低字节
+ 105   1        RecvACK();
+ 106   1        SendData((sw1 % 16) << 4); // 写测试数据1
+ 107   1        RecvACK();
+ 108   1        Stop(); // 发送停止命令
+ 109   1      
+ 110   1        Start();        // 发送起始命令
+ 111   1        SendData(0xc0); // 发送设备地址+写命令
+ 112   1        RecvACK();
+ 113   1        SendData(0x60); // 发送存储地址高字节
+ 114   1        RecvACK();
+ 115   1        SendData(sw2 / 16); // 发送存储地址低字节
+ 116   1        RecvACK();
+ 117   1        SendData((sw2 % 16) << 4); // 写测试数据1
+C51 COMPILER V9.05   LEDCONTROL                                                            06/18/2023 15:06:33 PAGE 3   
 
- 118   1        Stop(); // 发送停止命令
- 119   1      
- 120   1        Start();        // 发送起始命令
- 121   1        SendData(0xc0); // 发送设备地址+写命令
- 122   1        RecvACK();
- 123   1        SendData(0x60); // 发送存储地址高字节
- 124   1        RecvACK();
- 125   1        SendData(sw2 / 16); // 发送存储地址低字节
- 126   1        RecvACK();
- 127   1        SendData((sw2 % 16) << 4); // 写测试数据1
- 128   1        RecvACK();
- 129   1        Stop();
- 130   1                        
- 131   1       }
- 132           
- 133          sbit led1 = P3 ^ 7;
- 134          sbit led2 = P3 ^ 6;
- 135           void deanyan()
- 136           {
- 137   1            led1 = 0;
- 138   1            led2 = 1;
- 139   1            deanyanpre();
- 140   1      
- 141   1            led1 = 1;
- 142   1            led2 = 0;
+ 118   1        RecvACK();
+ 119   1        Stop();
+ 120   1      
+ 121   1        Start();        // 发送起始命令
+ 122   1        SendData(0xc2); // 发送设备地址+写命令
+ 123   1        RecvACK();
+ 124   1        SendData(0x60); // 发送存储地址高字节
+ 125   1        RecvACK();
+ 126   1        SendData(sw1 / 16); // 发送存储地址低字节
+ 127   1        RecvACK();
+ 128   1        SendData((sw1 % 16) << 4); // 写测试数据1
+ 129   1        RecvACK();
+ 130   1        Stop(); // 发送停止命令
+ 131   1      
+ 132   1        Start();        // 发送起始命令
+ 133   1        SendData(0xc0); // 发送设备地址+写命令
+ 134   1        RecvACK();
+ 135   1        SendData(0x60); // 发送存储地址高字节
+ 136   1        RecvACK();
+ 137   1        SendData(sw2 / 16); // 发送存储地址低字节
+ 138   1        RecvACK();
+ 139   1        SendData((sw2 % 16) << 4); // 写测试数据1
+ 140   1        RecvACK();
+ 141   1        Stop();
+ 142   1                        
  143   1       }
+ 144           
+ 145          sbit led1 = P3 ^ 7;
+ 146          sbit led2 = P3 ^ 6;
+ 147           void deanyan()
+ 148           {
+ 149   1            led1 = 0;
+ 150   1            led2 = 1;
+ 151   1            deanyanpre();
+ 152   1      
+ 153   1            led1 = 1;
+ 154   1            led2 = 0;
+ 155   1       }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    496    ----
+   CODE SIZE        =    502    ----
    CONSTANT SIZE    =     13    ----
    XDATA SIZE       =   ----       4
    PDATA SIZE       =   ----    ----

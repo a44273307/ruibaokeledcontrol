@@ -76,14 +76,26 @@ void I2C_Isr() interrupt 24
     }
     _pop_(P_SW2);
 }
-
+sbit out1=P1^6;  //总led输出开关。。。
+void deanyanpreadddeal(int dianliu)
+{
+    if(0==dianliu)
+    {
+        out1=1;
+    }
+    else
+    {
+        out1=0;
+    }
+}
 void deanyanpre()
  {  
   uint sw1=2047;
   uint sw2=3000;
-  sw1=HoldingReg[3];
+//   sw1=HoldingReg[3];
   sw2=HoldingReg[4];
   printf("***%d-%d***\n",sw2/256,sw2%256);
+  deanyanpreadddeal(sw2);
   Start();        // 发送起始命令
   SendData(0xc2); // 发送设备地址+写命令
   RecvACK();

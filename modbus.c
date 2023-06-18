@@ -44,7 +44,7 @@ uint8_t Modbus_Cmd_flag;                                                        
 uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
 uint8_t Modbus_Function;                                                        //从站设备需执行的功能
 
-volatile uint16_t HoldingReg[100] = {0, 0, 0, 0};                                //保持寄存器
+volatile uint16_t HoldingReg[100] = {0};                                //保持寄存器
 int UART3_Handler=0;
 /* 函数定义 ------------------------------------------------------------------*/
 
@@ -316,9 +316,9 @@ void Modbus_ReadHoldingReg_Process(void)
         StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //从接收数据缓冲区得到要读取的寄存器起始地址
         Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //从接收数据缓冲区得到要读取的寄存器数量
         
-        if(StartAddress_Reg < 100)                //寄存器起始地址在正确范围内
+        if(StartAddress_Reg < len_HoldingReg)                //寄存器起始地址在正确范围内
         {
-                if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确
+                if(StartAddress_Reg + Num_Reg < len_HoldingReg && Num_Reg > 0)                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确
                 {
 																			
                         Send_Cnt = 3 + (Num_Reg << 1) + 2;                //计算发送字节数量
@@ -370,7 +370,7 @@ void Modbus_WriteSingleReg_Process(void)
         Address_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];                //从接收数据缓冲区得到要写入的寄存器地址
         Value_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                //从接收数据缓冲区得到要写入的寄存器值
         
-        if(Address_Reg < 100)                //寄存器起始地址在正确范围内
+        if(Address_Reg < len_HoldingReg)                //寄存器起始地址在正确范围内
         {
 							
                 Send_Cnt = 6 + 2;                //计算发送字节数量
@@ -417,9 +417,9 @@ void Modbus_WriteMultipleReg_Process(void)
         StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //从接收数据缓冲区得到要写入的寄存器起始地址
         Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //从接收数据缓冲区得到要写入的寄存器数量
         
-        if(StartAddress_Reg < 100)                        //寄存器起始地址在正确范围内
+        if(StartAddress_Reg < len_HoldingReg)                        //寄存器起始地址在正确范围内
         {
-                if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确                        
+                if(StartAddress_Reg + Num_Reg < len_HoldingReg && Num_Reg > 0)                                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确                        
                 {
                         for(i = StartAddress_Reg, j = 7; i < StartAddress_Reg + Num_Reg; i++, j += 2)        //将要写入的寄存器值写入寄存器
                         {

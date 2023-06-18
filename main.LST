@@ -1,4 +1,4 @@
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 17:04:34 PAGE 1   
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 1   
 
 
 C51 COMPILER V9.05, COMPILATION OF MODULE MAIN
@@ -45,173 +45,304 @@ line level    source
   36   1      
   37   1      }
   38          
-  39          void Delay1ms()         //@24.000MHz
-  40          {
-  41   1              unsigned char i, j;
-  42   1      
-  43   1              i = 24;
-  44   1              j = 85;
-  45   1              do
-  46   1              {
-  47   2                      while (--j);
-  48   2              } while (--i);
-  49   1      }
-  50          
-  51          void delay_ms(int m)
+  39          
+  40          void delay_ms(int m);
+  41          
+  42          
+  43          
+  44          sbit out2=P3^2;
+  45          
+  46          extern void deanyan();
+  47          sbit fen=P5^4;
+  48          
+  49          #define Iapid 0x0000
+  50          uchar p1, a_a;
+  51          void IapIdle()
   52          {
-  53   1              int x;
-  54   1              for(x=m;x>0;x--)
-  55   1              {
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 17:04:34 PAGE 2   
+  53   1        IAP_CONTR = 0;    // ??±?IAP????
+  54   1        IAP_CMD = 0;      // ?????ü???????÷
+  55   1        IAP_TRIG = 0;     // ??????·??????÷
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 2   
 
-  56   2                      Delay1ms();
-  57   2              }
-  58   1              
-  59   1      }
-  60          
-  61          sbit out1=P1^6;  //
-  62          sbit out2=P3^2;
-  63          
-  64          extern void deanyan();
-  65          sbit fen=P5^4;
-  66          void testxx()
-  67          {
-  68   1                 P5M0 = 0x00; P5M1 = 0x00; 
-  69   1               while (1)
-  70   1               {
-  71   2                      PrintString("ddd is ok\n");
-  72   2                      P5=~P5;
-  73   2                      // fen=;
-  74   2                      delay_ms(1000);
-  75   2                      
-  76   2               }
-  77   1      }
-  78          void main()                                                    
+  56   1        IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
+  57   1        IAP_ADDRL = 0;
+  58   1      }
+  59          
+  60          uint8_t IapRead(int addr)
+  61          {
+  62   1        uint8_t dat;
+  63   1      
+  64   1        IAP_CONTR = 0x80;      // ????IAP
+  65   1        IAP_TPS = 40;          // ?è??????????12MHz
+  66   1        IAP_CMD = 1;           // ?è??IAP???ü??
+  67   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+  68   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  69   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+  70   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+  71   1        _nop_();
+  72   1        dat = IAP_DATA; // ??IAP????
+  73   1        IapIdle();      // ??±?IAP????
+  74   1      
+  75   1        return dat;
+  76   1      }
+  77          
+  78          void IapProgram(int addr, char dat)
   79          {
-  80   1              
-  81   1              io_inint();
-  82   1              Uart23Init();
-  83   1              
-  84   1              
-  85   1              Timer0Init();
-  86   1              
-  87   1              
-  88   1              Uart4Init();
-  89   1              // PrintString("system is ok\n");
-  90   1              P_SW2 = 0x80;
-  91   1          I2CCFG = 0xe0;                              //使能I2C主机模式
-  92   1          I2CMSST = 0x00;
-  93   1               EA = 1;
-  94   1              out2=1;
-  95   1              out1 = 1;
-  96   1              delay_ms(10);
-  97   1              Modbus_ClearBuff();
-  98   1              out1 = 0;
-  99   1              UartInit();
- 100   1              delay_ms(100);
- 101   1                      delay_ms(100);
- 102   1                              delay_ms(100);
- 103   1      
- 104   1              testxx();
- 105   1              while (1)
- 106   1              {
- 107   2                      delay_ms(1);
- 108   2                      // printf("0000000000");
- 109   2                      if(recover==1)
- 110   2                      {
- 111   3                              // deanyan();
- 112   3                              jishouokjisuan();
- 113   3                              recover=0;
- 114   3                              deanyan();
- 115   3                      }
- 116   2              }
- 117   1      }
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 17:04:34 PAGE 3   
+  80   1        IAP_CONTR = 0x80;      // ????IAP
+  81   1        IAP_TPS = 40;          // ?è??????????12MHz
+  82   1        IAP_CMD = 2;           // ?è??IAP???ü??
+  83   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+  84   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  85   1        IAP_DATA = dat;        // ??IAP????
+  86   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+  87   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+  88   1        _nop_();
+  89   1        IapIdle(); // ??±?IAP????
+  90   1      }
+  91          
+  92          void IapErase(int addr)
+  93          {
+  94   1        IAP_CONTR = 0x80;      // ????IAP
+  95   1        IAP_TPS = 40;          // ?è??????????12MHz
+  96   1        IAP_CMD = 3;           // ?è??IAP?????ü??
+  97   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+  98   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+  99   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+ 100   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+ 101   1        _nop_();               //
+ 102   1        IapIdle();             // ??±?IAP????
+ 103   1      }
+ 104          
+ 105          //
+ 106          void write_eeprom()
+ 107          {
+ 108   1        IapErase(Iapid); // ????????
+ 109   1        IapProgram(Iapid + 1, p1);
+ 110   1      
+ 111   1        IapProgram(Iapid + 60, a_a);
+ 112   1      }
+ 113          /******************°????????????ú????eeprom????????*****************/
+ 114          void read_eeprom()
+ 115          {
+ 116   1        uchar t, t1;
+ 117   1        p1 = IapRead(Iapid + 1);
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 3   
 
- 118                   
- 119                   
- 120          
- 121                   
- 122                   
- 123          uint time,lv_bo;
- 124          void Timer0() interrupt 1
- 125          {
- 126   1              time1msjisuan();
- 127   1      }
- 128          void UARTInterrupt(void) interrupt 4
- 129          {
- 130   1              unsigned char ans;
- 131   1              if (RI)
- 132   1              {
- 133   2                      RI = 0;
- 134   2                      ans=SBUF;
- 135   2                      IAP_CONTR=0x60;
- 136   2                      chuankou1jisuuan(ans);
- 137   2              }
- 138   1              else
- 139   1              {
- 140   2                      TI = 0;
- 141   2              }
- 142   1              if (TI) //发送中断..
- 143   1              {
- 144   2                      TI = 0;
- 145   2              }
- 146   1      }
- 147          
- 148          void uart2(void ) interrupt 8 
- 149          {
- 150   1        if (S2CON & S2RI)
- 151   1              {
- 152   2                      S2CON &= ~S2RI;         
- 153   2                      temp2 = S2BUF;
- 154   2              }
- 155   1        if (S2CON & S2TI)
- 156   1          {
- 157   2                              //y1=0;
- 158   2              S2CON &= ~S2TI;         //清除S2TI位
- 159   2              busy2 = 0;               //清忙标志
- 160   2          }  
- 161   1      }
- 162          
- 163            
- 164          
- 165          
- 166          void Uart3() interrupt 17 using 1
- 167          {
- 168   1          if (S3CON & S3RI)
- 169   1          {
- 170   2              S3CON &= ~S3RI;         //??S3RI?
- 171   2              temp3 = S3BUF;
- 172   2                                      
- 173   2         }
- 174   1      if (S3CON & S3TI)
- 175   1          {
- 176   2              S3CON &= ~S3TI;         //清除S3TI位
- 177   2              busy3 = 0;               //清忙标志
- 178   2          }
- 179   1      }
-C51 COMPILER V9.05   MAIN                                                                  06/04/2023 17:04:34 PAGE 4   
+ 118   1        a_a = IapRead(Iapid + 60);
+ 119   1      }
+*** WARNING C280 IN LINE 116 OF main.c: 't': unreferenced local variable
+*** WARNING C280 IN LINE 116 OF main.c: 't1': unreferenced local variable
+ 120          /**************???ú×??ìeeprom??????*****************/
+ 121          void init_eeprom()
+ 122          {
+ 123   1        read_eeprom();
+ 124   1        if (a_a != 6) // ?????????ú?????????ú????eeprom
+ 125   1        {
+ 126   2      
+ 127   2          p1 = 0;
+ 128   2          a_a = 6;
+ 129   2      
+ 130   2          write_eeprom(); // ±???????
+ 131   2        }
+ 132   1      }
+ 133          void Exxwrite(int addr, uint dat)
+ 134          {
+ 135   1          addr=addr*2;
+ 136   1          IapProgram(addr,dat/256);
+ 137   1          IapProgram(addr+1,dat%256);
+ 138   1      }
+ 139          uint ExxRead(int addr)
+ 140          {
+ 141   1          uint dat;
+ 142   1          addr=addr*2;
+ 143   1          dat=IapRead(addr);
+ 144   1          dat=dat*256;
+ 145   1          dat=dat+IapRead(addr+1);
+ 146   1          return dat;
+ 147   1      }
+ 148          void writebuf();
+ 149          void initbuf()
+ 150          {
+ 151   1          int i;
+ 152   1          int dizhi=Iapid+1;
+ 153   1          for ( i = 0; i < len_HoldingReg; i++)
+ 154   1          {
+ 155   2              HoldingReg[i]=0;
+ 156   2          }
+ 157   1          if(123!=ExxRead(dizhi))//没有初始化，初始化一次。。
+ 158   1          {
+ 159   2              Exxwrite(dizhi,123);
+ 160   2              writebuf();
+ 161   2          }
+ 162   1          for ( i = 0; i < len_HoldingReg; i++)
+ 163   1          {
+ 164   2              dizhi=dizhi+1;
+ 165   2              HoldingReg[i]=ExxRead(dizhi);
+ 166   2              if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
+ 167   2              {
+ 168   3                  printf("HoldingReg[%d]-[%d]",i,HoldingReg[i]);
+ 169   3              }
+ 170   2          }
+ 171   1      }
+ 172          void writebuf()
+ 173          {
+ 174   1          int i;
+ 175   1          int dizhi=Iapid+1;
+ 176   1          for ( i = 0; i < len_HoldingReg; i++)
+ 177   1          {
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 4   
 
- 180          
- 181          void Uart4() interrupt 18 
- 182          {
- 183   1          if (S4CON & S4RI)
- 184   1          {
- 185   2              S4CON &= ~S4RI;         //??S4RI?
- 186   2              temp4=S4BUF;
- 187   2         }
- 188   1      if(TI4)
- 189   1              {
- 190   2                      CLR_TI4();
- 191   2                      busy4 = 0;               //清忙标志
- 192   2              }
- 193   1      }
+ 178   2              dizhi=dizhi+1;
+ 179   2              Exxwrite(dizhi,HoldingReg[i]);
+ 180   2          }
+ 181   1      }
+ 182          // 比较值是否发生了变化。。
+ 183          uint16_t bufcheck[len_HoldingReg]={0};
+ 184          void buffchecktongbu()
+ 185          {
+ 186   1          int i;
+ 187   1          for ( i = 0; i < len_HoldingReg; i++)
+ 188   1          {
+ 189   2              bufcheck[i]=HoldingReg[i];
+ 190   2          }
+ 191   1      }
+ 192          int IsbuffcheckFailed()
+ 193          {
+ 194   1          int i;
+ 195   1          for ( i = 0; i < len_HoldingReg; i++)
+ 196   1          {
+ 197   2             if(bufcheck[i]!=HoldingReg[i])
+ 198   2             {
+ 199   3              return 1;
+ 200   3             }
+ 201   2          }
+ 202   1          return 0;
+ 203   1      }
+ 204          void main()                                                    
+ 205          {
+ 206   1              io_inint();
+ 207   1          UartInit();
+ 208   1              Uart23Init();
+ 209   1              Timer0Init();
+ 210   1              Uart4Init();
+ 211   1              P_SW2 = 0x80;
+ 212   1          I2CCFG = 0xe0;                              //使能I2C主机模式
+ 213   1          I2CMSST = 0x00;
+ 214   1              EA = 1;
+ 215   1              out2=1;
+ 216   1              Modbus_ClearBuff();
+ 217   1          deanyan();
+ 218   1              delay_ms(10);
+ 219   1          initbuf();
+ 220   1          buffchecktongbu();
+ 221   1              while (1)
+ 222   1              {
+ 223   2                      if (recover == 1)
+ 224   2              {
+ 225   3                              chuliguankji();
+*** WARNING C206 IN LINE 225 OF main.c: 'chuliguankji': missing function-prototype
+ 226   3                  jishouokjisuan();
+ 227   3                  if(IsbuffcheckFailed)
+*** WARNING C276 IN LINE 227 OF main.c: constant in condition expression
+ 228   3                  {
+ 229   4                      buffchecktongbu();
+ 230   4                      deanyan();
+ 231   4                      writebuf();
+ 232   4                  }
+ 233   3                  recover = 0;
+ 234   3              }
+ 235   2              }
+ 236   1      } 
+ 237          int delay_mszhi;         
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 5   
+
+ 238          uint time,lv_bo;
+ 239          void delay_ms(int m)
+ 240          {
+ 241   1          delay_mszhi=m*2;
+ 242   1          while (delay_mszhi>=0)
+ 243   1          {
+ 244   2              
+ 245   2          }
+ 246   1      }
+ 247          void Timer0() interrupt 1
+ 248          {
+ 249   1              time1msjisuan();
+ 250   1              delay_mszhi--;
+ 251   1      }
+ 252          void UARTInterrupt(void) interrupt 4
+ 253          {
+ 254   1              unsigned char ans;
+ 255   1              if (RI)
+ 256   1              {
+ 257   2                      RI = 0;
+ 258   2                      ans=SBUF;
+ 259   2                      chuankou1jisuuan(ans);
+ 260   2              }
+ 261   1              else
+ 262   1              {
+ 263   2                      TI = 0;
+ 264   2              }
+ 265   1              if (TI) //发送中断..
+ 266   1              {
+ 267   2                      TI = 0;
+ 268   2              }
+ 269   1      }
+ 270          
+ 271          void uart2(void ) interrupt 8 
+ 272          {
+ 273   1        if (S2CON & S2RI)
+ 274   1              {
+ 275   2                      S2CON &= ~S2RI;         
+ 276   2                      temp2 = S2BUF;
+ 277   2              }
+ 278   1        if (S2CON & S2TI)
+ 279   1          {
+ 280   2                              //y1=0;
+ 281   2              S2CON &= ~S2TI;         //清除S2TI位
+ 282   2              busy2 = 0;               //清忙标志
+ 283   2          }  
+ 284   1      }
+ 285          
+ 286            
+ 287          
+ 288          
+ 289          void Uart3() interrupt 17 using 1
+ 290          {
+ 291   1          if (S3CON & S3RI)
+ 292   1          {
+ 293   2              S3CON &= ~S3RI;         //??S3RI?
+ 294   2              temp3 = S3BUF;
+ 295   2                                      
+ 296   2         }
+ 297   1      if (S3CON & S3TI)
+ 298   1          {
+ 299   2              S3CON &= ~S3TI;         //清除S3TI位
+C51 COMPILER V9.05   MAIN                                                                  06/18/2023 15:06:32 PAGE 6   
+
+ 300   2              busy3 = 0;               //清忙标志
+ 301   2          }
+ 302   1      }
+ 303          
+ 304          void Uart4() interrupt 18 
+ 305          {
+ 306   1          if (S4CON & S4RI)
+ 307   1          {
+ 308   2              S4CON &= ~S4RI;         //??S4RI?
+ 309   2              temp4=S4BUF;
+ 310   2         }
+ 311   1      if(TI4)
+ 312   1              {
+ 313   2                      CLR_TI4();
+ 314   2                      busy4 = 0;               //清忙标志
+ 315   2              }
+ 316   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    474    ----
-   CONSTANT SIZE    =     11    ----
-   XDATA SIZE       =     12    ----
+   CODE SIZE        =   1197    ----
+   CONSTANT SIZE    =     20    ----
+   XDATA SIZE       =     56      12
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -219,4 +350,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)

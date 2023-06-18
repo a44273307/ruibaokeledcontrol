@@ -8,6 +8,8 @@ typedef unsigned char uint8_t;
 typedef unsigned char u8;
 typedef unsigned short uint16_t;
 #define Modbus_Max_Send_Buff	50
+
+#define len_HoldingReg	20
 #define Modbus_Max_Rcv_Buff	50
 void Modbus_ReadHoldingReg_Process(void);
 void Modbus_WriteSingleReg_Process(void);
@@ -21,7 +23,7 @@ void HAL_UART_Transmit_DMA_485(int *huart,uint8_t *pData, uint16_t Size);
 void Modbus_Init(void);
 char cuncu_485();
 void init_485();
-extern volatile uint16_t HoldingReg[100];                                //保持寄存器
+extern volatile uint16_t HoldingReg[100];
 void chuankou1jisuuan(unsigned char ans);
 extern void time1msjisuan();
 void jishouokjisuan();
@@ -56,7 +58,7 @@ void jishouokjisuan();
 //电压 2-3
 //电流  4-5
 
-extern volatile uint16_t HoldingReg[100];
+
 
 
 

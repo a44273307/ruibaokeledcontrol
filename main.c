@@ -24,6 +24,7 @@ uchar ans4[100] = {0};
 int weizhi4 = 0;
 static int rectimes4;
 void showoxbuf(char *ans4,int len);
+int setmodbus4(int dizhi,int zhi);
 void io_inint()
 {
     P0M1 = 0;
@@ -87,7 +88,7 @@ void pingmuGetData(char *p)
 int flagset=0;
 int setdizhi=0;
 int setdizhivalue=0;
-// 显示屏过来的操作。。。
+// 显示屏过来的操作。。。setdizhi02_04
 void pingmuSetData(char *p)
 {
     
@@ -114,6 +115,7 @@ void pingmuSetData(char *p)
     setdizhivalue=ans;
     
 }
+
 void dealpingmu()
 {
     char dataxx[100]={0};
@@ -122,6 +124,7 @@ void dealpingmu()
     {
         flagset=0;
         printf("pingmuSetData zhi%d-%d",setdizhi,setdizhivalue);
+        setmodbus4(setdizhi,setdizhivalue);
     }
     if(flagget==1)
     {
@@ -175,10 +178,11 @@ void com4read(int dizhi)
         {
             flagrec4=0;
             showoxbuf(req,8);
-            zhi=ans4[3] << 8 | ans4[4]; 
+            zhi=ans4[3] << 8 | ans4[4];
+            HoldingReg[4]=zhi; 
             printf("___ dianliu %d--",zhi);
             dealans4();
-            
+            break;
         }   
     }
 }
@@ -209,6 +213,7 @@ void getiicguang()
 }
 void main()
 {
+    int i;
     io_inint();
     UartInit();
     Uart23Init();
@@ -221,17 +226,26 @@ void main()
     delay_ms(2);
     Modbus_ClearBuff();
     delay_ms(2);
-    // Init_BH1750(); // 初始化BH1750
-    testxxx();
+
+    com4read(4);
+    delay_ms(10);
+    com4read(4);
+
     while (1)
     {
-
+        if(i++>100)
+        {
+            com4read(4);
+            i=0;
+        }
+        delay_ms(100);
+        dealpingmu();    
     }
 }
 
 
 
-char ans1[100] = {0};
+uchar ans1[100] = {0};
 int weizhi1 = 0;
 static int rectimes1;
 static void chuliguankji(char *ans1)
@@ -245,7 +259,7 @@ static void chuliguankji(char *ans1)
     printf("rec @STCISP#,researt now");
     IAP_CONTR = 0x60;
 }
-void input1(char c)
+void input1(unsigned char c)
 {
     ans1[weizhi1++] = c;
     if (weizhi1 > 80)

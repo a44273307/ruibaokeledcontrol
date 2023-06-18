@@ -216,15 +216,17 @@ void main()
 	Modbus_ClearBuff();
     deanyan();
 	delay_ms(10);
+    printf("system init ok");
     initbuf();
     buffchecktongbu();
+    printf("system init ok1");
 	while (1)
 	{
 		if (recover == 1)
         {
 			chuliguankji();
             jishouokjisuan();
-            if(IsbuffcheckFailed)
+            if(IsbuffcheckFailed())
             {
                 buffchecktongbu();
                 deanyan();

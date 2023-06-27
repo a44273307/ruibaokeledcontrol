@@ -17,7 +17,7 @@ extern void time1msjisuan();
 #define regdianliu HoldingReg[4]
 #define reglight   HoldingReg[5]  //光敏电阻的值。。
 
-
+// 温度值   6
 
 
 

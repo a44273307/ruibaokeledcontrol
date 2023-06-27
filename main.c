@@ -23,8 +23,25 @@ char flagrec4=0;
 uchar ans4[100] = {0};
 int weizhi4 = 0;
 static int rectimes4;
+
+char buf1[100];
+char buf2[100];
+char buf3[100];
+char buf4[100];
+
+char flag3=0;
+int weishu3=0;
+int timeleft1, timeleft2, timeleft3, timeleft4;
+
+
 void showoxbuf(char *ans4,int len);
 int setmodbus4(int dizhi,int zhi);
+
+void pingmuSetData(char *p);
+void pingmuGetData(char *p);
+
+
+
 void io_inint()
 {
     P0M1 = 0;
@@ -47,6 +64,19 @@ extern int recover;
 extern void chulimodbus();
 int delay_mszhi;
 void dealpingmu();
+void dealpingmuall()
+{
+    if(flag3==1)
+    {
+        printf("rec buf3%s",buf3);
+        flag3=0;
+        pingmuSetData(buf3);
+        pingmuGetData(buf3);
+        dealpingmu();
+        memset(buf3, 0, sizeof(buf3));
+	    weishu3 = 0;
+    }
+}
 void delay_ms(int m)
 {
     delay_mszhi=m*2;
@@ -57,7 +87,7 @@ void delay_ms(int m)
             chulimodbus();
             recover = 0;
         }
-        dealpingmu();
+        dealpingmuall();
     }
 }
 void readdianliu()
@@ -123,14 +153,18 @@ void dealpingmu()
     if(flagset==1)
     {
         flagset=0;
-        printf("pingmuSetData zhi%d-%d",setdizhi,setdizhivalue);
+        memset(dataxx,0,sizeof(dataxx));
+        sprintf(dataxx,"pingmuSetData zhi%d-%d",setdizhi,setdizhivalue);
+        print3(dataxx);
         setmodbus4(setdizhi,setdizhivalue);
     }
     if(flagget==1)
     {
+        memset(dataxx,0,sizeof(dataxx));
         flagget=0;
         ans=HoldingReg[getdizhi];
-        printf("pingmuGetData getdizhi%d-%d",getdizhi,ans);
+        print3(dataxx);
+        sprintf(dataxx,"pingmuGetData getdizhi%d-%d",getdizhi,ans);
     }
 }
 void dealans4();
@@ -239,7 +273,7 @@ void main()
             i=0;
         }
         delay_ms(100);
-        dealpingmu();    
+        dealpingmuall();    
     }
 }
 
@@ -276,8 +310,6 @@ void timechuli1()
         if(rectimes1==0)
         {
             chuliguankji(ans1);
-            pingmuSetData(ans1);
-            pingmuGetData(ans1);
             memset(ans1,0,sizeof(ans1));
             weizhi1=0;
         }
@@ -303,6 +335,24 @@ void UARTInterrupt(void) interrupt 4
     }
 }
 
+void chuankou3put(char c)
+{
+	buf3[weishu3++] = c;
+	if (weishu3 > 80)
+		weishu3 = 0;
+	timeleft3 = 3;
+}
+void chuankou3time()
+{
+	if (timeleft3 > 0)
+	{
+		timeleft3--;
+		if (timeleft3 == 0) // 数据一次收完了.
+		{
+			flag3=1;
+		}
+	}
+}
 void uart2(void) interrupt 8
 {
     if (S2CON & S2RI)
@@ -324,6 +374,7 @@ void Uart3() interrupt 17 using 1
     {
         S3CON &= ~S3RI; //??S3RI?
         temp3 = S3BUF;
+        chuankou3put(temp3);
     }
     if (S3CON & S3TI)
     {
@@ -364,7 +415,7 @@ void clearans4()
 }
 void showoxbuf(char *ans4,int len)
 {
-       int i;
+    int i;
     for(i=0;i<len;i++)
     {
         printf("%bx ",ans4[i]);
@@ -402,4 +453,5 @@ void Timer0() interrupt 1
     time1msjisuan();
     timechuli1();
     timechuli4();
+    chuankou3time();
 }

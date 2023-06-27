@@ -229,6 +229,7 @@ void main()
             jishouokjisuan();
             if(IsbuffcheckFailed())
             {
+                
                 printf("xiugaidata begin");
                 buffchecktongbu();
                 deanyan();

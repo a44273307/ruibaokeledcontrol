@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include "ntc10k3950.h"	
 uchar temp1, temp2, temp3, temp4;
 char flagrec4=0;
 uchar ans4[100] = {0};
@@ -42,6 +42,71 @@ void pingmuGetData(char *p);
 
 
 
+
+
+void initadc()
+{
+	P1M0 = 0x00;                                //设置P1.1为ADC口
+	P1M1 = 0x03;
+	ADC_CONTR = 0x80;                           //使能ADC模块
+	ADCCFG = 0x0f;                              //设置ADC时钟为系统时钟/2/16/16，右对齐
+}
+int getadczhi(int weizhi)
+{
+	    int ans,ans1;
+		if(weizhi==0)
+		{
+			ADC_CONTR = 0x80;
+		}
+		else
+		{
+			ADC_CONTR = 0x81;
+		}
+	// ADC_CONTR |=weizhi;
+	ADC_CONTR |= 0x40;                      //启动AD转换
+	
+		_nop_();
+		_nop_();
+		while (!(ADC_CONTR & 0x20));            //查询ADC完成标志
+		ADC_CONTR &= ~ 0X20;            //标志位需要手动清0
+		
+		ans=ADC_RES;
+		ans=ans<<2;
+		ans1=ADC_RESL;
+		ans1=ans1>>6;
+		 //( *4)+ ADC_RESL>>6;
+		 ADC_RES=0;
+		 ADC_RESL=0;
+		ans=ans+ans1;
+	return ans;
+}
+
+long getdianzu(long dianya)
+{
+	if(dianya==1023)
+	{
+		return 4700; 
+	}
+	return 4700*dianya/(1023-dianya);
+	// dianya/1023*
+}
+
+int jisuanwendu(int R)
+{
+	int p,T;
+	unsigned long Ac = 0;
+        for ( p=1; p<sizeof(NTC10K3950)/sizeof(NTC); p++ ) {
+      if ( R >= NTC10K3950[p].R ) 
+	  {
+        Ac = R - NTC10K3950[p].R; // delta resistance
+        Ac *= 50; //multiply by 5.0 degrees celsius step of table
+        Ac /= NTC10K3950[p-1].R - NTC10K3950[p].R; // divide by range of resistence 
+        T = NTC10K3950[p].t*10 - Ac; // temperature offset
+        break;
+      }
+    }
+	return T;
+}
 void io_inint()
 {
     P0M1 = 0;
@@ -68,7 +133,6 @@ void dealpingmuall()
 {
     if(flag3==1)
     {
-        printf("rec buf3%s",buf3);
         flag3=0;
         pingmuSetData(buf3);
         pingmuGetData(buf3);
@@ -90,10 +154,7 @@ void delay_ms(int m)
         dealpingmuall();
     }
 }
-void readdianliu()
-{
 
-}
 int flagget=0;
 int getdizhi=0;
 // 显示屏过来的操作。。。
@@ -101,43 +162,43 @@ void pingmuGetData(char *p)
 {
 	char* index;
 	int ans;
-	index=strstr(p,"getdizhi");
+	index=strstr(p,"pingmuGetData getdizhi");
 	if(index==0)
 	{
 		return  ;
 	}
-	ans=atoi(index+strlen("getdizhi"));
+	ans=atoi(index+strlen("pingmuGetData getdizhi"));
 	if(ans==-1)
 	{
 		return;
 	}
 	flagget=1;
 	getdizhi=ans;
-  
 }
 int flagset=0;
 int setdizhi=0;
 int setdizhivalue=0;
 // 显示屏过来的操作。。。setdizhi02_04
+// pingmuSetData setdizhi04-74
 void pingmuSetData(char *p)
 {
     
 	char* index;
 	int ans;
   
-	index=strstr(p,"setdizhi");
+	index=strstr(p,"pingmuSetData setdizhi");
 	if(index==0)
 	{
 		return  ;
 	}
-	ans=atoi(index+strlen("setdizhi"));
+	ans=atoi(index+strlen("pingmuSetData setdizhi"));
 	if(ans==-1)
 	{
 		return;
 	}
 	flagset=1;
 	setdizhi=ans;
-    ans=atoi(index+strlen("setdizhi")+3);
+    ans=atoi(index+strlen("pingmuSetData setdizhi")+3);
 	if(ans==-1)
 	{
 		return;
@@ -163,8 +224,8 @@ void dealpingmu()
         memset(dataxx,0,sizeof(dataxx));
         flagget=0;
         ans=HoldingReg[getdizhi];
-        print3(dataxx);
         sprintf(dataxx,"pingmuGetData getdizhi%d-%d",getdizhi,ans);
+        print3(dataxx);
     }
 }
 void dealans4();
@@ -248,6 +309,9 @@ void getiicguang()
 void main()
 {
     int i;
+    int ans,ans1;
+    int dianzu;
+    int wendu;
     io_inint();
     UartInit();
     Uart23Init();
@@ -264,14 +328,22 @@ void main()
     com4read(4);
     delay_ms(10);
     com4read(4);
-
+    initadc();
     while (1)
     {
+        if(i%10==0)
+        {
+            ans1=getadczhi(1);
+            dianzu=getdianzu(ans1);
+			wendu=jisuanwendu(dianzu);
+            HoldingReg[6]=wendu; 
+        }
         if(i++>100)
         {
             com4read(4);
             i=0;
         }
+        
         delay_ms(100);
         dealpingmuall();    
     }

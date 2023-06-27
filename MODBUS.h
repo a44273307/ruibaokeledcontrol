@@ -13,6 +13,7 @@ extern unsigned short Modbus_CRC16(unsigned char *puchMsg, unsigned char usDataL
 extern volatile unsigned short HoldingReg[100];
 extern void time1msjisuan();
 
+// 电源开关地址2  
 #define regdianya HoldingReg[3]
 #define regdianliu HoldingReg[4]
 #define reglight   HoldingReg[5]  //光敏电阻的值。。

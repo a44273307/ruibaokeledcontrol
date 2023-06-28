@@ -10,9 +10,7 @@
 #define uchar unsigned char
 
 
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned char u8;
+
 
 
 

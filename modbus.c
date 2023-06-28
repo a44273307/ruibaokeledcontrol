@@ -11,55 +11,41 @@
 //0x02 非法数据地址（起始地址不在有效范围内）
 //0x03 非法数据值（在起始地址的基础上，数量是不合法的）
 //----------------------------------------------------------------------------//
-
+#include <stdio.h>
 #include "MODBUS.h"
 #include "uart.h"
 #include "stc15f2k60s2.h"
-
-#include "comhead.h"
 #include <string.h>
+// #include "sys.h"
+// #include "delay.h"
+// #include "usart.h"
+// #include "timer.h"
+// #include "modbusCRC.h"
+// #include "dma.h"
+// #include "io.h"
+// #include "24cxx.h"
+// #include "yunxingkongzhi.h"
+// #include "kongzhiban.h"
+// #include "pingmu.h"
 
 
-static int Slave_Address=1;
+int Slave_Address=1;
 
 #define Modbus_ReadHoldingReg	3
 #define Modbus_WriteSingleReg	6
 #define Modbus_WriteMultipleReg	10       
 /* 变量定义 ------------------------------------------------------------------*/
-#define Modbus_Max_Send_Buff	50
-#define Modbus_Max_Rcv_Buff	50
+uint8_t Modbus_Send_Buff[Modbus_Max_Send_Buff];                //发送数据缓冲区
+uint8_t Modbus_Rcv_Buff[Modbus_Max_Rcv_Buff];                //接收数据缓冲区
+uint8_t Modbus_Timeout_Cnt;                                                        //定时器中断计数
+uint8_t Modbus_Rcv_Cnt;                                                                //接收字节计数
+uint8_t        Modbus_Rcv_flag;                                                        //设备进入接收状态标志
+uint8_t Modbus_Cmd_flag;                                                        //设备进入命令解析状态标志
+uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
+uint8_t Modbus_Function;                                                        //从站设备需执行的功能
 
-static uint8_t Modbus_Send_Buff[Modbus_Max_Send_Buff];                //发送数据缓冲区
-static uint8_t Modbus_Rcv_Buff[Modbus_Max_Rcv_Buff];                //接收数据缓冲区
-static uint8_t Modbus_Timeout_Cnt;                                                        //定时器中断计数
-static uint8_t Modbus_Rcv_Cnt;                                                                //接收字节计数
-static uint8_t        Modbus_Rcv_flag;                                                        //设备进入接收状态标志
-static uint8_t Modbus_Cmd_flag;                                                        //设备进入命令解析状态标志
-static uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
-static uint8_t Modbus_Function;                                                        //从站设备需执行的功能
-
-volatile uint16_t HoldingReg[100] = {0, 0, 0, 0};                                //保持寄存器
-static int UART3_Handler=0;
-
-
-void Modbus_ReadHoldingReg_Process(void);
-void Modbus_WriteSingleReg_Process(void);
-void Modbus_WriteMultipleReg_Process(void);
-void Modbus_ErrorHandling(uint8_t ErrorType);
-
-
-void HAL_UART_Transmit_DMA_485(int *huart,uint8_t *pData, uint16_t Size);
-void Modbus_Init(void);
-char cuncu_485();
-void init_485();
-                         //保持寄存器
-void chuankou1jisuuan(unsigned char ans);
-
-void jishouokjisuan();
-
-
-
-
+volatile uint16_t HoldingReg[100] = {0};                                //保持寄存器
+int UART3_Handler=0;
 /* 函数定义 ------------------------------------------------------------------*/
 
 //----------------------------------------------------------------------------//
@@ -69,9 +55,13 @@ void jishouokjisuan();
 //最后修改：2015.11.29
 //备注：
 //----------------------------------------------------------------------------//
-
-static char cuncu_485()
+void init_485()
+{
+	
+}
+char cuncu_485()
  {
+	
 	return 1;
  }
 uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)
@@ -114,7 +104,7 @@ uint16_t Modbus_CRC16(uint8_t *puchMsg, uint8_t usDataLen)
 //最后修改：2015.11.20
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_Init()
+void Modbus_Init(void)
 {
         uint16_t i;
         
@@ -142,60 +132,55 @@ static void Modbus_Init()
         //----------------------------------------------------------//
         //TIM_Cmd(TIM2, ENABLE);
 }
-static int rectimes;
+int rectimes;
 void chuankou1jisuuan(unsigned char ans)
 {
         Modbus_Rcv_Buff[Modbus_Rcv_Cnt]=ans;
 	Modbus_Rcv_Cnt++;
         rectimes=2;
 }
- int recover=0;
-
-static void chuliguankji()
+int recover=0;
+void chuliguankji()
 {
+
     char* index;
     index=strstr(Modbus_Rcv_Buff,"@STCISP#");
-	if(index==0)
+    if(index==0)
 	{
-	    return  ;
+	return  ;
 	}
-        printf("rec @STCISP#,researt now");
     IAP_CONTR=0x60;
 }
-void chulimodbus()
-{
-        // chuliguankji();
-        jishouokjisuan();
-}            
 void time1msjisuan()
 {
-        if (rectimes > 0)
+    if(rectimes>0)
+    {
+        rectimes--;
+        if(rectimes==0)
         {
-                rectimes--;
-                if (rectimes == 0)
-                {
-                        recover = 1;
-                }
+          
+           chuliguankji();
+            recover=1;
         }
-        // if (recover == 1)
-        // {
-        //          chulimodbus();
-        // }
+    }    
 }
 
 void Modbus_Cmd(void);
 void Modbus_Exe(void);
 
-static void jishouokjisuan()
-{
-        
+void jishouokjisuan()
+{   
 	Modbus_Cmd_flag=1;//数据接受完,,进入中断标志位..
 	Modbus_Cmd();     //数据处理,,          
 	Modbus_Exe();     //处理完发...    
         Modbus_ClearBuff();//弄完了清理缓冲区     
 }
 
+char dmatime=0;
+void DMA1_Channel2_IRQHandler(void)
+{
 
+}
 //----------------------------------------------------------------------------//
 //函数功能：Modbus命令解析函数
 //入口参数：无
@@ -203,13 +188,13 @@ static void jishouokjisuan()
 //最后修改：2015.12.11
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_Cmd(void)
+void Modbus_Cmd(void)
 {
         uint8_t Modbus_CRC_Rcv_Hi;                //接收到的ModbusCRC校验码高字节
         uint8_t Modbus_CRC_Rcv_Lo;                //接收到的ModbusCRC校验码低字节
         uint16_t Modbus_CRC_Rcv;                //接收到的ModbusCRC校验码
         uint16_t Modbus_CRC_Cal;                //根据接收到的数据计算出来的CRC值
-        // printf("Modbus_Cmd %bd %bd",Modbus_Rcv_Cnt,Modbus_Rcv_Buff[1]);
+        
         //----------------------------------------------------------//
         //开始命令解析
         //----------------------------------------------------------//
@@ -223,7 +208,6 @@ static void Modbus_Cmd(void)
                         Modbus_CRC_Cal = Modbus_CRC16(Modbus_Rcv_Buff, Modbus_Rcv_Cnt - 2);                        //根据接收到的数据计算CRC值
                         if(Modbus_CRC_Cal == Modbus_CRC_Rcv)                //如果计算的CRC值与接受的CRC值相等
                         {
-                                printf("Modbus_CRC_Rcv ok %bd",Modbus_Rcv_Cnt);
                                 //USART_SendByte(USART1, 0xAC);
                                 if(Slave_Address == Modbus_Rcv_Buff[0])        //如果是本机地址
                                 {
@@ -241,8 +225,7 @@ static void Modbus_Cmd(void)
                                         
                                         case Modbus_WriteMultipleReg:
                                                 Modbus_Function = Modbus_WriteMultipleReg;        //将从站设备需执行的功能赋值为写多个寄存器
-                                                Modbus_Exe_flag = 1; 
-                                                printf("Modbus_WriteMultipleReg ok %bd",Modbus_Rcv_Cnt);                                               //设备进入命令执行状态
+                                                Modbus_Exe_flag = 1;                                                //设备进入命令执行状态
                                                 break;                                                                                //跳出分支语句
                                                 
                                         default:
@@ -280,7 +263,7 @@ static void Modbus_Cmd(void)
 //最后修改：2015.12.6
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_Exe(void)
+void Modbus_Exe(void)
 {
         if(Modbus_Exe_flag == 1)
         {
@@ -310,7 +293,7 @@ static void Modbus_Exe(void)
 //最后修改：2015.12.5
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_ReadHoldingReg_Process(void)
+void Modbus_ReadHoldingReg_Process(void)
 {
         uint8_t Send_Cnt;                        //发送字节数量
         uint16_t StartAddress_Reg;        //要读取的寄存器起始地址
@@ -321,9 +304,9 @@ static void Modbus_ReadHoldingReg_Process(void)
         StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //从接收数据缓冲区得到要读取的寄存器起始地址
         Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //从接收数据缓冲区得到要读取的寄存器数量
         
-        if(StartAddress_Reg < 100)                //寄存器起始地址在正确范围内
+        if(StartAddress_Reg < len_HoldingReg)                //寄存器起始地址在正确范围内
         {
-                if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确
+                if(StartAddress_Reg + Num_Reg < len_HoldingReg && Num_Reg > 0)                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确
                 {
 																			
                         Send_Cnt = 3 + (Num_Reg << 1) + 2;                //计算发送字节数量
@@ -365,7 +348,7 @@ static void Modbus_ReadHoldingReg_Process(void)
 //最后修改：2015.12.6
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_WriteSingleReg_Process(void)
+void Modbus_WriteSingleReg_Process(void)
 {
         uint8_t Send_Cnt;                        //发送字节数量
         uint16_t Address_Reg;                //要写入的寄存器地址
@@ -375,7 +358,7 @@ static void Modbus_WriteSingleReg_Process(void)
         Address_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];                //从接收数据缓冲区得到要写入的寄存器地址
         Value_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                //从接收数据缓冲区得到要写入的寄存器值
         
-        if(Address_Reg < 100)                //寄存器起始地址在正确范围内
+        if(Address_Reg < len_HoldingReg)                //寄存器起始地址在正确范围内
         {
 							
                 Send_Cnt = 6 + 2;                //计算发送字节数量
@@ -411,7 +394,7 @@ static void Modbus_WriteSingleReg_Process(void)
 //最后修改：2015.12.9
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_WriteMultipleReg_Process(void)
+void Modbus_WriteMultipleReg_Process(void)
 {
         uint8_t Send_Cnt;                        //发送字节数量
         uint16_t StartAddress_Reg;        //要写入的寄存器起始地址
@@ -421,10 +404,10 @@ static void Modbus_WriteMultipleReg_Process(void)
         
         StartAddress_Reg = Modbus_Rcv_Buff[2] << 8 | Modbus_Rcv_Buff[3];        //从接收数据缓冲区得到要写入的寄存器起始地址
         Num_Reg = Modbus_Rcv_Buff[4] << 8 | Modbus_Rcv_Buff[5];                                //从接收数据缓冲区得到要写入的寄存器数量
-        printf("StartAddress_Reg %d Num_Reg %d",StartAddress_Reg,Num_Reg);
-        if(StartAddress_Reg < 100)                        //寄存器起始地址在正确范围内
+        
+        if(StartAddress_Reg < len_HoldingReg)                        //寄存器起始地址在正确范围内
         {
-                if(StartAddress_Reg + Num_Reg < 100 && Num_Reg > 0)                                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确                        
+                if(StartAddress_Reg + Num_Reg < len_HoldingReg && Num_Reg > 0)                                //起始地址+寄存器数量位于正确范围内 并且 寄存器数量正确                        
                 {
                         for(i = StartAddress_Reg, j = 7; i < StartAddress_Reg + Num_Reg; i++, j += 2)        //将要写入的寄存器值写入寄存器
                         {
@@ -467,7 +450,7 @@ static void Modbus_WriteMultipleReg_Process(void)
 //最后修改：2015.12.11
 //备注：
 //----------------------------------------------------------------------------//
-static void Modbus_ErrorHandling(uint8_t ErrorType)
+void Modbus_ErrorHandling(uint8_t ErrorType)
 {
         uint16_t CRC_Cal;                        //CRC校验码
         
@@ -546,7 +529,7 @@ void Modbus_ClearBuff(void)
 //最后修改：2015.11.28
 //备注：
 //----------------------------------------------------------------------------//
-static uint8_t High4BitsToOneByte(uint8_t Byte)
+uint8_t High4BitsToOneByte(uint8_t Byte)
 {
         uint8_t tempByte;
         
@@ -562,7 +545,7 @@ static uint8_t High4BitsToOneByte(uint8_t Byte)
 //最后修改：2015.11.28
 //备注：
 //----------------------------------------------------------------------------//
-static uint8_t Low4BitsToOneByte(uint8_t Byte)
+uint8_t Low4BitsToOneByte(uint8_t Byte)
 {
         uint8_t tempByte;
         
@@ -578,7 +561,7 @@ static uint8_t Low4BitsToOneByte(uint8_t Byte)
 //最后修改：2015.11.28
 //备注：
 //----------------------------------------------------------------------------//
-static uint8_t HexToOLEDAsc(uint8_t HexByte)
+uint8_t HexToOLEDAsc(uint8_t HexByte)
 {
         if((HexByte >= 0x00) && (HexByte <= 0x09))                        //数字0~9
         {
@@ -595,11 +578,11 @@ static uint8_t HexToOLEDAsc(uint8_t HexByte)
         
         return HexByte; 
 }
-static void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
+void HAL_UART_Transmit_DMA_485(int *huart, uint8_t *pData, uint16_t Size)
 {
         int i;
         for(i=0;i<Size;i++)
         {
-            sendbyte4(pData[i]);
+                sendbyte1(pData[i]);
         }
 }

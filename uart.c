@@ -197,9 +197,18 @@ void PrintString(const char *puts)
     for (; *puts != 0;	puts++)  sendbyte1(*puts); 	//Óöµ½Í£Ö¹·û0½áÊø
 }
 
+void Delay1us()		//@24.000MHz
+{
+	unsigned char i;
 
+	_nop_();
+	_nop_();
+	i = 57;
+	while (--i);
+}
 char putchar (char dat)
 {
-	sendbyte1(dat);
+	// Delay1us();
+	// sendbyte1(dat);
 	return (dat);
 }

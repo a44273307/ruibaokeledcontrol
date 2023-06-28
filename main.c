@@ -41,6 +41,36 @@ void pingmuSetData(char *p);
 void pingmuGetData(char *p);
 
 
+// 比较值是否发生了变化。。
+uint16_t bufcheck[len_HoldingReg]={0};
+void setmodbuszhi(int dizhi,int zhi)
+{
+    if(dizhi<0 || dizhi>=100)
+    {
+        return ;
+    }
+    HoldingReg[dizhi]=zhi;
+}
+void buffchecktongbu()
+{
+    int i;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        bufcheck[i]=HoldingReg[i];
+    }
+}
+void runbuffcheck()
+{
+    int i;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+       if(bufcheck[i]!=HoldingReg[i])
+       {
+          setmodbus4(i,HoldingReg[i]);   
+       }
+    }
+    buffchecktongbu();
+}
 
 
 
@@ -148,7 +178,8 @@ void delay_ms(int m)
     {
         if (recover == 1)
         {
-            chulimodbus();
+            jishouokjisuan();
+            runbuffcheck();//modbus 的测试。。。
             recover = 0;
         }
         dealpingmuall();
@@ -182,7 +213,6 @@ int setdizhivalue=0;
 // pingmuSetData setdizhi04-74
 void pingmuSetData(char *p)
 {
-    
 	char* index;
 	int ans;
   
@@ -229,6 +259,20 @@ void dealpingmu()
     }
 }
 void dealans4();
+
+void Delay1ms()		//@24.000MHz
+{
+	unsigned char i, j;
+
+	i = 24;
+	j = 85;
+	do
+	{
+		while (--j);
+	} while (--i);
+}
+
+
 int setmodbus4(int dizhi,int zhi)
 {
     unsigned char req[10]={0x01,0x06,0x00,0x04,0x00,0x00,0xC8,0x0B};
@@ -245,9 +289,6 @@ int setmodbus4(int dizhi,int zhi)
     {
         if(flagrec4)
         {
-            
-            showoxbuf(req,8);
-            printf("set dianliu %d__",zhi);
             flagrec4=0;
             dealans4();
             break;
@@ -277,6 +318,7 @@ void com4read(int dizhi)
             HoldingReg[4]=zhi; 
             printf("___ dianliu %d--",zhi);
             dealans4();
+            // delay_ms(5);
             break;
         }   
     }
@@ -297,7 +339,7 @@ void testxxx()
         delay_ms(500);
     }
 }
-void getiicguang()
+int getiicguang()
 {
     int dis_data;
     Single_Write_BH1750(0x01); // power on
@@ -305,6 +347,7 @@ void getiicguang()
     delay_ms(180);
     dis_data = Multiple_Read_BH1750();
     delay_ms(2);
+    return dis_data;
 }
 void main()
 {
@@ -313,14 +356,15 @@ void main()
     int dianzu;
     int wendu;
     io_inint();
+    P_SW1=P_SW1|0x80;
     UartInit();
+    
     Uart23Init();
     Timer0Init();
     Uart4Init();
     EA = 1;
     delay_ms(2);
-    PrintString("system isok");
-    print3("system isok");
+    PrintString("system start now");
     delay_ms(2);
     Modbus_ClearBuff();
     delay_ms(2);
@@ -337,56 +381,20 @@ void main()
             dianzu=getdianzu(ans1);
 			wendu=jisuanwendu(dianzu);
             HoldingReg[6]=wendu; 
+            HoldingReg[5]=getiicguang();
         }
         if(i++>100)
         {
             com4read(4);
             i=0;
         }
-        
         delay_ms(100);
         dealpingmuall();    
     }
 }
-
-
-
 uchar ans1[100] = {0};
 int weizhi1 = 0;
 static int rectimes1;
-static void chuliguankji(char *ans1)
-{
-    char *index;
-    index = strstr(ans1, "@STCISP#");
-    if (index == 0)
-    {
-        return;
-    }
-    printf("rec @STCISP#,researt now");
-    IAP_CONTR = 0x60;
-}
-void input1(unsigned char c)
-{
-    ans1[weizhi1++] = c;
-    if (weizhi1 > 80)
-    {
-        weizhi1 = 0;
-    }
-    rectimes1=5;
-}
-void timechuli1()
-{
-    if(rectimes1>0)
-    {
-        rectimes1--;
-        if(rectimes1==0)
-        {
-            chuliguankji(ans1);
-            memset(ans1,0,sizeof(ans1));
-            weizhi1=0;
-        }
-    }
-}
 void UARTInterrupt(void) interrupt 4
 {
     unsigned char ans;
@@ -394,8 +402,7 @@ void UARTInterrupt(void) interrupt 4
     {
         RI = 0;
         ans = SBUF;
-        input1(ans);
-        // IAP_CONTR=0x60;
+        chuankou1jisuuan(ans);
     }
     else
     {
@@ -523,7 +530,6 @@ void Timer0() interrupt 1
 {
     delay_mszhi--;
     time1msjisuan();
-    timechuli1();
     timechuli4();
     chuankou3time();
 }

@@ -87,6 +87,23 @@ void printf1(const char *fmt, ...)
 		p++;
 	}
 }
+// 定义printf函数
+void printf3(const char *fmt, ...)
+{
+	char *p;
+	char buf[128]; // 定义一个缓冲区，足够存储输出的字符串
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args); // 将格式化的字符串写入缓冲区
+	va_end(args);
+
+	p = (unsigned char *)buf;
+	while (*p != '\0')
+	{
+		sendbyte3(*p);
+		p++;
+	}
+}
 char code duanzhi[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x76, 0x00, 0x40, 0xff};
 
 sbit led4 = P4 ^ 3;
@@ -168,7 +185,7 @@ void testmain()
 
 
 void dealchuankou();
-int gsetzhi = 1234;
+int gsetzhi = 600;
 
 
 
@@ -292,7 +309,7 @@ void setzhione(int dizhi,int zhi)
 {
 	char out[30]={0};
 	sprintf(out,"set:%d-%d;end",dizhi,zhi);
-	printf1(out);
+	printf3(out);
 }
 void jiexi(char* input)
 {
@@ -308,40 +325,50 @@ void jiexi(char* input)
 		jixi2(par);
 	}
 }
-int mainxx() {
 
-	const char* haystack = "sdsdset:1234-2234;333-4;endsdsdsd";
-	jiexi(haystack);
-	
-	setzhione(4,20);
 
-	return 0;
+
+
+int setprezhi;
+
+int dianliusettime=0;
+char flagdianliuset=0;
+void setdianliusettime(int zhi)
+{
+	if(dianliusettime!=0)
+	{
+		return ;
+	}
+	dianliusettime=zhi;
 }
-
-
-int mainxx2() {
-    const char* haystack = "Hello, world!";
-    const char* needle = "world";
-    char* result = mystrstr(haystack, needle);
-
-    if (result != NULL) {
-        printf("'%s' found in '%s' at index %ld\n", needle, haystack, result - haystack);
-    } else {
-        printf("'%s' not found in '%s'\n", needle, haystack);
-    }
-
-    return 0;
+void changedainliuzhi()
+{
+	if(setprezhi!=gsetzhi)
+	{
+		setprezhi=gsetzhi;
+		setdianliusettime(100);
+	}
 }
-
-
-int mainxxx() {
-    const char* str = "Hello, world!";
-    size_t length = mystrlen(str);
-    printf("Length of '%s' is %d\n", str, length);
-    return 0;
+void timechuli()
+{
+	if(dianliusettime>0)
+	{
+		dianliusettime--;
+		if(dianliusettime==0)
+		{
+			flagdianliuset=1;
+		}
+	}
 }
-
-
+void chulidianliu()
+{
+	if(flagdianliuset==1)
+	{
+		flagdianliuset=0;
+		setzhione(4,gsetzhi);
+		printf1("dianliu set%d",gsetzhi);
+	}
+}
 void main(void)
 {
 
@@ -350,14 +377,16 @@ void main(void)
 	EA = 1;		  // 使能EA总中断
 
 	UartInit();
-	// Uart23Init();
+	Uart23Init();
 	printf1("system is ok");
 	Timer0Init();
-	mainxx();
+	printf1("system is overall");
 	while (1)
 	{
 		showpre(gsetzhi);
 		dealchuankou();
+		changedainliuzhi();
+		chulidianliu();
 	}
 }
 
@@ -436,10 +465,19 @@ void UARTInterrupt(void) interrupt 4
 		TI = 0;
 	}
 }
-
+void addgetsetzhi(int i)
+{
+	int ans;
+	ans=gsetzhi+i;
+	if(ans>=0 && ans<=1023)
+	{
+		gsetzhi=ans;
+	}
+}
 void Timer0() interrupt 1
 {
 	// gsetzhi++;
+	timechuli();
 	chuankou1time();
 }
 void EC11_Handle() // EC11数据处理函数
@@ -452,11 +490,11 @@ void EC11_Handle() // EC11数据处理函数
 	previous = nowzhi;
 	if (ans == 4)
 	{
-		gsetzhi++;
+		addgetsetzhi(1);
 	}
 	else
 	{
-		gsetzhi--;
+		addgetsetzhi(-1);
 	}
 }
 
@@ -499,4 +537,19 @@ void dealchuankou()
 	}
 }
 
+
+void Uart3() interrupt 17 using 1
+{
+    if (S3CON & S3RI)
+    {
+        S3CON &= ~S3RI; //??S3RI?
+        // temp3 = S3BUF;
+        // chuankou3put(temp3);
+    }
+    if (S3CON & S3TI)
+    {
+        S3CON &= ~S3TI; // 清除S3TI位
+        busy3 = 0;      // 清忙标志
+    }
+}
 // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16

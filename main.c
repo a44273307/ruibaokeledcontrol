@@ -220,6 +220,10 @@ void main()
     initbuf();
     buffchecktongbu();
     printf("system init ok1");
+    HoldingReg[2]=1;
+    HoldingReg[4]=800;
+    deanyan();
+     printf("system init ok3");
 	while (1)
 	{
 		if (recover == 1)

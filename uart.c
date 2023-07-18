@@ -177,6 +177,6 @@ void PrintString(const char *puts)
 
 char putchar (char dat)
 {
-	// sendbyte1(dat);
+	sendbyte1(dat);
 	return (dat);
 }

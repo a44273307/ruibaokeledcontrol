@@ -1,5 +1,8 @@
 Build target 'Target 1'
-compiling uart.c...
+compiling main.c...
+MAIN.C(116): warning C280: 't': unreferenced local variable
+MAIN.C(116): warning C280: 't1': unreferenced local variable
+MAIN.C(232): warning C206: 'chuliguankji': missing function-prototype
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?INIT_EEPROM?MAIN
@@ -54,6 +57,6 @@ linking...
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?TIMER0?MAIN
 
-Program Size: data=23.5 xdata=437 code=5500
+Program Size: data=23.5 xdata=437 code=5550
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 17 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 20 Warning(s).

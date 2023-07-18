@@ -5,232 +5,465 @@
 //  MAX7219数码管模块引脚定义：CS = P6^5;DIN = P6^6;CLK = P6^4;（可在MAX7219.h中修改）
 //  实验开发板：屠龙刀三.1 @主频12MHz
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+
+#include <stdio.h>
+#include <string.h>
+#include <string.h>
 #include "stc32g.h"
 #include "config.h"
-#include "MAX7219.h"
+
+
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdio.h>
 
-void SYS_Ini();								// STC32初始化设置
-void EC11_Handle();						// EC11数据处理
-void SEG_Disp(void);					// 数码管显示
-void PWM_Config();						// PWM初始化设置
+#include <stdlib.h>
 
-u8 cnt_H, cnt_L;							// 计数值高8位、低8位
-u16 count,newcount;						// 当前计数值、上次计数值
-u8 number;										// 亮度计数值
-bit numberchange;							// 亮度改变标志
+void SYS_Ini();		// STC32初始化设置
+void EC11_Handle(); // EC11数据处理
+					// 数码管显示
+void PWM_Config(); // PWM初始化设置
 
-void UartInit(void)		//115200@24.000MHz
+u8 cnt_H, cnt_L;	 // 计数值高8位、低8位
+u16 count, newcount; // 当前计数值、上次计数值
+					 // 亮度计数值
+
+void UartInit(void) // 115200@24.000MHz
 {
-	SCON = 0x50;		//8位数据,可变波特率
-	AUXR |= 0x01;		//串口1选择定时器2为波特率发生器
-	AUXR |= 0x04;		//定时器时钟1T模式
-	T2L = 0xCC;			//设置定时初始值
-	T2H = 0xFF;			//设置定时初始值
-	AUXR |= 0x10;		//定时器2开始计时
-	ES=1;
+	SCON = 0x50;  // 8位数据,可变波特率
+	AUXR |= 0x01; // 串口1选择定时器2为波特率发生器
+	AUXR |= 0x04; // 定时器时钟1T模式
+	T2L = 0xCC;	  // 设置定时初始值
+	T2H = 0xFF;	  // 设置定时初始值
+	AUXR |= 0x10; // 定时器2开始计时
+	ES = 1;
 	//	ES=0;//关闭串口0中断
-	EA=1;
+	EA = 1;
 }
 
-
-
-
-void SYS_Ini()								// STC32初始化设置
+void SYS_Ini() // STC32初始化设置
 {
-	EAXFR = 1; 									// 使能访问 XFR
-	CKCON = 0x00; 							// 设置外部数据总线速度为最快
-	WTST = 0x00; 								// 设置程序代码等待参数，赋值为 0 可将 CPU 执行程序的速度设置为最快
-	P0M1 = 0x00;P0M0 = 0x00;		// 设置P0口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P1M1 = 0x00;P1M0 = 0x00;		// 设置P1口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P2M1 = 0x00;P2M0 = 0x00;		// 设置P2口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P3M1 = 0x00;P3M0 = 0x00;		// 设置P3口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P4M1 = 0x00;P4M0 = 0x00;		// 设置P4口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P5M1 = 0x00;P5M0 = 0x00;		// 设置P5口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P6M1 = 0x00;P6M0 = 0x00;		// 设置P6口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
-	P7M1 = 0x00;P7M0 = 0x00;		// 设置P7口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	EAXFR = 1;	  // 使能访问 XFR
+	CKCON = 0x00; // 设置外部数据总线速度为最快
+	WTST = 0x00;  // 设置程序代码等待参数，赋值为 0 可将 CPU 执行程序的速度设置为最快
+	P0M1 = 0x00;
+	P0M0 = 0x00; // 设置P0口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P1M1 = 0x00;
+	P1M0 = 0x00; // 设置P1口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P2M1 = 0x00;
+	P2M0 = 0x00; // 设置P2口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P3M1 = 0x00;
+	P3M0 = 0x00; // 设置P3口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P4M1 = 0x00;
+	P4M0 = 0x00; // 设置P4口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P5M1 = 0x00;
+	P5M0 = 0x00; // 设置P5口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P6M1 = 0x00;
+	P6M0 = 0x00; // 设置P6口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
+	P7M1 = 0x00;
+	P7M0 = 0x00; // 设置P7口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
 }
 
 void sendbyte1(unsigned char ch)
 {
 	int i;
 	// EA=0;
-    TI     =   0;  //清零串口发送完成中断请求标志
-    SBUF   =   ch;
-    while(TI ==0) //等待发送完成
+	TI = 0; // 清零串口发送完成中断请求标志
+	SBUF = ch;
+	while (TI == 0) // 等待发送完成
 	{
-		for(i=0;i<2000; i++){
-			if(	TI) break;
+		for (i = 0; i < 2000; i++)
+		{
+			if (TI)
+				break;
 		}
 		break;
 	}
-	EA=1;
+	EA = 1;
 }
-char putchar (char dat)
+char putchar(char dat)
 {
 	// Delay1us();
 	sendbyte1(dat);
 	return (dat);
 }
-void UARTInterrupt(void) interrupt 4
-{
-    unsigned char ans;
-    if (RI)
-    {
-        RI = 0;
-        ans = SBUF;
-        // chuankou1jisuuan(ans);
-    }
-    else
-    {
-        TI = 0;
-    }
-    if (TI) // 发送中断..
-    {
-        TI = 0;
-    }
-}
-void Delay100ms()		//@24.000MHz
+
+void Delay100ms() //@24.000MHz
 {
 	unsigned long i;
 
 	_nop_();
 	_nop_();
 	i = 599998UL;
-	while (i) i--;
+	while (i)
+		i--;
 }
 // 定义printf函数
-void printf1(const char *fmt, ...) {
-	 char *p;
-    char buf[128];  // 定义一个缓冲区，足够存储输出的字符串
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);  // 将格式化的字符串写入缓冲区
-    va_end(args);
-    
-     p = (unsigned char *)buf;
-    while (*p != '\0')
+void printf1(const char *fmt, ...)
+{
+	char *p;
+	char buf[128]; // 定义一个缓冲区，足够存储输出的字符串
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args); // 将格式化的字符串写入缓冲区
+	va_end(args);
+
+	p = (unsigned char *)buf;
+	while (*p != '\0')
 	{
 		sendbyte1(*p);
 		p++;
 	}
 }
+char code duanzhi[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x76, 0x00, 0x40, 0xff};
+
+sbit led4 = P4 ^ 3;
+sbit led3 = P4 ^ 4;
+sbit led2 = P2 ^ 0;
+sbit led1 = P2 ^ 1;
+#define Y0 led1
+#define Y1 led2
+#define Y2 led3
+#define Y3 led4
+
+char yout_set(char weizhi, char zhi)
+{
+	if (weizhi == 0)
+		Y0 = zhi;
+	if (weizhi == 1)
+		Y1 = zhi;
+	if (weizhi == 2)
+		Y2 = zhi;
+	if (weizhi == 3)
+		Y3 = zhi;
+	// if(weizhi==4)Y4=zhi;
+	// if(weizhi==5)Y5=zhi;
+	return (0);
+}
+void yout_closeall()
+{
+	char i;
+	for (i = 0; i < 4; i++)
+	{
+		yout_set(i, 1);
+	}
+}
+void Delay10us() //@24.000MHz
+{
+	unsigned long i;
+
+	_nop_();
+	_nop_();
+	_nop_();
+	i = 58UL;
+	while (i)
+		i--;
+}
+void delay10x(int i)
+{
+	while (i-- > 0)
+	{
+		Delay10us();
+	}
+}
+void showpre(int num)
+{
+	int i;
+	int a[4];
+	a[0] = num % 10000 / 1000;
+	a[1] = num % 1000 / 100;
+
+	a[2] = num % 100 / 10;
+	a[3] = num % 10;
+
+	for (i = 0; i < 4; i++)
+	{
+		yout_closeall();
+		yout_set(i, 0);
+		P0 = ~duanzhi[a[i]];
+		Delay10us();
+		yout_closeall();
+		P0 = 0xff;
+		Delay10us();
+	}
+}
+
 void testmain()
 {
-	int a,b;
-	int times=0;
-   UartInit();
-   printf1("test run");
-   while (1)
-   {
-	a=P2^2;
-	b=P1^0;
-//    printf1("zhi%d-%d-%d",times++,a,b);
-	   Delay100ms();
-	//    sendbyte1('a');
-   }
+	int a, b;
+	int times = 0;
 }
+void Timer0Init(void) // 0.5ms @24.000MHz
+{
+
+	AUXR |= 0x80; // 定时器时钟1T模式
+	TMOD &= 0xF0; // 设置定时器模式
+	TL0 = 0x40;	  // 设置定时初始值
+	TH0 = 0xA2;	  // 设置定时初始值
+	TF0 = 0;	  // 清除TF0标志
+	TR0 = 1;	  // 定时器0开始计时
+
+	TF0 = 0; // 清除TF0标志
+	PT0 = 1;
+	ET0 = 1;
+	TR0 = 1; // 定时器0开始计时
+	EA = 1;
+}
+
+void dealchuankou();
+int gsetzhi = 1234;
+
+
+
+
+
+
+
+
+
+
+
+void selfchekc()
+{
+
+}
+int mainxx() {
+    char protocol[100] = "set:1-1234;2-34;6-48;end";
+	int len=strlen(protocol);
+	printf1("protocol len%d",protocol);
+
+
+    return 0;
+}
+
+
 void main(void)
 {
-	
-	SYS_Ini();									// STC32初始化设置
-	PWM_Config();							  // PWM初始化设置
-	EA = 1;											// 使能EA总中断
-	MAX7219_Ini();							// MAX7219初始化
-	number = 10;								// 初始亮度10
-	SEG_Disp();									// 数码管显示
-	testmain();
+
+	SYS_Ini();	  // STC32初始化设置
+	PWM_Config(); // PWM初始化设置
+	EA = 1;		  // 使能EA总中断
+
+	UartInit();
+	printf1("system is ok");
+	Timer0Init();
+	mainxx();
 	while (1)
 	{
-		if(numberchange == 1)			// 当改变亮度标志置1
+		showpre(gsetzhi);
+		dealchuankou();
+	}
+}
+
+void PWM_ISR() interrupt 26
+{
+	if (PWMA_SR1 & 0X02) // 当捕获中断标志置1
+	{
+		cnt_H = PWMA_CCR1H; // 读取计数值高8位
+		cnt_L = PWMA_CCR1L; // 读取计数值低8位
+		PWMA_SR1 &= ~0X02;	// 清零捕获中断标志
+		EC11_Handle();		// 处理EC11数据
+	}
+}
+void PWM_Config() // PWM初始化设置
+{
+	PWMA_CCER1 = 0x00; // 关闭通道
+	PWMA_CCMR1 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+	PWMA_CCMR2 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+	PWMA_CCER1 = 0x55; // 使能捕获/比较通道1、通道2
+
+	//	PWMA_SMCR = 0x01; 				// 编码器模式 1
+	//	PWMA_SMCR = 0x02; 				// 编码器模式 2
+	PWMA_SMCR = 0x03; // 编码器模式 3
+
+	PWMA_IER = 0x02;  // 使能中断
+	PWMA_CR1 |= 0x01; // 使能计数器
+	PWMA_PS |= 0x04;  // 选择 PWM2_2 通道
+}
+
+// 返回变化的步数
+long calculateChange(unsigned int previous, unsigned int current)
+{
+	long diff = (current - previous + 65536) % 65536;
+	return diff;
+}
+
+char buf3[500];
+char flag3 = 0;
+int weishu3;
+int timeleft1, timeleft2, timeleft3, timeleft4;
+void chuankou1put(char c)
+{
+	buf3[weishu3++] = c;
+	if (weishu3 > sizeof(buf3) - 3)
+		weishu3 = 0;
+	timeleft3 = 3;
+}
+void chuankou1time()
+{
+	if (timeleft3 > 0)
+	{
+		timeleft3--;
+		if (timeleft3 == 0) // 数据一次收完了.
 		{
-			Write7219(INTENSITY,number);  // 设置数码管亮度
-			SEG_Disp();							// 数码管刷新显示
-			numberchange = 0;				// 清零改变亮度标志
+			flag3 = 1;
 		}
 	}
 }
-void PWM_ISR() interrupt 26
+void UARTInterrupt(void) interrupt 4
 {
-	if (PWMA_SR1 & 0X02)				// 当捕获中断标志置1
+	unsigned char ans;
+	if (RI)
 	{
-		cnt_H = PWMA_CCR1H;				// 读取计数值高8位
-		cnt_L = PWMA_CCR1L;				// 读取计数值低8位
-		PWMA_SR1 &= ~0X02;				// 清零捕获中断标志
-		EC11_Handle();							// 处理EC11数据
-	}
-}
-void PWM_Config()							// PWM初始化设置
-{
-	PWMA_CCER1 = 0x00;					// 关闭通道
-	PWMA_CCMR1 = 0xA1; 					// 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-	PWMA_CCMR2 = 0xA1; 					// 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-	PWMA_CCER1 = 0x55;					// 使能捕获/比较通道1、通道2
-	
-//	PWMA_SMCR = 0x01; 				// 编码器模式 1
-//	PWMA_SMCR = 0x02; 				// 编码器模式 2	
-	PWMA_SMCR = 0x03; 					// 编码器模式 3
-	
-	PWMA_IER = 0x02; 						// 使能中断
-	PWMA_CR1 |= 0x01; 					// 使能计数器
-	PWMA_PS |= 0x04; //选择 PWM2_2 通道
-}
-
-
-
-// 返回变化的步数
-long  calculateChange(unsigned int previous, unsigned int current) {
-  long  diff = (current - previous + 65536) % 65536;
-  return diff;
-}
-
-
-
-void showled()
-{
-
-}
-void EC11_Handle()						// EC11数据处理函数
-{
-	static unsigned int previous=0; 
-	unsigned int  nowzhi;
-	long ans;
-	nowzhi = cnt_H * 256 + cnt_L;	// 读取当前计数值
-	ans=calculateChange(previous,nowzhi);
-	previous=nowzhi;
-	if(ans==4)
-	{
-		printf1("zheng");
+		RI = 0;
+		ans = SBUF;
+		chuankou1put(ans);
 	}
 	else
 	{
-		printf1("fan");
+		TI = 0;
 	}
-	// printf1("newcount %ld",ans);
-	// if(newcount < count) 				// 当前计数值小于上次计数值
-	// {
-	// 	if(number > 0)	number--;	// 数字减
-	// 	numberchange = 1;					// 亮度改变标志置1
-	// 	count = newcount;					// 更新计数值
-	// }
-	// else if(newcount > count)		// 当前计数值大于上次计数值
-	// {
-	// 	if(number < 15) number++;	// 数字加
-	// 	numberchange = 1;					// 亮度改变标志置1
-	// 	count = newcount;					// 更新计数值
-	// }
-}
-void SEG_Disp(void)											
-{							
-	Write7219(8,15); 						// 左起第1位熄灭
-	Write7219(7,15); 						// 左起第2位熄灭
-	Write7219(6,15); 						// 左起第3位熄灭
-	Write7219(5,15); 						// 左起第4位熄灭
-	Write7219(4,15); 						// 左起第5位熄灭
-	Write7219(3,15); 						// 左起第6位熄灭
-	Write7219(2,(u8)(number / 10)); 	// 左起第7位显示数字十位
-	Write7219(1,(u8)(number % 10)); 	// 左起第8位显示数字个位
+	if (TI) // 发送中断..
+	{
+		TI = 0;
+	}
 }
 
-// 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16    
+void Timer0() interrupt 1
+{
+	gsetzhi++;
+	chuankou1time();
+}
+void EC11_Handle() // EC11数据处理函数
+{
+	static unsigned int previous = 0;
+	unsigned int nowzhi;
+	long ans;
+	nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
+	ans = calculateChange(previous, nowzhi);
+	previous = nowzhi;
+	if (ans == 4)
+	{
+		gsetzhi++;
+	}
+	else
+	{
+		gsetzhi--;
+	}
+}
+
+// #define MAX_REGISTERS 10 // 设置最大寄存器数量
+
+// struct Register
+// {
+// 	unsigned char num;
+// 	unsigned int value;
+// };
+
+// struct Register registers[MAX_REGISTERS];
+// int numRegisters = 0;
+
+// void setRegisterValue(const char* data) {
+//     unsigned char* delimiterPos = strchr(data, '-');
+//     if (delimiterPos != NULL) {
+//         unsigned char registerNum = *(delimiterPos - 1) - '0';
+//         unsigned int value = atoi(delimiterPos + 1);
+
+//         if (numRegisters < MAX_REGISTERS) {
+//             registers[numRegisters].num = registerNum;
+//             registers[numRegisters].value = value;
+//             numRegisters++;
+//         } else {
+//             printf("Max number of registers reached.\n");
+//         }
+//     }
+// }
+
+// void processReceivedData(const char* receivedData) {
+//     char* dataCopy = strdup(receivedData);
+//     char* token = my_strtok(dataCopy, ",");
+//     while (token != NULL) {
+//         setRegisterValue(token);
+//         token = my_strtok(NULL, ",");
+//     }
+//     free(dataCopy);
+// }
+// void showgetzhi()
+// {
+// 	unsigned char i;
+// 	if (i == 0)
+// 	{
+// 		printf1("Register not get");
+// 	}
+// 	// 遍历并打印所有寄存器的值
+// 	for (i = 0; i < numRegisters; i++)
+// 	{
+// 		printf1("Register %d: %d\n", registers[i].num, registers[i].value);
+// 	}
+// }
+int step=0;
+void showstep(const char *s)
+{
+	printf1("%s\n",s);
+}
+char* my_strstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*) haystack;
+    }
+
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*h == *n && *n != '\0') {
+            h++;
+            n++;
+        }
+
+        if (*n == '\0') {
+            return (char*) haystack;
+        }
+
+        haystack++;
+    }
+
+    return NULL;
+}
+
+void dealbuf3()
+{
+	char *receiveData = buf3;
+	unsigned char *headerPos = my_strstr(receiveData, "set:");
+	unsigned char *footerPos = my_strstr(receiveData, "end");
+	printf1("dealbuf3");
+	if (headerPos != NULL && footerPos != NULL && footerPos > headerPos)
+	{
+		unsigned char *dataStart = headerPos + 4;
+		unsigned char *dataEnd = footerPos;
+
+		// 分离出有效的数据部分
+		*dataEnd = '\0';
+
+		// 处理有效的数据部分
+		// setRegisterValue(dataStart);
+		printf1("dealbuf4");
+	}
+	// showgetzhi();
+}
+void dealchuankou()
+{
+	if (flag3 == 1)
+	{
+		flag3 = 0;
+		printf1("rec%s", buf3);
+		dealbuf3();
+		memset(buf3, 0, sizeof(buf3));
+		weishu3 = 0;
+	}
+}
+
+// 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16

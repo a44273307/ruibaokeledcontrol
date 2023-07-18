@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  main                                                               18/07/23  22:04:38  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE main.c XSMALL BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.
-                    -\Objects\main.obj) 
+COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE main.c LARGE BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\
+                    -Objects\main.obj) 
 
 stmt  level    source
 
@@ -15,270 +15,508 @@ stmt  level    source
     5          //  MAX7219ÊıÂë¹ÜÄ£¿éÒı½Å¶¨Òå£ºCS = P6^5;DIN = P6^6;CLK = P6^4;£¨¿ÉÔÚMAX7219.hÖĞĞŞ¸Ä£©
     6          //  ÊµÑé¿ª·¢°å£ºÍÀÁúµ¶Èı.1 @Ö÷Æµ12MHz
     7          
-    8          #include "stc32g.h"
-    9          #include "config.h"
-   10          #include "MAX7219.h"
-   11          #include <stdio.h>
-   12          #include <stdarg.h>
-   13          
-   14          void SYS_Ini();               // STC32³õÊ¼»¯ÉèÖÃ
-   15          void EC11_Handle();           // EC11Êı¾İ´¦Àí
-   16          void SEG_Disp(void);          // ÊıÂë¹ÜÏÔÊ¾
-   17          void PWM_Config();            // PWM³õÊ¼»¯ÉèÖÃ
+    8          #include <stdio.h>
+    9          #include <string.h>
+   10          #include <stdlib.h>
+   11          
+   12          
+   13          #include <stdio.h>
+   14          #include <string.h>
+   15          #include <string.h>
+   16          #include "stc32g.h"
+   17          #include "config.h"
    18          
-   19          u8 cnt_H, cnt_L;              // ¼ÆÊıÖµ¸ß8Î»¡¢µÍ8Î»
-   20          u16 count,newcount;           // µ±Ç°¼ÆÊıÖµ¡¢ÉÏ´Î¼ÆÊıÖµ
-   21          u8 number;                    // ÁÁ¶È¼ÆÊıÖµ
-   22          bit numberchange;             // ÁÁ¶È¸Ä±ä±êÖ¾
+   19          
+   20          #include <stdio.h>
+   21          #include <stdarg.h>
+   22          #include <stdio.h>
    23          
-   24          void UartInit(void)   //115200@24.000MHz
-   25          {
-   26   1        SCON = 0x50;    //8Î»Êı¾İ,¿É±ä²¨ÌØÂÊ
-   27   1        AUXR |= 0x01;   //´®¿Ú1Ñ¡Ôñ¶¨Ê±Æ÷2Îª²¨ÌØÂÊ·¢ÉúÆ÷
-   28   1        AUXR |= 0x04;   //¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
-   29   1        T2L = 0xCC;     //ÉèÖÃ¶¨Ê±³õÊ¼Öµ
-   30   1        T2H = 0xFF;     //ÉèÖÃ¶¨Ê±³õÊ¼Öµ
-   31   1        AUXR |= 0x10;   //¶¨Ê±Æ÷2¿ªÊ¼¼ÆÊ±
-   32   1        ES=1;
-   33   1        //  ES=0;//¹Ø±Õ´®¿Ú0ÖĞ¶Ï
-   34   1        EA=1;
-   35   1      }
-   36          
-   37          
-   38          
-   39          
-   40          void SYS_Ini()                // STC32³õÊ¼»¯ÉèÖÃ
-   41          {
-   42   1        EAXFR = 1;                  // Ê¹ÄÜ·ÃÎÊ XFR
-   43   1        CKCON = 0x00;               // ÉèÖÃÍâ²¿Êı¾İ×ÜÏßËÙ¶ÈÎª×î¿ì
-   44   1        WTST = 0x00;                // ÉèÖÃ³ÌĞò´úÂëµÈ´ı²ÎÊı£¬¸³ÖµÎª 0 ¿É½« CPU Ö´ĞĞ³ÌĞòµÄËÙ¶ÈÉèÖÃÎª×î¿ì
-   45   1        P0M1 = 0x00;P0M0 = 0x00;    // ÉèÖÃP0¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   46   1        P1M1 = 0x00;P1M0 = 0x00;    // ÉèÖÃP1¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   47   1        P2M1 = 0x00;P2M0 = 0x00;    // ÉèÖÃP2¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   48   1        P3M1 = 0x00;P3M0 = 0x00;    // ÉèÖÃP3¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   49   1        P4M1 = 0x00;P4M0 = 0x00;    // ÉèÖÃP4¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   50   1        P5M1 = 0x00;P5M0 = 0x00;    // ÉèÖÃP5¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   51   1        P6M1 = 0x00;P6M0 = 0x00;    // ÉèÖÃP6¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-C251 COMPILER V5.60.0,  main                                                               18/07/23  22:04:38  PAGE 2   
+   24          #include <stdlib.h>
+   25          
+   26          void SYS_Ini();   // STC32³õÊ¼»¯ÉèÖÃ
+   27          void EC11_Handle(); // EC11Êı¾İ´¦Àí
+   28                    // ÊıÂë¹ÜÏÔÊ¾
+   29          void PWM_Config(); // PWM³õÊ¼»¯ÉèÖÃ
+   30          
+   31          u8 cnt_H, cnt_L;   // ¼ÆÊıÖµ¸ß8Î»¡¢µÍ8Î»
+   32          u16 count, newcount; // µ±Ç°¼ÆÊıÖµ¡¢ÉÏ´Î¼ÆÊıÖµ
+   33                     // ÁÁ¶È¼ÆÊıÖµ
+   34          
+   35          void UartInit(void) // 115200@24.000MHz
+   36          {
+   37   1        SCON = 0x50;  // 8Î»Êı¾İ,¿É±ä²¨ÌØÂÊ
+   38   1        AUXR |= 0x01; // ´®¿Ú1Ñ¡Ôñ¶¨Ê±Æ÷2Îª²¨ÌØÂÊ·¢ÉúÆ÷
+   39   1        AUXR |= 0x04; // ¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
+   40   1        T2L = 0xCC;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   41   1        T2H = 0xFF;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   42   1        AUXR |= 0x10; // ¶¨Ê±Æ÷2¿ªÊ¼¼ÆÊ±
+   43   1        ES = 1;
+   44   1        //  ES=0;//¹Ø±Õ´®¿Ú0ÖĞ¶Ï
+   45   1        EA = 1;
+   46   1      }
+   47          
+   48          void SYS_Ini() // STC32³õÊ¼»¯ÉèÖÃ
+   49          {
+   50   1        EAXFR = 1;    // Ê¹ÄÜ·ÃÎÊ XFR
+   51   1        CKCON = 0x00; // ÉèÖÃÍâ²¿Êı¾İ×ÜÏßËÙ¶ÈÎª×î¿ì
+   52   1        WTST = 0x00;  // ÉèÖÃ³ÌĞò´úÂëµÈ´ı²ÎÊı£¬¸³ÖµÎª 0 ¿É½« CPU Ö´ĞĞ³ÌĞòµÄËÙ¶ÈÉèÖÃÎª×î¿ì
+   53   1        P0M1 = 0x00;
+   54   1        P0M0 = 0x00; // ÉèÖÃP0¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   55   1        P1M1 = 0x00;
+   56   1        P1M0 = 0x00; // ÉèÖÃP1¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   57   1        P2M1 = 0x00;
+   58   1        P2M0 = 0x00; // ÉèÖÃP2¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 2   
 
-   52   1        P7M1 = 0x00;P7M0 = 0x00;    // ÉèÖÃP7¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   53   1      }
-   54          
-   55          void sendbyte1(unsigned char ch)
-   56          {
-   57   1        int i;
-   58   1        // EA=0;
-   59   1          TI     =   0;  //ÇåÁã´®¿Ú·¢ËÍÍê³ÉÖĞ¶ÏÇëÇó±êÖ¾
-   60   1          SBUF   =   ch;
-   61   1          while(TI ==0) //µÈ´ı·¢ËÍÍê³É
-   62   1        {
-   63   2          for(i=0;i<2000; i++){
-   64   3            if( TI) break;
-   65   3          }
-   66   2          break;
-   67   2        }
-   68   1        EA=1;
+   59   1        P3M1 = 0x00;
+   60   1        P3M0 = 0x00; // ÉèÖÃP3¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   61   1        P4M1 = 0x00;
+   62   1        P4M0 = 0x00; // ÉèÖÃP4¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   63   1        P5M1 = 0x00;
+   64   1        P5M0 = 0x00; // ÉèÖÃP5¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   65   1        P6M1 = 0x00;
+   66   1        P6M0 = 0x00; // ÉèÖÃP6¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
+   67   1        P7M1 = 0x00;
+   68   1        P7M0 = 0x00; // ÉèÖÃP7¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³ö
    69   1      }
-   70          char putchar (char dat)
-   71          {
-   72   1        // Delay1us();
-   73   1        sendbyte1(dat);
-   74   1        return (dat);
-   75   1      }
-   76          void UARTInterrupt(void) interrupt 4
-   77          {
-   78   1          unsigned char ans;
-   79   1          if (RI)
-   80   1          {
-   81   2              RI = 0;
-   82   2              ans = SBUF;
-   83   2              // chuankou1jisuuan(ans);
-   84   2          }
-   85   1          else
-   86   1          {
-   87   2              TI = 0;
-   88   2          }
-   89   1          if (TI) // ·¢ËÍÖĞ¶Ï..
-   90   1          {
-   91   2              TI = 0;
-   92   2          }
+   70          
+   71          void sendbyte1(unsigned char ch)
+   72          {
+   73   1        int i;
+   74   1        // EA=0;
+   75   1        TI = 0; // ÇåÁã´®¿Ú·¢ËÍÍê³ÉÖĞ¶ÏÇëÇó±êÖ¾
+   76   1        SBUF = ch;
+   77   1        while (TI == 0) // µÈ´ı·¢ËÍÍê³É
+   78   1        {
+   79   2          for (i = 0; i < 2000; i++)
+   80   2          {
+   81   3            if (TI)
+   82   3              break;
+   83   3          }
+   84   2          break;
+   85   2        }
+   86   1        EA = 1;
+   87   1      }
+   88          char putchar(char dat)
+   89          {
+   90   1        // Delay1us();
+   91   1        sendbyte1(dat);
+   92   1        return (dat);
    93   1      }
-   94          void Delay100ms()   //@24.000MHz
-   95          {
-   96   1        unsigned long i;
-   97   1      
-   98   1        _nop_();
+   94          
+   95          void Delay100ms() //@24.000MHz
+   96          {
+   97   1        unsigned long i;
+   98   1      
    99   1        _nop_();
-  100   1        i = 599998UL;
-  101   1        while (i) i--;
-  102   1      }
-  103          // ¶¨Òåprintfº¯Êı
-  104          void printf1(const char *fmt, ...) {
-  105   1         char *p;
-  106   1          char buf[128];  // ¶¨ÒåÒ»¸ö»º³åÇø£¬×ã¹»´æ´¢Êä³öµÄ×Ö·û´®
-  107   1          va_list args;
-  108   1          va_start(args, fmt);
-  109   1          vsprintf(buf, fmt, args);  // ½«¸ñÊ½»¯µÄ×Ö·û´®Ğ´Èë»º³åÇø
-  110   1          va_end(args);
-  111   1          
-  112   1           p = (unsigned char *)buf;
-  113   1          while (*p != '\0')
-  114   1        {
-  115   2          sendbyte1(*p);
-  116   2          p++;
-C251 COMPILER V5.60.0,  main                                                               18/07/23  22:04:38  PAGE 3   
+  100   1        _nop_();
+  101   1        i = 599998UL;
+  102   1        while (i)
+  103   1          i--;
+  104   1      }
+  105          // ¶¨Òåprintfº¯Êı
+  106          void printf1(const char *fmt, ...)
+  107          {
+  108   1        char *p;
+  109   1        char buf[128]; // ¶¨ÒåÒ»¸ö»º³åÇø£¬×ã¹»´æ´¢Êä³öµÄ×Ö·û´®
+  110   1        va_list args;
+  111   1        va_start(args, fmt);
+  112   1        vsprintf(buf, fmt, args); // ½«¸ñÊ½»¯µÄ×Ö·û´®Ğ´Èë»º³åÇø
+  113   1        va_end(args);
+  114   1      
+  115   1        p = (unsigned char *)buf;
+  116   1        while (*p != '\0')
+  117   1        {
+  118   2          sendbyte1(*p);
+  119   2          p++;
+  120   2        }
+  121   1      }
+  122          char code duanzhi[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e
+             -, 0x79, 0x71, 0x76, 0x00, 0x40, 0xff};
+  123          
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 3   
 
-  117   2        }
-  118   1      }
-  119          void testmain()
-  120          {
-  121   1        int a,b;
-  122   1        int times=0;
-  123   1         UartInit();
-  124   1         printf1("test run");
-  125   1         while (1)
-  126   1         {
-  127   2        a=P2^2;
-  128   2        b=P1^0;
-  129   2      //    printf1("zhi%d-%d-%d",times++,a,b);
-  130   2           Delay100ms();
-  131   2        //    sendbyte1('a');
-  132   2         }
-  133   1      }
-  134          void main(void)
-  135          {
-  136   1        
-  137   1        SYS_Ini();                  // STC32³õÊ¼»¯ÉèÖÃ
-  138   1        PWM_Config();               // PWM³õÊ¼»¯ÉèÖÃ
-  139   1        EA = 1;                     // Ê¹ÄÜEA×ÜÖĞ¶Ï
-  140   1        MAX7219_Ini();              // MAX7219³õÊ¼»¯
-  141   1        number = 10;                // ³õÊ¼ÁÁ¶È10
-  142   1        SEG_Disp();                 // ÊıÂë¹ÜÏÔÊ¾
-  143   1        testmain();
-  144   1        while (1)
-  145   1        {
-  146   2          if(numberchange == 1)     // µ±¸Ä±äÁÁ¶È±êÖ¾ÖÃ1
-  147   2          {
-  148   3            Write7219(INTENSITY,number);  // ÉèÖÃÊıÂë¹ÜÁÁ¶È
-  149   3            SEG_Disp();             // ÊıÂë¹ÜË¢ĞÂÏÔÊ¾
-  150   3            numberchange = 0;       // ÇåÁã¸Ä±äÁÁ¶È±êÖ¾
-  151   3          }
-  152   2        }
-  153   1      }
-  154          void PWM_ISR() interrupt 26
-  155          {
-  156   1        if (PWMA_SR1 & 0X02)        // µ±²¶»ñÖĞ¶Ï±êÖ¾ÖÃ1
-  157   1        {
-  158   2          cnt_H = PWMA_CCR1H;       // ¶ÁÈ¡¼ÆÊıÖµ¸ß8Î»
-  159   2          cnt_L = PWMA_CCR1L;       // ¶ÁÈ¡¼ÆÊıÖµµÍ8Î»
-  160   2          PWMA_SR1 &= ~0X02;        // ÇåÁã²¶»ñÖĞ¶Ï±êÖ¾
-  161   2          EC11_Handle();              // ´¦ÀíEC11Êı¾İ
-  162   2        }
-  163   1      }
-  164          void PWM_Config()             // PWM³õÊ¼»¯ÉèÖÃ
-  165          {
-  166   1        PWMA_CCER1 = 0x00;          // ¹Ø±ÕÍ¨µÀ
-  167   1        PWMA_CCMR1 = 0xA1;          // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
-  168   1        PWMA_CCMR2 = 0xA1;          // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
-  169   1        PWMA_CCER1 = 0x55;          // Ê¹ÄÜ²¶»ñ/±È½ÏÍ¨µÀ1¡¢Í¨µÀ2
-  170   1        
-  171   1      //  PWMA_SMCR = 0x01;         // ±àÂëÆ÷Ä£Ê½ 1
-  172   1      //  PWMA_SMCR = 0x02;         // ±àÂëÆ÷Ä£Ê½ 2 
-  173   1        PWMA_SMCR = 0x03;           // ±àÂëÆ÷Ä£Ê½ 3
-  174   1        
-  175   1        PWMA_IER = 0x02;            // Ê¹ÄÜÖĞ¶Ï
-  176   1        PWMA_CR1 |= 0x01;           // Ê¹ÄÜ¼ÆÊıÆ÷
-  177   1        PWMA_PS |= 0x04; //Ñ¡Ôñ PWM2_2 Í¨µÀ
-  178   1      }
-  179          
-  180          
-  181          
-  182          // ·µ»Ø±ä»¯µÄ²½Êı
-C251 COMPILER V5.60.0,  main                                                               18/07/23  22:04:38  PAGE 4   
+  124          sbit led4 = P4 ^ 3;
+  125          sbit led3 = P4 ^ 4;
+  126          sbit led2 = P2 ^ 0;
+  127          sbit led1 = P2 ^ 1;
+  128          #define Y0 led1
+  129          #define Y1 led2
+  130          #define Y2 led3
+  131          #define Y3 led4
+  132          
+  133          char yout_set(char weizhi, char zhi)
+  134          {
+  135   1        if (weizhi == 0)
+  136   1          Y0 = zhi;
+  137   1        if (weizhi == 1)
+  138   1          Y1 = zhi;
+  139   1        if (weizhi == 2)
+  140   1          Y2 = zhi;
+  141   1        if (weizhi == 3)
+  142   1          Y3 = zhi;
+  143   1        // if(weizhi==4)Y4=zhi;
+  144   1        // if(weizhi==5)Y5=zhi;
+  145   1        return (0);
+  146   1      }
+  147          void yout_closeall()
+  148          {
+  149   1        char i;
+  150   1        for (i = 0; i < 4; i++)
+  151   1        {
+  152   2          yout_set(i, 1);
+  153   2        }
+  154   1      }
+  155          void Delay10us() //@24.000MHz
+  156          {
+  157   1        unsigned long i;
+  158   1      
+  159   1        _nop_();
+  160   1        _nop_();
+  161   1        _nop_();
+  162   1        i = 58UL;
+  163   1        while (i)
+  164   1          i--;
+  165   1      }
+  166          void delay10x(int i)
+  167          {
+  168   1        while (i-- > 0)
+  169   1        {
+  170   2          Delay10us();
+  171   2        }
+  172   1      }
+  173          void showpre(int num)
+  174          {
+  175   1        int i;
+  176   1        int a[4];
+  177   1        a[0] = num % 10000 / 1000;
+  178   1        a[1] = num % 1000 / 100;
+  179   1      
+  180   1        a[2] = num % 100 / 10;
+  181   1        a[3] = num % 10;
+  182   1      
+  183   1        for (i = 0; i < 4; i++)
+  184   1        {
+  185   2          yout_closeall();
+  186   2          yout_set(i, 0);
+*** WARNING C188 IN LINE 186 OF main.c: 'parameter 1': value truncated
+  187   2          P0 = ~duanzhi[a[i]];
+  188   2          Delay10us();
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 4   
 
-  183          long  calculateChange(unsigned int previous, unsigned int current) {
-  184   1        long  diff = (current - previous + 65536) % 65536;
-*** WARNING C188 IN LINE 184 OF main.c: 'initialization': value truncated
-  185   1        return diff;
-  186   1      }
-  187          
-  188          
-  189          
-  190          
-  191          void EC11_Handle()            // EC11Êı¾İ´¦Àíº¯Êı
-  192          {
-  193   1        static unsigned int previous=0; 
-  194   1        unsigned int  nowzhi;
-  195   1        long ans;
-  196   1        nowzhi = cnt_H * 256 + cnt_L; // ¶ÁÈ¡µ±Ç°¼ÆÊıÖµ
-  197   1        ans=calculateChange(previous,nowzhi);
-  198   1        previous=nowzhi;
-  199   1        if(ans==4)
-  200   1        {
-  201   2          printf1("zheng");
-  202   2        }
-  203   1        else
-  204   1        {
-  205   2          printf1("fan");
-  206   2        }
-  207   1        // printf1("newcount %ld",ans);
-  208   1        // if(newcount < count)         // µ±Ç°¼ÆÊıÖµĞ¡ÓÚÉÏ´Î¼ÆÊıÖµ
-  209   1        // {
-  210   1        //  if(number > 0)  number--; // Êı×Ö¼õ
-  211   1        //  numberchange = 1;         // ÁÁ¶È¸Ä±ä±êÖ¾ÖÃ1
-  212   1        //  count = newcount;         // ¸üĞÂ¼ÆÊıÖµ
-  213   1        // }
-  214   1        // else if(newcount > count)    // µ±Ç°¼ÆÊıÖµ´óÓÚÉÏ´Î¼ÆÊıÖµ
-  215   1        // {
-  216   1        //  if(number < 15) number++; // Êı×Ö¼Ó
-  217   1        //  numberchange = 1;         // ÁÁ¶È¸Ä±ä±êÖ¾ÖÃ1
-  218   1        //  count = newcount;         // ¸üĞÂ¼ÆÊıÖµ
-  219   1        // }
-  220   1      }
-  221          void SEG_Disp(void)                     
-  222          {             
-  223   1        Write7219(8,15);            // ×óÆğµÚ1Î»Ï¨Ãğ
-  224   1        Write7219(7,15);            // ×óÆğµÚ2Î»Ï¨Ãğ
-  225   1        Write7219(6,15);            // ×óÆğµÚ3Î»Ï¨Ãğ
-  226   1        Write7219(5,15);            // ×óÆğµÚ4Î»Ï¨Ãğ
-  227   1        Write7219(4,15);            // ×óÆğµÚ5Î»Ï¨Ãğ
-  228   1        Write7219(3,15);            // ×óÆğµÚ6Î»Ï¨Ãğ
-  229   1        Write7219(2,(u8)(number / 10));   // ×óÆğµÚ7Î»ÏÔÊ¾Êı×ÖÊ®Î»
-  230   1        Write7219(1,(u8)(number % 10));   // ×óÆğµÚ8Î»ÏÔÊ¾Êı×Ö¸öÎ»
-  231   1      }
-  232          
-  233          // Ğ´¸öº¯Êı£¬´«ÈëÁ½¸ö·Ç¸ºÊı£¬¼ÆËãÊÇÇ°½ø»¹ÊÇºóÍËÁË£¬±ä»¯¹æÂÉ 15,16,0,1,2...15,16    
+  189   2          yout_closeall();
+  190   2          P0 = 0xff;
+  191   2          Delay10us();
+  192   2        }
+  193   1      }
+  194          
+  195          void testmain()
+  196          {
+  197   1        int a, b;
+  198   1        int times = 0;
+  199   1      }
+*** WARNING C47 IN LINE 197 OF main.c: 'a': unreferenced local variable
+*** WARNING C47 IN LINE 197 OF main.c: 'b': unreferenced local variable
+  200          void Timer0Init(void) // 0.5ms @24.000MHz
+  201          {
+  202   1      
+  203   1        AUXR |= 0x80; // ¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
+  204   1        TMOD &= 0xF0; // ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
+  205   1        TL0 = 0x40;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+  206   1        TH0 = 0xA2;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+  207   1        TF0 = 0;    // Çå³ıTF0±êÖ¾
+  208   1        TR0 = 1;    // ¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+  209   1      
+  210   1        TF0 = 0; // Çå³ıTF0±êÖ¾
+  211   1        PT0 = 1;
+  212   1        ET0 = 1;
+  213   1        TR0 = 1; // ¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+  214   1        EA = 1;
+  215   1      }
+  216          
+  217          void dealchuankou();
+  218          int gsetzhi = 1234;
+  219          
+  220          
+  221          
+  222          
+  223          
+  224          
+  225          
+  226          
+  227          
+  228          
+  229          
+  230          void selfchekc()
+  231          {
+  232   1      
+  233   1      }
+  234          int mainxx() {
+  235   1          char protocol[100] = "set:1-1234;2-34;6-48;end";
+  236   1        int len=strlen(protocol);
+  237   1        printf1("protocol len%d",protocol);
+  238   1      
+  239   1      
+  240   1          return 0;
+  241   1      }
+  242          
+  243          
+  244          void main(void)
+  245          {
+  246   1      
+  247   1        SYS_Ini();    // STC32³õÊ¼»¯ÉèÖÃ
+  248   1        PWM_Config(); // PWM³õÊ¼»¯ÉèÖÃ
+  249   1        EA = 1;     // Ê¹ÄÜEA×ÜÖĞ¶Ï
+  250   1      
+  251   1        UartInit();
+  252   1        printf1("system is ok");
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 5   
+
+  253   1        Timer0Init();
+  254   1        mainxx();
+  255   1        while (1)
+  256   1        {
+  257   2          showpre(gsetzhi);
+  258   2          dealchuankou();
+  259   2        }
+  260   1      }
+  261          
+  262          void PWM_ISR() interrupt 26
+  263          {
+  264   1        if (PWMA_SR1 & 0X02) // µ±²¶»ñÖĞ¶Ï±êÖ¾ÖÃ1
+  265   1        {
+  266   2          cnt_H = PWMA_CCR1H; // ¶ÁÈ¡¼ÆÊıÖµ¸ß8Î»
+  267   2          cnt_L = PWMA_CCR1L; // ¶ÁÈ¡¼ÆÊıÖµµÍ8Î»
+  268   2          PWMA_SR1 &= ~0X02;  // ÇåÁã²¶»ñÖĞ¶Ï±êÖ¾
+  269   2          EC11_Handle();    // ´¦ÀíEC11Êı¾İ
+  270   2        }
+  271   1      }
+  272          void PWM_Config() // PWM³õÊ¼»¯ÉèÖÃ
+  273          {
+  274   1        PWMA_CCER1 = 0x00; // ¹Ø±ÕÍ¨µÀ
+  275   1        PWMA_CCMR1 = 0xA1; // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
+  276   1        PWMA_CCMR2 = 0xA1; // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
+  277   1        PWMA_CCER1 = 0x55; // Ê¹ÄÜ²¶»ñ/±È½ÏÍ¨µÀ1¡¢Í¨µÀ2
+  278   1      
+  279   1        //  PWMA_SMCR = 0x01;         // ±àÂëÆ÷Ä£Ê½ 1
+  280   1        //  PWMA_SMCR = 0x02;         // ±àÂëÆ÷Ä£Ê½ 2
+  281   1        PWMA_SMCR = 0x03; // ±àÂëÆ÷Ä£Ê½ 3
+  282   1      
+  283   1        PWMA_IER = 0x02;  // Ê¹ÄÜÖĞ¶Ï
+  284   1        PWMA_CR1 |= 0x01; // Ê¹ÄÜ¼ÆÊıÆ÷
+  285   1        PWMA_PS |= 0x04;  // Ñ¡Ôñ PWM2_2 Í¨µÀ
+  286   1      }
+  287          
+  288          // ·µ»Ø±ä»¯µÄ²½Êı
+  289          long calculateChange(unsigned int previous, unsigned int current)
+  290          {
+  291   1        long diff = (current - previous + 65536) % 65536;
+*** WARNING C188 IN LINE 291 OF main.c: 'initialization': value truncated
+  292   1        return diff;
+  293   1      }
+  294          
+  295          char buf3[500];
+  296          char flag3 = 0;
+  297          int weishu3;
+  298          int timeleft1, timeleft2, timeleft3, timeleft4;
+  299          void chuankou1put(char c)
+  300          {
+  301   1        buf3[weishu3++] = c;
+  302   1        if (weishu3 > sizeof(buf3) - 3)
+  303   1          weishu3 = 0;
+  304   1        timeleft3 = 3;
+  305   1      }
+  306          void chuankou1time()
+  307          {
+  308   1        if (timeleft3 > 0)
+  309   1        {
+  310   2          timeleft3--;
+  311   2          if (timeleft3 == 0) // Êı¾İÒ»´ÎÊÕÍêÁË.
+  312   2          {
+  313   3            flag3 = 1;
+  314   3          }
+  315   2        }
+  316   1      }
+  317          void UARTInterrupt(void) interrupt 4
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 6   
+
+  318          {
+  319   1        unsigned char ans;
+  320   1        if (RI)
+  321   1        {
+  322   2          RI = 0;
+  323   2          ans = SBUF;
+  324   2          chuankou1put(ans);
+  325   2        }
+  326   1        else
+  327   1        {
+  328   2          TI = 0;
+  329   2        }
+  330   1        if (TI) // ·¢ËÍÖĞ¶Ï..
+  331   1        {
+  332   2          TI = 0;
+  333   2        }
+  334   1      }
+  335          
+  336          void Timer0() interrupt 1
+  337          {
+  338   1        gsetzhi++;
+  339   1        chuankou1time();
+  340   1      }
+  341          void EC11_Handle() // EC11Êı¾İ´¦Àíº¯Êı
+  342          {
+  343   1        static unsigned int previous = 0;
+  344   1        unsigned int nowzhi;
+  345   1        long ans;
+  346   1        nowzhi = cnt_H * 256 + cnt_L; // ¶ÁÈ¡µ±Ç°¼ÆÊıÖµ
+  347   1        ans = calculateChange(previous, nowzhi);
+  348   1        previous = nowzhi;
+  349   1        if (ans == 4)
+  350   1        {
+  351   2          gsetzhi++;
+  352   2        }
+  353   1        else
+  354   1        {
+  355   2          gsetzhi--;
+  356   2        }
+  357   1      }
+  358          
+  359          // #define MAX_REGISTERS 10 // ÉèÖÃ×î´ó¼Ä´æÆ÷ÊıÁ¿
+  360          
+  361          // struct Register
+  362          // {
+  363          //  unsigned char num;
+  364          //  unsigned int value;
+  365          // };
+  366          
+  367          // struct Register registers[MAX_REGISTERS];
+  368          // int numRegisters = 0;
+  369          
+  370          // void setRegisterValue(const char* data) {
+  371          //     unsigned char* delimiterPos = strchr(data, '-');
+  372          //     if (delimiterPos != NULL) {
+  373          //         unsigned char registerNum = *(delimiterPos - 1) - '0';
+  374          //         unsigned int value = atoi(delimiterPos + 1);
+  375          
+  376          //         if (numRegisters < MAX_REGISTERS) {
+  377          //             registers[numRegisters].num = registerNum;
+  378          //             registers[numRegisters].value = value;
+  379          //             numRegisters++;
+  380          //         } else {
+  381          //             printf("Max number of registers reached.\n");
+  382          //         }
+  383          //     }
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 7   
+
+  384          // }
+  385          
+  386          // void processReceivedData(const char* receivedData) {
+  387          //     char* dataCopy = strdup(receivedData);
+  388          //     char* token = my_strtok(dataCopy, ",");
+  389          //     while (token != NULL) {
+  390          //         setRegisterValue(token);
+  391          //         token = my_strtok(NULL, ",");
+  392          //     }
+  393          //     free(dataCopy);
+  394          // }
+  395          // void showgetzhi()
+  396          // {
+  397          //  unsigned char i;
+  398          //  if (i == 0)
+  399          //  {
+  400          //    printf1("Register not get");
+  401          //  }
+  402          //  // ±éÀú²¢´òÓ¡ËùÓĞ¼Ä´æÆ÷µÄÖµ
+  403          //  for (i = 0; i < numRegisters; i++)
+  404          //  {
+  405          //    printf1("Register %d: %d\n", registers[i].num, registers[i].value);
+  406          //  }
+  407          // }
+  408          int step=0;
+  409          void showstep(const char *s)
+  410          {
+  411   1        printf1("%s\n",s);
+  412   1      }
+  413          char* my_strstr(const char* haystack, const char* needle) {
+  414   1          if (*needle == '\0') {
+  415   2              return (char*) haystack;
+  416   2          }
+  417   1      
+  418   1          while (*haystack != '\0') {
+  419   2              const char* h = haystack;
+  420   2              const char* n = needle;
+  421   2      
+  422   2              while (*h == *n && *n != '\0') {
+  423   3                  h++;
+  424   3                  n++;
+  425   3              }
+  426   2      
+  427   2              if (*n == '\0') {
+  428   3                  return (char*) haystack;
+  429   3              }
+  430   2      
+  431   2              haystack++;
+  432   2          }
+  433   1      
+  434   1          return NULL;
+  435   1      }
+  436          
+  437          void dealbuf3()
+  438          {
+  439   1        char *receiveData = buf3;
+  440   1        unsigned char *headerPos = my_strstr(receiveData, "set:");
+  441   1        unsigned char *footerPos = my_strstr(receiveData, "end");
+  442   1        printf1("dealbuf3");
+  443   1        if (headerPos != NULL && footerPos != NULL && footerPos > headerPos)
+  444   1        {
+  445   2          unsigned char *dataStart = headerPos + 4;
+  446   2          unsigned char *dataEnd = footerPos;
+  447   2      
+  448   2          // ·ÖÀë³öÓĞĞ§µÄÊı¾İ²¿·Ö
+  449   2          *dataEnd = '\0';
+C251 COMPILER V5.60.0,  main                                                               19/07/23  00:41:48  PAGE 8   
+
+  450   2      
+  451   2          // ´¦ÀíÓĞĞ§µÄÊı¾İ²¿·Ö
+  452   2          // setRegisterValue(dataStart);
+  453   2          printf1("dealbuf4");
+  454   2        }
+  455   1        // showgetzhi();
+  456   1      }
+  457          void dealchuankou()
+  458          {
+  459   1        if (flag3 == 1)
+  460   1        {
+  461   2          flag3 = 0;
+  462   2          printf1("rec%s", buf3);
+  463   2          dealbuf3();
+  464   2          memset(buf3, 0, sizeof(buf3));
+  465   2          weishu3 = 0;
+  466   2        }
+  467   1      }
+  468          
+  469          // Ğ´¸öº¯Êı£¬´«ÈëÁ½¸ö·Ç¸ºÊı£¬¼ÆËãÊÇÇ°½ø»¹ÊÇºóÍËÁË£¬±ä»¯¹æÂÉ 15,16,0,1,2...15,16
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       615     ------
+  code size            =      1312     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =       523        284
   xdata-const size     =    ------     ------
-  edata size           =         9        172
-  bit size             =         1     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
-C251 COMPILER V5.60.0,  main                                                               18/07/23  22:04:38  PAGE 5   
-
   ebitaddressable size =    ------     ------
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =        25     ------
+  hconst size          =       192     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)

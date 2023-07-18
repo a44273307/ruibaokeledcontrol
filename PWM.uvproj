@@ -186,7 +186,7 @@
         </Utilities>
         <Target251>
           <Target251Misc>
-            <MemoryModel>3</MemoryModel>
+            <MemoryModel>4</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>3</RomSize>
             <NearDataHold>0</NearDataHold>

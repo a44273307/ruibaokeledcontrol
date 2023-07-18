@@ -22,6 +22,8 @@
 #include <stdio.h>
 
 #include <stdlib.h>
+#include "uart.h"
+
 
 void SYS_Ini();		// STC32初始化设置
 void EC11_Handle(); // EC11数据处理
@@ -32,18 +34,6 @@ u8 cnt_H, cnt_L;	 // 计数值高8位、低8位
 u16 count, newcount; // 当前计数值、上次计数值
 					 // 亮度计数值
 
-void UartInit(void) // 115200@24.000MHz
-{
-	SCON = 0x50;  // 8位数据,可变波特率
-	AUXR |= 0x01; // 串口1选择定时器2为波特率发生器
-	AUXR |= 0x04; // 定时器时钟1T模式
-	T2L = 0xCC;	  // 设置定时初始值
-	T2H = 0xFF;	  // 设置定时初始值
-	AUXR |= 0x10; // 定时器2开始计时
-	ES = 1;
-	//	ES=0;//关闭串口0中断
-	EA = 1;
-}
 
 void SYS_Ini() // STC32初始化设置
 {
@@ -68,29 +58,7 @@ void SYS_Ini() // STC32初始化设置
 	P7M0 = 0x00; // 设置P7口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
 }
 
-void sendbyte1(unsigned char ch)
-{
-	int i;
-	// EA=0;
-	TI = 0; // 清零串口发送完成中断请求标志
-	SBUF = ch;
-	while (TI == 0) // 等待发送完成
-	{
-		for (i = 0; i < 2000; i++)
-		{
-			if (TI)
-				break;
-		}
-		break;
-	}
-	EA = 1;
-}
-char putchar(char dat)
-{
-	// Delay1us();
-	sendbyte1(dat);
-	return (dat);
-}
+
 
 void Delay100ms() //@24.000MHz
 {
@@ -197,22 +165,7 @@ void testmain()
 	int a, b;
 	int times = 0;
 }
-void Timer0Init(void) // 0.5ms @24.000MHz
-{
 
-	AUXR |= 0x80; // 定时器时钟1T模式
-	TMOD &= 0xF0; // 设置定时器模式
-	TL0 = 0x40;	  // 设置定时初始值
-	TH0 = 0xA2;	  // 设置定时初始值
-	TF0 = 0;	  // 清除TF0标志
-	TR0 = 1;	  // 定时器0开始计时
-
-	TF0 = 0; // 清除TF0标志
-	PT0 = 1;
-	ET0 = 1;
-	TR0 = 1; // 定时器0开始计时
-	EA = 1;
-}
 
 void dealchuankou();
 int gsetzhi = 1234;
@@ -397,6 +350,7 @@ void main(void)
 	EA = 1;		  // 使能EA总中断
 
 	UartInit();
+	// Uart23Init();
 	printf1("system is ok");
 	Timer0Init();
 	mainxx();
@@ -470,7 +424,7 @@ void UARTInterrupt(void) interrupt 4
 		RI = 0;
 		ans = SBUF;
 		chuankou1put(ans);
-		IAP_CONTR=0x60;
+		// IAP_CONTR=0x60;
 	}
 	else
 	{
@@ -485,7 +439,7 @@ void UARTInterrupt(void) interrupt 4
 
 void Timer0() interrupt 1
 {
-	gsetzhi++;
+	// gsetzhi++;
 	chuankou1time();
 }
 void EC11_Handle() // EC11数据处理函数
@@ -534,34 +488,12 @@ char* my_strstr(const char* haystack, const char* needle) {
 
     return NULL;
 }
-
-void dealbuf3()
-{
-	char *receiveData = buf3;
-	unsigned char *headerPos = my_strstr(receiveData, "set:");
-	unsigned char *footerPos = my_strstr(receiveData, "end");
-	printf1("dealbuf3");
-	if (headerPos != NULL && footerPos != NULL && footerPos > headerPos)
-	{
-		unsigned char *dataStart = headerPos + 4;
-		unsigned char *dataEnd = footerPos;
-
-		// 分离出有效的数据部分
-		*dataEnd = '\0';
-
-		// 处理有效的数据部分
-		// setRegisterValue(dataStart);
-		printf1("dealbuf4");
-	}
-	// showgetzhi();
-}
 void dealchuankou()
 {
 	if (flag3 == 1)
 	{
 		flag3 = 0;
-		printf1("rec%s", buf3);
-		dealbuf3();
+		jiexi(buf3);
 		memset(buf3, 0, sizeof(buf3));
 		weishu3 = 0;
 	}

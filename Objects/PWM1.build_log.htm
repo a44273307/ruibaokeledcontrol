@@ -23,14 +23,24 @@ Project File Date:  07/19/2023
 
 <h2>Output:</h2>
 Build target 'Target 1'
+compiling main.c...
+main.c(186): warning C188: 'parameter 1': value truncated
+main.c(197): warning C47: 'a': unreferenced local variable
+main.c(197): warning C47: 'b': unreferenced local variable
+main.c(350): warning C161: 'far' pointer truncated to 'char'
+main.c(350): warning C10: conversion: 'pointer' to 'char'
+main.c(352): warning C40: 'char' converted to 'far' pointer
+main.c(439): warning C188: 'initialization': value truncated
 linking...
 *** WARNING L52: EVAL VERSION USED BEFORE, REBUILD ALL *.OBJ FILES
     MODULE:  .\Objects\MAX7219.obj (MAX7219)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    showgetzhi/main
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     NAME:    PRINTF/PRINTF
-Program Size: data=8.0 edata+hdata=256 xdata=1247 const=756 code=3017
+Program Size: data=8.0 edata+hdata=256 xdata=1451 const=1023 code=3138
 creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 2 Warning(s).
+".\Objects\PWM1" - 0 Error(s), 10 Warning(s).
 Build Time Elapsed:  00:00:00
 </pre>
 </body>

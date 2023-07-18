@@ -286,7 +286,10 @@ void showgetzhi()
 		printf1("Register %d: %d\n", registers[i].num, registers[i].value);
 	}
 }
-void jixi2(char* input)
+
+#define MAXgetzhi 100
+int getzhi[MAXgetzhi]={0};
+void jixi3(char* input)
 {
 	char *p=input;
 	char *p1;
@@ -308,19 +311,41 @@ void jixi2(char* input)
 	}
 	showgetzhi();
 }
-
-// struct Register RegisterSend[MAX_REGISTERS];
-// int RegisterSendcount=0;
-// void buildsendzhi(int dizhi,int value)
-// {
-// 	RegisterSend[0]=
-// 	RegisterSendcount++;
-// }
+void jixi2(char* input)
+{
+	char *p=input;
+	char *p1;
+	int i;
+	unsigned int weizhi;
+	unsigned int zhi;
+	//1234-2234;333-4;end
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+		if(weizhi<MAXgetzhi)
+		getzhi[weizhi]=zhi;
+		p=myaddstrstr(p,";");  //指向下一个后面
+		printf1("get set%d-%d",weizhi,zhi);
+	}
+}
+void setzhione(int dizhi,int zhi)
+{
+	char out[30]={0};
+	sprintf(out,"set:%d-%d;end",dizhi,zhi);
+	printf1(out);
+}
 void jiexi(char* input)
 {
 	char par[500]={0};
 	char *begin,end;
-	begin=myaddstrstr(input,"set;");
+	begin=myaddstrstr(input,"set:");
 	// printf1("input begin%s",begin);
 	end=myaddstrstr(begin,"end");
 	// printf1("input end%s",end);
@@ -330,11 +355,13 @@ void jiexi(char* input)
 		jixi2(par);
 	}
 }
-
 int mainxx() {
 
-	const char* haystack = "set;1234-2234;333-4;end";
+	const char* haystack = "sdsdset:1234-2234;333-4;endsdsdsd";
 	jiexi(haystack);
+	
+	setzhione(4,20);
+
 	return 0;
 }
 
@@ -479,55 +506,6 @@ void EC11_Handle() // EC11数据处理函数
 	}
 }
 
-// #define MAX_REGISTERS 10 // 设置最大寄存器数量
-
-// struct Register
-// {
-// 	unsigned char num;
-// 	unsigned int value;
-// };
-
-// struct Register registers[MAX_REGISTERS];
-// int numRegisters = 0;
-
-// void setRegisterValue(const char* data) {
-//     unsigned char* delimiterPos = strchr(data, '-');
-//     if (delimiterPos != NULL) {
-//         unsigned char registerNum = *(delimiterPos - 1) - '0';
-//         unsigned int value = atoi(delimiterPos + 1);
-
-//         if (numRegisters < MAX_REGISTERS) {
-//             registers[numRegisters].num = registerNum;
-//             registers[numRegisters].value = value;
-//             numRegisters++;
-//         } else {
-//             printf("Max number of registers reached.\n");
-//         }
-//     }
-// }
-
-// void processReceivedData(const char* receivedData) {
-//     char* dataCopy = strdup(receivedData);
-//     char* token = my_strtok(dataCopy, ",");
-//     while (token != NULL) {
-//         setRegisterValue(token);
-//         token = my_strtok(NULL, ",");
-//     }
-//     free(dataCopy);
-// }
-// void showgetzhi()
-// {
-// 	unsigned char i;
-// 	if (i == 0)
-// 	{
-// 		printf1("Register not get");
-// 	}
-// 	// 遍历并打印所有寄存器的值
-// 	for (i = 0; i < numRegisters; i++)
-// 	{
-// 		printf1("Register %d: %d\n", registers[i].num, registers[i].value);
-// 	}
-// }
 int step=0;
 void showstep(const char *s)
 {

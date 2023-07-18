@@ -5,13 +5,13 @@
 //  MAX7219数码管模块引脚定义：CS = P6^5;DIN = P6^6;CLK = P6^4;（可在MAX7219.h中修改）
 //  实验开发板：屠龙刀三.1 @主频12MHz
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 
-#include <stdio.h>
-#include <string.h>
+
+
+
+
+
 #include <string.h>
 #include "stc32g.h"
 #include "config.h"
@@ -223,20 +223,141 @@ int gsetzhi = 1234;
 
 
 
+char* mystrstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*)haystack;
+    }
 
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
 
+        while (*n != '\0' && *h == *n) {
+            h++;
+            n++;
+        }
 
+        if (*n == '\0') {
+            return (char*)haystack; // 子串匹配成功，返回起始位置
+        }
 
-void selfchekc()
-{
+        haystack++;
+    }
 
+    return NULL; // 未找到子串，返回NULL
 }
+size_t mystrlen(const char* str) {
+    size_t length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+char* myaddstrstr(const char* haystack, const char* needle)
+{	
+	char* result = mystrstr(haystack, needle);
+	 if (result != NULL)
+	 {
+		result=result+mystrlen(needle);
+	 }
+	 return result;
+}
+
+#define MAX_REGISTERS 10 // 设置最大寄存器数量
+
+struct Register
+{
+	unsigned int num;
+	unsigned int value;
+};
+struct Register registers[MAX_REGISTERS];
+int numRegisters = 0;
+void showgetzhi()
+{
+	unsigned char i;
+	if (i == 0)
+	{
+		printf1("Register not get");
+	}
+	// 遍历并打印所有寄存器的值
+	for (i = 0; i < numRegisters; i++)
+	{
+		printf1("Register %d: %d\n", registers[i].num, registers[i].value);
+	}
+}
+void jixi2(char* input)
+{
+	char *p=input;
+	char *p1;
+	int i;
+	numRegisters=0;
+	//1234-2234;333-4;end
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		registers[numRegisters].num = atoi(p);
+		p=myaddstrstr(p,"-");
+		registers[numRegisters].value = atoi(p);
+		numRegisters++;
+		p=myaddstrstr(p,";");  //指向下一个后面
+	}
+	showgetzhi();
+}
+
+// struct Register RegisterSend[MAX_REGISTERS];
+// int RegisterSendcount=0;
+// void buildsendzhi(int dizhi,int value)
+// {
+// 	RegisterSend[0]=
+// 	RegisterSendcount++;
+// }
+void jiexi(char* input)
+{
+	char par[500]={0};
+	char *begin,end;
+	begin=myaddstrstr(input,"set;");
+	// printf1("input begin%s",begin);
+	end=myaddstrstr(begin,"end");
+	// printf1("input end%s",end);
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		jixi2(par);
+	}
+}
+
 int mainxx() {
-    char protocol[100] = "set:1-1234;2-34;6-48;end";
-	int len=strlen(protocol);
-	printf1("protocol len%d",protocol);
+
+	const char* haystack = "set;1234-2234;333-4;end";
+	jiexi(haystack);
+	return 0;
+}
 
 
+int mainxx2() {
+    const char* haystack = "Hello, world!";
+    const char* needle = "world";
+    char* result = mystrstr(haystack, needle);
+
+    if (result != NULL) {
+        printf("'%s' found in '%s' at index %ld\n", needle, haystack, result - haystack);
+    } else {
+        printf("'%s' not found in '%s'\n", needle, haystack);
+    }
+
+    return 0;
+}
+
+
+int mainxxx() {
+    const char* str = "Hello, world!";
+    size_t length = mystrlen(str);
+    printf("Length of '%s' is %d\n", str, length);
     return 0;
 }
 
@@ -322,10 +443,12 @@ void UARTInterrupt(void) interrupt 4
 		RI = 0;
 		ans = SBUF;
 		chuankou1put(ans);
+		IAP_CONTR=0x60;
 	}
 	else
 	{
 		TI = 0;
+		
 	}
 	if (TI) // 发送中断..
 	{

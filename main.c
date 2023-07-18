@@ -17,6 +17,162 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+
+char buf3[500];
+char flag3 = 0;
+int weishu3;
+int timeleft1, timeleft2, timeleft3, timeleft4;
+void chuankou1put(char c)
+{
+	buf3[weishu3++] = c;
+	if (weishu3 > sizeof(buf3) - 3)
+		weishu3 = 0;
+	timeleft3 = 3;
+}
+void chuankou1time()
+{
+	if (timeleft3 > 0)
+	{
+		timeleft3--;
+		if (timeleft3 == 0) // 数据一次收完了.
+		{
+			flag3 = 1;
+		}
+	}
+}
+
+#define MAXgetzhi 100
+int getzhi[MAXgetzhi]={0};
+
+
+char* mystrstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*)haystack;
+    }
+
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*n != '\0' && *h == *n) {
+            h++;
+            n++;
+        }
+
+        if (*n == '\0') {
+            return (char*)haystack; // 子串匹配成功，返回起始位置
+        }
+
+        haystack++;
+    }
+
+    return NULL; // 未找到子串，返回NULL
+}
+size_t mystrlen(const char* str) {
+    size_t length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+char* myaddstrstr(const char* haystack, const char* needle)
+{	
+	char* result = mystrstr(haystack, needle);
+	 if (result != NULL)
+	 {
+		result=result+mystrlen(needle);
+	 }
+	 return result;
+}
+void jixi2(char* input)
+{
+	char *p=input;
+	char *p1;
+	int i;
+	unsigned int weizhi;
+	unsigned int zhi;
+	//1234-2234;333-4;end
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+		if(weizhi<MAXgetzhi)
+		getzhi[weizhi]=zhi;
+		p=myaddstrstr(p,";");  //指向下一个后面
+		printf("get set%d-%d",weizhi,zhi);
+	}
+}
+void jiexi(char* input)
+{
+	char par[500]={0};
+	char *begin,end;
+	begin=myaddstrstr(input,"set:");
+	// printf("input begin%s",begin);
+	end=myaddstrstr(begin,"end");
+	// printf("input end%s",end);
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		jixi2(par);
+	}
+}
+
+char* my_strstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*) haystack;
+    }
+
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*h == *n && *n != '\0') {
+            h++;
+            n++;
+        }
+
+        if (*n == '\0') {
+            return (char*) haystack;
+        }
+
+        haystack++;
+    }
+
+    return NULL;
+}
+void dealchuankou()
+{
+	if (flag3 == 1)
+	{
+		flag3 = 0;
+		jiexi(buf3);
+		memset(buf3, 0, sizeof(buf3));
+		weishu3 = 0;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int delay_mszhi;
 uint temp1,temp2,temp3,temp4;
 
@@ -237,7 +393,7 @@ void main()
                 printf("xiugaidata begin");
                 buffchecktongbu();
                 deanyan();
-                writebuf();
+                // writebuf();
                 printf("xiugaidata end %d",delay_mszhi);
             }
             recover = 0;

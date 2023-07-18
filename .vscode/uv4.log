@@ -1,9 +1,22 @@
 Build target 'Target 1'
 compiling main.c...
-MAIN.C(116): warning C280: 't': unreferenced local variable
-MAIN.C(116): warning C280: 't1': unreferenced local variable
-MAIN.C(232): warning C206: 'chuliguankji': missing function-prototype
+MAIN.C(119): warning C260: '=': pointer truncation
+MAIN.C(272): warning C280: 't': unreferenced local variable
+MAIN.C(272): warning C280: 't1': unreferenced local variable
+MAIN.C(388): warning C206: 'chuliguankji': missing function-prototype
 linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHUANKOU1PUT?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHUANKOU1TIME?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MY_STRSTR?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DEALCHUANKOU?MAIN
+
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?INIT_EEPROM?MAIN
 
@@ -57,6 +70,6 @@ linking...
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?TIMER0?MAIN
 
-Program Size: data=23.5 xdata=437 code=5550
+Program Size: data=23.6 xdata=1707 code=8077
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 20 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 25 Warning(s).

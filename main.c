@@ -8,6 +8,8 @@
 #include "stc32g.h"
 #include "config.h"
 #include "MAX7219.h"
+#include <stdio.h>
+#include <stdarg.h>
 
 void SYS_Ini();								// STC32初始化设置
 void EC11_Handle();						// EC11数据处理
@@ -22,19 +24,16 @@ bit numberchange;							// 亮度改变标志
 void UartInit(void)		//115200@24.000MHz
 {
 	SCON = 0x50;		//8位数据,可变波特率
-	AUXR |= 0x40;		//定时器1时钟为Fosc,即1T
-	AUXR &= 0xFE;		//串口1选择定时器1为波特率发生器
-	TMOD &= 0x0F;		//设定定时器1为16位自动重装方式
-	TL1 = 0xCC;			//设置定时初始值
-	TH1 = 0xFF;			//设置定时初始值
-	ET1 = 0;		//禁止定时器1中断
-	TR1 = 1;		//启动定时器1
+	AUXR |= 0x01;		//串口1选择定时器2为波特率发生器
+	AUXR |= 0x04;		//定时器时钟1T模式
+	T2L = 0xCC;			//设置定时初始值
+	T2H = 0xFF;			//设置定时初始值
+	AUXR |= 0x10;		//定时器2开始计时
 	ES=1;
 	//	ES=0;//关闭串口0中断
 	EA=1;
 }
 
-void testmain();
 
 
 
@@ -92,24 +91,56 @@ void UARTInterrupt(void) interrupt 4
         TI = 0;
     }
 }
+void Delay100ms()		//@24.000MHz
+{
+	unsigned long i;
+
+	_nop_();
+	_nop_();
+	i = 599998UL;
+	while (i) i--;
+}
+// 定义printf函数
+void printf1(const char *fmt, ...) {
+	 char *p;
+    char buf[128];  // 定义一个缓冲区，足够存储输出的字符串
+    va_list args;
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);  // 将格式化的字符串写入缓冲区
+    va_end(args);
+    
+     p = (unsigned char *)buf;
+    while (*p != '\0')
+	{
+		sendbyte1(*p);
+		p++;
+	}
+}
 void testmain()
 {
-   SYS_Ini();
+	int a,b;
+	int times=0;
    UartInit();
+   printf1("test run");
    while (1)
    {
-	   sendbyte1('a');
+	a=P2^2;
+	b=P1^0;
+//    printf1("zhi%d-%d-%d",times++,a,b);
+	   Delay100ms();
+	//    sendbyte1('a');
    }
 }
 void main(void)
 {
-	testmain();
+	
 	SYS_Ini();									// STC32初始化设置
 	PWM_Config();							  // PWM初始化设置
 	EA = 1;											// 使能EA总中断
 	MAX7219_Ini();							// MAX7219初始化
 	number = 10;								// 初始亮度10
 	SEG_Disp();									// 数码管显示
+	testmain();
 	while (1)
 	{
 		if(numberchange == 1)			// 当改变亮度标志置1
@@ -143,23 +174,52 @@ void PWM_Config()							// PWM初始化设置
 	
 	PWMA_IER = 0x02; 						// 使能中断
 	PWMA_CR1 |= 0x01; 					// 使能计数器
-	PWMA_PS |= 0x08; //选择 PWM2_2 通道
+	PWMA_PS |= 0x04; //选择 PWM2_2 通道
+}
+
+
+
+// 返回变化的步数
+long  calculateChange(unsigned int previous, unsigned int current) {
+  long  diff = (current - previous + 65536) % 65536;
+  return diff;
+}
+
+
+
+void showled()
+{
+
 }
 void EC11_Handle()						// EC11数据处理函数
 {
-	newcount = cnt_H * 256 + cnt_L;	// 读取当前计数值
-	if(newcount < count) 				// 当前计数值小于上次计数值
+	static unsigned int previous=0; 
+	unsigned int  nowzhi;
+	long ans;
+	nowzhi = cnt_H * 256 + cnt_L;	// 读取当前计数值
+	ans=calculateChange(previous,nowzhi);
+	previous=nowzhi;
+	if(ans==4)
 	{
-		if(number > 0)	number--;	// 数字减
-		numberchange = 1;					// 亮度改变标志置1
-		count = newcount;					// 更新计数值
+		printf1("zheng");
 	}
-	else if(newcount > count)		// 当前计数值大于上次计数值
+	else
 	{
-		if(number < 15) number++;	// 数字加
-		numberchange = 1;					// 亮度改变标志置1
-		count = newcount;					// 更新计数值
+		printf1("fan");
 	}
+	// printf1("newcount %ld",ans);
+	// if(newcount < count) 				// 当前计数值小于上次计数值
+	// {
+	// 	if(number > 0)	number--;	// 数字减
+	// 	numberchange = 1;					// 亮度改变标志置1
+	// 	count = newcount;					// 更新计数值
+	// }
+	// else if(newcount > count)		// 当前计数值大于上次计数值
+	// {
+	// 	if(number < 15) number++;	// 数字加
+	// 	numberchange = 1;					// 亮度改变标志置1
+	// 	count = newcount;					// 更新计数值
+	// }
 }
 void SEG_Disp(void)											
 {							
@@ -172,3 +232,5 @@ void SEG_Disp(void)
 	Write7219(2,(u8)(number / 10)); 	// 左起第7位显示数字十位
 	Write7219(1,(u8)(number % 10)); 	// 左起第8位显示数字个位
 }
+
+// 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16    

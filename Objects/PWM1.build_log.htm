@@ -24,10 +24,19 @@ Project File Date:  03/01/2023
 <h2>Output:</h2>
 Build target 'Target 1'
 compiling main.c...
+main.c(184): warning C188: 'initialization': value truncated
 linking...
-Program Size: data=8.1 edata+hdata=263 xdata=0 const=0 code=655
+*** WARNING L15: MULTIPLE CALL TO FUNCTION
+    NAME:    printf1/main
+    CALLER1: PWM_ISR/main
+    CALLER2: ?C_C51STARTUP?3
+*** WARNING L15: MULTIPLE CALL TO FUNCTION
+    NAME:    VSPRINTF/VSPRINTF
+    CALLER1: PWM_ISR/main
+    CALLER2: ?C_C51STARTUP?3
+Program Size: data=8.1 edata+hdata=617 xdata=0 const=31 code=1644
 creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 0 Warning(s).
+".\Objects\PWM1" - 0 Error(s), 3 Warning(s).
 Build Time Elapsed:  00:00:00
 </pre>
 </body>

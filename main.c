@@ -308,6 +308,7 @@ void jixi2(char* input)
 void setzhione(int dizhi,int zhi)
 {
 	char out[30]={0};
+	zhi=zhi*2;
 	sprintf(out,"set:%d-%d;end",dizhi,zhi);
 	printf3(out);
 }
@@ -346,7 +347,7 @@ void changedainliuzhi()
 	if(setprezhi!=gsetzhi)
 	{
 		setprezhi=gsetzhi;
-		setdianliusettime(100);
+		setdianliusettime(250);
 	}
 }
 void timechuli()
@@ -369,6 +370,110 @@ void chulidianliu()
 		printf1("dianliu set%d",gsetzhi);
 	}
 }
+
+char xin[30] = {0};
+sbit X0=P1^3;
+void shurulvbo(void)
+{
+	static u8 keybuf[40] = {
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+	}; // 矩阵按键扫描缓冲区 8ms
+	unsigned char i;
+	i = X0;
+	keybuf[0] = (keybuf[0] << 1) | i;
+	// i = X1;
+	// keybuf[1] = (keybuf[1] << 1) | i;
+	// i = X2;
+	// keybuf[2] = (keybuf[2] << 1) | i;
+	// i = X3;
+	// keybuf[3] = (keybuf[3] << 1) | i;
+	for (i = 0; i < 1; i++) // 3按键，所以循环3次
+	{
+		if ((keybuf[i] & 0xFF) == 0x00)
+		{
+			xin[i] = 0;
+		}
+		else if ((keybuf[i] & 0xFF) == 0xFF)
+		{ // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
+			xin[i] = 1;
+		}
+	}
+}
+void keydown(int i) // 按键按下的处理、、、
+{
+	printf1("keydown %d",i);
+	setzhione(4,gsetzhi);
+}
+void keyup(int i) // 按键按下的处理、、、
+{
+	printf1("keyup %d",i);
+	setzhione(4,0);
+}
+void keyallchuli()
+{
+	int i;
+	static char flag[10] = {0};		// 标志记录
+	static int dowmtimes[10] = {0}; // 标志记录
+	for (i = 0; i < 6; i++)
+	{
+		if (xin[i] == 0)
+		{
+			if (flag[i] == 0) // 代表按键第一次按下。。。
+			{
+				flag[i] = 1;
+				keydown(i);
+			}
+		}
+		if (xin[i] == 1)
+		{
+			if (flag[i] == 1) // 代表下去了又上来
+			{
+				keyup(i);
+			}
+			flag[i] = 0;
+			
+		}
+	}
+}
 void main(void)
 {
 
@@ -383,6 +488,7 @@ void main(void)
 	printf1("system is overall");
 	while (1)
 	{
+		keyallchuli();
 		showpre(gsetzhi);
 		dealchuankou();
 		changedainliuzhi();
@@ -477,6 +583,7 @@ void addgetsetzhi(int i)
 void Timer0() interrupt 1
 {
 	// gsetzhi++;
+	shurulvbo();
 	timechuli();
 	chuankou1time();
 }

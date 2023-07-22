@@ -1,213 +1,703 @@
-C251 COMPILER V5.60.0,  main                                                               18/07/23  21:03:50  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C251\BIN\C251.EXE main.c XSMALL BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE main.c XSMALL BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.
                     -\Objects\main.obj) 
 
 stmt  level    source
 
-    1          //  @²¼¶¡éÙ³¤ 2023/03/10
-    2          //  PWM±àÂëÆ÷Ä£Ê½Ê¾Àý£¬±¾Ê¾Àý³ÌÐò±àÂëÆ÷Ä£Ê½1/2/3¾ùÖ§³Ö£¬SMCR = 1£ºÄ£Ê½1£¬SMCR = 2:Ä£Ê½2£¬SMCR = 3£ºÄ£Ê½3
-    3          //  EC11×óÐý»òÓÒÐý£¬¸Ä±äÊýÂë¹ÜÁÁ¶È
-    4          //  EC11Òý½Å¶¨Òå£ºAÏà-P1.0£¬BÏà-P5.4
-    5          //  MAX7219ÊýÂë¹ÜÄ£¿éÒý½Å¶¨Òå£ºCS = P6^5;DIN = P6^6;CLK = P6^4;£¨¿ÉÔÚMAX7219.hÖÐÐÞ¸Ä£©
-    6          //  ÊµÑé¿ª·¢°å£ºÍÀÁúµ¶Èý.1 @Ö÷Æµ12MHz
-    7          
-    8          #include "stc32g.h"
-    9          #include "config.h"
-   10          #include "MAX7219.h"
-   11          
-   12          void SYS_Ini();               // STC32³õÊ¼»¯ÉèÖÃ
-   13          void EC11_Handle();           // EC11Êý¾Ý´¦Àí
-   14          void SEG_Disp(void);          // ÊýÂë¹ÜÏÔÊ¾
-   15          void PWM_Config();            // PWM³õÊ¼»¯ÉèÖÃ
-   16          
-   17          u8 cnt_H, cnt_L;              // ¼ÆÊýÖµ¸ß8Î»¡¢µÍ8Î»
-   18          u16 count,newcount;           // µ±Ç°¼ÆÊýÖµ¡¢ÉÏ´Î¼ÆÊýÖµ
-   19          u8 number;                    // ÁÁ¶È¼ÆÊýÖµ
-   20          bit numberchange;             // ÁÁ¶È¸Ä±ä±êÖ¾
-   21          
-   22          void UartInit(void)   //115200@24.000MHz
-   23          {
-   24   1        SCON = 0x50;    //8Î»Êý¾Ý,¿É±ä²¨ÌØÂÊ
-   25   1        AUXR |= 0x40;   //¶¨Ê±Æ÷1Ê±ÖÓÎªFosc,¼´1T
-   26   1        AUXR &= 0xFE;   //´®¿Ú1Ñ¡Ôñ¶¨Ê±Æ÷1Îª²¨ÌØÂÊ·¢ÉúÆ÷
-   27   1        TMOD &= 0x0F;   //Éè¶¨¶¨Ê±Æ÷1Îª16Î»×Ô¶¯ÖØ×°·½Ê½
-   28   1        TL1 = 0xCC;     //ÉèÖÃ¶¨Ê±³õÊ¼Öµ
-   29   1        TH1 = 0xFF;     //ÉèÖÃ¶¨Ê±³õÊ¼Öµ
-   30   1        ET1 = 0;    //½ûÖ¹¶¨Ê±Æ÷1ÖÐ¶Ï
-   31   1        TR1 = 1;    //Æô¶¯¶¨Ê±Æ÷1
-   32   1        ES=1;
-   33   1        //  ES=0;//¹Ø±Õ´®¿Ú0ÖÐ¶Ï
-   34   1        EA=1;
-   35   1      }
-   36          
-   37          void testmain();
-   38          
-   39          
-   40          
-   41          void SYS_Ini()                // STC32³õÊ¼»¯ÉèÖÃ
-   42          {
-   43   1        EAXFR = 1;                  // Ê¹ÄÜ·ÃÎÊ XFR
-   44   1        CKCON = 0x00;               // ÉèÖÃÍâ²¿Êý¾Ý×ÜÏßËÙ¶ÈÎª×î¿ì
-   45   1        WTST = 0x00;                // ÉèÖÃ³ÌÐò´úÂëµÈ´ý²ÎÊý£¬¸³ÖµÎª 0 ¿É½« CPU Ö´ÐÐ³ÌÐòµÄËÙ¶ÈÉèÖÃÎª×î¿ì
-   46   1        P0M1 = 0x00;P0M0 = 0x00;    // ÉèÖÃP0¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   47   1        P1M1 = 0x00;P1M0 = 0x00;    // ÉèÖÃP1¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   48   1        P2M1 = 0x00;P2M0 = 0x00;    // ÉèÖÃP2¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   49   1        P3M1 = 0x00;P3M0 = 0x00;    // ÉèÖÃP3¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   50   1        P4M1 = 0x00;P4M0 = 0x00;    // ÉèÖÃP4¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   51   1        P5M1 = 0x00;P5M0 = 0x00;    // ÉèÖÃP5¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   52   1        P6M1 = 0x00;P6M0 = 0x00;    // ÉèÖÃP6¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-C251 COMPILER V5.60.0,  main                                                               18/07/23  21:03:50  PAGE 2   
+    1          #include "stc32g.h"
+    2          #include <intrins.h>
+    3          #include <stdio.h>
+    4          #include "lcd.h"
+    5          #include <string.h>
+    6          
+    7          #include <stdio.h>
+    8          #include <string.h>
+    9          #include <stdlib.h>
+   10          
+   11          #define u8 unsigned char
+   12          #define FOSC 24000000UL
+   13          #define BRT (65536 - FOSC / 9600 / 4)
+   14          int writedizhi(int dizhi, int zhi);
+   15          int keyon = 0;
+   16          int keylow = 1;
+   17          int keyok = 2;
+   18          int keyup = 3;
+   19          
+   20          int nowzhi = 0;
+   21          int setzhi = 0;
+   22          
+   23          char flagsystemrun = 0;
+   24          #define maxsetzhi 2047
+   25          
+   26          void showhenxiang();
+   27          void ledopen(int weizhi);
+   28          bit busy;
+   29          void UartInit() // 24 9600
+   30          {
+   31   1        SCON = 0x50;  // 8Î»Êý¾Ý,¿É±ä²¨ÌØÂÊ
+   32   1        AUXR |= 0x40; // ¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
+   33   1        AUXR &= 0xFE; // ´®¿Ú1Ñ¡Ôñ¶¨Ê±Æ÷1Îª²¨ÌØÂÊ·¢ÉúÆ÷
+   34   1        TMOD &= 0x0F; // ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
+   35   1        TL1 = 0xCC;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   36   1        TH1 = 0xFF;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   37   1        ET1 = 0;    // ½ûÖ¹¶¨Ê±Æ÷%dÖÐ¶Ï
+   38   1        TR1 = 1;    // ¶¨Ê±Æ÷1¿ªÊ¼¼ÆÊ±
+   39   1        ES = 1;
+   40   1        EA = 1;
+   41   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+   42   1      }
+   43          void UartSendByte(u8 dat)
+   44          {
+   45   1        SBUF = dat;
+   46   1        while (TI == 0)
+   47   1          ;
+   48   1        TI = 0;
+   49   1      }
+   50          char putchar(char dat)
+   51          {
+   52   1        SBUF = dat;
+   53   1        while (TI == 0)
+   54   1          ;
+   55   1        TI = 0;
+   56   1        return (dat);
+   57   1      }
+   58          
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 2   
 
-             -ö
-   53   1        P7M1 = 0x00;P7M0 = 0x00;    // ÉèÖÃP7¿ÚÎª×¼Ë«Ïò¿ÚÄ£Ê½ //00£º×¼Ë«Ïò¿Ú 01£ºÍÆÍìÊä³ö 10£º¸ß×èÊäÈë 11£º¿ªÂ©Êä³
-             -ö
-   54   1      }
-   55          
-   56          void sendbyte1(unsigned char ch)
-   57          {
-   58   1        int i;
-   59   1        // EA=0;
-   60   1          TI     =   0;  //ÇåÁã´®¿Ú·¢ËÍÍê³ÉÖÐ¶ÏÇëÇó±êÖ¾
-   61   1          SBUF   =   ch;
-   62   1          while(TI ==0) //µÈ´ý·¢ËÍÍê³É
-   63   1        {
-   64   2          for(i=0;i<2000; i++){
-   65   3            if( TI) break;
-   66   3          }
-   67   2          break;
-   68   2        }
-   69   1        EA=1;
-   70   1      }
-   71          char putchar (char dat)
-   72          {
-   73   1        // Delay1us();
-   74   1        sendbyte1(dat);
-   75   1        return (dat);
-   76   1      }
-   77          void UARTInterrupt(void) interrupt 4
-   78          {
-   79   1          unsigned char ans;
-   80   1          if (RI)
-   81   1          {
-   82   2              RI = 0;
-   83   2              ans = SBUF;
-   84   2              // chuankou1jisuuan(ans);
-   85   2          }
-   86   1          else
-   87   1          {
-   88   2              TI = 0;
-   89   2          }
-   90   1          if (TI) // ·¢ËÍÖÐ¶Ï..
-   91   1          {
-   92   2              TI = 0;
-   93   2          }
-   94   1      }
-   95          void testmain()
-   96          {
-   97   1        SYS_Ini();
-   98   1         UartInit();
-   99   1         while (1)
-  100   1         {
-  101   2           sendbyte1('a');
-  102   2         }
-  103   1      }
-  104          void main(void)
-  105          {
-  106   1        testmain();
-  107   1        SYS_Ini();                  // STC32³õÊ¼»¯ÉèÖÃ
-  108   1        PWM_Config();               // PWM³õÊ¼»¯ÉèÖÃ
-  109   1        EA = 1;                     // Ê¹ÄÜEA×ÜÖÐ¶Ï
-  110   1        MAX7219_Ini();              // MAX7219³õÊ¼»¯
-  111   1        number = 10;                // ³õÊ¼ÁÁ¶È10
-  112   1        SEG_Disp();                 // ÊýÂë¹ÜÏÔÊ¾
-  113   1        while (1)
-  114   1        {
-  115   2          if(numberchange == 1)     // µ±¸Ä±äÁÁ¶È±êÖ¾ÖÃ1
-  116   2          {
-C251 COMPILER V5.60.0,  main                                                               18/07/23  21:03:50  PAGE 3   
+   59          void UartSendStr(u8 *str)
+   60          {
+   61   1        while (*str)
+   62   1        {
+   63   2          UartSendByte(*str);
+   64   2          str++;
+   65   2        }
+   66   1      }
+   67          void Uart2Init()
+   68          {
+   69   1        S2CON = 0x10;
+   70   1        T2L = BRT;
+   71   1        T2H = BRT >> 8;
+   72   1        AUXR |= 0x14;
+   73   1        IE2 = 0x01;
+   74   1        EA = 1;
+   75   1      }
+   76          void Uart2Send(char dat)
+   77          {
+   78   1        while (busy)
+   79   1          ;
+   80   1        busy = 1;
+   81   1        S2BUF = dat;
+   82   1      }
+   83          
+   84          void Uart2SendStr(char *p)
+   85          {
+   86   1        while (*p)
+   87   1        {
+   88   2          Uart2Send(*p++);
+   89   2        }
+   90   1      }
+   91          
+   92          void Timer0Init(void) // 2ºÁÃë@11.0592MHz
+   93          {
+   94   1        AUXR |= 0x80; // ¶¨Ê±Æ÷Ê±ÖÓ1TÄ£Ê½
+   95   1        TMOD &= 0xF0; // ÉèÖÃ¶¨Ê±Æ÷Ä£Ê½
+   96   1        TL0 = 0x80;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   97   1        TH0 = 0x44;   // ÉèÖÃ¶¨Ê±³õÊ¼Öµ
+   98   1        TF0 = 0;    // Çå³ýTF0±êÖ¾
+   99   1        TR0 = 1;    // ¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+  100   1        TR0 = 1;    // ¶¨Ê±Æ÷0¿ªÊ¼¼ÆÊ±
+  101   1        ET0 = 1;    // Ê¹ÄÜ¶¨Ê±Æ÷0ÖÐ¶Ï
+  102   1        PT0 = 1;
+  103   1        EA = 1;
+  104   1        //    IT0 = 1;                                    //??INT0?????
+  105   1        //    EX0 = 1;                                    //??INT0??
+  106   1        //    EA = 1;
+  107   1        //
+  108   1        //  IT1 = 1;                                    //??INT1?????
+  109   1        //    EX1 = 1;                                    //??INT1??
+  110   1        //    EA = 1;
+  111   1      }
+  112          
+  113          sbit X0 = P2 ^ 3;
+  114          sbit X1 = P2 ^ 1;
+  115          sbit X2 = P3 ^ 7;
+  116          sbit X3 = P3 ^ 5;
+  117          
+  118          sbit LED3 = P3 ^ 4;
+  119          sbit LED2 = P3 ^ 6;
+  120          
+  121          sbit LED1 = P2 ^ 0;
+  122          sbit LED0 = P2 ^ 2;
+  123          sbit Y3 = P3 ^ 4;
+  124          sbit Y2 = P3 ^ 6;
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 3   
 
-  117   3            Write7219(INTENSITY,number);  // ÉèÖÃÊýÂë¹ÜÁÁ¶È
-  118   3            SEG_Disp();             // ÊýÂë¹ÜË¢ÐÂÏÔÊ¾
-  119   3            numberchange = 0;       // ÇåÁã¸Ä±äÁÁ¶È±êÖ¾
-  120   3          }
-  121   2        }
-  122   1      }
-  123          void PWM_ISR() interrupt 26
-  124          {
-  125   1        if (PWMA_SR1 & 0X02)        // µ±²¶»ñÖÐ¶Ï±êÖ¾ÖÃ1
-  126   1        {
-  127   2          cnt_H = PWMA_CCR1H;       // ¶ÁÈ¡¼ÆÊýÖµ¸ß8Î»
-  128   2          cnt_L = PWMA_CCR1L;       // ¶ÁÈ¡¼ÆÊýÖµµÍ8Î»
-  129   2          PWMA_SR1 &= ~0X02;        // ÇåÁã²¶»ñÖÐ¶Ï±êÖ¾
-  130   2          EC11_Handle();              // ´¦ÀíEC11Êý¾Ý
-  131   2        }
-  132   1      }
-  133          void PWM_Config()             // PWM³õÊ¼»¯ÉèÖÃ
-  134          {
-  135   1        PWMA_CCER1 = 0x00;          // ¹Ø±ÕÍ¨µÀ
-  136   1        PWMA_CCMR1 = 0xA1;          // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
-  137   1        PWMA_CCMR2 = 0xA1;          // Í¨µÀÄ£Ê½ÅäÖÃÎªÊäÈë£¬½Ó±àÂëÆ÷ , ÂË²¨Æ÷ 80 Ê±ÖÓ
-  138   1        PWMA_CCER1 = 0x55;          // Ê¹ÄÜ²¶»ñ/±È½ÏÍ¨µÀ1¡¢Í¨µÀ2
-  139   1        
-  140   1      //  PWMA_SMCR = 0x01;         // ±àÂëÆ÷Ä£Ê½ 1
-  141   1      //  PWMA_SMCR = 0x02;         // ±àÂëÆ÷Ä£Ê½ 2 
-  142   1        PWMA_SMCR = 0x03;           // ±àÂëÆ÷Ä£Ê½ 3
-  143   1        
-  144   1        PWMA_IER = 0x02;            // Ê¹ÄÜÖÐ¶Ï
-  145   1        PWMA_CR1 |= 0x01;           // Ê¹ÄÜ¼ÆÊýÆ÷
-  146   1        PWMA_PS |= 0x08; //Ñ¡Ôñ PWM2_2 Í¨µÀ
-  147   1      }
-  148          void EC11_Handle()            // EC11Êý¾Ý´¦Àíº¯Êý
-  149          {
-  150   1        newcount = cnt_H * 256 + cnt_L; // ¶ÁÈ¡µ±Ç°¼ÆÊýÖµ
-  151   1        if(newcount < count)        // µ±Ç°¼ÆÊýÖµÐ¡ÓÚÉÏ´Î¼ÆÊýÖµ
-  152   1        {
-  153   2          if(number > 0)  number--; // Êý×Ö¼õ
-  154   2          numberchange = 1;         // ÁÁ¶È¸Ä±ä±êÖ¾ÖÃ1
-  155   2          count = newcount;         // ¸üÐÂ¼ÆÊýÖµ
-  156   2        }
-  157   1        else if(newcount > count)   // µ±Ç°¼ÆÊýÖµ´óÓÚÉÏ´Î¼ÆÊýÖµ
-  158   1        {
-  159   2          if(number < 15) number++; // Êý×Ö¼Ó
-  160   2          numberchange = 1;         // ÁÁ¶È¸Ä±ä±êÖ¾ÖÃ1
-  161   2          count = newcount;         // ¸üÐÂ¼ÆÊýÖµ
-  162   2        }
-  163   1      }
-  164          void SEG_Disp(void)                     
-  165          {             
-  166   1        Write7219(8,15);            // ×óÆðµÚ1Î»Ï¨Ãð
-  167   1        Write7219(7,15);            // ×óÆðµÚ2Î»Ï¨Ãð
-  168   1        Write7219(6,15);            // ×óÆðµÚ3Î»Ï¨Ãð
-  169   1        Write7219(5,15);            // ×óÆðµÚ4Î»Ï¨Ãð
-  170   1        Write7219(4,15);            // ×óÆðµÚ5Î»Ï¨Ãð
-  171   1        Write7219(3,15);            // ×óÆðµÚ6Î»Ï¨Ãð
-  172   1        Write7219(2,(u8)(number / 10));   // ×óÆðµÚ7Î»ÏÔÊ¾Êý×ÖÊ®Î»
-  173   1        Write7219(1,(u8)(number % 10));   // ×óÆðµÚ8Î»ÏÔÊ¾Êý×Ö¸öÎ»
-  174   1      }
+  125          
+  126          sbit Y1 = P2 ^ 0;
+  127          sbit Y0 = P2 ^ 2;
+  128          
+  129          char xin[30] = {0};
+  130          void shurulvbo(void)
+  131          {
+  132   1        static u8 keybuf[40] = {
+  133   1          0xFF,
+  134   1          0xFF,
+  135   1          0xFF,
+  136   1          0xFF,
+  137   1          0xFF,
+  138   1          0xFF,
+  139   1          0xFF,
+  140   1          0xFF,
+  141   1          0xFF,
+  142   1          0xFF,
+  143   1          0xFF,
+  144   1          0xFF,
+  145   1          0xFF,
+  146   1          0xFF,
+  147   1          0xFF,
+  148   1          0xFF,
+  149   1          0xFF,
+  150   1          0xFF,
+  151   1          0xFF,
+  152   1          0xFF,
+  153   1          0xFF,
+  154   1          0xFF,
+  155   1          0xFF,
+  156   1          0xFF,
+  157   1          0xFF,
+  158   1          0xFF,
+  159   1          0xFF,
+  160   1          0xFF,
+  161   1          0xFF,
+  162   1          0xFF,
+  163   1          0xFF,
+  164   1          0xFF,
+  165   1          0xFF,
+  166   1          0xFF,
+  167   1          0xFF,
+  168   1          0xFF,
+  169   1          0xFF,
+  170   1          0xFF,
+  171   1          0xFF,
+  172   1          0xFF,
+  173   1        }; // ¾ØÕó°´¼üÉ¨Ãè»º³åÇø 8ms
+  174   1        unsigned char i;
+  175   1        i = X0;
+  176   1        keybuf[0] = (keybuf[0] << 1) | i;
+  177   1        i = X1;
+  178   1        keybuf[1] = (keybuf[1] << 1) | i;
+  179   1        i = X2;
+  180   1        keybuf[2] = (keybuf[2] << 1) | i;
+  181   1        i = X3;
+  182   1        keybuf[3] = (keybuf[3] << 1) | i;
+  183   1        for (i = 0; i < 10; i++) // 3°´¼ü£¬ËùÒÔÑ­»·3´Î
+  184   1        {
+  185   2          if ((keybuf[i] & 0xFF) == 0x00)
+  186   2          {
+  187   3            xin[i] = 0;
+  188   3          }
+  189   2          else if ((keybuf[i] & 0xFF) == 0xFF)
+  190   2          { // Á¬Ðø3´ÎÉ¨ÃèÖµÎª1£¬¼´1*8msÄÚ¶¼ÊÇµ¯Æð×´Ì¬Ê±£¬¿ÉÈÏÎª°´¼üÒÑÎÈ¶¨µÄµ¯Æð
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 4   
+
+  191   3            xin[i] = 1;
+  192   3          }
+  193   2        }
+  194   1      }
+  195          char flagsetzhichange = 0;
+  196          // ÊÇ·ñÄÜ¹»ÉèÖÃÖµµÄ×´Ì¬¡£¡£¡£  ok¼ü°´ÏÂ ¼´¿É¡£¡£¡£
+  197          char flagcanset = 0;
+  198          void setdianliu(int zhi)
+  199          {
+  200   1        writedizhi(4, zhi);
+  201   1      }
+  202          void setzhichange(int a)
+  203          {
+  204   1        if (flagcanset == 0)
+  205   1          return;
+  206   1        if (setzhi + a < 0)
+  207   1        {
+  208   2          setzhi = 0;
+  209   2          // 0µÄÇé¿öÒ²·¢£¬±£Ö¤ÄÜ¹»±»ÊÕµ½¡£¡£
+  210   2          flagsetzhichange = 1;
+  211   2          setdianliu(setzhi);
+  212   2          // printf("setdianliu%d\r\n",setzhi);
+  213   2          return;
+  214   2        }
+  215   1        if (setzhi + a > maxsetzhi)
+  216   1        {
+  217   2          setzhi = maxsetzhi;
+  218   2          return;
+  219   2        }
+  220   1        setzhi = setzhi + a;
+  221   1        flagsetzhichange = 1;
+  222   1        setdianliu(setzhi);
+  223   1      }
+  224          
+  225          void keydown(int i) // °´¼ü°´ÏÂµÄ´¦Àí¡¢¡¢¡¢
+  226          {
+  227   1        if (i == keyon)
+  228   1        {
+  229   2          LED0 = ~LED0;
+  230   2          // ½áÊøÊ±ºò¹ØµÆ£¬ ¿ª»ú¼üÅÌ¿ªµÆ¡£¡£¡£
+  231   2          if (flagsystemrun == 0)
+  232   2          {
+  233   3            flagsystemrun = 1;
+  234   3            LCD_ShowString(0, 0, "Circle TAC", RED, WHITE, 32, 0);
+  235   3            showhenxiang();
+  236   3            writedizhi(2,1);
+  237   3            delay_ms(30);
+  238   3            writedizhi(2,1);
+  239   3            delay_ms(30);
+  240   3            setdianliu(setzhi);
+  241   3            delay_ms(10);
+  242   3          }
+  243   2          else
+  244   2          {
+  245   3            writedizhi(2,0);
+  246   3            delay_ms(100);
+  247   3            writedizhi(2,0);
+  248   3            IAP_CONTR = 0x60;
+  249   3          }
+  250   2        }
+  251   1        if (flagcanset)
+  252   1        {
+  253   2          ledopen(i);
+  254   2        }
+  255   1        if (i == keylow)
+  256   1        {
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 5   
+
+  257   2          setzhichange(-1);
+  258   2          return;
+  259   2        }
+  260   1        if (i == keyup)
+  261   1        {
+  262   2          setzhichange(1);
+  263   2          return;
+  264   2        }
+  265   1        if (i == keyok)
+  266   1        {
+  267   2          flagcanset = 1 - flagcanset;
+  268   2          LED2 = ~LED2;
+  269   2        }
+  270   1      }
+  271          int keyshi = 3;
+  272          // °´¼üÁ¬Ðø°´ÏÂ¶àÉÙ´ÎµÄ²Ù×÷¡£¡£
+  273          int setbizhi(int times)
+  274          {
+  275   1        if (times < 15 * keyshi)
+  276   1        {
+  277   2          return 10;
+  278   2        }
+  279   1        if (times < 50 * keyshi)
+  280   1        {
+  281   2          return 50;
+  282   2        }
+  283   1        return 100;
+  284   1      }
+  285          // 2ms Ò»´ÎµÄ»°£¬ÄÇ300msÒ»´ÎokµÄ°É¡£¡£
+  286          void dolongtimes(int i, int times)
+  287          {
+  288   1        int xielv;
+  289   1        times = times - 300;
+  290   1        if (times < 0)
+  291   1        {
+  292   2          return;
+  293   2        }
+  294   1        xielv = setbizhi(times);
+  295   1        if (times % keyshi != 0)
+  296   1        {
+  297   2          return;
+  298   2        }
+  299   1        if (i == keylow)
+  300   1        {
+  301   2          setzhichange(-xielv);
+  302   2          return;
+  303   2        }
+  304   1        if (i == keyup)
+  305   1        {
+  306   2          setzhichange(xielv);
+  307   2          return;
+  308   2        }
+  309   1      }
+  310          void yout_set(char weizhi, char zhi)
+  311          {
+  312   1        if (weizhi == 0)
+  313   1          Y0 = zhi;
+  314   1        if (weizhi == 1)
+  315   1          Y1 = zhi;
+  316   1        if (weizhi == 2)
+  317   1          Y2 = zhi;
+  318   1        if (weizhi == 3)
+  319   1          Y3 = zhi;
+  320   1      }
+  321          void ledclose(int weizhi)
+  322          {
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 6   
+
+  323   1        if (weizhi == keyon || weizhi == keyok)
+  324   1        {
+  325   2          return;
+  326   2        }
+  327   1        yout_set(weizhi, 1);
+*** WARNING C188 IN LINE 327 OF main.c: 'parameter 1': value truncated
+  328   1      }
+  329          void ledopen(int weizhi)
+  330          {
+  331   1        if (weizhi == keyon || weizhi == keyok)
+  332   1        {
+  333   2          return;
+  334   2        }
+  335   1        yout_set(weizhi, 0);
+*** WARNING C188 IN LINE 335 OF main.c: 'parameter 1': value truncated
+  336   1      }
+  337          void keyallchuli()
+  338          {
+  339   1        int i;
+  340   1        static char flag[10] = {0};   // ±êÖ¾¼ÇÂ¼
+  341   1        static int dowmtimes[10] = {0}; // ±êÖ¾¼ÇÂ¼
+  342   1        for (i = 0; i < 6; i++)
+  343   1        {
+  344   2          if (xin[i] == 0)
+  345   2          {
+  346   3            if (flag[i] == 0) // ´ú±í°´¼üµÚÒ»´Î°´ÏÂ¡£¡£¡£
+  347   3            {
+  348   4              flag[i] = 1;
+  349   4              keydown(i);
+  350   4            }
+  351   3      
+  352   3            dowmtimes[i]++;
+  353   3            dolongtimes(i, dowmtimes[i]);
+  354   3          }
+  355   2          else
+  356   2          {
+  357   3            flag[i] = 0;
+  358   3            dowmtimes[i] = 0;
+  359   3            ledclose(i);
+  360   3          }
+  361   2        }
+  362   1      }
+  363          
+  364          int tmp = 203; // ÎÂ¶ÈÖµ
+  365          void shownwendu()
+  366          {
+  367   1        char dataxx[40];
+  368   1        sprintf(dataxx, "TMP:%3d.%01d  ", tmp / 10, tmp % 10);
+  369   1        LCD_ShowString(0, 80, dataxx, RED, WHITE, 32, 0);
+  370   1      }
+  371          
+  372          void shownow()
+  373          {
+  374   1        // char dataxx[40];
+  375   1        // sprintf(dataxx,"NOW:%05d",nowzhi);
+  376   1        // LCD_ShowString(0,40,dataxx,RED,WHITE,32,0);
+  377   1      }
+  378          
+  379          #define maxjindu 16
+  380          #define qidian 0
+  381          
+  382          void pingmuclear()
+  383          {
+  384   1        char dataxx[60] = {0};
+  385   1        static int runflag2 = 0;
+  386   1        int i;
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 7   
+
+  387   1        if (runflag2 == 1)
+  388   1        {
+  389   2          return;
+  390   2        }
+  391   1        runflag2 = 1;
+  392   1        // LCD_Clear(WHITE);
+  393   1      
+  394   1        sprintf(dataxx, "                     ", 1);
+  395   1        for (i = 0; i < 10; i++)
+  396   1        {
+  397   2          LCD_ShowString(0, i * 30, dataxx, RED, WHITE, 32, 0);
+  398   2          delay_ms(10);
+  399   2        }
+  400   1      }
+  401          void showhenxiang()
+  402          {
+  403   1        int i;
+  404   1        char dataxx[60] = {0};
+  405   1        static int runflag = 0;
+  406   1        if (runflag == 1)
+  407   1        {
+  408   2          return;
+  409   2        }
+  410   1        runflag = 1;
+  411   1      
+  412   1        for (i = 0; i < maxjindu; i++)
+  413   1        {
+  414   2          dataxx[i] = '-';
+  415   2        }
+  416   1      
+  417   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
+  418   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
+  419   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
+  420   1      }
+  421          
+  422          void showjindtiao()
+  423          {
+  424   1        int i;
+  425   1        char dataxx[60] = {0};
+  426   1        int jindu;
+  427   1        jindu = setzhi * maxjindu / maxsetzhi;
+  428   1        for (i = 0; i < maxjindu; i++)
+  429   1        {
+  430   2          if (i < jindu)
+  431   2            dataxx[i] = '>';
+  432   2          else
+  433   2            dataxx[i] = ' ';
+  434   2        }
+  435   1        showhenxiang();
+  436   1        LCD_ShowString(qidian, 160, dataxx, RED, WHITE, 32, 0);
+  437   1      }
+  438          void showsetzhi()
+  439          {
+  440   1        char dataxx[40];
+  441   1        sprintf(dataxx, "SET:        %04d    ", setzhi);
+  442   1        LCD_ShowString(0, 120, dataxx, RED, WHITE, 32, 0);
+  443   1        showjindtiao();
+  444   1      }
+  445          void showdata()
+  446          {
+  447   1        if (flagsystemrun == 0)
+  448   1        {
+  449   2          return;
+  450   2        }
+  451   1        shownow();
+  452   1        showsetzhi();
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 8   
+
+  453   1        shownwendu();
+  454   1      }
+  455          int getwendu();
+  456          void init();
+  457          int readzhi(int dizhi);
+  458          int readdianliuzhi()
+  459          {
+  460   1        int ans;
+  461   1        ans= readzhi(4);
+  462   1        if(ans>=0 && ans<=2047)
+  463   1        {
+  464   2          return ans;
+  465   2        }
+  466   1        return 0;
+  467   1      }
+  468          void main()
+  469          {
+  470   1        int rumtimes = 0;
+  471   1        init();
+  472   1        setzhi = readdianliuzhi();
+  473   1        // setzhi=readzhi(4);
+  474   1        while (1)
+  475   1        {
+  476   2          shurulvbo();
+  477   2          keyallchuli();
+  478   2          delay_ms(1);
+  479   2          if (flagsetzhichange == 1)
+  480   2          {
+  481   3            flagsetzhichange = 0;
+  482   3            showdata();
+  483   3            rumtimes = 0;
+  484   3          }
+  485   2          else
+  486   2          {
+  487   3            rumtimes++;
+  488   3          }
+  489   2          if (rumtimes++ > 500)
+  490   2          {
+  491   3            rumtimes = 0;
+  492   3      
+  493   3            tmp = getwendu();
+  494   3            showdata();
+  495   3          }
+  496   2        }
+  497   1      }
+  498          int weishu1, weishu2, weishu3, weishu4;
+  499          char buf1[300];
+  500          int timeleft1, timeleft2, timeleft3, timeleft4;
+  501          char falgchuankou1 = 0;
+  502          void chuankou1put(char c)
+  503          {
+  504   1        buf1[weishu1++] = c;
+  505   1        if (weishu1 >= sizeof(buf1))
+  506   1          weishu1 = 0;
+  507   1        timeleft1 = 3;
+  508   1      }
+  509          static void chuliguankji(char *ans1)
+  510          {
+  511   1        char *index;
+  512   1        index = strstr(ans1, "@STCISP#");
+*** WARNING C140 IN LINE 512 OF main.c: 'strstr' undefined; assuming 'extern int strstr()'
+*** WARNING C95 IN LINE 512 OF main.c: 'strstr': too many actual parameters
+*** WARNING C40 IN LINE 512 OF main.c: 'int' converted to 'far' pointer
+  513   1        if (index == 0)
+  514   1        {
+  515   2          return;
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 9   
+
+  516   2        }
+  517   1        printf("rec @STCISP#,researt now");
+  518   1        IAP_CONTR = 0x60;
+  519   1      }
+  520          void clearbuff1()
+  521          {
+  522   1        memset(buf1, 0, sizeof(buf1));
+  523   1        weishu1 = 0;
+  524   1        falgchuankou1 = 0;
+  525   1      }
+  526          
+  527          int readzhi(int dizhi)
+  528          {
+  529   1        int times = 0;
+  530   1        int ans;
+  531   1        char dataxx[40];
+  532   1        sprintf(dataxx, "pingmuGetData getdizhi%d-", dizhi);
+  533   1        clearbuff1();
+  534   1        printf(dataxx);
+  535   1        while (1)
+  536   1        {
+  537   2          delay_ms(1);
+  538   2          if (times++ > 100)
+  539   2          {
+  540   3            return 0;
+  541   3          }
+  542   2          if (falgchuankou1)
+  543   2          {
+  544   3            char *index;
+  545   3            index = strstr(buf1, dataxx);
+*** WARNING C95 IN LINE 545 OF main.c: 'strstr': too many actual parameters
+*** WARNING C40 IN LINE 545 OF main.c: 'int' converted to 'far' pointer
+  546   3            if (index != 0)
+  547   3            {
+  548   4              ans = atoi(index + strlen(dataxx));
+  549   4              printf("read ans%d\n", ans);
+  550   4              return ans;
+  551   4            }
+  552   3            clearbuff1();
+  553   3          }
+  554   2        }
+  555   1      }
+  556          // ÉÏµ½ÏÂ  »Ò°×ºÚ×Ï
+  557          int writedizhi(int dizhi, int zhi)
+  558          {
+  559   1        int times = 0;
+  560   1        int ans;
+  561   1        char dataxx[40];
+  562   1        sprintf(dataxx, "pingmuSetData setdizhi0%d-%d", dizhi, zhi);
+  563   1        clearbuff1();
+  564   1        printf(dataxx);
+  565   1        while (1)
+  566   1        {
+  567   2          delay_ms(1);
+  568   2          if (times++ > 100)
+  569   2          {
+  570   3            return 0;
+  571   3          }
+  572   2          if (falgchuankou1)
+  573   2          {
+  574   3            char *index;
+  575   3            index = strstr(buf1, "pingmuSetData zhi");
+*** WARNING C95 IN LINE 575 OF main.c: 'strstr': too many actual parameters
+*** WARNING C40 IN LINE 575 OF main.c: 'int' converted to 'far' pointer
+  576   3            if (index != 0)
+  577   3            {
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 10  
+
+  578   4              return 0;
+  579   4            }
+  580   3            clearbuff1();
+  581   3          }
+  582   2        }
+  583   1      }
+*** WARNING C47 IN LINE 560 OF main.c: 'ans': unreferenced local variable
+  584          // ·¢Êý¾Ý³öÈ¥£¬£¬È»ºóÊÕËùÓÐµÄ£¬¼ìÑé·µ»ØµÄÖµ¡£¡£
+  585          void chuankou1time()
+  586          {
+  587   1        if (timeleft1 > 0)
+  588   1        {
+  589   2          timeleft1--;
+  590   2          if (timeleft1 == 0) // Êý¾ÝÒ»´ÎÊÕÍêÁË.
+  591   2          {
+  592   3            chuliguankji(buf1);
+  593   3            falgchuankou1 = 1;
+  594   3          }
+  595   2        }
+  596   1      }
+  597          
+  598          // ²ÉÓÃÖÐ¶ÏºÍ´¦Àí·Ö¿ªµÄ·½Ê½°É£¬·½±ãµ÷ÊÔ¡£¡£
+  599          int getwendu()
+  600          {
+  601   1        return readzhi(6);
+  602   1      }
+  603          void UartIsr() interrupt 4
+  604          {
+  605   1        if (RI)
+  606   1        {
+  607   2          RI = 0;
+  608   2          chuankou1put(SBUF);
+  609   2        }
+  610   1      }
+  611          
+  612          void tm0_isr() interrupt 1
+  613          {
+  614   1        chuankou1time();
+  615   1      }
+  616          
+  617          void init()
+  618          {
+  619   1        delay_ms(10);
+  620   1        P0M0 = 0x00;
+  621   1        P0M1 = 0x02;
+  622   1        P1M0 = 0x00;
+  623   1        P1M1 = 0x00;
+  624   1        P2M0 = 0x00;
+  625   1        P2M1 = 0x00;
+  626   1        P3M0 = 0x00;
+  627   1        P3M1 = 0x00;
+  628   1        P4M0 = 0x00;
+  629   1        P4M1 = 0x00;
+  630   1        P5M0 = 0x00;
+  631   1        P5M1 = 0x00;
+  632   1        SPCTL = 0x50 | 0x80; //??SPI????
+  633   1        SPSTAT = 0xc0;     //?????
+  634   1        LCD_LED = 0;
+  635   1        LED0 = ~LED0;
+  636   1        delay_ms(50);
+  637   1      
+  638   1        LCD_Init();
+  639   1        UartInit();
+  640   1      
+  641   1        Timer0Init();
+  642   1        delay_ms(50);
+C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 11  
+
+  643   1      
+  644   1        LCD_Fill(0, 0, 320, 240, WHITE);
+  645   1        printf("system begin\r");
+  646   1        delay_ms(50);
+  647   1        pingmuclear();
+  648   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       554     ------
+  code size            =      2047     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-C251 COMPILER V5.60.0,  main                                                               18/07/23  21:03:50  PAGE 4   
-
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =         7     ------
+  edata size           =       440        348
   bit size             =         1     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -215,8 +705,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =    ------     ------
+  hconst size          =       611     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  10 WARNING(S),  0 ERROR(S)

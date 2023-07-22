@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: μVision V5.25.3.0
 Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: a dali, a, LIC=----
+License Information: xs dali, 11, LIC=GM7DL-05DD6-HQL0J-UT5ER-GZ9PB-MXWEQ
  
 Tool Versions:
-Toolchain:       DK251 Develpers Kit  Version: 5.60.0.0
-Toolchain Path:  C:\Keil_v5\C251\BIN
+Toolchain:       PK251 Prof. Developers Kit  Version: 5.60.0.0
+Toolchain Path:  D:\Keil_v5\C251\BIN
 C Compiler:      C251.exe V5.60.0.0
 Assembler:       A251.exe V4.69.13.0
 Linker/Locator:  L251.exe V4.66.93.0
@@ -18,16 +18,44 @@ Hex Converter:   OH251.exe V1.47.0.0
 CPU DLL:         S251.DLL V3.129.0.0
 Dialog DLL:      DCORE51.DLL V2.81.6.0 
 <h2>Project:</h2>
-D:\瑞宝科\new2\091-高级PWM定时器-编码器模式-EC11旋转编码器-调节数码管亮度-MAX7219数码管\PWM.uvproj
-Project File Date:  03/01/2023
+D:\瑞宝科\new2\lcd显示屏\PWM.uvproj
+Project File Date:  07/23/2023
 
 <h2>Output:</h2>
 Build target 'Target 1'
 compiling main.c...
+main.c(327): warning C188: 'parameter 1': value truncated
+main.c(335): warning C188: 'parameter 1': value truncated
+main.c(512): warning C140: 'strstr' undefined; assuming 'extern int strstr()'
+main.c(512): warning C95: 'strstr': too many actual parameters
+main.c(512): warning C40: 'int' converted to 'far' pointer
+main.c(545): warning C95: 'strstr': too many actual parameters
+main.c(545): warning C40: 'int' converted to 'far' pointer
+main.c(575): warning C95: 'strstr': too many actual parameters
+main.c(575): warning C40: 'int' converted to 'far' pointer
+main.c(560): warning C47: 'ans': unreferenced local variable
 linking...
-Program Size: data=8.1 edata+hdata=263 xdata=0 const=0 code=655
-creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 0 Warning(s).
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    UartSendByte/main
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    LCD_WR_DATA8/lcd
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    LCD_DrawLine/lcd
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    NAME:    ?C?ULIDIV/?C?ULDIV
+*** WARNING L15: MULTIPLE CALL TO FUNCTION
+    NAME:    PRINTF/PRINTF
+    CALLER1: tm0_isr/main
+    CALLER2: ?C_C51STARTUP?3
+*** WARNING L25: DATA TYPES DIFFERENT
+    SYMBOL:  strstr
+    MODULE:  .\Objects\main.obj (main)
+   DEFINED:  D:\KEIL_V5\C251\LIB\C2SXS.LIB (STRSTR)
+*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?strstr?BYTE
+    MODULE:  .\Objects\main.obj (main)
+Program Size: data=8.1 edata+hdata=947 xdata=0 const=623 code=19251
+Target not created.
 Build Time Elapsed:  00:00:00
 </pre>
 </body>

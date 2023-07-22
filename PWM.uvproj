@@ -330,9 +330,9 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>MAX7219.c</FileName>
+              <FileName>lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\MAX7219.c</FilePath>
+              <FilePath>.\lcd.c</FilePath>
             </File>
           </Files>
         </Group>

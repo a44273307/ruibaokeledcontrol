@@ -10,6 +10,8 @@
 #include "ds18b20.h"
 #include "ds18b201.h"
 #include "main.h"
+
+#include "tongxin.h"
 //函数名列表初始化(用户自己添加)
 //用户直接在这里输入要执行的函数名及其查找串
 struct _m_usmart_nametab usmart_nametab[]=
@@ -31,6 +33,9 @@ struct _m_usmart_nametab usmart_nametab[]=
 (void*)settime,"void settime(int zhi)",
 (void*)yout_set,"char yout_set(char weizhi,char zhi)",
 	(void*)yout_get,"char yout_get(char weizhi)",
+	(void*)show,"void show()",
+	(void*)pushshow,"void pushshow(int weizhi,int zhi)",
+	(void*)pop,"int pop()",
 						//				char yout_set(char weizhi,char zhi);
 			//	char yout_get(char weizhi);						
 	//void settime(int zhi);

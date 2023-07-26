@@ -109,35 +109,6 @@ int flagdongzuo = 0;
 void keydown(char i) //按键按下的处理、、、
 {
 	//printf("key%d",i);
-	if (i == 1)
-	{
-		if (guangset < 99)
-			guangset++;
-	}
-	if (i == 2)
-	{
-		if (guangset > 0)
-			guangset--;
-	}
-	if (i == 3)
-	{
-		if (flagzidong == zidong)
-			return;
-		flagopen = 1;
-		flagdongzuo=1;
-	}
-	if (i == 4)
-	{
-		if (flagzidong == zidong)
-			return;
-		flagopen = 0;
-		flagdongzuo=1;
-		//flagclosekey=1;
-	}
-	if (i == 6)
-	{
-		flagzidong = 1 - flagzidong;
-	}
 }
 void keyallchuli()
 {
@@ -214,167 +185,36 @@ int times = 0;
 void showdianjiweizhi();
 void run()
 {
-	int shijibushu;
-	int bushu;
-	char flag = 0;
-	int set = 16000;
-	bushu = 0;
-	shijibushu = TIM2->CNT - 30000; //实际距离
-	pid_init();
-	while (1)
-	{
-		times++;
-		//pwm=(set-cnt)*0.2;
-		if (flagopen)
-		{
-			shijibushu = TIM2->CNT - 30000; //实际距离
-			bushu = shijibushu;
-			if (shijibushu >= set)
-			{
-				//printf("%d\n", bushu);
-				TIM_SetTIM1Compare4(0);
-				TIM_SetTIM1Compare1(0);
-				return;
-			}
-		}
-		else
-		{
-			shijibushu = TIM2->CNT - 30000; //实际距离
-			bushu = set - shijibushu;		////反向,方便计算.
-			if (shijibushu <= 0)
-			{
-				//printf("%d\n", bushu);
-				TIM_SetTIM1Compare4(0);
-				TIM_SetTIM1Compare1(0);
-				//printf("%d\n",cnt);
-				//printf("times**%d\n",times);
-				return;
-			}
-			/* code */
-		}
-		pwm = pid_realisexx(set, bushu);
-		if (pwm < 30)
-			pwm = 30;
-		if (pwm > 1000)
-			pwm = 1000;
-		if (flagopen)
-			TIM_SetTIM1Compare1(pwm);
-		else
-		{
-			TIM_SetTIM1Compare4(pwm);
-		}
-		delay_ms(1);
-		showdianjiweizhi();
-		printf("%d\n", shijibushu);
-	}
+	
 }
-char riqi1[30] = "wen:00 shi:25";
-char riqi2[30] = "guang:25 set:50";
-char riqi3[30] = "weizhi: 16000";
-char riqi4[30] = "shoudong";
-int wendu, shidu;
-int guang;
+
 void zhuanhuan()
 {
-	int zhi;
-	char *p;
-	int weizhi;
-	p = riqi1;
-	weizhi = 4;
-	zhi = wendu;
-	p[weizhi++] = zhi / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	weizhi = 7 + 4;
-	zhi = shidu;
-	p[weizhi++] = zhi / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	p = riqi2;
-	weizhi = 4 + 2;
-	zhi = guang;
-	p[weizhi++] = zhi / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	weizhi = 4 + 9;
-	zhi = guangset;
-	p[weizhi++] = zhi / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	p = riqi3;
-	weizhi = 7;
-	zhi = TIM2->CNT - 30000;
-	if (zhi < 0)
-	{
-		zhi=0-zhi;
-		p[weizhi++] = '-';
-	}
-	else
-	{
-		p[weizhi++] = ' ';
-	}
-	p[weizhi++] = zhi / 10000 + '0';
-	p[weizhi++] = zhi % 10000 / 1000 + '0';
-	p[weizhi++] = zhi % 1000 / 100 + '0';
-	p[weizhi++] = zhi % 100 / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	p = riqi4;
-	if (flagzidong)
-		strcpy(p, "zidong  ");
-	else
-	{
-		strcpy(p, "shoudong");
-	}
+	
 }
 void showdianjiweizhi()
 {
-	int zhi;
-	char *p;
-	int weizhi;
-	p = riqi3;
-	weizhi = 7;
-	zhi = TIM2->CNT - 30000;
-	if (zhi < 0)
-	{
-		zhi=0-zhi;
-		p[weizhi++] = '-';
-	}
-	else
-	{
-		p[weizhi++] = ' ';
-	}
-	p[weizhi++] = zhi / 10000 + '0';
-	p[weizhi++] = zhi % 10000 / 1000 + '0';
-	p[weizhi++] = zhi % 1000 / 100 + '0';
-	p[weizhi++] = zhi % 100 / 10 + '0';
-	p[weizhi++] = zhi % 10 + '0';
-	OLED_ShowString(0, 4, riqi3, 16);
+	
 }
 void zhongduanclose()
 {
-	//HAL_NVIC_DisableIRQ(TIM3_IRQn);
-	HAL_NVIC_DisableIRQ(TIM3_IRQn);
+	
 }
 void zhongduanopen()
 {
-	//HAL_NVIC_EnableIRQ(TIM3_IRQn);
-	HAL_NVIC_EnableIRQ(TIM3_IRQn);
+	
 }
 __weak void getdata()
 {
-	zhongduanclose();
-	DHT11_Read_Data(&wendu, &shidu);
-	zhongduanopen();
+	// zhongduanclose();
+	// DHT11_Read_Data(&wendu, &shidu);
+	// zhongduanopen();
 	//printf("wendu%dshidu%d",wendu,shidu);
 	//Get_Adc_Average(ADC_CHANNEL_6,5)/20;
-	guang = 100 - Get_Adc_Average(ADC_CHANNEL_4, 5) / 41;
-}
-void show()
-{
-	getdata();
-	zhuanhuan();
-	OLED_ShowString(0, 0, riqi1, 16);
-	OLED_ShowString(0, 2, riqi2, 16);
-	OLED_ShowString(0, 4, riqi3, 16);
-	OLED_ShowString(0, 6, riqi4, 16);
+	//guang = 100 - Get_Adc_Average(ADC_CHANNEL_4, 5) / 41;
 }
 
+void init();
 int main(void)
 {
 	int bushu;
@@ -383,6 +223,24 @@ int main(void)
 	int ts;
 	int a[10];
 	int key;
+	
+	// HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
+	// TIM_SetTIM1Compare1(0);
+	// TIM1_PWM_Init(1000 - 1, 6400 - 1);
+	// TIM_SetTIM1Compare1(0);
+	// TIM_SetTIM1Compare4(0);
+	// TIM3_Init(64 - 1, 5000 - 1); //10毫秒
+	// TIM2->CNT = 30000;
+	init();
+	while (1)
+	{
+		delay_ms(2000);
+		printf("test run");
+	}
+}
+
+void init()
+{
 	HAL_Init();
 	Stm32_Clock_Init(RCC_PLL_MUL9); //设置时钟,72M
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
@@ -406,49 +264,4 @@ int main(void)
 	delay_ms(50);
 	MX_TIM2_Init();
 	delay_ms(50);
-	HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-	TIM_SetTIM1Compare1(0);
-	TIM1_PWM_Init(1000 - 1, 6400 - 1);
-	TIM_SetTIM1Compare1(0);
-	TIM_SetTIM1Compare4(0);
-	TIM3_Init(64 - 1, 5000 - 1); //10毫秒
-	TIM2->CNT = 30000;
-	// flagopen=1;
-	// run();
-	// delay_ms(3000);
-	// flagopen=0;
-	// run();
-	while (1)
-	{
-		show();
-		//printf("test%d", TIM2->CNT);
-		bushu = TIM2->CNT - 30000;
-		if(flagzidong)
-		{
-			if(guang>guangset)//光照过强,关闭.....
-			{
-				flagopen=0;
-				run();
-			}
-			else
-			{
-				flagopen=1;
-				run();
-			}
-			
-		}else if(flagdongzuo)
-		{
-			run();
-			flagdongzuo=0;
-		}
-		if (i++ > 5)
-		{
-			i = 0;
-			sendshuju(riqi1);
-			sendshuju(riqi2);
-			sendshuju(riqi3);
-			sendshuju(riqi4);
-		}
-		delay_ms(200);
-	}
 }

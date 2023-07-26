@@ -70,3 +70,4 @@
 ..\obj\usmart_config.o: ..\USER\ds18b20.h
 ..\obj\usmart_config.o: ..\USER\ds18b201.h
 ..\obj\usmart_config.o: ..\USER\main.h
+..\obj\usmart_config.o: ..\USER\tongxin.h

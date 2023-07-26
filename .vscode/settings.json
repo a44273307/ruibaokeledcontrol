@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "stepkong.h": "c"
+        "stepkong.h": "c",
+        "ds18b20.h": "c"
     }
 }

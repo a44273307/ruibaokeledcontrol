@@ -31,6 +31,7 @@
 "..\obj\oled.o"
 "..\obj\dht11.o"
 "..\obj\adc.o"
+"..\obj\tongxin.o"
 "..\obj\usmart.o"
 "..\obj\usmart_config.o"
 "..\obj\usmart_str.o"

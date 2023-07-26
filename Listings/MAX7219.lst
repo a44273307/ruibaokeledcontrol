@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  MAX7219                                                            19/07/23  12:17:04  PAGE 1   
+C251 COMPILER V5.60.0,  MAX7219                                                            26/07/23  20:44:52  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE MAX7219
 OBJECT MODULE PLACED IN .\Objects\MAX7219.obj
-COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE MAX7219.c LARGE BROWSE DEBUG PRINT(.\Listings\MAX7219.lst) TABS(2) OBJ
-                    -ECT(.\Objects\MAX7219.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE MAX7219.c LARGE BROWSE DEBUG PRINT(.\Listings\MAX7219.lst) TABS(2) OB
+                    -JECT(.\Objects\MAX7219.obj) 
 
 stmt  level    source
 

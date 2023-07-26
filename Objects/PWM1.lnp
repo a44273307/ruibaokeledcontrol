@@ -1,6 +1,7 @@
 ".\Objects\main.obj",
 ".\Objects\MAX7219.obj",
-".\Objects\uart.obj" 
+".\Objects\uart.obj",
+".\Objects\tongxin.obj" 
 TO ".\Objects\PWM1" 
 PRINT(".\Listings\PWM1.map") CASE 
 REMOVEUNUSED 

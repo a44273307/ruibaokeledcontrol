@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: μVision V5.25.3.0
 Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: xs dali, 11, LIC=GM7DL-05DD6-HQL0J-UT5ER-GZ9PB-MXWEQ
+License Information: a dali, 1, LIC=----
  
 Tool Versions:
 Toolchain:       PK251 Prof. Developers Kit  Version: 5.60.0.0
-Toolchain Path:  D:\Keil_v5\C251\BIN
+Toolchain Path:  D:\keilc251\C251\BIN
 C Compiler:      C251.exe V5.60.0.0
 Assembler:       A251.exe V4.69.13.0
 Linker/Locator:  L251.exe V4.66.93.0
@@ -19,14 +19,28 @@ CPU DLL:         S251.DLL V3.129.0.0
 Dialog DLL:      DCORE51.DLL V2.81.6.0 
 <h2>Project:</h2>
 D:\瑞宝科\new2\091-高级PWM定时器-编码器模式-EC11旋转编码器-调节数码管亮度-MAX7219数码管\PWM.uvproj
-Project File Date:  07/19/2023
+Project File Date:  07/26/2023
 
 <h2>Output:</h2>
 Build target 'Target 1'
+compiling tongxin.c...
+tongxin.c(55): warning C47: 'j': unreferenced local variable
+tongxin.c(55): warning C47: 'k': unreferenced local variable
+tongxin.c(79): warning C47: 'j': unreferenced local variable
+tongxin.c(79): warning C47: 'k': unreferenced local variable
+tongxin.c(91): warning C47: 'get': unreferenced parameter
+tongxin.c(98): warning C47: 'j': unreferenced local variable
+tongxin.c(98): warning C47: 'k': unreferenced local variable
+tongxin.c(115): warning C47: 'j': unreferenced local variable
+tongxin.c(115): warning C47: 'k': unreferenced local variable
 linking...
-Program Size: data=8.3 edata+hdata=256 xdata=1558 const=1058 code=3339
+*** WARNING L15: MULTIPLE CALL TO FUNCTION
+    NAME:    push/tongxin
+    CALLER1: PWM_ISR/main
+    CALLER2: ?C_C51STARTUP?3
+Program Size: data=8.3 edata+hdata=256 xdata=1622 const=1051 code=3707
 creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 0 Warning(s).
+".\Objects\PWM1" - 0 Error(s), 10 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

@@ -23,7 +23,7 @@
 
 #include <stdlib.h>
 #include "uart.h"
-
+#include "tongxin.h"
 
 void SYS_Ini();		// STC32初始化设置
 void EC11_Handle(); // EC11数据处理
@@ -307,10 +307,8 @@ void jixi2(char* input)
 }
 void setzhione(int dizhi,int zhi)
 {
-	char out[30]={0};
-	zhi=zhi*2;
-	sprintf(out,"set:%d-%d;end",dizhi,zhi);
-	printf3(out);
+	push(dizhi,zhi);
+
 }
 void jiexi(char* input)
 {
@@ -350,26 +348,8 @@ void changedainliuzhi()
 		setdianliusettime(250);
 	}
 }
-void timechuli()
-{
-	if(dianliusettime>0)
-	{
-		dianliusettime--;
-		if(dianliusettime==0)
-		{
-			flagdianliuset=1;
-		}
-	}
-}
-void chulidianliu()
-{
-	if(flagdianliuset==1)
-	{
-		flagdianliuset=0;
-		setzhione(4,gsetzhi);
-		printf1("dianliu set%d",gsetzhi);
-	}
-}
+
+
 
 char xin[30] = {0};
 sbit X0=P1^3;
@@ -474,6 +454,7 @@ void keyallchuli()
 		}
 	}
 }
+void dealorder();
 void main(void)
 {
 
@@ -490,9 +471,8 @@ void main(void)
 	{
 		keyallchuli();
 		showpre(gsetzhi);
-		dealchuankou();
-		changedainliuzhi();
-		chulidianliu();
+		dealorder();//取缓冲区里面的命令进行发送
+		dealchuankou();//解析上来的串口命令。
 	}
 }
 
@@ -580,12 +560,31 @@ void addgetsetzhi(int i)
 		gsetzhi=ans;
 	}
 }
+static int timepush=0;
+void dealorder()
+{
+	char out[30]={0};
+	Alltongxininfo get;
+	if(timepush>45)
+	{
+		timepush=0;
+		pop2(&get);
+		if(get.weizhi==4)
+		{
+			get.weizhi=get.weizhi*2;
+		}
+		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+		printf3(out);
+	}
+}
 void Timer0() interrupt 1
 {
-	// gsetzhi++;
 	shurulvbo();
-	timechuli();
 	chuankou1time();
+	if(!empty())
+	{
+		timepush++;
+	}
 }
 void EC11_Handle() // EC11数据处理函数
 {
@@ -603,6 +602,7 @@ void EC11_Handle() // EC11数据处理函数
 	{
 		addgetsetzhi(-1);
 	}
+	setzhione(4,gsetzhi);
 }
 
 int step=0;

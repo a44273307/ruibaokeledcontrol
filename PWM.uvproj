@@ -339,6 +339,11 @@
               <FileType>1</FileType>
               <FilePath>.\uart.c</FilePath>
             </File>
+            <File>
+              <FileName>tongxin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\tongxin.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

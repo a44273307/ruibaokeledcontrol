@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "config.h": "c",
-        "max7219.h": "c"
+        "max7219.h": "c",
+        "tongxin.h": "c"
     }
 }

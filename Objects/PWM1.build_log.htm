@@ -25,36 +25,42 @@ Project File Date:  07/26/2023
 Rebuild target 'Target 1'
 compiling main.c...
 uart.h(24): warning C317: attempt to redefine macro 'MAIN_Fosc'
-main.c(170): warning C188: 'parameter 1': value truncated
-main.c(181): warning C47: 'a': unreferenced local variable
-main.c(181): warning C47: 'b': unreferenced local variable
+main.c(172): warning C188: 'parameter 1': value truncated
+main.c(183): warning C47: 'a': unreferenced local variable
+main.c(183): warning C47: 'b': unreferenced local variable
 main.c(327): warning C161: 'far' pointer truncated to 'char'
 main.c(327): warning C10: conversion: 'pointer' to 'char'
 main.c(329): warning C40: 'char' converted to 'far' pointer
-main.c(538): warning C188: 'initialization': value truncated
-main.c(614): warning C140: 'empty' undefined; assuming 'extern int empty()'
+main.c(556): warning C188: 'initialization': value truncated
+main.c(650): warning C140: 'empty' undefined; assuming 'extern int empty()'
 compiling MAX7219.c...
 compiling uart.c...
 uart.h(24): warning C317: attempt to redefine macro 'MAIN_Fosc'
 compiling tongxin.c...
-tongxin.c(55): warning C47: 'j': unreferenced local variable
-tongxin.c(55): warning C47: 'k': unreferenced local variable
-tongxin.c(79): warning C47: 'j': unreferenced local variable
-tongxin.c(79): warning C47: 'k': unreferenced local variable
-tongxin.c(91): warning C47: 'get': unreferenced parameter
-tongxin.c(98): warning C47: 'j': unreferenced local variable
-tongxin.c(98): warning C47: 'k': unreferenced local variable
-tongxin.c(115): warning C47: 'j': unreferenced local variable
-tongxin.c(115): warning C47: 'k': unreferenced local variable
+tongxin.c(46): warning C47: 'j': unreferenced local variable
+tongxin.c(46): warning C47: 'k': unreferenced local variable
+tongxin.c(70): warning C47: 'j': unreferenced local variable
+tongxin.c(70): warning C47: 'k': unreferenced local variable
+tongxin.c(82): warning C47: 'get': unreferenced parameter
+tongxin.c(89): warning C47: 'j': unreferenced local variable
+tongxin.c(89): warning C47: 'k': unreferenced local variable
+tongxin.c(106): warning C47: 'j': unreferenced local variable
+tongxin.c(106): warning C47: 'k': unreferenced local variable
+compiling func.c...
+compiling tongxin2.c...
+tongxin2.c(46): warning C47: 'j': unreferenced local variable
+tongxin2.c(46): warning C47: 'k': unreferenced local variable
+tongxin2.c(70): warning C47: 'j': unreferenced local variable
+tongxin2.c(70): warning C47: 'k': unreferenced local variable
 linking...
 *** WARNING L15: MULTIPLE CALL TO FUNCTION
     NAME:    push/tongxin
     CALLER1: PWM_ISR/main
     CALLER2: ?C_C51STARTUP?3
-Program Size: data=16.3 edata+hdata=256 xdata=1626 const=1086 code=3841
+Program Size: data=16.3 edata+hdata=256 xdata=1796 const=1145 code=4390
 creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 20 Warning(s).
-Build Time Elapsed:  00:00:01
+".\Objects\PWM1" - 0 Error(s), 24 Warning(s).
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

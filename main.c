@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include "uart.h"
 #include "tongxin.h"
+#include "tongxin2.h"
+
 
 void SYS_Ini();		// STC32初始化设置
 void EC11_Handle(); // EC11数据处理
@@ -303,10 +305,8 @@ void jixi2(char* input)
 		getzhi[weizhi]=zhi;
 		p=myaddstrstr(p,";");  //指向下一个后面
 		printf1("get set%d-%d",weizhi,zhi);
-		if(weizhi==4)
-		{
-			gsetzhi=zhi/bili;
-		}
+		push2(weizhi,zhi);
+		
 	}
 }
 int flaginit=0;
@@ -463,23 +463,41 @@ void keyallchuli()
 	}
 }
 void dealorder();
+void getdianliupre()
+{
+
+}
+int timereport=0;
+
 void init2test()
 {
-	int i=0;
+	Alltongxininfo2 get={0};
 	printf1("read begin");
-	push(20,1);//去读数据。。。
 	while (1)
 	{
-		dealorder();//取缓冲区里面的命令进行发送
-		i++;
-		if(i>9000)
+		if(timereport%1000==0)
 		{
+			printf1("read[%d].....",timereport);
+		}
+		if(timereport>10000)
+		{
+			printf1("read failed");
 			break;
 		}
+		pop22(&get);
+		if(get.weizhi==4)
+		{
+			get.zhi=get.zhi/2;
+			gsetzhi=get.zhi;
+			printf1("read over %d ",gsetzhi);
+			break;
+		}
+		dealorder();//取缓冲区里面的命令进行发送
+		
 		showpre(gsetzhi);
 		dealchuankou();//解析上来的串口命令。
 	}
-	printf1("read over");
+	
 }
 
 void main(void)
@@ -561,6 +579,18 @@ void chuankou1time()
 		}
 	}
 }
+char get1[100];
+int weizhi1=0;
+void chuliguankji()
+{
+    char* index;
+    index=mystrstr(get1,"@STCISP#");
+	if(index==0)
+	{
+	    return  ;
+	}
+    IAP_CONTR=0x60;
+}
 void UARTInterrupt(void) interrupt 4
 {
 	unsigned char ans;
@@ -568,7 +598,12 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans = SBUF;
-		
+		get1[weizhi1++]=ans;
+		if(weizhi1>80)
+		{
+			weizhi1=0;
+		}
+		chuliguankji();
 		// IAP_CONTR=0x60;
 	}
 	else
@@ -609,6 +644,7 @@ void dealorder()
 }
 void Timer0() interrupt 1
 {
+	timereport++;
 	shurulvbo();
 	chuankou1time();
 	if(!empty())
@@ -664,6 +700,7 @@ char* my_strstr(const char* haystack, const char* needle) {
 
     return NULL;
 }
+
 void dealchuankou()
 {
 	if (flag3 == 1)

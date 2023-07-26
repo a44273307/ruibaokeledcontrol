@@ -5,23 +5,14 @@
 
 #include <stdio.h>
 #include "tongxin.h"
+#include "func.h"
 #define use 1
 #define use 1
 #define nouse 0
 #define maxzhi 10 
 
-Alltongxininfo tongxindata[maxzhi];
-void* memcpy(void* destination, const void* source, size_t num) {
-size_t i;   
-	char* dest = (char*)destination;
-    const char* src = (const char*)source;
+static Alltongxininfo tongxindata[maxzhi];
 
-    for ( i = 0; i < num; i++) {
-        dest[i] = src[i];
-    }
-
-    return destination;
-}
 int  getemptyindex()
 {
     int i;

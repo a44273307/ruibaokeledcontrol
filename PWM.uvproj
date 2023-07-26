@@ -344,6 +344,16 @@
               <FileType>1</FileType>
               <FilePath>.\tongxin.c</FilePath>
             </File>
+            <File>
+              <FileName>func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\func.c</FilePath>
+            </File>
+            <File>
+              <FileName>tongxin2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\tongxin2.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

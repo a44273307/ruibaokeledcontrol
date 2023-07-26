@@ -22,7 +22,20 @@ D:\瑞宝科\new2\091-高级PWM定时器-编码器模式-EC11旋转编码器-调节数码管亮度-MAX721
 Project File Date:  07/26/2023
 
 <h2>Output:</h2>
-Build target 'Target 1'
+Rebuild target 'Target 1'
+compiling main.c...
+uart.h(24): warning C317: attempt to redefine macro 'MAIN_Fosc'
+main.c(170): warning C188: 'parameter 1': value truncated
+main.c(181): warning C47: 'a': unreferenced local variable
+main.c(181): warning C47: 'b': unreferenced local variable
+main.c(327): warning C161: 'far' pointer truncated to 'char'
+main.c(327): warning C10: conversion: 'pointer' to 'char'
+main.c(329): warning C40: 'char' converted to 'far' pointer
+main.c(538): warning C188: 'initialization': value truncated
+main.c(614): warning C140: 'empty' undefined; assuming 'extern int empty()'
+compiling MAX7219.c...
+compiling uart.c...
+uart.h(24): warning C317: attempt to redefine macro 'MAIN_Fosc'
 compiling tongxin.c...
 tongxin.c(55): warning C47: 'j': unreferenced local variable
 tongxin.c(55): warning C47: 'k': unreferenced local variable
@@ -38,9 +51,9 @@ linking...
     NAME:    push/tongxin
     CALLER1: PWM_ISR/main
     CALLER2: ?C_C51STARTUP?3
-Program Size: data=8.3 edata+hdata=256 xdata=1622 const=1051 code=3707
+Program Size: data=16.3 edata+hdata=256 xdata=1626 const=1086 code=3841
 creating hex file from ".\Objects\PWM1"...
-".\Objects\PWM1" - 0 Error(s), 10 Warning(s).
+".\Objects\PWM1" - 0 Error(s), 20 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

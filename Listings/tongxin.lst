@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  20:46:31  PAGE 1   
+C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  21:08:58  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE tongxin
@@ -66,7 +66,7 @@ stmt  level    source
    56   1          dizhi=getemptyindex();
    57   1          // 有就更新
    58   1          for(i=0;i<dizhi;i++)
-C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  20:46:31  PAGE 2   
+C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  21:08:58  PAGE 2   
 
    59   1          {
    60   2              if(tongxindata[i].weizhi==weizhi)
@@ -134,7 +134,7 @@ stmt  level    source
   115   1          int i,j,k;
   116   1          int dizhi=getemptyindex();
   117   1          if(0==getemptyindex())
-C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  20:46:31  PAGE 3   
+C251 COMPILER V5.60.0,  tongxin                                                            26/07/23  21:08:58  PAGE 3   
 
   118   1          {
   119   2              return 0;
@@ -151,33 +151,12 @@ stmt  level    source
 *** WARNING C47 IN LINE 115 OF tongxin.c: 'k': unreferenced local variable
   129          
   130          
-  131          void timechuli()
-  132          {
-  133   1          // if(settime==0)
-  134   1          // {
-  135   1          //     if(empty())
-  136   1          //     {
-  137   1          //         settime=100;
-  138   1          //     }
-  139   1          // }
-  140   1          // if(settime>0)
-  141   1          // {
-  142   1          //     settime--;
-  143   1          //     if(settime==0)
-  144   1          //     {
-  145   1                  
-  146   1          //     }
-  147   1          // }
-  148   1      }
-  149          void timerun()
-  150          {
-  151   1      
-  152   1      }
+  131          
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       534     ------
+  code size            =       532     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------

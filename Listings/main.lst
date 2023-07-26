@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -45,7 +45,7 @@ stmt  level    source
    34          u16 count, newcount; // 当前计数值、上次计数值
    35                     // 亮度计数值
    36          
-   37          
+   37          int bili=2;
    38          void SYS_Ini() // STC32初始化设置
    39          {
    40   1        EAXFR = 1;    // 使能访问 XFR
@@ -66,7 +66,7 @@ stmt  level    source
    55   1        P6M1 = 0x00;
    56   1        P6M0 = 0x00; // 设置P6口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
    57   1        P7M1 = 0x00;
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 2   
 
    58   1        P7M0 = 0x00; // 设置P7口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
    59   1      }
@@ -134,176 +134,176 @@ stmt  level    source
   120   1        if (weizhi == 0)
   121   1          Y0 = zhi;
   122   1        if (weizhi == 1)
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 3   
 
   123   1          Y1 = zhi;
   124   1        if (weizhi == 2)
   125   1          Y2 = zhi;
   126   1        if (weizhi == 3)
   127   1          Y3 = zhi;
-  128   1        // if(weizhi==4)Y4=zhi;
-  129   1        // if(weizhi==5)Y5=zhi;
-  130   1        return (0);
-  131   1      }
-  132          void yout_closeall()
-  133          {
-  134   1        char i;
-  135   1        for (i = 0; i < 4; i++)
-  136   1        {
-  137   2          yout_set(i, 1);
-  138   2        }
-  139   1      }
-  140          void Delay10us() //@24.000MHz
-  141          {
-  142   1        unsigned long i;
-  143   1      
+  128   1      
+  129   1        return (0);
+  130   1      }
+  131          void yout_closeall()
+  132          {
+  133   1        char i;
+  134   1        for (i = 0; i < 4; i++)
+  135   1        {
+  136   2          yout_set(i, 1);
+  137   2        }
+  138   1      }
+  139          void Delay10us() //@24.000MHz
+  140          {
+  141   1        unsigned long i;
+  142   1      
+  143   1        _nop_();
   144   1        _nop_();
   145   1        _nop_();
-  146   1        _nop_();
-  147   1        i = 58UL;
-  148   1        while (i)
-  149   1          i--;
-  150   1      }
-  151          void delay10x(int i)
-  152          {
-  153   1        while (i-- > 0)
-  154   1        {
-  155   2          Delay10us();
-  156   2        }
-  157   1      }
-  158          void showpre(int num)
-  159          {
-  160   1        int i;
-  161   1        int a[4];
-  162   1        a[0] = num % 10000 / 1000;
-  163   1        a[1] = num % 1000 / 100;
-  164   1      
-  165   1        a[2] = num % 100 / 10;
-  166   1        a[3] = num % 10;
-  167   1      
-  168   1        for (i = 0; i < 4; i++)
-  169   1        {
-  170   2          yout_closeall();
-  171   2          yout_set(i, 0);
-*** WARNING C188 IN LINE 171 OF main.c: 'parameter 1': value truncated
-  172   2          P0 = ~duanzhi[a[i]];
-  173   2          Delay10us();
-  174   2          yout_closeall();
-  175   2          P0 = 0xff;
-  176   2          Delay10us();
-  177   2        }
-  178   1      }
-  179          
-  180          void testmain()
-  181          {
-  182   1        int a, b;
-  183   1        int times = 0;
-  184   1      }
-*** WARNING C47 IN LINE 182 OF main.c: 'a': unreferenced local variable
-*** WARNING C47 IN LINE 182 OF main.c: 'b': unreferenced local variable
+  146   1        i = 58UL;
+  147   1        while (i)
+  148   1          i--;
+  149   1      }
+  150          void delay10x(int i)
+  151          {
+  152   1        while (i-- > 0)
+  153   1        {
+  154   2          Delay10us();
+  155   2        }
+  156   1      }
+  157          void showpre(int num)
+  158          {
+  159   1        int i;
+  160   1        int a[4];
+  161   1        a[0] = num % 10000 / 1000;
+  162   1        a[1] = num % 1000 / 100;
+  163   1      
+  164   1        a[2] = num % 100 / 10;
+  165   1        a[3] = num % 10;
+  166   1      
+  167   1        for (i = 0; i < 4; i++)
+  168   1        {
+  169   2          yout_closeall();
+  170   2          yout_set(i, 0);
+*** WARNING C188 IN LINE 170 OF main.c: 'parameter 1': value truncated
+  171   2          P0 = ~duanzhi[a[i]];
+  172   2          Delay10us();
+  173   2          yout_closeall();
+  174   2          P0 = 0xff;
+  175   2          Delay10us();
+  176   2        }
+  177   1      }
+  178          
+  179          void testmain()
+  180          {
+  181   1        int a, b;
+  182   1        int times = 0;
+  183   1      }
+*** WARNING C47 IN LINE 181 OF main.c: 'a': unreferenced local variable
+*** WARNING C47 IN LINE 181 OF main.c: 'b': unreferenced local variable
+  184          
   185          
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 4   
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 4   
 
-  186          
-  187          void dealchuankou();
-  188          int gsetzhi = 600;
+  186          void dealchuankou();
+  187          int gsetzhi = 600;
+  188          
   189          
   190          
   191          
   192          
   193          
   194          
-  195          
-  196          char* mystrstr(const char* haystack, const char* needle) {
-  197   1          if (*needle == '\0') {
-  198   2              return (char*)haystack;
-  199   2          }
-  200   1      
-  201   1          while (*haystack != '\0') {
-  202   2              const char* h = haystack;
-  203   2              const char* n = needle;
-  204   2      
-  205   2              while (*n != '\0' && *h == *n) {
-  206   3                  h++;
-  207   3                  n++;
-  208   3              }
-  209   2      
-  210   2              if (*n == '\0') {
-  211   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
-  212   3              }
-  213   2      
-  214   2              haystack++;
-  215   2          }
-  216   1      
-  217   1          return NULL; // 未找到子串，返回NULL
-  218   1      }
-  219          size_t mystrlen(const char* str) {
-  220   1          size_t length = 0;
-  221   1          while (str[length] != '\0') {
-  222   2              length++;
-  223   2          }
-  224   1          return length;
-  225   1      }
-  226          
-  227          char* myaddstrstr(const char* haystack, const char* needle)
-  228          { 
-  229   1        char* result = mystrstr(haystack, needle);
-  230   1         if (result != NULL)
-  231   1         {
-  232   2          result=result+mystrlen(needle);
-  233   2         }
-  234   1         return result;
-  235   1      }
-  236          
-  237          #define MAX_REGISTERS 10 // 设置最大寄存器数量
-  238          
-  239          struct Register
-  240          {
-  241            unsigned int num;
-  242            unsigned int value;
-  243          };
-  244          struct Register registers[MAX_REGISTERS];
-  245          int numRegisters = 0;
-  246          void showgetzhi()
-  247          {
-  248   1        unsigned char i;
-  249   1        if (i == 0)
-  250   1        {
-  251   2          printf1("Register not get");
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 5   
+  195          char* mystrstr(const char* haystack, const char* needle) {
+  196   1          if (*needle == '\0') {
+  197   2              return (char*)haystack;
+  198   2          }
+  199   1      
+  200   1          while (*haystack != '\0') {
+  201   2              const char* h = haystack;
+  202   2              const char* n = needle;
+  203   2      
+  204   2              while (*n != '\0' && *h == *n) {
+  205   3                  h++;
+  206   3                  n++;
+  207   3              }
+  208   2      
+  209   2              if (*n == '\0') {
+  210   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
+  211   3              }
+  212   2      
+  213   2              haystack++;
+  214   2          }
+  215   1      
+  216   1          return NULL; // 未找到子串，返回NULL
+  217   1      }
+  218          size_t mystrlen(const char* str) {
+  219   1          size_t length = 0;
+  220   1          while (str[length] != '\0') {
+  221   2              length++;
+  222   2          }
+  223   1          return length;
+  224   1      }
+  225          
+  226          char* myaddstrstr(const char* haystack, const char* needle)
+  227          { 
+  228   1        char* result = mystrstr(haystack, needle);
+  229   1         if (result != NULL)
+  230   1         {
+  231   2          result=result+mystrlen(needle);
+  232   2         }
+  233   1         return result;
+  234   1      }
+  235          
+  236          #define MAX_REGISTERS 10 // 设置最大寄存器数量
+  237          
+  238          struct Register
+  239          {
+  240            unsigned int num;
+  241            unsigned int value;
+  242          };
+  243          struct Register registers[MAX_REGISTERS];
+  244          int numRegisters = 0;
+  245          void showgetzhi()
+  246          {
+  247   1        unsigned char i;
+  248   1        if (i == 0)
+  249   1        {
+  250   2          printf1("Register not get");
+  251   2        }
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 5   
 
-  252   2        }
-  253   1        // 遍历并打印所有寄存器的值
-  254   1        for (i = 0; i < numRegisters; i++)
-  255   1        {
-  256   2          printf1("Register %d: %d\n", registers[i].num, registers[i].value);
-  257   2        }
-  258   1      }
-  259          
-  260          #define MAXgetzhi 100
-  261          int getzhi[MAXgetzhi]={0};
-  262          void jixi3(char* input)
-  263          {
-  264   1        char *p=input;
-  265   1        char *p1;
-  266   1        int i;
-  267   1        numRegisters=0;
-  268   1        //1234-2234;333-4;end
-  269   1        for( i=0;i<100;i++)
-  270   1        {
-  271   2          p1=myaddstrstr(p,";"); //找有没有下一个的
-  272   2          if(p1==NULL)
-  273   2          {
-  274   3            break;
-  275   3          }
-  276   2          registers[numRegisters].num = atoi(p);
-  277   2          p=myaddstrstr(p,"-");
-  278   2          registers[numRegisters].value = atoi(p);
-  279   2          numRegisters++;
-  280   2          p=myaddstrstr(p,";");  //指向下一个后面
-  281   2        }
-  282   1        showgetzhi();
-  283   1      }
+  252   1        // 遍历并打印所有寄存器的值
+  253   1        for (i = 0; i < numRegisters; i++)
+  254   1        {
+  255   2          printf1("Register %d: %d\n", registers[i].num, registers[i].value);
+  256   2        }
+  257   1      }
+  258          
+  259          #define MAXgetzhi 100
+  260          int getzhi[MAXgetzhi]={0};
+  261          void jixi3(char* input)
+  262          {
+  263   1        char *p=input;
+  264   1        char *p1;
+  265   1        int i;
+  266   1        numRegisters=0;
+  267   1        //1234-2234;333-4;end
+  268   1        for( i=0;i<100;i++)
+  269   1        {
+  270   2          p1=myaddstrstr(p,";"); //找有没有下一个的
+  271   2          if(p1==NULL)
+  272   2          {
+  273   3            break;
+  274   3          }
+  275   2          registers[numRegisters].num = atoi(p);
+  276   2          p=myaddstrstr(p,"-");
+  277   2          registers[numRegisters].value = atoi(p);
+  278   2          numRegisters++;
+  279   2          p=myaddstrstr(p,";");  //指向下一个后面
+  280   2        }
+  281   1        showgetzhi();
+  282   1      }
+  283          // 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
   284          void jixi2(char* input)
   285          {
   286   1        char *p=input;
@@ -326,72 +326,72 @@ stmt  level    source
   303   2          getzhi[weizhi]=zhi;
   304   2          p=myaddstrstr(p,";");  //指向下一个后面
   305   2          printf1("get set%d-%d",weizhi,zhi);
-  306   2        }
-  307   1      }
-  308          void setzhione(int dizhi,int zhi)
-  309          {
-  310   1        push(dizhi,zhi);
-  311   1      
-  312   1      }
-  313          void jiexi(char* input)
+  306   2          if(weizhi==4)
+  307   2          {
+  308   3            gsetzhi=zhi/bili;
+  309   3          }
+  310   2        }
+  311   1      }
+  312          int flaginit=0;
+  313          void setzhione(int dizhi,int zhi)
   314          {
-  315   1        char par[500]={0};
-  316   1        char *begin,end;
-  317   1        begin=myaddstrstr(input,"set:");
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 6   
+  315   1        if(flaginit==0)
+  316   1        {
+  317   2          return ;
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 6   
 
-  318   1        // printf1("input begin%s",begin);
-  319   1        end=myaddstrstr(begin,"end");
-*** WARNING C161 IN LINE 319 OF main.c: 'far' pointer truncated to 'char'
-*** WARNING C10 IN LINE 319 OF main.c: conversion: 'pointer' to 'char'
-  320   1        // printf1("input end%s",end);
-  321   1        if(begin!=NULL && end!=NULL)
-*** WARNING C40 IN LINE 321 OF main.c: 'char' converted to 'far' pointer
-  322   1        {
-  323   2          strcpy(par,begin);
-  324   2          jixi2(par);
-  325   2        }
-  326   1      }
-  327          
-  328          
-  329          
-  330          
-  331          int setprezhi;
-  332          
-  333          int dianliusettime=0;
-  334          char flagdianliuset=0;
-  335          void setdianliusettime(int zhi)
-  336          {
-  337   1        if(dianliusettime!=0)
-  338   1        {
-  339   2          return ;
-  340   2        }
-  341   1        dianliusettime=zhi;
-  342   1      }
-  343          void changedainliuzhi()
+  318   2        }
+  319   1        push(dizhi,zhi);
+  320   1      }
+  321          void jiexi(char* input)
+  322          {
+  323   1        char par[500]={0};
+  324   1        char *begin,end;
+  325   1        begin=myaddstrstr(input,"set:");
+  326   1        // printf1("input begin%s",begin);
+  327   1        end=myaddstrstr(begin,"end");
+*** WARNING C161 IN LINE 327 OF main.c: 'far' pointer truncated to 'char'
+*** WARNING C10 IN LINE 327 OF main.c: conversion: 'pointer' to 'char'
+  328   1        // printf1("input end%s",end);
+  329   1        if(begin!=NULL && end!=NULL)
+*** WARNING C40 IN LINE 329 OF main.c: 'char' converted to 'far' pointer
+  330   1        {
+  331   2          strcpy(par,begin);
+  332   2          jixi2(par);
+  333   2        }
+  334   1      }
+  335          
+  336          
+  337          
+  338          
+  339          int setprezhi;
+  340          
+  341          int dianliusettime=0;
+  342          char flagdianliuset=0;
+  343          void setdianliusettime(int zhi)
   344          {
-  345   1        if(setprezhi!=gsetzhi)
+  345   1        if(dianliusettime!=0)
   346   1        {
-  347   2          setprezhi=gsetzhi;
-  348   2          setdianliusettime(250);
-  349   2        }
+  347   2          return ;
+  348   2        }
+  349   1        dianliusettime=zhi;
   350   1      }
-  351          
-  352          
-  353          
-  354          char xin[30] = {0};
-  355          sbit X0=P1^3;
-  356          void shurulvbo(void)
-  357          {
-  358   1        static u8 keybuf[40] = {
-  359   1          0xFF,
-  360   1          0xFF,
-  361   1          0xFF,
-  362   1          0xFF,
-  363   1          0xFF,
-  364   1          0xFF,
-  365   1          0xFF,
-  366   1          0xFF,
+  351          void changedainliuzhi()
+  352          {
+  353   1        if(setprezhi!=gsetzhi)
+  354   1        {
+  355   2          setprezhi=gsetzhi;
+  356   2          setdianliusettime(250);
+  357   2        }
+  358   1      }
+  359          
+  360          
+  361          
+  362          char xin[30] = {0};
+  363          sbit X0=P1^3;
+  364          void shurulvbo(void)
+  365          {
+  366   1        static u8 keybuf[40] = {
   367   1          0xFF,
   368   1          0xFF,
   369   1          0xFF,
@@ -406,7 +406,7 @@ stmt  level    source
   378   1          0xFF,
   379   1          0xFF,
   380   1          0xFF,
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 7   
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 7   
 
   381   1          0xFF,
   382   1          0xFF,
@@ -426,300 +426,335 @@ stmt  level    source
   396   1          0xFF,
   397   1          0xFF,
   398   1          0xFF,
-  399   1        }; // 矩阵按键扫描缓冲区 8ms
-  400   1        unsigned char i;
-  401   1        i = X0;
-  402   1        keybuf[0] = (keybuf[0] << 1) | i;
-  403   1        // i = X1;
-  404   1        // keybuf[1] = (keybuf[1] << 1) | i;
-  405   1        // i = X2;
-  406   1        // keybuf[2] = (keybuf[2] << 1) | i;
-  407   1        // i = X3;
-  408   1        // keybuf[3] = (keybuf[3] << 1) | i;
-  409   1        for (i = 0; i < 1; i++) // 3按键，所以循环3次
-  410   1        {
-  411   2          if ((keybuf[i] & 0xFF) == 0x00)
-  412   2          {
-  413   3            xin[i] = 0;
-  414   3          }
-  415   2          else if ((keybuf[i] & 0xFF) == 0xFF)
-  416   2          { // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
-  417   3            xin[i] = 1;
-  418   3          }
-  419   2        }
-  420   1      }
-  421          void keydown(int i) // 按键按下的处理、、、
-  422          {
-  423   1        printf1("keydown %d",i);
-  424   1        setzhione(4,gsetzhi);
-  425   1      }
-  426          void keyup(int i) // 按键按下的处理、、、
-  427          {
-  428   1        printf1("keyup %d",i);
-  429   1        setzhione(4,0);
-  430   1      }
-  431          void keyallchuli()
-  432          {
-  433   1        int i;
-  434   1        static char flag[10] = {0};   // 标志记录
-  435   1        static int dowmtimes[10] = {0}; // 标志记录
-  436   1        for (i = 0; i < 6; i++)
-  437   1        {
-  438   2          if (xin[i] == 0)
-  439   2          {
-  440   3            if (flag[i] == 0) // 代表按键第一次按下。。。
-  441   3            {
-  442   4              flag[i] = 1;
-  443   4              keydown(i);
-  444   4            }
-  445   3          }
-  446   2          if (xin[i] == 1)
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 8   
+  399   1          0xFF,
+  400   1          0xFF,
+  401   1          0xFF,
+  402   1          0xFF,
+  403   1          0xFF,
+  404   1          0xFF,
+  405   1          0xFF,
+  406   1          0xFF,
+  407   1        }; // 矩阵按键扫描缓冲区 8ms
+  408   1        unsigned char i;
+  409   1        i = X0;
+  410   1        keybuf[0] = (keybuf[0] << 1) | i;
+  411   1        // i = X1;
+  412   1        // keybuf[1] = (keybuf[1] << 1) | i;
+  413   1        // i = X2;
+  414   1        // keybuf[2] = (keybuf[2] << 1) | i;
+  415   1        // i = X3;
+  416   1        // keybuf[3] = (keybuf[3] << 1) | i;
+  417   1        for (i = 0; i < 1; i++) // 3按键，所以循环3次
+  418   1        {
+  419   2          if ((keybuf[i] & 0xFF) == 0x00)
+  420   2          {
+  421   3            xin[i] = 0;
+  422   3          }
+  423   2          else if ((keybuf[i] & 0xFF) == 0xFF)
+  424   2          { // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
+  425   3            xin[i] = 1;
+  426   3          }
+  427   2        }
+  428   1      }
+  429          void keydown(int i) // 按键按下的处理、、、
+  430          {
+  431   1        printf1("keydown %d",i);
+  432   1        setzhione(4,gsetzhi);
+  433   1      }
+  434          void keyup(int i) // 按键按下的处理、、、
+  435          {
+  436   1        printf1("keyup %d",i);
+  437   1        setzhione(4,0);
+  438   1      }
+  439          void keyallchuli()
+  440          {
+  441   1        int i;
+  442   1        static char flag[10] = {0};   // 标志记录
+  443   1        static int dowmtimes[10] = {0}; // 标志记录
+  444   1        for (i = 0; i < 6; i++)
+  445   1        {
+  446   2          if (xin[i] == 0)
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 8   
 
   447   2          {
-  448   3            if (flag[i] == 1) // 代表下去了又上来
+  448   3            if (flag[i] == 0) // 代表按键第一次按下。。。
   449   3            {
-  450   4              keyup(i);
-  451   4            }
-  452   3            flag[i] = 0;
-  453   3            
-  454   3          }
-  455   2        }
-  456   1      }
-  457          void dealorder();
-  458          void main(void)
-  459          {
-  460   1      
-  461   1        SYS_Ini();    // STC32初始化设置
-  462   1        PWM_Config(); // PWM初始化设置
-  463   1        EA = 1;     // 使能EA总中断
-  464   1      
-  465   1        UartInit();
-  466   1        Uart23Init();
-  467   1        printf1("system is ok");
-  468   1        Timer0Init();
-  469   1        printf1("system is overall");
-  470   1        while (1)
-  471   1        {
-  472   2          keyallchuli();
-  473   2          showpre(gsetzhi);
-  474   2          dealorder();//取缓冲区里面的命令进行发送
-  475   2          dealchuankou();//解析上来的串口命令。
-  476   2        }
-  477   1      }
-  478          
-  479          void PWM_ISR() interrupt 26
-  480          {
-  481   1        if (PWMA_SR1 & 0X02) // 当捕获中断标志置1
-  482   1        {
-  483   2          cnt_H = PWMA_CCR1H; // 读取计数值高8位
-  484   2          cnt_L = PWMA_CCR1L; // 读取计数值低8位
-  485   2          PWMA_SR1 &= ~0X02;  // 清零捕获中断标志
-  486   2          EC11_Handle();    // 处理EC11数据
-  487   2        }
-  488   1      }
-  489          void PWM_Config() // PWM初始化设置
-  490          {
-  491   1        PWMA_CCER1 = 0x00; // 关闭通道
-  492   1        PWMA_CCMR1 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-  493   1        PWMA_CCMR2 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-  494   1        PWMA_CCER1 = 0x55; // 使能捕获/比较通道1、通道2
-  495   1      
-  496   1        //  PWMA_SMCR = 0x01;         // 编码器模式 1
-  497   1        //  PWMA_SMCR = 0x02;         // 编码器模式 2
-  498   1        PWMA_SMCR = 0x03; // 编码器模式 3
-  499   1      
-  500   1        PWMA_IER = 0x02;  // 使能中断
-  501   1        PWMA_CR1 |= 0x01; // 使能计数器
-  502   1        PWMA_PS |= 0x04;  // 选择 PWM2_2 通道
-  503   1      }
-  504          
-  505          // 返回变化的步数
-  506          long calculateChange(unsigned int previous, unsigned int current)
-  507          {
-  508   1        long diff = (current - previous + 65536) % 65536;
-*** WARNING C188 IN LINE 508 OF main.c: 'initialization': value truncated
-  509   1        return diff;
-  510   1      }
-  511          
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 9   
+  450   4              flag[i] = 1;
+  451   4              keydown(i);
+  452   4            }
+  453   3          }
+  454   2          if (xin[i] == 1)
+  455   2          {
+  456   3            if (flag[i] == 1) // 代表下去了又上来
+  457   3            {
+  458   4              keyup(i);
+  459   4            }
+  460   3            flag[i] = 0;
+  461   3            
+  462   3          }
+  463   2        }
+  464   1      }
+  465          void dealorder();
+  466          void init2test()
+  467          {
+  468   1        int i=0;
+  469   1        printf1("read begin");
+  470   1        push(20,1);//去读数据。。。
+  471   1        while (1)
+  472   1        {
+  473   2          dealorder();//取缓冲区里面的命令进行发送
+  474   2          i++;
+  475   2          if(i>9000)
+  476   2          {
+  477   3            break;
+  478   3          }
+  479   2          showpre(gsetzhi);
+  480   2          dealchuankou();//解析上来的串口命令。
+  481   2        }
+  482   1        printf1("read over");
+  483   1      }
+  484          
+  485          void main(void)
+  486          {
+  487   1      
+  488   1        SYS_Ini();    // STC32初始化设置
+  489   1        PWM_Config(); // PWM初始化设置
+  490   1        EA = 1;     // 使能EA总中断
+  491   1      
+  492   1        UartInit();
+  493   1        Uart23Init();
+  494   1        printf1("system is ok");
+  495   1        Timer0Init();
+  496   1        printf1("system is overall");
+  497   1        init2test();
+  498   1        keyallchuli();
+  499   1        flaginit=1;
+  500   1        while (1)
+  501   1        {
+  502   2          keyallchuli();
+  503   2          showpre(gsetzhi);
+  504   2          dealorder();//取缓冲区里面的命令进行发送
+  505   2          dealchuankou();//解析上来的串口命令。
+  506   2        }
+  507   1      }
+  508          
+  509          void PWM_ISR() interrupt 26
+  510          {
+  511   1        if (PWMA_SR1 & 0X02) // 当捕获中断标志置1
+  512   1        {
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 9   
 
-  512          char buf3[500];
-  513          char flag3 = 0;
-  514          int weishu3;
-  515          int timeleft1, timeleft2, timeleft3, timeleft4;
-  516          void chuankou1put(char c)
-  517          {
-  518   1        buf3[weishu3++] = c;
-  519   1        if (weishu3 > sizeof(buf3) - 3)
-  520   1          weishu3 = 0;
-  521   1        timeleft3 = 3;
-  522   1      }
-  523          void chuankou1time()
-  524          {
-  525   1        if (timeleft3 > 0)
-  526   1        {
-  527   2          timeleft3--;
-  528   2          if (timeleft3 == 0) // 数据一次收完了.
-  529   2          {
-  530   3            flag3 = 1;
-  531   3          }
-  532   2        }
+  513   2          cnt_H = PWMA_CCR1H; // 读取计数值高8位
+  514   2          cnt_L = PWMA_CCR1L; // 读取计数值低8位
+  515   2          PWMA_SR1 &= ~0X02;  // 清零捕获中断标志
+  516   2          EC11_Handle();    // 处理EC11数据
+  517   2        }
+  518   1      }
+  519          void PWM_Config() // PWM初始化设置
+  520          {
+  521   1        PWMA_CCER1 = 0x00; // 关闭通道
+  522   1        PWMA_CCMR1 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+  523   1        PWMA_CCMR2 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+  524   1        PWMA_CCER1 = 0x55; // 使能捕获/比较通道1、通道2
+  525   1      
+  526   1        //  PWMA_SMCR = 0x01;         // 编码器模式 1
+  527   1        //  PWMA_SMCR = 0x02;         // 编码器模式 2
+  528   1        PWMA_SMCR = 0x03; // 编码器模式 3
+  529   1      
+  530   1        PWMA_IER = 0x02;  // 使能中断
+  531   1        PWMA_CR1 |= 0x01; // 使能计数器
+  532   1        PWMA_PS |= 0x04;  // 选择 PWM2_2 通道
   533   1      }
-  534          void UARTInterrupt(void) interrupt 4
-  535          {
-  536   1        unsigned char ans;
-  537   1        if (RI)
-  538   1        {
-  539   2          RI = 0;
-  540   2          ans = SBUF;
-  541   2          chuankou1put(ans);
-  542   2          // IAP_CONTR=0x60;
-  543   2        }
-  544   1        else
-  545   1        {
-  546   2          TI = 0;
-  547   2          
-  548   2        }
-  549   1        if (TI) // 发送中断..
-  550   1        {
-  551   2          TI = 0;
-  552   2        }
-  553   1      }
-  554          void addgetsetzhi(int i)
-  555          {
-  556   1        int ans;
-  557   1        ans=gsetzhi+i;
-  558   1        if(ans>=0 && ans<=1023)
-  559   1        {
-  560   2          gsetzhi=ans;
-  561   2        }
-  562   1      }
-  563          static int timepush=0;
-  564          void dealorder()
+  534          
+  535          // 返回变化的步数
+  536          long calculateChange(unsigned int previous, unsigned int current)
+  537          {
+  538   1        long diff = (current - previous + 65536) % 65536;
+*** WARNING C188 IN LINE 538 OF main.c: 'initialization': value truncated
+  539   1        return diff;
+  540   1      }
+  541          
+  542          char buf3[500];
+  543          char flag3 = 0;
+  544          int weishu3;
+  545          int timeleft1, timeleft2, timeleft3, timeleft4;
+  546          void chuankou1put(char c)
+  547          {
+  548   1        buf3[weishu3++] = c;
+  549   1        if (weishu3 > sizeof(buf3) - 3)
+  550   1          weishu3 = 0;
+  551   1        timeleft3 = 3;
+  552   1      }
+  553          void chuankou1time()
+  554          {
+  555   1        if (timeleft3 > 0)
+  556   1        {
+  557   2          timeleft3--;
+  558   2          if (timeleft3 == 0) // 数据一次收完了.
+  559   2          {
+  560   3            flag3 = 1;
+  561   3          }
+  562   2        }
+  563   1      }
+  564          void UARTInterrupt(void) interrupt 4
   565          {
-  566   1        char out[30]={0};
-  567   1        Alltongxininfo get;
-  568   1        if(timepush>45)
-  569   1        {
-  570   2          timepush=0;
-  571   2          pop2(&get);
-  572   2          if(get.weizhi==4)
-  573   2          {
-  574   3            get.weizhi=get.weizhi*2;
-  575   3          }
-  576   2          sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
-  577   2          printf3(out);
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 10  
+  566   1        unsigned char ans;
+  567   1        if (RI)
+  568   1        {
+  569   2          RI = 0;
+  570   2          ans = SBUF;
+  571   2          
+  572   2          // IAP_CONTR=0x60;
+  573   2        }
+  574   1        else
+  575   1        {
+  576   2          TI = 0;
+  577   2          
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 10  
 
   578   2        }
-  579   1      }
-  580          void Timer0() interrupt 1
-  581          {
-  582   1        shurulvbo();
-  583   1        chuankou1time();
-  584   1        if(!empty())
-*** WARNING C140 IN LINE 584 OF main.c: 'empty' undefined; assuming 'extern int empty()'
-  585   1        {
-  586   2          timepush++;
-  587   2        }
-  588   1      }
-  589          void EC11_Handle() // EC11数据处理函数
-  590          {
-  591   1        static unsigned int previous = 0;
-  592   1        unsigned int nowzhi;
-  593   1        long ans;
-  594   1        nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
-  595   1        ans = calculateChange(previous, nowzhi);
-  596   1        previous = nowzhi;
-  597   1        if (ans == 4)
-  598   1        {
-  599   2          addgetsetzhi(1);
-  600   2        }
-  601   1        else
-  602   1        {
-  603   2          addgetsetzhi(-1);
-  604   2        }
-  605   1        setzhione(4,gsetzhi);
-  606   1      }
-  607          
-  608          int step=0;
-  609          void showstep(const char *s)
-  610          {
-  611   1        printf1("%s\n",s);
-  612   1      }
-  613          char* my_strstr(const char* haystack, const char* needle) {
-  614   1          if (*needle == '\0') {
-  615   2              return (char*) haystack;
-  616   2          }
-  617   1      
-  618   1          while (*haystack != '\0') {
-  619   2              const char* h = haystack;
-  620   2              const char* n = needle;
-  621   2      
-  622   2              while (*h == *n && *n != '\0') {
-  623   3                  h++;
-  624   3                  n++;
-  625   3              }
-  626   2      
-  627   2              if (*n == '\0') {
-  628   3                  return (char*) haystack;
-  629   3              }
-  630   2      
-  631   2              haystack++;
-  632   2          }
-  633   1      
-  634   1          return NULL;
-  635   1      }
-  636          void dealchuankou()
-  637          {
-  638   1        if (flag3 == 1)
-  639   1        {
-  640   2          flag3 = 0;
-  641   2          jiexi(buf3);
-  642   2          memset(buf3, 0, sizeof(buf3));
-C251 COMPILER V5.60.0,  main                                                               26/07/23  20:44:52  PAGE 11  
+  579   1        if (TI) // 发送中断..
+  580   1        {
+  581   2          TI = 0;
+  582   2        }
+  583   1      }
+  584          void addgetsetzhi(int i)
+  585          {
+  586   1        int ans;
+  587   1        ans=gsetzhi+i;
+  588   1        if(ans>=0 && ans<=1023)
+  589   1        {
+  590   2          gsetzhi=ans;
+  591   2        }
+  592   1      }
+  593          static int timepush=0;
+  594          void dealorder()
+  595          {
+  596   1        char out[30]={0};
+  597   1        Alltongxininfo get;
+  598   1        if(timepush>45)
+  599   1        {
+  600   2          timepush=0;
+  601   2          pop2(&get);
+  602   2          if(get.weizhi==4)
+  603   2          {
+  604   3            get.zhi=get.zhi*bili;
+  605   3          }
+  606   2          sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+  607   2          printf3(out);
+  608   2        }
+  609   1      }
+  610          void Timer0() interrupt 1
+  611          {
+  612   1        shurulvbo();
+  613   1        chuankou1time();
+  614   1        if(!empty())
+*** WARNING C140 IN LINE 614 OF main.c: 'empty' undefined; assuming 'extern int empty()'
+  615   1        {
+  616   2          timepush++;
+  617   2        }
+  618   1      }
+  619          void EC11_Handle() // EC11数据处理函数
+  620          {
+  621   1        static unsigned int previous = 0;
+  622   1        unsigned int nowzhi;
+  623   1        long ans;
+  624   1        nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
+  625   1        ans = calculateChange(previous, nowzhi);
+  626   1        previous = nowzhi;
+  627   1        if (ans == 4)
+  628   1        {
+  629   2          addgetsetzhi(1);
+  630   2        }
+  631   1        else
+  632   1        {
+  633   2          addgetsetzhi(-1);
+  634   2        }
+  635   1        // 设定电流值。。。
+  636   1        setzhione(4,gsetzhi);
+  637   1      }
+  638          
+  639          int step=0;
+  640          void showstep(const char *s)
+  641          {
+  642   1        printf1("%s\n",s);
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 11  
 
-  643   2          weishu3 = 0;
-  644   2        }
-  645   1      }
-  646          
-  647          
-  648          void Uart3() interrupt 17 using 1
-  649          {
-  650   1          if (S3CON & S3RI)
-  651   1          {
-  652   2              S3CON &= ~S3RI; //??S3RI?
-  653   2              // temp3 = S3BUF;
-  654   2              // chuankou3put(temp3);
-  655   2          }
-  656   1          if (S3CON & S3TI)
-  657   1          {
-  658   2              S3CON &= ~S3TI; // 清除S3TI位
-  659   2              busy3 = 0;      // 清忙标志
-  660   2          }
-  661   1      }
-  662          // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16
+  643   1      }
+  644          char* my_strstr(const char* haystack, const char* needle) {
+  645   1          if (*needle == '\0') {
+  646   2              return (char*) haystack;
+  647   2          }
+  648   1      
+  649   1          while (*haystack != '\0') {
+  650   2              const char* h = haystack;
+  651   2              const char* n = needle;
+  652   2      
+  653   2              while (*h == *n && *n != '\0') {
+  654   3                  h++;
+  655   3                  n++;
+  656   3              }
+  657   2      
+  658   2              if (*n == '\0') {
+  659   3                  return (char*) haystack;
+  660   3              }
+  661   2      
+  662   2              haystack++;
+  663   2          }
+  664   1      
+  665   1          return NULL;
+  666   1      }
+  667          void dealchuankou()
+  668          {
+  669   1        if (flag3 == 1)
+  670   1        {
+  671   2          flag3 = 0;
+  672   2          jiexi(buf3);
+  673   2          memset(buf3, 0, sizeof(buf3));
+  674   2          weishu3 = 0;
+  675   2        }
+  676   1      }
+  677          
+  678          
+  679          void Uart3() interrupt 17 using 1
+  680          {
+  681   1        char temp3; 
+  682   1          if (S3CON & S3RI)
+  683   1          {
+  684   2              S3CON &= ~S3RI; //??S3RI?
+  685   2          temp3 = S3BUF;
+  686   2          chuankou1put(temp3);
+  687   2              // chuankou3put(temp3);
+  688   2          }
+  689   1          if (S3CON & S3TI)
+  690   1          {
+  691   2              S3CON &= ~S3TI; // 清除S3TI位
+  692   2              busy3 = 0;      // 清忙标志
+  693   2          }
+  694   1      }
+  695          // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      2323     ------
+  code size            =      2457     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =       872        908
+  xdata size           =       876        908
   xdata-const size     =    ------     ------
   edata size           =    ------     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
+C251 COMPILER V5.60.0,  main                                                               26/07/23  21:08:57  PAGE 12  
+
   bitaddressable size  =    ------     ------
   ebitaddressable size =    ------     ------
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =      1038     ------
+  hconst size          =      1073     ------
 End of Module Information.
 
 

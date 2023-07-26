@@ -34,7 +34,7 @@ u8 cnt_H, cnt_L;	 // 计数值高8位、低8位
 u16 count, newcount; // 当前计数值、上次计数值
 					 // 亮度计数值
 
-
+int bili=2;
 void SYS_Ini() // STC32初始化设置
 {
 	EAXFR = 1;	  // 使能访问 XFR
@@ -125,8 +125,7 @@ char yout_set(char weizhi, char zhi)
 		Y2 = zhi;
 	if (weizhi == 3)
 		Y3 = zhi;
-	// if(weizhi==4)Y4=zhi;
-	// if(weizhi==5)Y5=zhi;
+
 	return (0);
 }
 void yout_closeall()
@@ -281,6 +280,7 @@ void jixi3(char* input)
 	}
 	showgetzhi();
 }
+// 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
 void jixi2(char* input)
 {
 	char *p=input;
@@ -303,12 +303,20 @@ void jixi2(char* input)
 		getzhi[weizhi]=zhi;
 		p=myaddstrstr(p,";");  //指向下一个后面
 		printf1("get set%d-%d",weizhi,zhi);
+		if(weizhi==4)
+		{
+			gsetzhi=zhi/bili;
+		}
 	}
 }
+int flaginit=0;
 void setzhione(int dizhi,int zhi)
 {
+	if(flaginit==0)
+	{
+		return ;
+	}
 	push(dizhi,zhi);
-
 }
 void jiexi(char* input)
 {
@@ -455,6 +463,25 @@ void keyallchuli()
 	}
 }
 void dealorder();
+void init2test()
+{
+	int i=0;
+	printf1("read begin");
+	push(20,1);//去读数据。。。
+	while (1)
+	{
+		dealorder();//取缓冲区里面的命令进行发送
+		i++;
+		if(i>9000)
+		{
+			break;
+		}
+		showpre(gsetzhi);
+		dealchuankou();//解析上来的串口命令。
+	}
+	printf1("read over");
+}
+
 void main(void)
 {
 
@@ -467,6 +494,9 @@ void main(void)
 	printf1("system is ok");
 	Timer0Init();
 	printf1("system is overall");
+	init2test();
+	keyallchuli();
+	flaginit=1;
 	while (1)
 	{
 		keyallchuli();
@@ -538,7 +568,7 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans = SBUF;
-		chuankou1put(ans);
+		
 		// IAP_CONTR=0x60;
 	}
 	else
@@ -571,7 +601,7 @@ void dealorder()
 		pop2(&get);
 		if(get.weizhi==4)
 		{
-			get.weizhi=get.weizhi*2;
+			get.zhi=get.zhi*bili;
 		}
 		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
 		printf3(out);
@@ -602,6 +632,7 @@ void EC11_Handle() // EC11数据处理函数
 	{
 		addgetsetzhi(-1);
 	}
+	// 设定电流值。。。
 	setzhione(4,gsetzhi);
 }
 
@@ -647,10 +678,12 @@ void dealchuankou()
 
 void Uart3() interrupt 17 using 1
 {
+	char temp3; 
     if (S3CON & S3RI)
     {
         S3CON &= ~S3RI; //??S3RI?
-        // temp3 = S3BUF;
+		temp3 = S3BUF;
+		chuankou1put(temp3);
         // chuankou3put(temp3);
     }
     if (S3CON & S3TI)

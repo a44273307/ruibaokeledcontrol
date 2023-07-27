@@ -153,7 +153,7 @@
         <aSer4>0</aSer4>
         <StkLoc>0</StkLoc>
         <TrcWin>0</TrcWin>
-        <newCpu>0</newCpu>
+        <newCpu>1</newCpu>
         <uProt>0</uProt>
       </DebugFlag>
       <LintExecutable></LintExecutable>
@@ -186,10 +186,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>53</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>274</TopLine>
-      <CurrentLine>286</CurrentLine>
+      <CurrentLine>280</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -249,6 +249,20 @@
       <bDave2>0</bDave2>
       <PathWithFileName>.\ledcontrol.c</PathWithFileName>
       <FilenameWithoutPath>ledcontrol.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>0</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>11</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>64</TopLine>
+      <CurrentLine>64</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\tongxin2.c</PathWithFileName>
+      <FilenameWithoutPath>tongxin2.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1587,28 +1601,5 @@
       </Window>
     </View>
   </WinLayout>
-
-  <MDIGroups>
-    <Orientation>1</Orientation>
-    <ActiveMDIGroup>0</ActiveMDIGroup>
-    <MDIGroup>
-      <Size>100</Size>
-      <ActiveTab>1</ActiveTab>
-      <Documents>
-        <Doc>
-          <Name>.\delay.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>1</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\main.c</Name>
-          <ColumnNumber>53</ColumnNumber>
-          <TopLine>274</TopLine>
-          <CurrentLine>286</CurrentLine>
-        </Doc>
-      </Documents>
-    </MDIGroup>
-  </MDIGroups>
 
 </ProjectOpt>

@@ -168,21 +168,8 @@ void dealchuankou()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 int delay_mszhi;
-uint temp1,temp2,temp3,temp4;
+uint temp1,temp2;
 
 
 void io_inint()
@@ -217,17 +204,17 @@ void Exxwrite(int addr, uint dat);
 void writebuf()
 {
     int i;
-    int dizhi=Iapid+1;
+    int dizhi=Iapid;
     IapErase(Iapid); // ????????
+    Exxwrite(dizhi,55);
     for ( i = 0; i < len_HoldingReg; i++)
     {
         dizhi=dizhi+1;
         Exxwrite(dizhi,HoldingReg[i]);
-       
     }
 }
 // 比较值是否发生了变化。。
-uint16_t bufcheck[len_HoldingReg]={0};
+int bufcheck[len_HoldingReg]={0};
 void buffchecktongbu()
 {
     int i;
@@ -284,9 +271,9 @@ void IapIdle()
     IAP_ADDRL = 0;
 }
 
-char IapRead(int addr)
+uchar IapRead(int addr)
 {
-    char dat;
+    uchar dat;
 
     IAP_CONTR = 0x80;                           //使能IAP
     IAP_TPS = 40;                               //设置等待参数12MHz
@@ -337,21 +324,39 @@ void Exxwrite(int addr, uint dat)
     IapProgram(addr,dat/256);
     IapProgram(addr+1,dat%256);
 }
-uint ExxRead(int addr)
+
+int ExxRead(int addr)
 {
-    uint dat;
+    uint dat1,dat2;
+    int dat3;
     addr=addr*2;
-    dat=IapRead(addr);
-    dat=dat*256;
-    dat=dat+IapRead(addr+1);
-    return dat;
+    dat1=IapRead(addr);
+    // printf("ExxRead[%d]\n",dat1);
+
+    
+    dat2=IapRead(addr+1);
+    // printf("ExxRead[%d]\n",dat2);
+    dat3=dat1*256+dat2;
+    // printf("ExxRead[%d]\n",dat3);
+    return dat3; 
 }
 
 void readbuf()
 {
     int i;
     int zhi;
-    int dizhi=Iapid+1;
+    int dizhi=Iapid;
+    zhi=ExxRead(dizhi);
+    if(zhi==55)
+    {
+        printf("has init\n");
+    }
+    else
+    {
+        printf("not init\n");
+        HoldingReg[4]=600;
+        writebuf();
+    }
     for ( i = 0; i < len_HoldingReg; i++)
     {
         dizhi=dizhi+1;
@@ -359,7 +364,6 @@ void readbuf()
         // delay_ms(4);
         zhi=HoldingReg[i];
         printf("HoldingReg[%d]-[%d]\n",i,zhi);
-
     }
 }
 void initbuf()
@@ -394,12 +398,12 @@ void getzhiandchange()
 	}
     if(IsbuffcheckFailed())
     {
-        printf("xiugaidata begin\n");
+        // printf("xiugaidata begin\n");
         delay_mszhi=0;
         buffchecktongbu();
         writebuf();
-        printf("HoldingReg[4] %d",HoldingReg[4]);
-        printf("xiugaidata end %d\n",delay_mszhi);
+        // printf("HoldingReg[4] %d",HoldingReg[4]);
+        // printf("xiugaidata end %d\n",delay_mszhi);
         readbuf();
     }
 }
@@ -426,7 +430,7 @@ void main()
     com1clearbuf();
     while (1)
 	{
-     
+        runreport();
         getzhiandchange();
 	}
 } 
@@ -483,31 +487,5 @@ void uart2(void ) interrupt 8
   
 
 
-void Uart3() interrupt 17 using 1
-{
-    if (S3CON & S3RI)
-    {
-        S3CON &= ~S3RI;         //??S3RI?
-        temp3 = S3BUF;
-				
-   }
-if (S3CON & S3TI)
-    {
-        S3CON &= ~S3TI;         //清除S3TI位
-        busy3 = 0;               //清忙标志
-    }
-}
 
-void Uart4() interrupt 18 
-{
-    if (S4CON & S4RI)
-    {
-        S4CON &= ~S4RI;         //??S4RI?
-        temp4=S4BUF;
-   }
-if(TI4)
-	{
-		CLR_TI4();
-		busy4 = 0;               //清忙标志
-	}
-}
+

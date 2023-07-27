@@ -381,6 +381,11 @@
               <FileType>1</FileType>
               <FilePath>.\tongxin2.c</FilePath>
             </File>
+            <File>
+              <FileName>EEPROM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\EEPROM.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

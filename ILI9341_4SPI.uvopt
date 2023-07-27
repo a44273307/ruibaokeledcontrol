@@ -153,7 +153,7 @@
         <aSer4>0</aSer4>
         <StkLoc>0</StkLoc>
         <TrcWin>0</TrcWin>
-        <newCpu>1</newCpu>
+        <newCpu>0</newCpu>
         <uProt>0</uProt>
       </DebugFlag>
       <LintExecutable></LintExecutable>
@@ -188,8 +188,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>274</TopLine>
-      <CurrentLine>280</CurrentLine>
+      <TopLine>324</TopLine>
+      <CurrentLine>339</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -252,17 +252,31 @@
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
+      <FileNumber>7</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>0</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\tongxin2.c</PathWithFileName>
+      <FilenameWithoutPath>tongxin2.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
       <FileNumber>0</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>11</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>64</TopLine>
-      <CurrentLine>64</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\tongxin2.c</PathWithFileName>
-      <FilenameWithoutPath>tongxin2.c</FilenameWithoutPath>
+      <PathWithFileName>.\EEPROM.c</PathWithFileName>
+      <FilenameWithoutPath>EEPROM.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -1601,5 +1615,22 @@
       </Window>
     </View>
   </WinLayout>
+
+  <MDIGroups>
+    <Orientation>1</Orientation>
+    <ActiveMDIGroup>0</ActiveMDIGroup>
+    <MDIGroup>
+      <Size>100</Size>
+      <ActiveTab>0</ActiveTab>
+      <Documents>
+        <Doc>
+          <Name>.\main.c</Name>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>324</TopLine>
+          <CurrentLine>339</CurrentLine>
+        </Doc>
+      </Documents>
+    </MDIGroup>
+  </MDIGroups>
 
 </ProjectOpt>

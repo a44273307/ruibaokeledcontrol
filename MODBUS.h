@@ -23,7 +23,7 @@ void HAL_UART_Transmit_DMA_485(int *huart,uint8_t *pData, uint16_t Size);
 void Modbus_Init(void);
 char cuncu_485();
 void init_485();
-extern volatile uint16_t HoldingReg[10];
+extern volatile int HoldingReg[10];
 void chuankou1jisuuan(unsigned char ans);
 extern void time1msjisuan();
 void jishouokjisuan();

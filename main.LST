@@ -1,9 +1,9 @@
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN main.OBJ
-COMPILER INVOKED BY: C:\Keil2\C51\BIN\C51.EXE main.c LARGE BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: C:\Keil2\C51\BIN\C51.EXE main.c LARGE ROM(COMPACT) BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
@@ -26,160 +26,159 @@ line level    source
   17          #include <stdio.h>
   18          #include <string.h>
   19          #include <stdlib.h>
-  20          
+  20          #include "tongxin2.h"
   21          
-  22          char buf3[500];
+  22          char buf3[60];
   23          char flag3 = 0;
   24          int weishu3;
   25          int timeleft1, timeleft2, timeleft3, timeleft4;
-  26          void chuankou1put(char c)
+  26          void com1clearbuf()
   27          {
-  28   1              buf3[weishu3++] = c;
-  29   1              if (weishu3 > sizeof(buf3) - 3)
-  30   1                      weishu3 = 0;
-  31   1              timeleft3 = 3;
-  32   1      }
-  33          void chuankou1time()
-  34          {
-  35   1              if (timeleft3 > 0)
-  36   1              {
-  37   2                      timeleft3--;
-  38   2                      if (timeleft3 == 0) // 数据一次收完了.
-  39   2                      {
-  40   3                              flag3 = 1;
-  41   3                      }
-  42   2              }
-  43   1      }
-  44          
-  45          #define MAXgetzhi 100
-  46          int getzhi[MAXgetzhi]={0};
-  47          
-  48          
-  49          char* mystrstr(const char* haystack, const char* needle) {
-  50   1          if (*needle == '\0') {
-  51   2              return (char*)haystack;
-  52   2          }
-  53   1      
-  54   1          while (*haystack != '\0') {
-  55   2              const char* h = haystack;
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 2   
+  28   1          memset(buf3, 0, sizeof(buf3));
+  29   1              weishu3 = 0;
+  30   1      }
+  31          void chuankou1put(char c)
+  32          {
+  33   1              buf3[weishu3++] = c;
+  34   1              if (weishu3 > sizeof(buf3) - 3)
+  35   1                      weishu3 = 0;
+  36   1              timeleft3 = 3;
+  37   1      }
+  38          void dealchuankou();    
+  39          void chuliguankji();
+  40          void chuankou1time()
+  41          {
+  42   1              if (timeleft3 > 0)
+  43   1              {
+  44   2                      timeleft3--;
+  45   2                      if (timeleft3 == 0) // 数据一次收完了.
+  46   2                      {
+  47   3                              flag3 = 1;
+  48   3                  dealchuankou();     
+  49   3                      }
+  50   2              }
+  51   1      }
+  52          
+  53          
+  54          
+  55          
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 2   
 
-  56   2              const char* n = needle;
-  57   2      
-  58   2              while (*n != '\0' && *h == *n) {
-  59   3                  h++;
-  60   3                  n++;
-  61   3              }
-  62   2      
-  63   2              if (*n == '\0') {
-  64   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
-  65   3              }
-  66   2      
-  67   2              haystack++;
-  68   2          }
-  69   1      
-  70   1          return NULL; // 未找到子串，返回NULL
-  71   1      }
-  72          size_t mystrlen(const char* str) {
-  73   1          size_t length = 0;
-  74   1          while (str[length] != '\0') {
-  75   2              length++;
-  76   2          }
-  77   1          return length;
+  56          char* mystrstr(const char* haystack, const char* needle) {
+  57   1          if (*needle == '\0') {
+  58   2              return (char*)haystack;
+  59   2          }
+  60   1      
+  61   1          while (*haystack != '\0') {
+  62   2              const char* h = haystack;
+  63   2              const char* n = needle;
+  64   2      
+  65   2              while (*n != '\0' && *h == *n) {
+  66   3                  h++;
+  67   3                  n++;
+  68   3              }
+  69   2      
+  70   2              if (*n == '\0') {
+  71   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
+  72   3              }
+  73   2      
+  74   2              haystack++;
+  75   2          }
+  76   1      
+  77   1          return NULL; // 未找到子串，返回NULL
   78   1      }
-  79          
-  80          char* myaddstrstr(const char* haystack, const char* needle)
-  81          {       
-  82   1              char* result = mystrstr(haystack, needle);
-  83   1               if (result != NULL)
-  84   1               {
-  85   2                      result=result+mystrlen(needle);
-  86   2               }
-  87   1               return result;
-  88   1      }
-  89          void jixi2(char* input)
-  90          {
-  91   1              char *p=input;
-  92   1              char *p1;
-  93   1              int i;
-  94   1              unsigned int weizhi;
-  95   1              unsigned int zhi;
-  96   1              //1234-2234;333-4;end
-  97   1              for( i=0;i<100;i++)
-  98   1              {
-  99   2                      p1=myaddstrstr(p,";"); //找有没有下一个的
- 100   2                      if(p1==NULL)
- 101   2                      {
- 102   3                              break;
- 103   3                      }
- 104   2                      weizhi = atoi(p);
- 105   2                      p=myaddstrstr(p,"-");
- 106   2                      zhi = atoi(p);
- 107   2                      if(weizhi<MAXgetzhi)
- 108   2                      getzhi[weizhi]=zhi;
- 109   2                      p=myaddstrstr(p,";");  //指向下一个后面
- 110   2                      printf("get set%d-%d",weizhi,zhi);
- 111   2              }
- 112   1      }
- 113          void jiexi(char* input)
- 114          {
- 115   1              char par[500]={0};
- 116   1              char *begin,end;
- 117   1              begin=myaddstrstr(input,"set:");
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 3   
+  79          size_t mystrlen(const char* str) {
+  80   1          size_t length = 0;
+  81   1          while (str[length] != '\0') {
+  82   2              length++;
+  83   2          }
+  84   1          return length;
+  85   1      }
+  86          
+  87          char* myaddstrstr(const char* haystack, const char* needle)
+  88          {       
+  89   1              char* result = mystrstr(haystack, needle);
+  90   1               if (result != NULL)
+  91   1               {
+  92   2                      result=result+mystrlen(needle);
+  93   2               }
+  94   1               return result;
+  95   1      }
+  96          void jixi2(char* input)
+  97          {
+  98   1              char *p=input;
+  99   1              char *p1;
+ 100   1              int i;
+ 101   1              unsigned int weizhi;
+ 102   1              unsigned int zhi;
+ 103   1              //1234-2234;333-4;end
+ 104   1          printf("input %s",input);
+ 105   1              for( i=0;i<100;i++)
+ 106   1              {
+ 107   2                      p1=myaddstrstr(p,";"); //找有没有下一个的
+ 108   2                      if(p1==NULL)
+ 109   2                      {
+ 110   3                              break;
+ 111   3                      }
+ 112   2                      weizhi = atoi(p);
+ 113   2                      p=myaddstrstr(p,"-");
+ 114   2                      zhi = atoi(p);
+ 115   2              printf("get set%d-%d",weizhi,zhi);
+ 116   2              push2(weizhi,zhi);
+ 117   2                      p=myaddstrstr(p,";");  //指向下一个后面
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 3   
 
- 118   1              // printf("input begin%s",begin);
- 119   1              end=myaddstrstr(begin,"end");
-*** WARNING C260 IN LINE 119 OF MAIN.C: '=': pointer truncation
- 120   1              // printf("input end%s",end);
- 121   1              if(begin!=NULL && end!=NULL)
- 122   1              {
- 123   2                      strcpy(par,begin);
- 124   2                      jixi2(par);
- 125   2              }
- 126   1      }
- 127          
- 128          char* my_strstr(const char* haystack, const char* needle) {
- 129   1          if (*needle == '\0') {
- 130   2              return (char*) haystack;
- 131   2          }
- 132   1      
- 133   1          while (*haystack != '\0') {
- 134   2              const char* h = haystack;
- 135   2              const char* n = needle;
- 136   2      
- 137   2              while (*h == *n && *n != '\0') {
- 138   3                  h++;
- 139   3                  n++;
- 140   3              }
- 141   2      
- 142   2              if (*n == '\0') {
- 143   3                  return (char*) haystack;
- 144   3              }
+ 118   2                      
+ 119   2              }
+ 120   1      }
+ 121          void jiexi(char* input)
+ 122          {
+ 123   1              char par[100]={0};
+ 124   1              char *begin;
+ 125   1              char *end;
+ 126   1              begin=myaddstrstr(input,"set:");
+ 127   1              // printf("input begin%s",begin);
+ 128   1              end=myaddstrstr(begin,"end");
+ 129   1              // printf("input end%s",end);
+ 130   1              if(begin!=NULL && end!=NULL)
+ 131   1              {
+ 132   2                      strcpy(par,begin);
+ 133   2                      jixi2(par);
+ 134   2              }
+ 135   1      }
+ 136          
+ 137          char* my_strstr(const char* haystack, const char* needle) {
+ 138   1          if (*needle == '\0') {
+ 139   2              return (char*) haystack;
+ 140   2          }
+ 141   1      
+ 142   1          while (*haystack != '\0') {
+ 143   2              const char* h = haystack;
+ 144   2              const char* n = needle;
  145   2      
- 146   2              haystack++;
- 147   2          }
- 148   1      
- 149   1          return NULL;
- 150   1      }
- 151          void dealchuankou()
- 152          {
- 153   1              if (flag3 == 1)
- 154   1              {
- 155   2                      flag3 = 0;
- 156   2                      jiexi(buf3);
- 157   2                      memset(buf3, 0, sizeof(buf3));
- 158   2                      weishu3 = 0;
- 159   2              }
- 160   1      }
- 161          
- 162          
- 163          
- 164          
- 165          
- 166          
- 167          
- 168          
+ 146   2              while (*h == *n && *n != '\0') {
+ 147   3                  h++;
+ 148   3                  n++;
+ 149   3              }
+ 150   2      
+ 151   2              if (*n == '\0') {
+ 152   3                  return (char*) haystack;
+ 153   3              }
+ 154   2      
+ 155   2              haystack++;
+ 156   2          }
+ 157   1      
+ 158   1          return NULL;
+ 159   1      }
+ 160          
+ 161          // 串口的处理，，开机，解析等等。
+ 162          void dealchuankou()
+ 163          {
+ 164   1          chuliguankji();
+ 165   1              jiexi(buf3);
+ 166   1              memset(buf3, 0, sizeof(buf3));
+ 167   1              weishu3 = 0;
+ 168   1      }
  169          
  170          
  171          
@@ -187,334 +186,400 @@ line level    source
  173          
  174          
  175          
- 176          int delay_mszhi;
- 177          uint temp1,temp2,temp3,temp4;
+ 176          
+ 177          
  178          
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 4   
-
  179          
- 180          void io_inint()
- 181          {
- 182   1              P0M1 = 0;       P0M0 = 0;       //设置P0.0~P0.7为准双向口
- 183   1        P1M0 = 0x00; // 设置P1.0为ADC口
- 184   1        P1M1 = 0x80;
- 185   1              P2M1 = 0;       P2M0 = 0;       //设置P2.0~P2.7为准双向口 
- 186   1                  P3M0 = 0;
- 187   1          P3M1 = 0;
- 188   1              P4M1 = 0;       P4M0 = 0;       //设置P4.0~P4.7为准双向口
- 189   1              // P5M1 = 0;    P5M0 = 0;       //设置P5.0~P5.7为准双向口
- 190   1      
- 191   1                  P5M0 = 0xff; P5M1 = 0x00; 
- 192   1      
- 193   1      }
- 194          
- 195          
- 196          void delay_ms(int m);
- 197          
- 198          
- 199          
- 200          sbit out2=P3^2;
- 201          
- 202          extern void deanyan();
- 203          sbit fen=P5^4;
- 204          
- 205          #define Iapid 0x0000
- 206          uchar p1, a_a;
- 207          void IapIdle()
- 208          {
- 209   1        IAP_CONTR = 0;    // ??±?IAP????
- 210   1        IAP_CMD = 0;      // ?????ü???????÷
- 211   1        IAP_TRIG = 0;     // ??????·??????÷
- 212   1        IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
- 213   1        IAP_ADDRL = 0;
- 214   1      }
- 215          
- 216          uint8_t IapRead(int addr)
- 217          {
- 218   1        uint8_t dat;
- 219   1      
- 220   1        IAP_CONTR = 0x80;      // ????IAP
- 221   1        IAP_TPS = 40;          // ?è??????????12MHz
- 222   1        IAP_CMD = 1;           // ?è??IAP???ü??
- 223   1        IAP_ADDRL = addr;      // ?è??IAP?????·
- 224   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
- 225   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
- 226   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
- 227   1        _nop_();
- 228   1        dat = IAP_DATA; // ??IAP????
- 229   1        IapIdle();      // ??±?IAP????
- 230   1      
- 231   1        return dat;
- 232   1      }
- 233          
- 234          void IapProgram(int addr, char dat)
- 235          {
- 236   1        IAP_CONTR = 0x80;      // ????IAP
- 237   1        IAP_TPS = 40;          // ?è??????????12MHz
- 238   1        IAP_CMD = 2;           // ?è??IAP???ü??
- 239   1        IAP_ADDRL = addr;      // ?è??IAP?????·
- 240   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 5   
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 4   
 
- 241   1        IAP_DATA = dat;        // ??IAP????
- 242   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
- 243   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
- 244   1        _nop_();
- 245   1        IapIdle(); // ??±?IAP????
- 246   1      }
- 247          
- 248          void IapErase(int addr)
- 249          {
- 250   1        IAP_CONTR = 0x80;      // ????IAP
- 251   1        IAP_TPS = 40;          // ?è??????????12MHz
- 252   1        IAP_CMD = 3;           // ?è??IAP?????ü??
- 253   1        IAP_ADDRL = addr;      // ?è??IAP?????·
- 254   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
- 255   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
- 256   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
- 257   1        _nop_();               //
- 258   1        IapIdle();             // ??±?IAP????
- 259   1      }
- 260          
- 261          //
- 262          void write_eeprom()
- 263          {
- 264   1        IapErase(Iapid); // ????????
- 265   1        IapProgram(Iapid + 1, p1);
- 266   1      
- 267   1        IapProgram(Iapid + 60, a_a);
- 268   1      }
- 269          /******************°????????????ú????eeprom????????*****************/
- 270          void read_eeprom()
+ 180          
+ 181          
+ 182          
+ 183          
+ 184          int delay_mszhi;
+ 185          uint temp1,temp2,temp3,temp4;
+ 186          
+ 187          
+ 188          void io_inint()
+ 189          {
+ 190   1              P0M1 = 0;       P0M0 = 0;       //设置P0.0~P0.7为准双向口
+ 191   1        P1M0 = 0x00; // 设置P1.0为ADC口
+ 192   1        P1M1 = 0x80;
+ 193   1              P2M1 = 0;       P2M0 = 0;       //设置P2.0~P2.7为准双向口 
+ 194   1                  P3M0 = 0;
+ 195   1          P3M1 = 0;
+ 196   1              P4M1 = 0;       P4M0 = 0;       //设置P4.0~P4.7为准双向口
+ 197   1              // P5M1 = 0;    P5M0 = 0;       //设置P5.0~P5.7为准双向口
+ 198   1      
+ 199   1                  P5M0 = 0xff; P5M1 = 0x00; 
+ 200   1      
+ 201   1      }
+ 202          
+ 203          
+ 204          void delay_ms(int m);
+ 205          
+ 206          
+ 207          
+ 208          sbit out2=P3^2;
+ 209          
+ 210          extern void deanyan();
+ 211          sbit fen=P5^4;
+ 212          
+ 213          #define Iapid 0x0000
+ 214          uchar p1, a_a;
+ 215          void IapIdle()
+ 216          {
+ 217   1        IAP_CONTR = 0;    // ??±?IAP????
+ 218   1        IAP_CMD = 0;      // ?????ü???????÷
+ 219   1        IAP_TRIG = 0;     // ??????·??????÷
+ 220   1        IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
+ 221   1        IAP_ADDRL = 0;
+ 222   1      }
+ 223          
+ 224          uint8_t IapRead(int addr)
+ 225          {
+ 226   1        uint8_t dat;
+ 227   1      
+ 228   1        IAP_CONTR = 0x80;      // ????IAP
+ 229   1        IAP_TPS = 40;          // ?è??????????12MHz
+ 230   1        IAP_CMD = 1;           // ?è??IAP???ü??
+ 231   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+ 232   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+ 233   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+ 234   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+ 235   1        _nop_();
+ 236   1        dat = IAP_DATA; // ??IAP????
+ 237   1        IapIdle();      // ??±?IAP????
+ 238   1      
+ 239   1        return dat;
+ 240   1      }
+ 241          
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 5   
+
+ 242          void IapProgram(int addr, char dat)
+ 243          {
+ 244   1        IAP_CONTR = 0x80;      // ????IAP
+ 245   1        IAP_TPS = 40;          // ?è??????????12MHz
+ 246   1        IAP_CMD = 2;           // ?è??IAP???ü??
+ 247   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+ 248   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+ 249   1        IAP_DATA = dat;        // ??IAP????
+ 250   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+ 251   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+ 252   1        _nop_();
+ 253   1        IapIdle(); // ??±?IAP????
+ 254   1      }
+ 255          
+ 256          void IapErase(int addr)
+ 257          {
+ 258   1        IAP_CONTR = 0x80;      // ????IAP
+ 259   1        IAP_TPS = 40;          // ?è??????????12MHz
+ 260   1        IAP_CMD = 3;           // ?è??IAP?????ü??
+ 261   1        IAP_ADDRL = addr;      // ?è??IAP?????·
+ 262   1        IAP_ADDRH = addr >> 8; // ?è??IAP?????·
+ 263   1        IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
+ 264   1        IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
+ 265   1        _nop_();               //
+ 266   1        IapIdle();             // ??±?IAP????
+ 267   1      }
+ 268          
+ 269          //
+ 270          void write_eeprom()
  271          {
- 272   1        uchar t, t1;
- 273   1        p1 = IapRead(Iapid + 1);
- 274   1        a_a = IapRead(Iapid + 60);
- 275   1      }
-*** WARNING C280 IN LINE 272 OF MAIN.C: 't': unreferenced local variable
-*** WARNING C280 IN LINE 272 OF MAIN.C: 't1': unreferenced local variable
- 276          /**************???ú×??ìeeprom??????*****************/
- 277          void init_eeprom()
- 278          {
- 279   1        read_eeprom();
- 280   1        if (a_a != 6) // ?????????ú?????????ú????eeprom
- 281   1        {
- 282   2      
- 283   2          p1 = 0;
- 284   2          a_a = 6;
- 285   2      
- 286   2          write_eeprom(); // ±???????
- 287   2        }
- 288   1      }
- 289          void Exxwrite(int addr, uint dat)
- 290          {
- 291   1          addr=addr*2;
- 292   1          IapProgram(addr,dat/256);
- 293   1          IapProgram(addr+1,dat%256);
- 294   1      }
- 295          uint ExxRead(int addr)
- 296          {
- 297   1          uint dat;
- 298   1          addr=addr*2;
- 299   1          dat=IapRead(addr);
- 300   1          dat=dat*256;
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 6   
-
- 301   1          dat=dat+IapRead(addr+1);
- 302   1          return dat;
+ 272   1        IapErase(Iapid); // ????????
+ 273   1        IapProgram(Iapid + 1, p1);
+ 274   1      
+ 275   1        IapProgram(Iapid + 60, a_a);
+ 276   1      }
+ 277          /******************°????????????ú????eeprom????????*****************/
+ 278          void read_eeprom()
+ 279          {
+ 280   1        
+ 281   1        p1 = IapRead(Iapid + 1);
+ 282   1        a_a = IapRead(Iapid + 60);
+ 283   1      }
+ 284          /**************???ú×??ìeeprom??????*****************/
+ 285          void init_eeprom()
+ 286          {
+ 287   1        read_eeprom();
+ 288   1        if (a_a != 6) // ?????????ú?????????ú????eeprom
+ 289   1        {
+ 290   2      
+ 291   2          p1 = 0;
+ 292   2          a_a = 6;
+ 293   2      
+ 294   2          write_eeprom(); // ±???????
+ 295   2        }
+ 296   1      }
+ 297          void Exxwrite(int addr, uint dat)
+ 298          {
+ 299   1          // IapErase(Iapid); // ????????
+ 300   1          addr=addr*2;
+ 301   1          IapProgram(addr,dat/256);
+ 302   1          IapProgram(addr+1,dat%256);
  303   1      }
- 304          void writebuf();
- 305          void initbuf()
- 306          {
- 307   1          int i;
- 308   1          int dizhi=Iapid+1;
- 309   1          for ( i = 0; i < len_HoldingReg; i++)
- 310   1          {
- 311   2              HoldingReg[i]=0;
- 312   2          }
- 313   1          if(123!=ExxRead(dizhi))//没有初始化，初始化一次。。
- 314   1          {
- 315   2              Exxwrite(dizhi,123);
- 316   2              writebuf();
- 317   2          }
- 318   1          for ( i = 0; i < len_HoldingReg; i++)
- 319   1          {
- 320   2              dizhi=dizhi+1;
- 321   2              HoldingReg[i]=ExxRead(dizhi);
- 322   2              if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
- 323   2              {
- 324   3                  printf("HoldingReg[%d]-[%d]",i,HoldingReg[i]);
- 325   3              }
- 326   2          }
- 327   1      }
- 328          void writebuf()
- 329          {
- 330   1          int i;
- 331   1          int dizhi=Iapid+1;
- 332   1          for ( i = 0; i < len_HoldingReg; i++)
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 6   
+
+ 304          uint ExxRead(int addr)
+ 305          {
+ 306   1          uint dat;
+ 307   1          addr=addr*2;
+ 308   1          dat=IapRead(addr);
+ 309   1          dat=dat*256;
+ 310   1          dat=dat+IapRead(addr+1);
+ 311   1          return dat;
+ 312   1      }
+ 313          void writebuf();
+ 314          void initbuf()
+ 315          {
+ 316   1          int i;
+ 317   1          uint zhi;
+ 318   1          int dizhi=Iapid+1;
+ 319   1          
+ 320   1          for ( i = 0; i < len_HoldingReg; i++)
+ 321   1          {
+ 322   2              HoldingReg[i]=0;
+ 323   2          }
+ 324   1          zhi=ExxRead(dizhi);
+ 325   1          // printf("errprom init zhi%d",zhi);
+ 326   1          if(123!=zhi)//没有初始化，初始化一次。。
+ 327   1          {
+ 328   2              printf("IS FISRTINIT\n");
+ 329   2              Exxwrite(dizhi,123);
+ 330   2              writebuf();
+ 331   2          }
+ 332   1          else
  333   1          {
- 334   2              dizhi=dizhi+1;
- 335   2              Exxwrite(dizhi,HoldingReg[i]);
- 336   2          }
- 337   1      }
- 338          // 比较值是否发生了变化。。
- 339          uint16_t bufcheck[len_HoldingReg]={0};
- 340          void buffchecktongbu()
- 341          {
- 342   1          int i;
- 343   1          for ( i = 0; i < len_HoldingReg; i++)
- 344   1          {
- 345   2              bufcheck[i]=HoldingReg[i];
- 346   2          }
- 347   1      }
- 348          int IsbuffcheckFailed()
- 349          {
- 350   1          int i;
+ 334   2              printf("IS not FISRTINIT\n");
+ 335   2          }
+ 336   1          for ( i = 0; i < len_HoldingReg; i++)
+ 337   1          {
+ 338   2              dizhi=dizhi+1;
+ 339   2              HoldingReg[i]=ExxRead(dizhi);
+ 340   2              delay_ms(4);
+ 341   2              // if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
+ 342   2              // {
+ 343   2                  printf("HoldingReg[%d]-[%d]\n",i,HoldingReg[i]);
+ 344   2              // }
+ 345   2          }
+ 346   1      }
+ 347          void writebuf()
+ 348          {
+ 349   1          int i;
+ 350   1          int dizhi=Iapid+1;
  351   1          for ( i = 0; i < len_HoldingReg; i++)
  352   1          {
- 353   2             if(bufcheck[i]!=HoldingReg[i])
- 354   2             {
- 355   3              return 1;
- 356   3             }
- 357   2          }
- 358   1          return 0;
- 359   1      }
- 360          void main()                                                    
+ 353   2              dizhi=dizhi+1;
+ 354   2              Exxwrite(dizhi,HoldingReg[i]);
+ 355   2              delay_ms(4);
+ 356   2          }
+ 357   1      }
+ 358          // 比较值是否发生了变化。。
+ 359          uint16_t bufcheck[len_HoldingReg]={0};
+ 360          void buffchecktongbu()
  361          {
- 362   1              io_inint();
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 7   
+ 362   1          int i;
+ 363   1          for ( i = 0; i < len_HoldingReg; i++)
+ 364   1          {
+ 365   2              bufcheck[i]=HoldingReg[i];
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 7   
 
- 363   1          UartInit();
- 364   1              Uart23Init();
- 365   1              Timer0Init();
- 366   1              Uart4Init();
- 367   1              P_SW2 = 0x80;
- 368   1          I2CCFG = 0xe0;                              //使能I2C主机模式
- 369   1          I2CMSST = 0x00;
- 370   1              EA = 1;
- 371   1              out2=1;
- 372   1              Modbus_ClearBuff();
- 373   1          deanyan();
- 374   1              delay_ms(10);
- 375   1          printf("system init ok");
- 376   1          initbuf();
- 377   1          buffchecktongbu();
- 378   1          printf("system init ok1");
- 379   1          HoldingReg[2]=1;
- 380   1          HoldingReg[4]=800;
- 381   1          deanyan();
- 382   1           printf("system init ok3");
- 383   1              while (1)
- 384   1              {
- 385   2                      if (recover == 1)
- 386   2              {
- 387   3                  delay_mszhi=0;
- 388   3                              chuliguankji();
-*** WARNING C206 IN LINE 388 OF MAIN.C: 'chuliguankji': missing function-prototype
- 389   3                  jishouokjisuan();
- 390   3                  if(IsbuffcheckFailed())
- 391   3                  {
- 392   4                      
- 393   4                      printf("xiugaidata begin");
- 394   4                      buffchecktongbu();
- 395   4                      deanyan();
- 396   4                      writebuf();
- 397   4                      printf("xiugaidata end %d",delay_mszhi);
- 398   4                  }
- 399   3                  recover = 0;
- 400   3              }
- 401   2              }
- 402   1      } 
- 403          int delay_mszhi;         
- 404          uint time,lv_bo;
- 405          void delay_ms(int m)
- 406          {
- 407   1          delay_mszhi=0;
- 408   1          while (delay_mszhi<=m*2)
- 409   1          {
- 410   2              
- 411   2          }
- 412   1      }
- 413          void Timer0() interrupt 1
- 414          {
- 415   1              time1msjisuan();
- 416   1              delay_mszhi++;
- 417   1      }
- 418          void UARTInterrupt(void) interrupt 4
- 419          {
- 420   1              unsigned char ans;
- 421   1              if (RI)
- 422   1              {
- 423   2                      RI = 0;
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 8   
+ 366   2          }
+ 367   1      }
+ 368          int IsbuffcheckFailed()
+ 369          {
+ 370   1          int i;
+ 371   1          for ( i = 0; i < len_HoldingReg; i++)
+ 372   1          {
+ 373   2             if(bufcheck[i]!=HoldingReg[i])
+ 374   2             {
+ 375   3                return 1;
+ 376   3             }
+ 377   2          }
+ 378   1          return 0;
+ 379   1      }
+ 380          
+ 381          int timereport=0;
+ 382          void sendzhi(int weizhi,int zhi)
+ 383          {
+ 384   1          char out[30]={0};
+ 385   1          sprintf(out,"set:%d-%d;end",weizhi,zhi);
+ 386   1              printf(out);
+ 387   1      }
+ 388          void runreport()
+ 389          {
+ 390   1          if(timereport>300)
+ 391   1          {
+ 392   2              timereport=0;
+ 393   2              sendzhi(4,HoldingReg[4]);
+ 394   2          }
+ 395   1      }
+ 396          void chuliguankji()
+ 397          {
+ 398   1          char* index;
+ 399   1          index=strstr(buf3,"@STCISP#");
+ 400   1              if(index==NULL)
+ 401   1              {
+ 402   2                  return  ;
+ 403   2              }
+ 404   1          IAP_CONTR=0x60;
+ 405   1      }
+ 406          void getzhiandchange()
+ 407          {
+ 408   1          int weizhi,zhi;
+ 409   1          Alltongxininfo2 get={0};
+ 410   1          pop22(&get);
+ 411   1          if(get.weizhi==0)
+ 412   1          {
+ 413   2              return ;
+ 414   2          }
+ 415   1          weizhi=get.weizhi;
+ 416   1          zhi=get.zhi;
+ 417   1          printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+ 418   1          if(weizhi<len_HoldingReg)
+ 419   1          {
+ 420   2              HoldingReg[weizhi]=zhi;
+ 421   2          }
+ 422   1          if(weizhi==4 || weizhi==2)
+ 423   1              {
+ 424   2                      deanyan();
+ 425   2              }
+ 426   1          if(IsbuffcheckFailed())
+ 427   1          {
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 8   
 
- 424   2                      ans=SBUF;
- 425   2                      chuankou1jisuuan(ans);
- 426   2              }
- 427   1              else
- 428   1              {
- 429   2                      TI = 0;
- 430   2              }
- 431   1              if (TI) //发送中断..
- 432   1              {
- 433   2                      TI = 0;
- 434   2              }
- 435   1      }
- 436          
- 437          void uart2(void ) interrupt 8 
- 438          {
- 439   1        if (S2CON & S2RI)
- 440   1              {
- 441   2                      S2CON &= ~S2RI;         
- 442   2                      temp2 = S2BUF;
- 443   2              }
- 444   1        if (S2CON & S2TI)
- 445   1          {
- 446   2                              //y1=0;
- 447   2              S2CON &= ~S2TI;         //清除S2TI位
- 448   2              busy2 = 0;               //清忙标志
- 449   2          }  
- 450   1      }
- 451          
- 452            
- 453          
- 454          
- 455          void Uart3() interrupt 17 using 1
- 456          {
- 457   1          if (S3CON & S3RI)
- 458   1          {
- 459   2              S3CON &= ~S3RI;         //??S3RI?
- 460   2              temp3 = S3BUF;
- 461   2                                      
- 462   2         }
- 463   1      if (S3CON & S3TI)
- 464   1          {
- 465   2              S3CON &= ~S3TI;         //清除S3TI位
- 466   2              busy3 = 0;               //清忙标志
- 467   2          }
- 468   1      }
- 469          
- 470          void Uart4() interrupt 18 
- 471          {
- 472   1          if (S4CON & S4RI)
- 473   1          {
- 474   2              S4CON &= ~S4RI;         //??S4RI?
- 475   2              temp4=S4BUF;
- 476   2         }
- 477   1      if(TI4)
- 478   1              {
- 479   2                      CLR_TI4();
- 480   2                      busy4 = 0;               //清忙标志
- 481   2              }
- 482   1      }
+ 428   2              printf("xiugaidata begin\n");
+ 429   2              delay_mszhi=0;
+ 430   2              buffchecktongbu();
+ 431   2              writebuf();
+ 432   2              printf("xiugaidata end %d\n",delay_mszhi);
+ 433   2          }
+ 434   1      }
+ 435          void test2()
+ 436          {
+ 437   1        IapErase(Iapid); // ????????
+ 438   1        IapProgram(Iapid + 1, 3);
+ 439   1      
+ 440   1      //   IapProgram(Iapid + 60, a_a);
+ 441   1      }
+ 442          void main()                                                    
+ 443          {
+ 444   1              io_inint();
+ 445   1          UartInit();
+ 446   1              Uart23Init();
+ 447   1              Timer0Init();
+ 448   1              Uart4Init();
+ 449   1              P_SW2 = 0x80;
+ 450   1          I2CCFG = 0xe0;                              //使能I2C主机模式
+ 451   1          I2CMSST = 0x00;
+ 452   1              EA = 1;
+ 453   1              out2=1;
+ 454   1              Modbus_ClearBuff();
+ 455   1          deanyan();
+ 456   1              delay_ms(100);
+ 457   1          printf("system init ok\n");
+ 458   1          initbuf();
+ 459   1          buffchecktongbu();
+ 460   1          printf("system init ok1");
+ 461   1          HoldingReg[2]=1;
+ 462   1          com1clearbuf();
+ 463   1          while (1)
+ 464   1              {
+ 465   2              // runreport();
+ 466   2              getzhiandchange();
+ 467   2              }
+ 468   1      } 
+ 469          int delay_mszhi;         
+ 470          uint time,lv_bo;
+ 471          void delay_ms(int m)
+ 472          {
+ 473   1          delay_mszhi=0;
+ 474   1          while (delay_mszhi<=m*2)
+ 475   1          {
+ 476   2              
+ 477   2          }
+ 478   1      }
+ 479          void Timer0() interrupt 1
+ 480          {
+ 481   1          chuankou1time();
+ 482   1              delay_mszhi++;
+ 483   1          timereport++;
+ 484   1      }
+ 485          void UARTInterrupt(void) interrupt 4
+ 486          {
+ 487   1              unsigned char ans;
+ 488   1              if (RI)
+ 489   1              {
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 9   
 
+ 490   2                      RI = 0;
+ 491   2                      ans=SBUF;
+ 492   2              chuankou1put(ans);
+ 493   2              }
+ 494   1              else
+ 495   1              {
+ 496   2                      TI = 0;
+ 497   2              }
+ 498   1              if (TI) //发送中断..
+ 499   1              {
+ 500   2                      TI = 0;
+ 501   2              }
+ 502   1      }
+ 503          
+ 504          void uart2(void ) interrupt 8 
+ 505          {
+ 506   1        if (S2CON & S2RI)
+ 507   1              {
+ 508   2                      S2CON &= ~S2RI;         
+ 509   2                      temp2 = S2BUF;
+ 510   2              }
+ 511   1        if (S2CON & S2TI)
+ 512   1          {
+ 513   2                              //y1=0;
+ 514   2              S2CON &= ~S2TI;         //清除S2TI位
+ 515   2              busy2 = 0;               //清忙标志
+ 516   2          }  
+ 517   1      }
+ 518          
+ 519            
+ 520          
+ 521          
+ 522          void Uart3() interrupt 17 using 1
+ 523          {
+ 524   1          if (S3CON & S3RI)
+ 525   1          {
+ 526   2              S3CON &= ~S3RI;         //??S3RI?
+ 527   2              temp3 = S3BUF;
+ 528   2                                      
+ 529   2         }
+ 530   1      if (S3CON & S3TI)
+ 531   1          {
+ 532   2              S3CON &= ~S3TI;         //清除S3TI位
+ 533   2              busy3 = 0;               //清忙标志
+ 534   2          }
+ 535   1      }
+ 536          
+ 537          void Uart4() interrupt 18 
+ 538          {
+ 539   1          if (S4CON & S4RI)
+ 540   1          {
+ 541   2              S4CON &= ~S4RI;         //??S4RI?
+ 542   2              temp4=S4BUF;
+ 543   2         }
+ 544   1      if(TI4)
+ 545   1              {
+ 546   2                      CLR_TI4();
+ 547   2                      busy4 = 0;               //清忙标志
+ 548   2              }
+ 549   1      }
+
+
+C51 COMPILER V9.00   MAIN                                                                  07/27/2023 07:51:47 PAGE 10  
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-C51 COMPILER V9.00   MAIN                                                                  07/19/2023 03:58:02 PAGE 9   
-
-   CODE SIZE        =   2303    ----
-   CONSTANT SIZE    =    628    ----
-   XDATA SIZE       =    767     566
+   CODE SIZE        =   2637    ----
+   CONSTANT SIZE    =    352    ----
+   XDATA SIZE       =    109     217
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -522,4 +587,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

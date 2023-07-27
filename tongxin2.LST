@@ -1,0 +1,111 @@
+C51 COMPILER V9.00   TONGXIN2                                                              07/27/2023 07:39:00 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE TONGXIN2
+OBJECT MODULE PLACED IN tongxin2.OBJ
+COMPILER INVOKED BY: C:\Keil2\C51\BIN\C51.EXE tongxin2.c LARGE ROM(COMPACT) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          
+   2          
+   3          
+   4          #include <stdio.h>
+   5          #include "tongxin2.h"
+   6          #include <stdio.h>
+   7          #include <string.h>
+   8          #include <stdlib.h>
+   9          #define use 1
+  10          #define use 1
+  11          #define nouse 0
+  12          #define maxzhi 10 
+  13          
+  14          static Alltongxininfo2 tongxindata2[maxzhi];
+  15          
+  16          int  getemptyindex2()
+  17          {
+  18   1          int i;
+  19   1          for(i=0;i<maxzhi;i++)
+  20   1          {
+  21   2              if(tongxindata2[i].falg==0)
+  22   2              return i;
+  23   2          }
+  24   1          return i;
+  25   1      }
+  26          int empty2()
+  27          {
+  28   1          if(0==getemptyindex2())
+  29   1          {
+  30   2              return 1;
+  31   2          }
+  32   1          return 0;
+  33   1      }
+  34          int isfull2()
+  35          {
+  36   1          if(maxzhi==getemptyindex2())
+  37   1          {
+  38   2              return 1;
+  39   2          }
+  40   1          return 0;
+  41   1      }
+  42          
+  43          void push2(int weizhi,int zhi)
+  44          {
+  45   1          int dizhi;
+  46   1          int i;
+  47   1          dizhi=getemptyindex2();
+  48   1          // 有就更新
+  49   1          for(i=0;i<dizhi;i++)
+  50   1          {
+  51   2              if(tongxindata2[i].weizhi==weizhi)
+  52   2              {
+  53   3                  tongxindata2[i].zhi=zhi;
+  54   3                  return;
+  55   3              }
+C51 COMPILER V9.00   TONGXIN2                                                              07/27/2023 07:39:00 PAGE 2   
+
+  56   2          }
+  57   1          // 满了丢
+  58   1          if(maxzhi==getemptyindex2())
+  59   1          {
+  60   2              return ;
+  61   2          }
+  62   1          // 入。
+  63   1          // dizhi=dizhi;
+  64   1          tongxindata2[dizhi].weizhi=weizhi;
+  65   1          tongxindata2[dizhi].zhi=zhi;
+  66   1          tongxindata2[dizhi].falg=1;
+  67   1      }
+  68          int pop22(Alltongxininfo2 *get)
+  69          {
+  70   1          int i;
+  71   1          int dizhi=getemptyindex2();
+  72   1          if(0==getemptyindex2())
+  73   1          {
+  74   2              return 0;
+  75   2          }
+  76   1          memcpy(get,&tongxindata2[0],sizeof(Alltongxininfo2));
+  77   1          for(i=0;i<dizhi-1;i++)
+  78   1          {
+  79   2              memcpy(&tongxindata2[i],&tongxindata2[i+1],sizeof(Alltongxininfo2));
+  80   2          }
+  81   1          tongxindata2[dizhi-1].falg=nouse;
+  82   1          return 1;
+  83   1      }
+  84          
+  85          
+  86          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    494    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     60      13
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

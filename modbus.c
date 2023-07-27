@@ -44,7 +44,7 @@ uint8_t Modbus_Cmd_flag;                                                        
 uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
 uint8_t Modbus_Function;                                                        //从站设备需执行的功能
 
-volatile uint16_t HoldingReg[100] = {0};                                //保持寄存器
+volatile uint16_t HoldingReg[10] = {0};                                //保持寄存器
 int UART3_Handler=0;
 /* 函数定义 ------------------------------------------------------------------*/
 
@@ -153,16 +153,7 @@ int bijiao(const char *a,const char *b)
         return 1;
 }
 
-void chuliguankji()
-{
-    char* index;
-    index=strstr(Modbus_Rcv_Buff,"@STCISP#");
-	if(index==0)
-	{
-	    return  ;
-	}
-    IAP_CONTR=0x60;
-}
+
 void time1msjisuan()
 {
     if(rectimes>0)
@@ -170,7 +161,6 @@ void time1msjisuan()
         rectimes--;
         if(rectimes==0)
         {
-           chuliguankji();
             recover=1;
         }
     }    

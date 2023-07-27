@@ -17,12 +17,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "tongxin2.h"
 
-
-char buf3[500];
+char buf3[60];
 char flag3 = 0;
 int weishu3;
 int timeleft1, timeleft2, timeleft3, timeleft4;
+void com1clearbuf()
+{
+    memset(buf3, 0, sizeof(buf3));
+	weishu3 = 0;
+}
 void chuankou1put(char c)
 {
 	buf3[weishu3++] = c;
@@ -30,6 +35,8 @@ void chuankou1put(char c)
 		weishu3 = 0;
 	timeleft3 = 3;
 }
+void dealchuankou();	
+void chuliguankji();
 void chuankou1time()
 {
 	if (timeleft3 > 0)
@@ -38,12 +45,12 @@ void chuankou1time()
 		if (timeleft3 == 0) // 数据一次收完了.
 		{
 			flag3 = 1;
+            dealchuankou();	
 		}
 	}
 }
 
-#define MAXgetzhi 100
-int getzhi[MAXgetzhi]={0};
+
 
 
 char* mystrstr(const char* haystack, const char* needle) {
@@ -94,6 +101,7 @@ void jixi2(char* input)
 	unsigned int weizhi;
 	unsigned int zhi;
 	//1234-2234;333-4;end
+    printf("input %s",input);
 	for( i=0;i<100;i++)
 	{
 		p1=myaddstrstr(p,";"); //找有没有下一个的
@@ -104,16 +112,17 @@ void jixi2(char* input)
 		weizhi = atoi(p);
 		p=myaddstrstr(p,"-");
 		zhi = atoi(p);
-		if(weizhi<MAXgetzhi)
-		getzhi[weizhi]=zhi;
+        printf("get set%d-%d",weizhi,zhi);
+        push2(weizhi,zhi);
 		p=myaddstrstr(p,";");  //指向下一个后面
-		printf("get set%d-%d",weizhi,zhi);
+		
 	}
 }
 void jiexi(char* input)
 {
-	char par[500]={0};
-	char *begin,end;
+	char par[100]={0};
+	char *begin;
+	char *end;
 	begin=myaddstrstr(input,"set:");
 	// printf("input begin%s",begin);
 	end=myaddstrstr(begin,"end");
@@ -148,15 +157,14 @@ char* my_strstr(const char* haystack, const char* needle) {
 
     return NULL;
 }
+
+// 串口的处理，，开机，解析等等。
 void dealchuankou()
 {
-	if (flag3 == 1)
-	{
-		flag3 = 0;
-		jiexi(buf3);
-		memset(buf3, 0, sizeof(buf3));
-		weishu3 = 0;
-	}
+    chuliguankji();
+	jiexi(buf3);
+	memset(buf3, 0, sizeof(buf3));
+	weishu3 = 0;
 }
 
 
@@ -269,7 +277,7 @@ void write_eeprom()
 /******************°????????????ú????eeprom????????*****************/
 void read_eeprom()
 {
-  uchar t, t1;
+  
   p1 = IapRead(Iapid + 1);
   a_a = IapRead(Iapid + 60);
 }
@@ -288,6 +296,7 @@ void init_eeprom()
 }
 void Exxwrite(int addr, uint dat)
 {
+    // IapErase(Iapid); // ????????
     addr=addr*2;
     IapProgram(addr,dat/256);
     IapProgram(addr+1,dat%256);
@@ -305,24 +314,34 @@ void writebuf();
 void initbuf()
 {
     int i;
+    uint zhi;
     int dizhi=Iapid+1;
+    
     for ( i = 0; i < len_HoldingReg; i++)
     {
         HoldingReg[i]=0;
     }
-    if(123!=ExxRead(dizhi))//没有初始化，初始化一次。。
+    zhi=ExxRead(dizhi);
+    // printf("errprom init zhi%d",zhi);
+    if(123!=zhi)//没有初始化，初始化一次。。
     {
+        printf("IS FISRTINIT\n");
         Exxwrite(dizhi,123);
         writebuf();
+    }
+    else
+    {
+        printf("IS not FISRTINIT\n");
     }
     for ( i = 0; i < len_HoldingReg; i++)
     {
         dizhi=dizhi+1;
         HoldingReg[i]=ExxRead(dizhi);
-        if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
-        {
-            printf("HoldingReg[%d]-[%d]",i,HoldingReg[i]);
-        }
+        delay_ms(4);
+        // if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
+        // {
+            printf("HoldingReg[%d]-[%d]\n",i,HoldingReg[i]);
+        // }
     }
 }
 void writebuf()
@@ -333,6 +352,7 @@ void writebuf()
     {
         dizhi=dizhi+1;
         Exxwrite(dizhi,HoldingReg[i]);
+        delay_ms(4);
     }
 }
 // 比较值是否发生了变化。。
@@ -352,10 +372,72 @@ int IsbuffcheckFailed()
     {
        if(bufcheck[i]!=HoldingReg[i])
        {
-        return 1;
+          return 1;
        }
     }
     return 0;
+}
+
+int timereport=0;
+void sendzhi(int weizhi,int zhi)
+{
+    char out[30]={0};
+    sprintf(out,"set:%d-%d;end",weizhi,zhi);
+	printf(out);
+}
+void runreport()
+{
+    if(timereport>300)
+    {
+        timereport=0;
+        sendzhi(4,HoldingReg[4]);
+    }
+}
+void chuliguankji()
+{
+    char* index;
+    index=strstr(buf3,"@STCISP#");
+	if(index==NULL)
+	{
+	    return  ;
+	}
+    IAP_CONTR=0x60;
+}
+void getzhiandchange()
+{
+    int weizhi,zhi;
+    Alltongxininfo2 get={0};
+    pop22(&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+    printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+    if(weizhi<len_HoldingReg)
+    {
+        HoldingReg[weizhi]=zhi;
+    }
+    if(weizhi==4 || weizhi==2)
+	{
+		deanyan();
+	}
+    if(IsbuffcheckFailed())
+    {
+        printf("xiugaidata begin\n");
+        delay_mszhi=0;
+        buffchecktongbu();
+        writebuf();
+        printf("xiugaidata end %d\n",delay_mszhi);
+    }
+}
+void test2()
+{
+  IapErase(Iapid); // ????????
+  IapProgram(Iapid + 1, 3);
+
+//   IapProgram(Iapid + 60, a_a);
 }
 void main()		                                       
 {
@@ -371,33 +453,17 @@ void main()
 	out2=1;
 	Modbus_ClearBuff();
     deanyan();
-	delay_ms(10);
-    printf("system init ok");
+	delay_ms(100);
+    printf("system init ok\n");
     initbuf();
     buffchecktongbu();
     printf("system init ok1");
     HoldingReg[2]=1;
-    HoldingReg[4]=800;
-    deanyan();
-     printf("system init ok3");
-	while (1)
+    com1clearbuf();
+    while (1)
 	{
-		if (recover == 1)
-        {
-            delay_mszhi=0;
-			chuliguankji();
-            jishouokjisuan();
-            if(IsbuffcheckFailed())
-            {
-                
-                printf("xiugaidata begin");
-                buffchecktongbu();
-                deanyan();
-                // writebuf();
-                printf("xiugaidata end %d",delay_mszhi);
-            }
-            recover = 0;
-        }
+        // runreport();
+        getzhiandchange();
 	}
 } 
 int delay_mszhi;	 
@@ -412,8 +478,9 @@ void delay_ms(int m)
 }
 void Timer0() interrupt 1
 {
-	time1msjisuan();
+    chuankou1time();
 	delay_mszhi++;
+    timereport++;
 }
 void UARTInterrupt(void) interrupt 4
 {
@@ -422,7 +489,7 @@ void UARTInterrupt(void) interrupt 4
 	{
 		RI = 0;
 		ans=SBUF;
- 		chuankou1jisuuan(ans);
+        chuankou1put(ans);
 	}
 	else
 	{

@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "tongxin2.h"
-
+#include "EEPROM.h"
 char buf3[60];
 char flag3 = 0;
 int weishu3;
@@ -100,7 +100,7 @@ void jixi2(char* input)
 	int i;
 	unsigned int weizhi;
 	unsigned int zhi;
-	//1234-2234;333-4;end
+	//554-2234;333-4;end
     printf("input %s",input);
 	for( i=0;i<100;i++)
 	{
@@ -210,149 +210,20 @@ sbit out2=P3^2;
 extern void deanyan();
 sbit fen=P5^4;
 
+
 #define Iapid 0x0000
-uchar p1, a_a;
-void IapIdle()
-{
-  IAP_CONTR = 0;    // ??±?IAP????
-  IAP_CMD = 0;      // ?????ü???????÷
-  IAP_TRIG = 0;     // ??????·??????÷
-  IAP_ADDRH = 0x80; // ?????·?è????·?IAP???ò
-  IAP_ADDRL = 0;
-}
-
-uint8_t IapRead(int addr)
-{
-  uint8_t dat;
-
-  IAP_CONTR = 0x80;      // ????IAP
-  IAP_TPS = 40;          // ?è??????????12MHz
-  IAP_CMD = 1;           // ?è??IAP???ü??
-  IAP_ADDRL = addr;      // ?è??IAP?????·
-  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
-  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
-  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
-  _nop_();
-  dat = IAP_DATA; // ??IAP????
-  IapIdle();      // ??±?IAP????
-
-  return dat;
-}
-
-void IapProgram(int addr, char dat)
-{
-  IAP_CONTR = 0x80;      // ????IAP
-  IAP_TPS = 40;          // ?è??????????12MHz
-  IAP_CMD = 2;           // ?è??IAP???ü??
-  IAP_ADDRL = addr;      // ?è??IAP?????·
-  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
-  IAP_DATA = dat;        // ??IAP????
-  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
-  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
-  _nop_();
-  IapIdle(); // ??±?IAP????
-}
-
-void IapErase(int addr)
-{
-  IAP_CONTR = 0x80;      // ????IAP
-  IAP_TPS = 40;          // ?è??????????12MHz
-  IAP_CMD = 3;           // ?è??IAP?????ü??
-  IAP_ADDRL = addr;      // ?è??IAP?????·
-  IAP_ADDRH = addr >> 8; // ?è??IAP?????·
-  IAP_TRIG = 0x5a;       // ????·??ü??(0x5a)
-  IAP_TRIG = 0xa5;       // ????·??ü??(0xa5)
-  _nop_();               //
-  IapIdle();             // ??±?IAP????
-}
-
-//
-void write_eeprom()
-{
-  IapErase(Iapid); // ????????
-  IapProgram(Iapid + 1, p1);
-
-  IapProgram(Iapid + 60, a_a);
-}
-/******************°????????????ú????eeprom????????*****************/
-void read_eeprom()
-{
-  
-  p1 = IapRead(Iapid + 1);
-  a_a = IapRead(Iapid + 60);
-}
-/**************???ú×??ìeeprom??????*****************/
-void init_eeprom()
-{
-  read_eeprom();
-  if (a_a != 6) // ?????????ú?????????ú????eeprom
-  {
-
-    p1 = 0;
-    a_a = 6;
-
-    write_eeprom(); // ±???????
-  }
-}
-void Exxwrite(int addr, uint dat)
-{
-    // IapErase(Iapid); // ????????
-    addr=addr*2;
-    IapProgram(addr,dat/256);
-    IapProgram(addr+1,dat%256);
-}
-uint ExxRead(int addr)
-{
-    uint dat;
-    addr=addr*2;
-    dat=IapRead(addr);
-    dat=dat*256;
-    dat=dat+IapRead(addr+1);
-    return dat;
-}
-void writebuf();
-void initbuf()
-{
-    int i;
-    uint zhi;
-    int dizhi=Iapid+1;
-    
-    for ( i = 0; i < len_HoldingReg; i++)
-    {
-        HoldingReg[i]=0;
-    }
-    zhi=ExxRead(dizhi);
-    // printf("errprom init zhi%d",zhi);
-    if(123!=zhi)//没有初始化，初始化一次。。
-    {
-        printf("IS FISRTINIT\n");
-        Exxwrite(dizhi,123);
-        writebuf();
-    }
-    else
-    {
-        printf("IS not FISRTINIT\n");
-    }
-    for ( i = 0; i < len_HoldingReg; i++)
-    {
-        dizhi=dizhi+1;
-        HoldingReg[i]=ExxRead(dizhi);
-        delay_ms(4);
-        // if(0!=HoldingReg[i] && -1 !=HoldingReg[i])
-        // {
-            printf("HoldingReg[%d]-[%d]\n",i,HoldingReg[i]);
-        // }
-    }
-}
+void IapErase(int addr);
+void Exxwrite(int addr, uint dat);
 void writebuf()
 {
     int i;
     int dizhi=Iapid+1;
+    IapErase(Iapid); // ????????
     for ( i = 0; i < len_HoldingReg; i++)
     {
         dizhi=dizhi+1;
         Exxwrite(dizhi,HoldingReg[i]);
-        delay_ms(4);
+       
     }
 }
 // 比较值是否发生了变化。。
@@ -403,6 +274,104 @@ void chuliguankji()
 	}
     IAP_CONTR=0x60;
 }
+
+void IapIdle()
+{
+    IAP_CONTR = 0;                              //关闭IAP功能
+    IAP_CMD = 0;                                //清除命令寄存器
+    IAP_TRIG = 0;                               //清除触发寄存器
+    IAP_ADDRH = 0x80;                           //将地址设置到非IAP区域
+    IAP_ADDRL = 0;
+}
+
+char IapRead(int addr)
+{
+    char dat;
+
+    IAP_CONTR = 0x80;                           //使能IAP
+    IAP_TPS = 40;                               //设置等待参数12MHz
+    IAP_CMD = 1;                                //设置IAP读命令
+    IAP_ADDRL = addr;                           //设置IAP低地址
+    IAP_ADDRH = addr >> 8;                      //设置IAP高地址
+    IAP_TRIG = 0x5a;                            //写触发命令(0x5a)
+    IAP_TRIG = 0xa5;                            //写触发命令(0xa5)
+    _nop_();
+    dat = IAP_DATA;                             //读IAP数据
+    IapIdle();                                  //关闭IAP功能
+
+    return dat;
+}
+
+void IapProgram(int addr, char dat)
+{
+    IAP_CONTR = 0x80;                           //使能IAP
+    IAP_TPS = 40;                               //设置等待参数12MHz
+    IAP_CMD = 2;                                //设置IAP写命令
+    IAP_ADDRL = addr;                           //设置IAP低地址
+    IAP_ADDRH = addr >> 8;                      //设置IAP高地址
+    IAP_DATA = dat;                             //写IAP数据
+    IAP_TRIG = 0x5a;                            //写触发命令(0x5a)
+    IAP_TRIG = 0xa5;                            //写触发命令(0xa5)
+    _nop_();
+    IapIdle();                                  //关闭IAP功能
+}
+
+void IapErase(int addr)
+{
+    IAP_CONTR = 0x80;                           //使能IAP
+    IAP_TPS = 40;                               //设置等待参数12MHz
+    IAP_CMD = 3;                                //设置IAP擦除命令
+    IAP_ADDRL = addr;                           //设置IAP低地址
+    IAP_ADDRH = addr >> 8;                      //设置IAP高地址
+    IAP_TRIG = 0x5a;                            //写触发命令(0x5a)
+    IAP_TRIG = 0xa5;                            //写触发命令(0xa5)
+    _nop_();                                    //
+    IapIdle();                                  //关闭IAP功能
+}
+
+
+
+void Exxwrite(int addr, uint dat)
+{
+    addr=addr*2;
+    IapProgram(addr,dat/256);
+    IapProgram(addr+1,dat%256);
+}
+uint ExxRead(int addr)
+{
+    uint dat;
+    addr=addr*2;
+    dat=IapRead(addr);
+    dat=dat*256;
+    dat=dat+IapRead(addr+1);
+    return dat;
+}
+
+void readbuf()
+{
+    int i;
+    int zhi;
+    int dizhi=Iapid+1;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        dizhi=dizhi+1;
+        HoldingReg[i]=ExxRead(dizhi);
+        // delay_ms(4);
+        zhi=HoldingReg[i];
+        printf("HoldingReg[%d]-[%d]\n",i,zhi);
+
+    }
+}
+void initbuf()
+{
+    int i;
+    for ( i = 0; i < len_HoldingReg; i++)
+    {
+        HoldingReg[i]=0;
+    }
+    readbuf();
+}
+
 void getzhiandchange()
 {
     int weizhi,zhi;
@@ -429,15 +398,10 @@ void getzhiandchange()
         delay_mszhi=0;
         buffchecktongbu();
         writebuf();
+        printf("HoldingReg[4] %d",HoldingReg[4]);
         printf("xiugaidata end %d\n",delay_mszhi);
+        readbuf();
     }
-}
-void test2()
-{
-  IapErase(Iapid); // ????????
-  IapProgram(Iapid + 1, 3);
-
-//   IapProgram(Iapid + 60, a_a);
 }
 void main()		                                       
 {
@@ -462,7 +426,7 @@ void main()
     com1clearbuf();
     while (1)
 	{
-        // runreport();
+     
         getzhiandchange();
 	}
 } 

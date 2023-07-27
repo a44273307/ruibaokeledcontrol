@@ -1,0 +1,70 @@
+C51 COMPILER V9.00   EEPROM                                                                07/27/2023 21:06:05 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE EEPROM
+OBJECT MODULE PLACED IN EEPROM.OBJ
+COMPILER INVOKED BY: C:\Keil2\C51\BIN\C51.EXE EEPROM.c LARGE ROM(COMPACT) BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "intrins.h"
+   2          
+   3          //
+   4          // void write_eeprom()
+   5          // {         
+   6          //     IapErase(0x0400);  //扇区擦除
+   7          //        IapProgram(0x0400 + 1,id);
+   8          //        IapProgram(0x0400 + 2,num1/256);IapProgram(0x0400 + 3,num1%256);
+   9              
+  10          //        IapProgram(0x0400 + 4,sw1/256);IapProgram(0x0400 + 5,sw1%256);        
+  11                    
+  12          //        IapProgram(0x0400 + 6,sw2/256);IapProgram(0x0400 + 7,sw2%256);
+  13              
+  14          //        IapProgram(0x0400 + 8,sw3);
+  15                  
+  16          //     IapProgram(0x0400 + 9,wd1);
+  17                  
+  18          //        IapProgram(0x0400 + 10,sw4/256);IapProgram(0x0400 + 11,sw4%256);
+  19                  
+  20          //        IapProgram(0x0400 + 13,ks);
+  21            
+  22          //     IapProgram(0x0400 + 60,a_a);
+  23                  
+  24          // }
+  25          // /******************把数据从单片机内部eeprom中读出来*****************/
+  26          // void read_eeprom()                                                                                                                             
+  27          // { uchar t,t1;
+  28          //      id = IapRead(0x0400 + 1);
+  29          
+  30                  
+  31          //      t = IapRead(0x0400 + 2);t1=IapRead(0x0400 + 3);num1=t*256+t1;
+  32          //      t = IapRead(0x0400 + 4);t1=IapRead(0x0400 + 5);sw1=t*256+t1;
+  33                  
+  34          //   t = IapRead(0x0400 + 6);t1=IapRead(0x0400 + 7);sw2=t*256+t1;
+  35                  
+  36          //   sw3 = IapRead(0x0400 + 8);
+  37          //      wd1 = IapRead(0x0400 + 9);
+  38                  
+  39                  
+  40          //      t = IapRead(0x0400 + 10);t1=IapRead(0x0400 + 11);sw4=t*256+t1;
+  41                  
+  42          //      ks = IapRead(0x0400 + 13);
+  43                  
+  44          //      a_a = IapRead(0x0400 + 60);
+  45          // }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   ----    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.00   EEPROM                                                                07/27/2023 21:06:05 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 1   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MODBUS
@@ -54,16 +54,17 @@ line level    source
   44          uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
   45          uint8_t Modbus_Function;                                                        //从站设备需执行的功能
   46          
-  47          volatile uint16_t HoldingReg[10] = {0};                                //保持寄存器
+  47          volatile int HoldingReg[10] = {0};                                //保持寄存器
+*** WARNING C231 IN LINE 47 OF MODBUS.C: 'HoldingReg': redefinition
   48          int UART3_Handler=0;
   49          /* 函数定义 ------------------------------------------------------------------*/
   50          
   51          //----------------------------------------------------------------------------//
   52          //函数功能：逐位计算法CRC16校验，在Modbus中CRC结果要进行高低字节交换，即低字节在前，高字节在后
   53          //入口参数：puchMsg是要进行CRC校验的消息；usDataLen是消息中字节数
-  54          //出口参数：计算出来的CRC校验码，16位长度
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 2   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 2   
 
+  54          //出口参数：计算出来的CRC校验码，16位长度
   55          //最后修改：2015.11.29
   56          //备注：
   57          //----------------------------------------------------------------------------//
@@ -125,9 +126,9 @@ line level    source
  113   1              //----------------------------------------------------------//
  114   1              Modbus_Timeout_Cnt = 0;
  115   1              Modbus_Rcv_Cnt = 0;
- 116   1              Modbus_Rcv_flag = 0;
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 3   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 3   
 
+ 116   1              Modbus_Rcv_flag = 0;
  117   1              Modbus_Cmd_flag = 0;
  118   1              Modbus_Exe_flag = 0;
  119   1              
@@ -189,9 +190,9 @@ line level    source
  175   1              Modbus_Cmd_flag=1;//数据接受完,,进入中断标志位..
  176   1              Modbus_Cmd();     //数据处理,,          
  177   1              Modbus_Exe();     //处理完发...    
- 178   1              Modbus_ClearBuff();//弄完了清理缓冲区     
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 4   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 4   
 
+ 178   1              Modbus_ClearBuff();//弄完了清理缓冲区     
  179   1      }
  180          
  181          char dmatime=0;
@@ -253,9 +254,9 @@ line level    source
  225   6                                                      Modbus_Exe_flag = 1;                                      
              -          //设备进入命令执行状态
  226   6                                                      break;                                                    
-             -                            //跳出分支语句
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 5   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 5   
 
+             -                            //跳出分支语句
  227   6                                              
  228   6                                              case Modbus_WriteMultipleReg:
  229   6                                                      Modbus_Function = Modbus_WriteMultipleReg;        //将从站
@@ -317,9 +318,9 @@ line level    source
  281   3                      
  282   3                      case Modbus_WriteMultipleReg:
  283   3                              Modbus_WriteMultipleReg_Process();
- 284   3                              break;
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 6   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 6   
 
+ 284   3                              break;
  285   3                              
  286   3                      }
  287   2                      Modbus_Exe_flag = 0;
@@ -381,9 +382,9 @@ line level    source
  334   2                      {
  335   3                              Modbus_ErrorHandling(0x03);                //非法数据值
  336   3                      }
- 337   2              }
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 7   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 7   
 
+ 337   2              }
  338   1              
  339   1              else
  340   1              {
@@ -445,9 +446,9 @@ line level    source
  387   1              {
  388   2                      Modbus_ErrorHandling(0x02);                        //非法数据地址
  389   2              }
- 390   1      }
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 8   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 8   
 
+ 390   1      }
  391          
  392          //----------------------------------------------------------------------------//
  393          //函数功能：功能码0x10，写多个寄存器
@@ -509,9 +510,9 @@ line level    source
  438   3                              Modbus_ErrorHandling(0x03);
  439   3                      }
  440   2              }
- 441   1              
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 9   
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 9   
 
+ 441   1              
  442   1              else
  443   1              {
  444   2                      Modbus_ErrorHandling(0x02);
@@ -573,9 +574,9 @@ line level    source
  494   2                                              HAL_UART_Transmit_DMA_485(&UART3_Handler,(u8*)Modbus_Send_Buff,5);
  495   2                      break;
  496   2      //        default:
- 497   2      //                return;
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 10  
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 10  
 
+ 497   2      //                return;
  498   2                      
  499   2              }
  500   1              
@@ -637,9 +638,9 @@ line level    source
  556   1              return tempByte; 
  557   1      }
  558          
- 559          //----------------------------------------------------------------------------//
-C51 COMPILER V9.00   MODBUS                                                                07/27/2023 07:38:59 PAGE 11  
+C51 COMPILER V9.00   MODBUS                                                                07/27/2023 21:34:08 PAGE 11  
 
+ 559          //----------------------------------------------------------------------------//
  560          //函数功能：把低4位16进制数转换为在OLED字库上对应的0~9和A~F
  561          //入口参数：HexByte是低4位16进制数
  562          //出口参数：OLED字库上对应的0~9和A~F
@@ -675,7 +676,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   1756    ----
+   CODE SIZE        =   1758    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     75      42
    PDATA SIZE       =   ----    ----
@@ -685,4 +686,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -44,7 +44,7 @@ uint8_t Modbus_Cmd_flag;                                                        
 uint8_t Modbus_Exe_flag;                                                        //设备进入命令执行状态标志
 uint8_t Modbus_Function;                                                        //从站设备需执行的功能
 
-volatile uint16_t HoldingReg[10] = {0};                                //保持寄存器
+volatile int HoldingReg[10] = {0};                                //保持寄存器
 int UART3_Handler=0;
 /* 函数定义 ------------------------------------------------------------------*/
 

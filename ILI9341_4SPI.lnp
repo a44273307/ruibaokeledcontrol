@@ -4,6 +4,7 @@
 "uart.obj",
 "modbus.obj",
 "ledcontrol.obj",
-"tongxin2.obj" 
+"tongxin2.obj",
+"EEPROM.obj" 
 TO "ILI9341_4SPI" 
 RAMSIZE(256) 

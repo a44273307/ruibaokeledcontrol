@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -66,7 +66,7 @@ stmt  level    source
    55   1        P5M1 = 0x00;
    56   1        P5M0 = 0x00; // 设置P5口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
    57   1        P6M1 = 0x00;
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 2   
 
    58   1        P6M0 = 0x00; // 设置P6口为准双向口模式 //00：准双向口 01：推挽输出 10：高阻输入 11：开漏输出
    59   1        P7M1 = 0x00;
@@ -134,7 +134,7 @@ stmt  level    source
   120          char yout_set(char weizhi, char zhi)
   121          {
   122   1        if (weizhi == 0)
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 3   
 
   123   1          Y0 = zhi;
   124   1        if (weizhi == 1)
@@ -202,7 +202,7 @@ stmt  level    source
   185   1      }
 *** WARNING C47 IN LINE 183 OF main.c: 'a': unreferenced local variable
 *** WARNING C47 IN LINE 183 OF main.c: 'b': unreferenced local variable
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 4   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 4   
 
   186          
   187          
@@ -270,7 +270,7 @@ stmt  level    source
   249   1        unsigned char i;
   250   1        if (i == 0)
   251   1        {
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 5   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 5   
 
   252   2          printf1("Register not get");
   253   2        }
@@ -338,7 +338,7 @@ stmt  level    source
   315   1        if(flaginit==0)
   316   1        {
   317   2          return ;
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 6   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 6   
 
   318   2        }
   319   1        push(dizhi,zhi);
@@ -406,7 +406,7 @@ stmt  level    source
   378   1          0xFF,
   379   1          0xFF,
   380   1          0xFF,
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 7   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 7   
 
   381   1          0xFF,
   382   1          0xFF,
@@ -474,7 +474,7 @@ stmt  level    source
   444   1        for (i = 0; i < 6; i++)
   445   1        {
   446   2          if (xin[i] == 0)
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 8   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 8   
 
   447   2          {
   448   3            if (flag[i] == 0) // 代表按键第一次按下。。。
@@ -511,7 +511,7 @@ stmt  level    source
   479   2          {
   480   3            printf1("read[%d].....",timereport);
   481   3          }
-  482   2          if(timereport>10000)
+  482   2          if(timereport>3000)
   483   2          {
   484   3            printf1("read failed");
   485   3            break;
@@ -542,7 +542,7 @@ stmt  level    source
   510   1        UartInit();
   511   1        Uart23Init();
   512   1        printf1("system is ok");
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 9   
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 9   
 
   513   1        Timer0Init();
   514   1        printf1("system is overall");
@@ -610,7 +610,7 @@ stmt  level    source
   575   2          timeleft3--;
   576   2          if (timeleft3 == 0) // 数据一次收完了.
   577   2          {
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 10  
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 10  
 
   578   3            flag3 = 1;
   579   3          }
@@ -678,7 +678,7 @@ stmt  level    source
   641   2          sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
   642   2          printf3(out);
   643   2        }
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 11  
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 11  
 
   644   1      }
   645          void Timer0() interrupt 1
@@ -746,7 +746,7 @@ stmt  level    source
   706   1        if (flag3 == 1)
   707   1        {
   708   2          flag3 = 0;
-C251 COMPILER V5.60.0,  main                                                               27/07/23  00:28:21  PAGE 12  
+C251 COMPILER V5.60.0,  main                                                               27/07/23  14:58:33  PAGE 12  
 
   709   2          jiexi(buf3);
   710   2          memset(buf3, 0, sizeof(buf3));

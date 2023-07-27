@@ -429,12 +429,12 @@ void shurulvbo(void)
 void keydown(int i) // 按键按下的处理、、、
 {
 	printf1("keydown %d",i);
-	setzhione(4,gsetzhi);
+	setzhione(2,1);
 }
 void keyup(int i) // 按键按下的处理、、、
 {
 	printf1("keyup %d",i);
-	setzhione(4,0);
+	setzhione(2,0);
 }
 void keyallchuli()
 {
@@ -479,7 +479,7 @@ void init2test()
 		{
 			printf1("read[%d].....",timereport);
 		}
-		if(timereport>10000)
+		if(timereport>3000)
 		{
 			printf1("read failed");
 			break;
@@ -493,7 +493,6 @@ void init2test()
 			break;
 		}
 		dealorder();//取缓冲区里面的命令进行发送
-		
 		showpre(gsetzhi);
 		dealchuankou();//解析上来的串口命令。
 	}

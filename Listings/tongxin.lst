@@ -1,0 +1,161 @@
+C251 COMPILER V5.60.0,  tongxin                                                            28/07/23  09:42:48  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE tongxin
+OBJECT MODULE PLACED IN .\Objects\tongxin.obj
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE tongxin.c XSMALL BROWSE DEBUG PRINT(.\Listings\tongxin.lst) TABS(2) O
+                    -BJECT(.\Objects\tongxin.obj) 
+
+stmt  level    source
+
+    1          
+    2          #include "stc32g.h"
+    3          #include "config.h"
+    4          
+    5          
+    6          #include <stdio.h>
+    7          #include "tongxin.h"
+    8          #include "func.h"
+    9          #define use 1
+   10          #define use 1
+   11          #define nouse 0
+   12          #define maxzhi 10 
+   13          
+   14          static Alltongxininfo tongxindata[maxzhi];
+   15          
+   16          int  getemptyindex()
+   17          {
+   18   1          int i;
+   19   1          for(i=0;i<maxzhi;i++)
+   20   1          {
+   21   2              if(tongxindata[i].falg==0)
+   22   2              return i;
+   23   2          }
+   24   1          return i;
+   25   1      }
+   26          int empty()
+   27          {
+   28   1          if(0==getemptyindex())
+   29   1          {
+   30   2              return 1;
+   31   2          }
+   32   1          return 0;
+   33   1      }
+   34          int isfull()
+   35          {
+   36   1          if(maxzhi==getemptyindex())
+   37   1          {
+   38   2              return 1;
+   39   2          }
+   40   1          return 0;
+   41   1      }
+   42          
+   43          void push(int weizhi,int zhi)
+   44          {
+   45   1          int dizhi;
+   46   1          int i;
+   47   1          dizhi=getemptyindex();
+   48   1          // 有就更新
+   49   1          for(i=0;i<dizhi;i++)
+   50   1          {
+   51   2              if(tongxindata[i].weizhi==weizhi)
+   52   2              {
+   53   3                  tongxindata[i].zhi=zhi;
+   54   3                  return;
+   55   3              }
+   56   2          }
+   57   1          // 满了丢
+   58   1          if(maxzhi==getemptyindex())
+C251 COMPILER V5.60.0,  tongxin                                                            28/07/23  09:42:48  PAGE 2   
+
+   59   1          {
+   60   2              return ;
+   61   2          }
+   62   1          // 入。
+   63   1          // dizhi=dizhi;
+   64   1          tongxindata[dizhi].weizhi=weizhi;
+   65   1          tongxindata[dizhi].zhi=zhi;
+   66   1          tongxindata[dizhi].falg=1;
+   67   1      }
+   68          void show()
+   69          {
+   70   1          int i;
+   71   1          int dizhi=getemptyindex();
+   72   1          for(i=0;i<dizhi;i++)
+   73   1          {
+   74   2           //   printf("dizhi[%d]-[%d]\n",tongxindata[i].weizhi,tongxindata[i].zhi);
+   75   2          }
+   76   1      }
+   77          void pushshow(int weizhi,int zhi)
+   78          {
+   79   1          push(weizhi,zhi);
+   80   1          show();
+   81   1      }
+   82          void deal(Alltongxininfo get)
+   83          {
+   84   1          
+   85   1      
+   86   1      }
+*** WARNING C47 IN LINE 82 OF tongxin.c: 'get': unreferenced parameter
+   87          int pop()
+   88          {
+   89   1          int i;
+   90   1          int dizhi=getemptyindex();
+   91   1          Alltongxininfo get;
+   92   1          if(0==getemptyindex())
+   93   1          {
+   94   2              return 0;
+   95   2          }
+   96   1          memcpy(&get,&tongxindata[0],sizeof(Alltongxininfo));
+   97   1          for(i=0;i<dizhi-1;i++)
+   98   1          {
+   99   2              memcpy(&tongxindata[i],&tongxindata[i+1],sizeof(Alltongxininfo));
+  100   2          }
+  101   1          return 1;
+  102   1      }
+  103          
+  104          int pop2(Alltongxininfo *get)
+  105          {
+  106   1          int i;
+  107   1          int dizhi=getemptyindex();
+  108   1          if(0==getemptyindex())
+  109   1          {
+  110   2              return 0;
+  111   2          }
+  112   1          memcpy(get,&tongxindata[0],sizeof(Alltongxininfo));
+  113   1          for(i=0;i<dizhi-1;i++)
+  114   1          {
+  115   2              memcpy(&tongxindata[i],&tongxindata[i+1],sizeof(Alltongxininfo));
+  116   2          }
+  117   1          tongxindata[dizhi-1].falg=nouse;
+  118   1          return 1;
+  119   1      }
+  120          
+  121          
+  122          
+
+C251 COMPILER V5.60.0,  tongxin                                                            28/07/23  09:42:48  PAGE 3   
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       372     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        60         16
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

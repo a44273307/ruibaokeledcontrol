@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 1   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE lcd
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        LCD_CD=0;
    57   1        SPI_RW(reg);
    58   1        LCD_CS=1;
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 2   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 2   
 
    59   1      }
    60          int USE_HORIZONTAL=0;
@@ -116,7 +116,7 @@ stmt  level    source
   104   1        LCD_CD_REG(0xC7);    //VCM control2 
   105   1        LCD_CD_DATA(0XB7); 
   106   1        LCD_CD_REG(0x36);    // Memory Access Control 
-  107   1        LCD_CD_DATA(0x48); 
+  107   1        LCD_CD_DATA(0x0C+0x80+0x20); 
   108   1        LCD_CD_REG(0x3A);   
   109   1        LCD_CD_DATA(0x55); 
   110   1        LCD_CD_REG(0xB1);   
@@ -134,7 +134,7 @@ stmt  level    source
   122   1        LCD_CD_DATA(0x2A); 
   123   1        LCD_CD_DATA(0x28); 
   124   1        LCD_CD_DATA(0x08); 
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 3   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 3   
 
   125   1        LCD_CD_DATA(0x0E); 
   126   1        LCD_CD_DATA(0x08); 
@@ -202,7 +202,7 @@ stmt  level    source
   184   1        LCD_CS=0;
   185   1        LCD_CD=1;
   186   1        SPI_RW(color>>8);
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 4   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 4   
 
 *** WARNING C188 IN LINE 186 OF lcd.c: 'parameter 1': value truncated
   187   1        SPI_RW(color&0xff);
@@ -270,7 +270,7 @@ stmt  level    source
   249                入口数据：xsta,ysta   起始坐标
   250                          xend,yend   终止坐标
   251                          color       要填充的颜色
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 5   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 5   
 
   252                返回值：  无
   253          ******************************************************************************/
@@ -338,7 +338,7 @@ stmt  level    source
   315   2          {
   316   3            yerr-=distance;
   317   3            uCol+=incy;
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 6   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 6   
 
   318   3          }
   319   2        }
@@ -406,7 +406,7 @@ stmt  level    source
   381          void LCD_ShowChar(u16 x,u16 y,u8 num,u16 fc,u16 bc,u8 sizey,u8 mode)
   382          {
   383   1        u8 temp,sizex,t,m=0;
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 7   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 7   
 
   384   1        u16 i,TypefaceNum;//一个字符所占字节大小
   385   1        u16 x0=x;
@@ -474,7 +474,7 @@ stmt  level    source
   447          
   448          /******************************************************************************
   449                函数说明：显示数字
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 8   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 8   
 
   450                入口数据：m底数，n指数
   451                返回值：  无
@@ -542,7 +542,7 @@ stmt  level    source
   511   2          temp=(num1/mypow(10,len-t-1))%10;
 *** WARNING C188 IN LINE 511 OF lcd.c: 'parameter 2': value truncated
   512   2          if(t==(len-2))
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 9   
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 9   
 
   513   2          {
   514   3            LCD_ShowChar(x+(len-2)*sizex,y,'.',fc,bc,sizey,0);
@@ -611,7 +611,7 @@ Module Information          Static   Overlayable
   edata size           =         2        109
   bit size             =    ------     ------
   ebit size            =    ------     ------
-C251 COMPILER V5.60.0,  lcd                                                                28/07/23  08:35:14  PAGE 10  
+C251 COMPILER V5.60.0,  lcd                                                                28/07/23  09:42:48  PAGE 10  
 
   bitaddressable size  =    ------     ------
   ebitaddressable size =    ------     ------

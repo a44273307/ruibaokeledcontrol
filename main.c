@@ -1,12 +1,24 @@
+#include <string.h>
 #include "stc32g.h"
-#include <intrins.h>
+#include "config.h"
+
+
 #include <stdio.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+#include <stdlib.h>
+
+
 #include "lcd.h"
 #include <string.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "tongxin.h"
+#include "tongxin2.h"
+#include "uart.h"
 
 #define u8 unsigned char
 #define FOSC 24000000UL
@@ -23,92 +35,36 @@ int setzhi = 0;
 char flagsystemrun = 0;
 #define maxsetzhi 2047
 
+
+char* mystrstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*)haystack;
+    }
+
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*n != '\0' && *h == *n) {
+            h++;
+            n++;
+        }
+
+        if (*n == '\0') {
+            return (char*)haystack; // 子串匹配成功，返回起始位置
+        }
+
+        haystack++;
+    }
+
+    return NULL; // 未找到子串，返回NULL
+}
+
 void showhenxiang();
 void ledopen(int weizhi);
-bit busy;
-void UartInit() // 24 9600
-{
-	SCON = 0x50;  // 8位数据,可变波特率
-	AUXR |= 0x40; // 定时器时钟1T模式
-	AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
-	TMOD &= 0x0F; // 设置定时器模式
-	TL1 = 0xCC;	  // 设置定时初始值
-	TH1 = 0xFF;	  // 设置定时初始值
-	ET1 = 0;	  // 禁止定时器%d中断
-	TR1 = 1;	  // 定时器1开始计时
-	ES = 1;
-	EA = 1;
-	P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
-}
-void UartSendByte(u8 dat)
-{
-	SBUF = dat;
-	while (TI == 0)
-		;
-	TI = 0;
-}
-char putchar(char dat)
-{
-	SBUF = dat;
-	while (TI == 0)
-		;
-	TI = 0;
-	return (dat);
-}
 
-void UartSendStr(u8 *str)
-{
-	while (*str)
-	{
-		UartSendByte(*str);
-		str++;
-	}
-}
-void Uart2Init()
-{
-	S2CON = 0x10;
-	T2L = BRT;
-	T2H = BRT >> 8;
-	AUXR |= 0x14;
-	IE2 = 0x01;
-	EA = 1;
-}
-void Uart2Send(char dat)
-{
-	while (busy)
-		;
-	busy = 1;
-	S2BUF = dat;
-}
 
-void Uart2SendStr(char *p)
-{
-	while (*p)
-	{
-		Uart2Send(*p++);
-	}
-}
 
-void Timer0Init(void) // 2毫秒@11.0592MHz
-{
-	AUXR |= 0x80; // 定时器时钟1T模式
-	TMOD &= 0xF0; // 设置定时器模式
-	TL0 = 0x80;	  // 设置定时初始值
-	TH0 = 0x44;	  // 设置定时初始值
-	TF0 = 0;	  // 清除TF0标志
-	TR0 = 1;	  // 定时器0开始计时
-	TR0 = 1;	  // 定时器0开始计时
-	ET0 = 1;	  // 使能定时器0中断
-	PT0 = 1;
-	EA = 1;
-	//    IT0 = 1;                                    //??INT0?????
-	//    EX0 = 1;                                    //??INT0??
-	//    EA = 1;
-	//
-	//	IT1 = 1;                                    //??INT1?????
-	//    EX1 = 1;                                    //??INT1??
-	//    EA = 1;
-}
 
 sbit X0 = P2 ^ 3;
 sbit X1 = P2 ^ 1;
@@ -197,8 +153,11 @@ char flagsetzhichange = 0;
 char flagcanset = 0;
 void setdianliu(int zhi)
 {
-	writedizhi(4, zhi);
+	push(4,zhi);
 }
+
+
+
 void setzhichange(int a)
 {
 	if (flagcanset == 0)
@@ -395,7 +354,7 @@ void pingmuclear()
 	for (i = 0; i < 10; i++)
 	{
 		LCD_ShowString(0, i * 30, dataxx, RED, WHITE, 32, 0);
-		delay_ms(10);
+		delay_ms(2);
 	}
 }
 void showhenxiang()
@@ -444,10 +403,11 @@ void showsetzhi()
 }
 void showdata()
 {
-	if (flagsystemrun == 0)
-	{
-		return;
-	}
+	// 记得复位
+	// if (flagsystemrun == 0)
+	// {
+	// 	return;
+	// }
 	shownow();
 	showsetzhi();
 	shownwendu();
@@ -465,6 +425,7 @@ int readdianliuzhi()
 	}
 	return 0;
 }
+void dealorder();
 void main()
 {
 	int rumtimes = 0;
@@ -475,45 +436,41 @@ void main()
 		shurulvbo();
 		keyallchuli();
 		delay_ms(1);
-		if (flagsetzhichange == 1)
-		{
-			flagsetzhichange = 0;
-			showdata();
-			rumtimes = 0;
-		}
-		else
-		{
-			rumtimes++;
-		}
-		if (rumtimes++ > 500)
-		{
-			rumtimes = 0;
-			// tmp = getwendu();
-			showdata();
-		}
+		dealorder();
+		// if (flagsetzhichange == 1)
+		// {
+		// 	flagsetzhichange = 0;
+		// 	showdata();
+		// 	rumtimes = 0;
+		// }
+		// else
+		// {
+		// 	rumtimes++;
+		// }
+		// if (rumtimes++ > 500)
+		// {
+		// 	rumtimes = 0;
+		// 	// tmp = getwendu();
+		// 	showdata();
+		// }
 	}
 }
 int weishu1, weishu2, weishu3, weishu4;
 char buf1[300];
+char buf3[300];
+
 int timeleft1, timeleft2, timeleft3, timeleft4;
 char falgchuankou1 = 0;
-void chuankou1put(char c)
-{
-	buf1[weishu1++] = c;
-	if (weishu1 >= sizeof(buf1))
-		weishu1 = 0;
-	timeleft1 = 3;
-}
 static void chuliguankji(char *ans1)
 {
-	// char *index;
-	// index = strstr(ans1, "@STCISP#");
-	// if (index == 0)
-	// {
-	// 	return;
-	// }
-	// printf("rec @STCISP#,researt now");
-	// IAP_CONTR = 0x60;
+	char *index;
+	index = mystrstr(ans1, "@STCISP#");
+	if (index == 0)
+	{
+		return;
+	}
+	printf("rec @STCISP#,researt now");
+	IAP_CONTR = 0x60;
 }
 void clearbuff1()
 {
@@ -579,19 +536,7 @@ int writedizhi(int dizhi, int zhi)
 	// 	// }
 	// }
 }
-// 发数据出去，，然后收所有的，检验返回的值。。
-void chuankou1time()
-{
-	if (timeleft1 > 0)
-	{
-		timeleft1--;
-		if (timeleft1 == 0) // 数据一次收完了.
-		{
-			chuliguankji(buf1);
-			falgchuankou1 = 1;
-		}
-	}
-}
+
 
 // 采用中断和处理分开的方式吧，方便调试。。
 int getwendu()
@@ -603,15 +548,158 @@ void UartIsr() interrupt 4
 	if (RI)
 	{
 		RI = 0;
-		chuankou1put(SBUF);
+				buf1[weishu1++] =SBUF;
+	if (weishu1 >= sizeof(buf1))
+		weishu1 = 0;
+	chuliguankji(buf1);
+	}
+} 
+static int timepush=0;
+// 定义printf函数
+void printf3(const char *fmt, ...)
+{
+	char *p;
+	char buf[128]; // 定义一个缓冲区，足够存储输出的字符串
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args); // 将格式化的字符串写入缓冲区
+	va_end(args);
+
+	p = (unsigned char *)buf;
+	while (*p != '\0')
+	{
+		sendbyte3(*p);
+		p++;
+	}
+}
+void dealorder()
+{
+	char out[30]={0};
+	Alltongxininfo get;
+	if(timepush>45)
+	{
+		timepush=0;
+		pop2(&get);
+		if(get.weizhi==4)
+		{
+			get.zhi=get.zhi;
+		}
+		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+		printf3(out);
+	}
+}
+char flag3 = 0;
+void chuankou1put(char c)
+{
+	buf3[weishu3++] = c;
+	if (weishu3 > sizeof(buf3) - 3)
+		weishu3 = 0;
+	timeleft3 = 3;
+}
+void chuankou1time()
+{
+	if (timeleft3 > 0)
+	{
+		timeleft3--;
+		if (timeleft3 == 0) // 数据一次收完了.
+		{
+			flag3 = 1;
+		}
+	}
+}
+size_t mystrlen(const char* str) {
+    size_t length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+char* myaddstrstr(const char* haystack, const char* needle)
+{	
+	char* result = mystrstr(haystack, needle);
+	 if (result != NULL)
+	 {
+		result=result+mystrlen(needle);
+	 }
+	 return result;
+}
+// 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
+void jixi2(char* input)
+{
+	char *p=input;
+	char *p1;
+	int i;
+	unsigned int weizhi;
+	unsigned int zhi;
+	//1234-2234;333-4;end
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+		p=myaddstrstr(p,";");  //指向下一个后面
+		printf("get set%d-%d",weizhi,zhi);
+		push2(weizhi,zhi);
+		
+	}
+}
+void jiexi(char* input)
+{
+	char par[500]={0};
+	char *begin,end;
+	begin=myaddstrstr(input,"set:");
+	// printf("input begin%s",begin);
+	end=myaddstrstr(begin,"end");
+	// printf("input end%s",end);
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		jixi2(par);
 	}
 }
 
+void dealchuankou()
+{
+	if (flag3 == 1)
+	{
+		flag3 = 0;
+		jiexi(buf3);
+		memset(buf3, 0, sizeof(buf3));
+		weishu3 = 0;
+	}
+}
 void tm0_isr() interrupt 1
 {
 	chuankou1time();
+	if(!empty())
+	{
+		timepush++;
+	}
 }
 
+
+void Uart3() interrupt 17 using 1
+{
+	char temp3; 
+    if (S3CON & S3RI)
+    {
+        S3CON &= ~S3RI; //??S3RI?
+		temp3 = S3BUF;
+		chuankou1put(temp3);
+        // chuankou3put(temp3);
+    }
+    if (S3CON & S3TI)
+    {
+        S3CON &= ~S3TI; // 清除S3TI位
+        busy3 = 0;      // 清忙标志
+    }
+}
 void init()
 {
 	WTST = 0;	
@@ -634,24 +722,18 @@ void init()
 	LCD_LED = 0;
 	LED0 = ~LED0;
 	UartInit();
+	Uart23Init();
 	Timer0Init();
-
 	delay_ms(10);
-
 	LCD_Init();
-
-
-
-
-	delay_ms(50);
-
-	LCD_Fill(0, 0, 320, 240, WHITE);
-	printf("system begin\r");
-	delay_ms(50);
-	pingmuclear();
-	
-	
-
-	
+	delay_ms(10);
+	printf("system begin\n");
+	// 屏幕相关的，记得复位。。。
+	// LCD_Fill(0, 0, 320, 240, WHITE);
+	// printf("system begin\r");
+	// delay_ms(10);
+	// pingmuclear();
+	// printf("system begin over\r");
+	// LCD_Fill(0, 0, 320, 240, WHITE);
 	
 }

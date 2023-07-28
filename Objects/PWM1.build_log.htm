@@ -5,11 +5,11 @@
 <h2>Tool Versions:</h2>
 IDE-Version: ¶ÃVision V5.25.3.0
 Copyright (C) 2018 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: xs dali, 11, LIC=GM7DL-05DD6-HQL0J-UT5ER-GZ9PB-MXWEQ
+License Information: a dali, 1, LIC=BU28G-V2DTD-ULFCF-6EJS7-7UGXM-XE49T
  
 Tool Versions:
 Toolchain:       PK251 Prof. Developers Kit  Version: 5.60.0.0
-Toolchain Path:  D:\Keil_v5\C251\BIN
+Toolchain Path:  D:\keilc251\C251\BIN
 C Compiler:      C251.exe V5.60.0.0
 Assembler:       A251.exe V4.69.13.0
 Linker/Locator:  L251.exe V4.66.93.0
@@ -19,21 +19,30 @@ CPU DLL:         S251.DLL V3.129.0.0
 Dialog DLL:      DCORE51.DLL V2.81.6.0 
 <h2>Project:</h2>
 D:\»±¶ø∆\new2\lcdœ‘ æ∆¡\PWM.uvproj
-Project File Date:  07/23/2023
+Project File Date:  07/28/2023
 
 <h2>Output:</h2>
-Build target 'Target 1'
+Rebuild target 'Target 1'
 compiling main.c...
 main.c(327): warning C188: 'parameter 1': value truncated
 main.c(335): warning C188: 'parameter 1': value truncated
-main.c(512): warning C140: 'strstr' undefined; assuming 'extern int strstr()'
-main.c(512): warning C95: 'strstr': too many actual parameters
-main.c(512): warning C40: 'int' converted to 'far' pointer
-main.c(545): warning C95: 'strstr': too many actual parameters
-main.c(545): warning C40: 'int' converted to 'far' pointer
-main.c(575): warning C95: 'strstr': too many actual parameters
-main.c(575): warning C40: 'int' converted to 'far' pointer
+main.c(509): warning C47: 'ans1': unreferenced parameter
+main.c(530): warning C47: 'ans': unreferenced local variable
 main.c(560): warning C47: 'ans': unreferenced local variable
+main.c(555): warning C135: 'readzhi': no return value
+main.c(555): warning C135: 'readzhi': no return value
+main.c(583): warning C135: 'writedizhi': no return value
+main.c(583): warning C135: 'writedizhi': no return value
+compiling lcd.c...
+lcd.c(170): warning C188: 'parameter 1': value truncated
+lcd.c(172): warning C188: 'parameter 1': value truncated
+lcd.c(176): warning C188: 'parameter 1': value truncated
+lcd.c(178): warning C188: 'parameter 1': value truncated
+lcd.c(186): warning C188: 'parameter 1': value truncated
+lcd.c(478): warning C188: 'parameter 2': value truncated
+lcd.c(488): warning C188: 'parameter 3': value truncated
+lcd.c(511): warning C188: 'parameter 2': value truncated
+lcd.c(518): warning C188: 'parameter 3': value truncated
 linking...
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    UartSendByte/main
@@ -43,20 +52,10 @@ linking...
     NAME:    LCD_DrawLine/lcd
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     NAME:    ?C?ULIDIV/?C?ULDIV
-*** WARNING L15: MULTIPLE CALL TO FUNCTION
-    NAME:    PRINTF/PRINTF
-    CALLER1: tm0_isr/main
-    CALLER2: ?C_C51STARTUP?3
-*** WARNING L25: DATA TYPES DIFFERENT
-    SYMBOL:  strstr
-    MODULE:  .\Objects\main.obj (main)
-   DEFINED:  D:\KEIL_V5\C251\LIB\C2SXS.LIB (STRSTR)
-*** ERROR L127: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  ?strstr?BYTE
-    MODULE:  .\Objects\main.obj (main)
-Program Size: data=8.1 edata+hdata=947 xdata=0 const=623 code=19251
-Target not created.
-Build Time Elapsed:  00:00:00
+Program Size: data=8.1 edata+hdata=907 xdata=0 const=559 code=18737
+creating hex file from ".\Objects\PWM1"...
+".\Objects\PWM1" - 0 Error(s), 22 Warning(s).
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

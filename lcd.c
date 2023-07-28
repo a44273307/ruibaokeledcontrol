@@ -8,35 +8,32 @@
 
 void SPI_RW(unsigned char byte)
 {
-	SPDAT = byte;                           //??????
-  while (!(SPSTAT & 0x80));               //??????
-  SPSTAT = 0xc0;                          //?????
 	
-//	for(bit_ctr=0;bit_ctr<8;bit_ctr++) // 输出8位
-//	{
-//		LCD_SCK=0;
-//		LCD_MOSI=(byte&0x80); // MSB TO MOSI
-//		byte=(byte<<1);	// shift next bit to MSB
-//		LCD_SCK=1;
-//		byte|=LCD_MISO;	        // capture current MISO bit
-//	}
-//	return byte;
+	unsigned char bit_ctr;
 	
+	for(bit_ctr=0;bit_ctr<8;bit_ctr++) // 输出8位
+	{
+		LCD_SCK=0;
+		LCD_MOSI=(byte&0x80); // MSB TO MOSI
+		byte=(byte<<1);	// shift next bit to MSB
+		LCD_SCK=1;
+		byte|=LCD_MISO;	        // capture current MISO bit
+	}
+	//return byte;
 }
 
 
-void Delay1ms()		//@24.000MHz
+void Delay1ms()		//@11.0592MHz
 {
-	unsigned char i, j;
+	unsigned long i;
 
 	_nop_();
-	i = 32;
-	j = 40;
-	do
-	{
-		while (--j);
-	} while (--i);
+	_nop_();
+	_nop_();
+	i = 5998UL;
+	while (i) i--;
 }
+
 
 void delay_ms(unsigned int ms)
 {
@@ -63,10 +60,16 @@ void LCD_CD_REG(unsigned char reg)
 int USE_HORIZONTAL=0;
 void LCD_Init()
 {
+//	P0=0;
+//	P2=0;
+	LCD_RESET=0;
+	delay_ms(1);
 	LCD_RESET=0;
 	delay_ms(10);
 	LCD_RESET=1;
 	delay_ms(120);
+
+//************* Start Initial Sequence **********//
 	LCD_CD_REG(0xCF);  
 	LCD_CD_DATA(0x00); 
 	LCD_CD_DATA(0xC1); 
@@ -101,7 +104,7 @@ void LCD_Init()
 	LCD_CD_REG(0xC7);    //VCM control2 
 	LCD_CD_DATA(0XB7); 
 	LCD_CD_REG(0x36);    // Memory Access Control 
-	LCD_CD_DATA(0x0C+0x80+0x20); 
+	LCD_CD_DATA(0x48); 
 	LCD_CD_REG(0x3A);   
 	LCD_CD_DATA(0x55); 
 	LCD_CD_REG(0xB1);   
@@ -158,7 +161,7 @@ void LCD_Init()
 	LCD_CD_DATA(0xef);	 
 	LCD_CD_REG(0x11); //Exit Sleep
 	delay_ms(120);
-	LCD_CD_REG(0x29); //display on	
+	LCD_CD_REG(0x29); //display on		
 }
 
 void LCD_SetArea(unsigned int stx,unsigned int sty,unsigned int endx,unsigned int endy)
@@ -543,3 +546,19 @@ void LCD_ShowPicture(u16 x,u16 y,u16 length,u16 width,const u8 pic[])
 }
 
 
+void Sample_Lamp(void)
+{
+	// P33 = !P33;
+	// P35 = !P35;
+	// P37 = !P37;
+	// P42 = !P42;
+	delay_ms(20);
+	LCD_Clear(RED);
+	delay_ms(20);
+	LCD_Clear(GREEN);
+	delay_ms(20);
+	LCD_Clear(RED);
+	delay_ms(20);
+	LCD_Clear(GREEN);
+	LCD_LED = !LCD_LED;
+}

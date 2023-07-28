@@ -469,8 +469,7 @@ void main()
 {
 	int rumtimes = 0;
 	init();
-	setzhi = readdianliuzhi();
-	// setzhi=readzhi(4);
+	// setzhi = readdianliuzhi();
 	while (1)
 	{
 		shurulvbo();
@@ -489,8 +488,7 @@ void main()
 		if (rumtimes++ > 500)
 		{
 			rumtimes = 0;
-
-			tmp = getwendu();
+			// tmp = getwendu();
 			showdata();
 		}
 	}
@@ -508,14 +506,14 @@ void chuankou1put(char c)
 }
 static void chuliguankji(char *ans1)
 {
-	char *index;
-	index = strstr(ans1, "@STCISP#");
-	if (index == 0)
-	{
-		return;
-	}
-	printf("rec @STCISP#,researt now");
-	IAP_CONTR = 0x60;
+	// char *index;
+	// index = strstr(ans1, "@STCISP#");
+	// if (index == 0)
+	// {
+	// 	return;
+	// }
+	// printf("rec @STCISP#,researt now");
+	// IAP_CONTR = 0x60;
 }
 void clearbuff1()
 {
@@ -532,26 +530,26 @@ int readzhi(int dizhi)
 	sprintf(dataxx, "pingmuGetData getdizhi%d-", dizhi);
 	clearbuff1();
 	printf(dataxx);
-	while (1)
-	{
-		delay_ms(1);
-		if (times++ > 100)
-		{
-			return 0;
-		}
-		if (falgchuankou1)
-		{
-			char *index;
-			index = strstr(buf1, dataxx);
-			if (index != 0)
-			{
-				ans = atoi(index + strlen(dataxx));
-				printf("read ans%d\n", ans);
-				return ans;
-			}
-			clearbuff1();
-		}
-	}
+	// while (1)
+	// {
+	// 	// delay_ms(1);
+	// 	// if (times++ > 100)
+	// 	// {
+	// 	// 	return 0;
+	// 	// }
+	// 	// if (falgchuankou1)
+	// 	// {
+	// 	// 	char *index;
+	// 	// 	index = strstr(buf1, dataxx);
+	// 	// 	if (index != 0)
+	// 	// 	{
+	// 	// 		ans = atoi(index + strlen(dataxx));
+	// 	// 		printf("read ans%d\n", ans);
+	// 	// 		return ans;
+	// 	// 	}
+	// 	// 	clearbuff1();
+	// 	// }
+	// }
 }
 // 上到下  灰白黑紫
 int writedizhi(int dizhi, int zhi)
@@ -562,24 +560,24 @@ int writedizhi(int dizhi, int zhi)
 	sprintf(dataxx, "pingmuSetData setdizhi0%d-%d", dizhi, zhi);
 	clearbuff1();
 	printf(dataxx);
-	while (1)
-	{
-		delay_ms(1);
-		if (times++ > 100)
-		{
-			return 0;
-		}
-		if (falgchuankou1)
-		{
-			char *index;
-			index = strstr(buf1, "pingmuSetData zhi");
-			if (index != 0)
-			{
-				return 0;
-			}
-			clearbuff1();
-		}
-	}
+	// while (1)
+	// {
+	// 	// delay_ms(1);
+	// 	// if (times++ > 100)
+	// 	// {
+	// 	// 	return 0;
+	// 	// }
+	// 	// if (falgchuankou1)
+	// 	// {
+	// 	// 	char *index;
+	// 	// 	index = strstr(buf1, "pingmuSetData zhi");
+	// 	// 	if (index != 0)
+	// 	// 	{
+	// 	// 		return 0;
+	// 	// 	}
+	// 	// 	clearbuff1();
+	// 	// }
+	// }
 }
 // 发数据出去，，然后收所有的，检验返回的值。。
 void chuankou1time()
@@ -616,7 +614,10 @@ void tm0_isr() interrupt 1
 
 void init()
 {
-	delay_ms(10);
+	WTST = 0;	
+	EAXFR = 1;	  // 使能访问 XFR
+	CKCON = 0x00; // 设置外部数据总线速度为最快
+	// delay_ms(10);
 	P0M0 = 0x00;
 	P0M1 = 0x02;
 	P1M0 = 0x00;
@@ -629,20 +630,28 @@ void init()
 	P4M1 = 0x00;
 	P5M0 = 0x00;
 	P5M1 = 0x00;
-	SPCTL = 0x50 | 0x80; //??SPI????
-	SPSTAT = 0xc0;		 //?????
+	
 	LCD_LED = 0;
 	LED0 = ~LED0;
-	delay_ms(50);
+	UartInit();
+	Timer0Init();
+
+	delay_ms(10);
 
 	LCD_Init();
-	UartInit();
 
-	Timer0Init();
+
+
+
 	delay_ms(50);
 
 	LCD_Fill(0, 0, 320, 240, WHITE);
 	printf("system begin\r");
 	delay_ms(50);
 	pingmuclear();
+	
+	
+
+	
+	
 }

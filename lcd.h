@@ -1,21 +1,37 @@
 #ifndef __LCD_H
 #define __LCD_H	
 #include "stc32g.h"
-#define DATA_H P2
-#define DATA_L P0
-
-////sbit LCD_MOSI = P1^4;
-////sbit LCD_MISO = P1^3;
-//sbit LCD_SCK = P1^5;//就是TFT上的LCD_RS引脚
 
 
+//#define DATA_H P2
+//#define DATA_L P0
 
-sbit LCD_LED= P1^1;
+sbit LCD_LED  = P4^3;
 
-sbit LCD_CS = P1^2;
-sbit LCD_CD = P1^0;//就是TFT上的LCD_WR引脚
-sbit LCD_RESET = P0^3;
+sbit LCD_CS = P2^2;  
+sbit LCD_CD   = P2^6; //就是TFT上的LCD_WR引脚
+sbit LCD_RESET = P2^7;
+//sbit LCD_MOSI = P2^3;
+//sbit LCD_MISO = P2^4;
+sbit LCD_MOSI = P2^4;
+sbit LCD_MISO = P2^3;
+sbit LCD_SCK  = P2^5;
 
+
+
+sbit led1=P3^3;
+sbit led2=P3^5;
+sbit led3=P3^7;
+sbit led4=P4^2;
+
+sbit k1=P4^0;
+sbit k2=P3^4;
+sbit k3=P3^6;
+sbit k4=P4^1;
+
+
+
+void Sample_Lamp(void);
 
 
 

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE main.c XSMALL BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.
-                    -\Objects\main.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE main.c XSMALL BROWSE DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(
+                    -.\Objects\main.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        return (dat);
    57   1      }
    58          
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 2   
 
    59          void UartSendStr(u8 *str)
    60          {
@@ -134,7 +134,7 @@ stmt  level    source
   122          sbit LED0 = P2 ^ 2;
   123          sbit Y3 = P3 ^ 4;
   124          sbit Y2 = P3 ^ 6;
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 3   
 
   125          
   126          sbit Y1 = P2 ^ 0;
@@ -202,7 +202,7 @@ stmt  level    source
   188   3          }
   189   2          else if ((keybuf[i] & 0xFF) == 0xFF)
   190   2          { // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 4   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 4   
 
   191   3            xin[i] = 1;
   192   3          }
@@ -270,7 +270,7 @@ stmt  level    source
   254   2        }
   255   1        if (i == keylow)
   256   1        {
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 5   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 5   
 
   257   2          setzhichange(-1);
   258   2          return;
@@ -338,7 +338,7 @@ stmt  level    source
   320   1      }
   321          void ledclose(int weizhi)
   322          {
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 6   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 6   
 
   323   1        if (weizhi == keyon || weizhi == keyok)
   324   1        {
@@ -406,7 +406,7 @@ stmt  level    source
   384   1        char dataxx[60] = {0};
   385   1        static int runflag2 = 0;
   386   1        int i;
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 7   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 7   
 
   387   1        if (runflag2 == 1)
   388   1        {
@@ -474,7 +474,7 @@ stmt  level    source
   450   2        }
   451   1        shownow();
   452   1        showsetzhi();
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 8   
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 8   
 
   453   1        shownwendu();
   454   1      }
@@ -534,20 +534,18 @@ stmt  level    source
   508   1      }
   509          static void chuliguankji(char *ans1)
   510          {
-  511   1        char *index;
-  512   1        index = strstr(ans1, "@STCISP#");
-*** WARNING C140 IN LINE 512 OF main.c: 'strstr' undefined; assuming 'extern int strstr()'
-*** WARNING C95 IN LINE 512 OF main.c: 'strstr': too many actual parameters
-*** WARNING C40 IN LINE 512 OF main.c: 'int' converted to 'far' pointer
-  513   1        if (index == 0)
-  514   1        {
-  515   2          return;
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 9   
+  511   1        // char *index;
+  512   1        // index = strstr(ans1, "@STCISP#");
+  513   1        // if (index == 0)
+  514   1        // {
+  515   1        //  return;
+  516   1        // }
+  517   1        // printf("rec @STCISP#,researt now");
+  518   1        // IAP_CONTR = 0x60;
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 9   
 
-  516   2        }
-  517   1        printf("rec @STCISP#,researt now");
-  518   1        IAP_CONTR = 0x60;
   519   1      }
+*** WARNING C47 IN LINE 509 OF main.c: 'ans1': unreferenced parameter
   520          void clearbuff1()
   521          {
   522   1        memset(buf1, 0, sizeof(buf1));
@@ -563,29 +561,28 @@ stmt  level    source
   532   1        sprintf(dataxx, "pingmuGetData getdizhi%d-", dizhi);
   533   1        clearbuff1();
   534   1        printf(dataxx);
-  535   1        while (1)
-  536   1        {
-  537   2          delay_ms(1);
-  538   2          if (times++ > 100)
-  539   2          {
-  540   3            return 0;
-  541   3          }
-  542   2          if (falgchuankou1)
-  543   2          {
-  544   3            char *index;
-  545   3            index = strstr(buf1, dataxx);
-*** WARNING C95 IN LINE 545 OF main.c: 'strstr': too many actual parameters
-*** WARNING C40 IN LINE 545 OF main.c: 'int' converted to 'far' pointer
-  546   3            if (index != 0)
-  547   3            {
-  548   4              ans = atoi(index + strlen(dataxx));
-  549   4              printf("read ans%d\n", ans);
-  550   4              return ans;
-  551   4            }
-  552   3            clearbuff1();
-  553   3          }
-  554   2        }
+  535   1        // while (1)
+  536   1        // {
+  537   1        //  // delay_ms(1);
+  538   1        //  // if (times++ > 100)
+  539   1        //  // {
+  540   1        //  //  return 0;
+  541   1        //  // }
+  542   1        //  // if (falgchuankou1)
+  543   1        //  // {
+  544   1        //  //  char *index;
+  545   1        //  //  index = strstr(buf1, dataxx);
+  546   1        //  //  if (index != 0)
+  547   1        //  //  {
+  548   1        //  //    ans = atoi(index + strlen(dataxx));
+  549   1        //  //    printf("read ans%d\n", ans);
+  550   1        //  //    return ans;
+  551   1        //  //  }
+  552   1        //  //  clearbuff1();
+  553   1        //  // }
+  554   1        // }
   555   1      }
+*** WARNING C47 IN LINE 530 OF main.c: 'ans': unreferenced local variable
   556          // 上到下  灰白黑紫
   557          int writedizhi(int dizhi, int zhi)
   558          {
@@ -595,28 +592,26 @@ stmt  level    source
   562   1        sprintf(dataxx, "pingmuSetData setdizhi0%d-%d", dizhi, zhi);
   563   1        clearbuff1();
   564   1        printf(dataxx);
-  565   1        while (1)
-  566   1        {
-  567   2          delay_ms(1);
-  568   2          if (times++ > 100)
-  569   2          {
-  570   3            return 0;
-  571   3          }
-  572   2          if (falgchuankou1)
-  573   2          {
-  574   3            char *index;
-  575   3            index = strstr(buf1, "pingmuSetData zhi");
-*** WARNING C95 IN LINE 575 OF main.c: 'strstr': too many actual parameters
-*** WARNING C40 IN LINE 575 OF main.c: 'int' converted to 'far' pointer
-  576   3            if (index != 0)
-  577   3            {
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 10  
+  565   1        // while (1)
+  566   1        // {
+  567   1        //  // delay_ms(1);
+  568   1        //  // if (times++ > 100)
+  569   1        //  // {
+  570   1        //  //  return 0;
+  571   1        //  // }
+  572   1        //  // if (falgchuankou1)
+  573   1        //  // {
+  574   1        //  //  char *index;
+  575   1        //  //  index = strstr(buf1, "pingmuSetData zhi");
+  576   1        //  //  if (index != 0)
+  577   1        //  //  {
+  578   1        //  //    return 0;
+  579   1        //  //  }
+  580   1        //  //  clearbuff1();
+  581   1        //  // }
+  582   1        // }
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 10  
 
-  578   4              return 0;
-  579   4            }
-  580   3            clearbuff1();
-  581   3          }
-  582   2        }
   583   1      }
 *** WARNING C47 IN LINE 560 OF main.c: 'ans': unreferenced local variable
   584          // 发数据出去，，然后收所有的，检验返回的值。。
@@ -654,50 +649,74 @@ stmt  level    source
   616          
   617          void init()
   618          {
-  619   1        delay_ms(10);
-  620   1        P0M0 = 0x00;
-  621   1        P0M1 = 0x02;
-  622   1        P1M0 = 0x00;
-  623   1        P1M1 = 0x00;
-  624   1        P2M0 = 0x00;
-  625   1        P2M1 = 0x00;
-  626   1        P3M0 = 0x00;
-  627   1        P3M1 = 0x00;
-  628   1        P4M0 = 0x00;
-  629   1        P4M1 = 0x00;
-  630   1        P5M0 = 0x00;
-  631   1        P5M1 = 0x00;
-  632   1        SPCTL = 0x50 | 0x80; //??SPI????
-  633   1        SPSTAT = 0xc0;     //?????
-  634   1        LCD_LED = 0;
-  635   1        LED0 = ~LED0;
-  636   1        delay_ms(50);
-  637   1      
-  638   1        LCD_Init();
-  639   1        UartInit();
+  619   1        WTST = 0; 
+  620   1        EAXFR = 1;    // 使能访问 XFR
+  621   1        CKCON = 0x00; // 设置外部数据总线速度为最快
+  622   1        // delay_ms(10);
+  623   1        P0M0 = 0x00;
+  624   1        P0M1 = 0x02;
+  625   1        P1M0 = 0x00;
+  626   1        P1M1 = 0x00;
+  627   1        P2M0 = 0x00;
+  628   1        P2M1 = 0x00;
+  629   1        P3M0 = 0x00;
+  630   1        P3M1 = 0x00;
+  631   1        P4M0 = 0x00;
+  632   1        P4M1 = 0x00;
+  633   1        P5M0 = 0x00;
+  634   1        P5M1 = 0x00;
+  635   1        
+  636   1        LCD_LED = 0;
+  637   1        LED0 = ~LED0;
+  638   1        UartInit();
+  639   1        Timer0Init();
   640   1      
-  641   1        Timer0Init();
-  642   1        delay_ms(50);
-C251 COMPILER V5.60.0,  main                                                               23/07/23  06:23:14  PAGE 11  
+  641   1        delay_ms(10);
+  642   1      
+  643   1        LCD_Init();
+  644   1      
+  645   1      
+  646   1      
+  647   1      
+C251 COMPILER V5.60.0,  main                                                               28/07/23  08:35:13  PAGE 11  
 
-  643   1      
-  644   1        LCD_Fill(0, 0, 320, 240, WHITE);
-  645   1        printf("system begin\r");
-  646   1        delay_ms(50);
-  647   1        pingmuclear();
-  648   1      }
+  648   1          printf("test1 running" );
+  649   1          delay_ms(200);
+  650   1          printf("test1 running" );
+  651   1          delay_ms(200);
+  652   1          printf("test1 running" );
+  653   1        while (1)
+  654   1        {
+  655   2          Sample_Lamp();
+  656   2        }
+  657   1        
+  658   1        
+  659   1        
+  660   1      
+  661   1        
+  662   1        // delay_ms(50);
+  663   1      
+  664   1        // LCD_Fill(0, 0, 320, 240, WHITE);
+  665   1        // printf("system begin\r");
+  666   1        // delay_ms(50);
+  667   1        // pingmuclear();
+  668   1      }
+*** WARNING C135 IN LINE 555 OF main.c: 'readzhi': no return value
+*** WARNING C135 IN LINE 555 OF main.c: 'readzhi': no return value
+*** WARNING C135 IN LINE 583 OF main.c: 'writedizhi': no return value
+*** WARNING C135 IN LINE 583 OF main.c: 'writedizhi': no return value
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      2047     ------
+  code size            =      1814     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
   xdata size           =    ------     ------
   xdata-const size     =    ------     ------
-  edata size           =       440        348
+  edata size           =       440        340
   bit size             =         1     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -705,8 +724,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =       611     ------
+  hconst size          =       547     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  10 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  9 WARNING(S),  0 ERROR(S)

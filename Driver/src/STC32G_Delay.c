@@ -25,7 +25,15 @@ void delay_ms(unsigned int ms)
 {
 	unsigned int i;
 	do{
-		i = MAIN_Fosc / 6030;
+		i = MAIN_Fosc /2/ 6030;
+		while(--i);
+	}while(--ms);
+}
+void delay_ms2(unsigned int ms)
+{
+	unsigned int i;
+	do{
+		i = MAIN_Fosc/20/ 6030;
 		while(--i);
 	}while(--ms);
 }

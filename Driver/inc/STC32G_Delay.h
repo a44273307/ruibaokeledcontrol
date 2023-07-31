@@ -16,5 +16,5 @@
 #include	"config.h"
 
 void delay_ms(unsigned int ms);
-
+void delay_ms2(unsigned int ms);
 #endif

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  21:38:33  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  22:33:15  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_PWM_Isr
@@ -66,7 +66,7 @@ stmt  level    source
    56   1          if (PWMA_SR1 & 0x40)    //TIFA ´¥·¢Æ÷ÖÐ¶Ï
    57   1          {
    58   2              PWMA_SR1 &= ~0x40;
-C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  21:38:33  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  22:33:15  PAGE 2   
 
    59   2      
    60   2          }
@@ -135,7 +135,7 @@ stmt  level    source
 Module Information          Static   Overlayable
 ------------------------------------------------
   code size            =         8     ------
-C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  21:38:33  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_PWM_Isr                                                     31/07/23  22:33:15  PAGE 3   
 
   ecode size           =       266     ------
   data size            =    ------     ------

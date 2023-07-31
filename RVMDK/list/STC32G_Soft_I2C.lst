@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  21:38:28  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  22:33:10  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Soft_I2C
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        I2C_Delay();
    57   1      }
    58          
-C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  21:38:28  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  22:33:10  PAGE 2   
 
    59          void S_ACK(void)              //Send ACK (LOW)
    60          {
@@ -134,7 +134,7 @@ stmt  level    source
   122          u8 I2C_ReadAbyte(void)          //read A byte from I2C
   123          {
   124   1        u8 i,dat;
-C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  21:38:28  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  22:33:10  PAGE 3   
 
   125   1        i = 8;
   126   1        SDA = 1;
@@ -202,7 +202,7 @@ stmt  level    source
   186   2          if(!F0)
   187   2          {
   188   3            I2C_Start();
-C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  21:38:28  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_Soft_I2C                                                    31/07/23  22:33:10  PAGE 4   
 
   189   3            I2C_WriteAbyte(dev_addr|1);
   190   3            I2C_Check_ACK();

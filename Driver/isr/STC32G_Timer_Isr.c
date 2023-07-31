@@ -20,10 +20,10 @@
 // 返回: none.
 // 版本: V1.0, 2020-09-23
 //========================================================================
-void Timer0_ISR_Handler (void) interrupt TMR0_VECTOR		//进中断时已经清除标志
-{
-  Task_Marks_Handler_Callback();	//任务标记回调函数
-}
+// void Timer0_ISR_Handler (void) interrupt TMR0_VECTOR		//进中断时已经清除标志
+// {
+//   Task_Marks_Handler_Callback();	//任务标记回调函数
+// }
 
 //========================================================================
 // 函数: Timer1_ISR_Handler

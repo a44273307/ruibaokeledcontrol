@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  tongxin2                                                           31/07/23  21:38:25  PAGE 1   
+C251 COMPILER V5.60.0,  tongxin2                                                           31/07/23  22:33:07  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE tongxin2
@@ -66,7 +66,7 @@ stmt  level    source
    56   2          }
    57   1          // ÂúÁË¶ª
    58   1          if(maxzhi==getemptyindex2())
-C251 COMPILER V5.60.0,  tongxin2                                                           31/07/23  21:38:25  PAGE 2   
+C251 COMPILER V5.60.0,  tongxin2                                                           31/07/23  22:33:07  PAGE 2   
 
    59   1          {
    60   2              return ;

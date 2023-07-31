@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -19,229 +19,701 @@ stmt  level    source
     9          /* --- QQ:  800003751 -------------------------------------------------*/
    10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
    11          /*---------------------------------------------------------------------*/
-   12          
-   13          #include  "Task.h"
-   14          #include  "System_init.h"
-   15          #include  "APP.h"
+   12          #include <string.h>
+   13          #include "stc32g.h"
+   14          #include "config.h"
+*** WARNING C317 IN LINE 39 OF ..\User\type_def.h: attempt to redefine macro 'NULL'
+   15          
+   16          
+   17          #include <stdio.h>
+   18          #include <stdarg.h>
+   19          #include <stdio.h>
+   20          
+   21          #include <stdlib.h>
+   22          #include  "Task.h"
+   23          #include  "System_init.h"
+   24          #include  "APP.h"
 *** WARNING C317 IN LINE 89 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
 *** WARNING C317 IN LINE 91 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
 *** WARNING C317 IN LINE 95 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
 *** WARNING C317 IN LINE 97 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
-   16          
-   17          #include  "STC32G_GPIO.h"
-   18          #include  "STC32G_UART.h"
-   19          #include  "STC32G_NVIC.h"
-   20          #include  "STC32G_Delay.h"
-   21          #include  "STC32G_Switch.h"
-   22          #include "uart.h"
+   25          
+   26          #include  "config.h"
+   27          #include  "STC32G_GPIO.h"
+   28          #include  "STC32G_UART.h"
+   29          #include  "STC32G_NVIC.h"
+   30          #include  "STC32G_Delay.h"
+   31          #include  "STC32G_Switch.h"
+   32          #include "uart.h"
 *** WARNING C317 IN LINE 17 OF ..\User\uart.h: attempt to redefine macro 'CLR_TI4'
 *** WARNING C317 IN LINE 18 OF ..\User\uart.h: attempt to redefine macro 'CLR_RI4'
-   23          
-   24          void  GPIO_configcom3(void)
-   25          {
-   26   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
-   27   1      
-   28   1        GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1;    //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
-   29   1        GPIO_InitStructure.Mode = GPIO_PullUp;  //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
-             -OUT_PP
-   30   1        GPIO_Inilize(GPIO_P5,&GPIO_InitStructure);  //初始化
-   31   1      }
-   32          
-   33          /***************  串口初始化函数 *****************/
-   34          void  UART_configcom3(void)
-   35          {
-   36   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
-   37   1      
-   38   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UAR
-             -T_9bit_BRTx
-   39   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer3;     //选择波特率发生器, BRT_Timer3, BRT_Timer2 (注意: 串口
-             -2固定使用BRT_Timer2)
-   40   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率, 一般 110 ~ 115200
-   41   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
-   42   1        UART_Configuration(UART3, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
-   43   1        NVIC_UART3_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pr
-             -iority_2,Priority_3
-   44   1      
-   45   1        UART3_SW(UART3_SW_P50_P51);   //UART3_SW_P00_P01,UART3_SW_P50_P51
-   46   1      }
-   47          
-   48          
-C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 2   
+   33          #include "tongxin2.h"
+   34          #include "tongxin.h"
+   35          #include "STC32G_EEPROM.h"
+   36          
+   37          void showhenxiang();
+   38          void ledopen(int weizhi);
+   39          
+   40          int keyon = 0;
+   41          int keylow = 1;
+   42          int keyok = 2;
+   43          int keyup = 3;
+   44          
+   45          int nowzhi = 0;
+   46          int setzhi = 0;
+   47          sbit X0 = P4 ^ 0;
+   48          sbit X3 = P3 ^ 4;
+   49          sbit X2 = P3 ^ 6;
+   50          sbit X1 = P4 ^ 1;
+   51          
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 2   
 
-   49          //========================================================================
-   50          // 函数: void main(void)
-   51          // 描述: 主函数程序.
-   52          // 参数: None.
-   53          // 返回: None.
-   54          // 版本: V1.0, 2012-10-22
-   55          //========================================================================
-   56          void test2()
-   57          {
-   58   1          SCON = 0x50;  // 8位数据,可变波特率
-   59   1        AUXR |= 0x40; // 定时器时钟1T模式
-   60   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
-   61   1        TMOD &= 0x0F; // 设置定时器模式
-   62   1        TL1 = 0xCC;   // 设置定时初始值
-   63   1        TH1 = 0xFF;   // 设置定时初始值
-   64   1        ET1 = 0;    // 禁止定时器%d中断
-   65   1        TR1 = 1;    // 定时器1开始计时
-   66   1        ES = 1;
-   67   1        EA = 1;
-   68   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
-   69   1      
-   70   1      }
-   71          void Delay1ms()   //@11.0592MHz
+   52          sbit LED1 = P4 ^ 2;
+   53          sbit LED2 = P3 ^ 7;
+   54          
+   55          sbit LED3 = P3 ^ 5;
+   56          sbit LED0 = P3 ^ 3;
+   57          
+   58          
+   59          sbit Y1 =  P4 ^ 2;
+   60          sbit Y2 =  P3 ^ 7;
+   61          
+   62          sbit Y3 =  P3 ^ 5;
+   63          sbit Y0 =  P3 ^ 3;
+   64          
+   65          
+   66          
+   67          char flagsystemrun = 0;
+   68          #define maxsetzhi 2047
+   69          
+   70          
+   71          void  GPIO_confibase(void)
    72          {
-   73   1        unsigned long i;
-   74   1      
-   75   1        _nop_();
-   76   1        _nop_();
-   77   1        _nop_();
-   78   1        i = 5998UL;
-   79   1        while (i) i--;
-   80   1      }
-   81          
-   82          
-   83          void delayx_ms(unsigned int ms)
-   84          {
-   85   1        while(ms--)
-   86   1        {
-   87   2          Delay1ms();
-   88   2        }
-   89   1      }
-   90          extern void Sample_Lamp(void);
-   91          void sendbytecom1(unsigned char ch)
-   92          {
-   93   1        int i;
-   94   1        // EA=0;
-   95   1          TI     =   0;  //清零串口发送完成中断请求标志
-   96   1          SBUF   =   ch;
-   97   1          while(TI ==0) //等待发送完成
-   98   1        {
-   99   2          for(i=0;i<2000; i++){
-  100   3            if( TI) break;
-  101   3          }
-  102   2          break;
-  103   2        }
-  104   1        EA=1;
-  105   1      }
-  106          #define maxjindu 16
-  107          #define qidian 0
-  108          void showhenxiang()
-  109          {
-  110   1        int i;
-  111   1        char dataxx[60] = {0};
-  112   1        static int runflag = 0;
-  113   1      
-  114   1      
-C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 3   
+   73   1      //  P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );   //P2 设置为准双向口
+   74   1      //  P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
+   75   1          P2_MODE_IO_PU(GPIO_Pin_All);  
+   76   1        
+   77   1        P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
+   78   1        P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
+   79   1        
+   80   1        P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
+   81   1        P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
+   82   1      }
+   83          
+   84          void  GPIO_configcom3(void)
+   85          {
+   86   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
+   87   1      
+   88   1        GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1;    //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
+   89   1        GPIO_InitStructure.Mode = GPIO_PullUp;  //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
+             -OUT_PP
+   90   1        GPIO_Inilize(GPIO_P5,&GPIO_InitStructure);  //初始化
+   91   1      }
+   92          
+   93          /***************  串口初始化函数 *****************/
+   94          void  UART_configcom3(void)
+   95          {
+   96   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
+   97   1      
+   98   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UAR
+             -T_9bit_BRTx
+   99   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer3;     //选择波特率发生器, BRT_Timer3, BRT_Timer2 (注意: 串口
+             -2固定使用BRT_Timer2)
+  100   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率, 一般 110 ~ 115200
+  101   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+  102   1        UART_Configuration(UART3, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
+  103   1        NVIC_UART3_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pr
+             -iority_2,Priority_3
+  104   1      
+  105   1        UART3_SW(UART3_SW_P50_P51);   //UART3_SW_P00_P01,UART3_SW_P50_P51
+  106   1      }
+  107          
+  108          
+  109          static int timepush=0;
+  110          void dealorder()
+  111          {
+  112   1        char out[30]={0};
+  113   1        Alltongxininfo get;
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 3   
 
-  115   1        for (i = 0; i < maxjindu; i++)
-  116   1        {
-  117   2          dataxx[i] = '-';
-  118   2        }
-  119   1      
-  120   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
-  121   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
-  122   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
-  123   1      }
-  124          
-  125          void  GPIO_confibase(void)
-  126          {
-  127   1      //  P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );   //P2 设置为准双向口
-  128   1      //  P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
-  129   1          P2_MODE_IO_PU(GPIO_Pin_All);  
-  130   1        
-  131   1        P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
-  132   1        P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
-  133   1        
-  134   1        P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
-  135   1        P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
-  136   1      }
-  137          void main(void)
-  138          {
-  139   1        WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
-  140   1        EAXSFR();   //扩展SFR(XFR)访问使能 
-  141   1        CKCON = 0;      //提高访问XRAM速度
-  142   1        
-  143   1        XOSCCR = 0xc0;        //启动外部晶振
-  144   1        while(!(XOSCCR&1));   //等待时钟稳定
-  145   1        CLKDIV = 0x00;        //时钟不分频
-  146   1        CLKSEL = 0x01;        //选择外部时钟    
-  147   1        GPIO_confibase();
-  148   1        SYS_Init();
-  149   1      
-  150   1        test2();
-  151   1        sendbytecom1('c');
-  152   1        GPIO_configcom3();
-  153   1        sendbytecom1('d');
-  154   1        Uart23Init();
-  155   1        sendbytecom1('e');
-  156   1      
-  157   1        while (1)
-  158   1        {
-  159   2          
-  160   2          sendbytecom1('a');
-  161   2          print3("test3");
-  162   2          delayx_ms(100);
-  163   2          sendbytecom1('b');
-  164   2          Sample_Lamp();
-  165   2          showhenxiang();
-  166   2          
-  167   2        }
-  168   1      }
-  169          
-  170          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
-  171          {
-  172   1      
-  173   1      
-  174   1        if(RI)
+  114   1        if(timepush>45)
+  115   1        {
+  116   2          timepush=0;
+  117   2          pop2(&get);
+  118   2          if(get.weizhi==4)
+  119   2          {
+  120   3            get.zhi=get.zhi;
+*** WARNING C138 IN LINE 120 OF ..\User\main.c: expression with possibly no effect
+  121   3          }
+  122   2          sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+  123   2          print3(out);
+  124   2        }
+  125   1      }
+  126          void time0() interrupt 1
+  127          {
+  128   1        if(!empty())
+*** WARNING C140 IN LINE 128 OF ..\User\main.c: 'empty' undefined; assuming 'extern int empty()'
+  129   1        {
+  130   2          timepush++;
+  131   2        }
+  132   1        chuankou1time();
+  133   1      }
+  134          
+  135          void Uart3() interrupt 17
+  136          {
+  137   1        char temp3; 
+  138   1          if (S3CON & S3RI)
+  139   1          {
+  140   2              S3CON &= ~S3RI; //??S3RI?
+  141   2          temp3 = S3BUF;
+  142   2          chuankou1put(temp3);
+  143   2          }
+  144   1          if (S3CON & S3TI)
+  145   1          {
+  146   2              S3CON &= ~S3TI; // 清除S3TI位
+  147   2              busy3 = 0;      // 清忙标志
+  148   2          }
+  149   1      }
+  150          
+  151          char flasetzhichange = 0;
+  152          // 是否能够设置值的状态。。。  ok键按下 即可。。。
+  153          char flagcanset = 0;
+  154          void setdianliu(int zhi)
+  155          {
+  156   1        push(4,zhi);
+  157   1      }
+  158          
+  159          
+  160          
+  161          void setzhichange(int a)
+  162          {
+  163   1        if (flagcanset == 0)
+  164   1          return;
+  165   1        if (setzhi + a < 0)
+  166   1        {
+  167   2          setzhi = 0;
+  168   2          // 0的情况也发，保证能够被收到。。
+  169   2          flasetzhichange = 1;
+  170   2          setdianliu(setzhi);
+  171   2          // printf("setdianliu%d\r\n",setzhi);
+  172   2          return;
+  173   2        }
+  174   1        if (setzhi + a > maxsetzhi)
   175   1        {
-  176   2          RI = 0;
-  177   2          printf("rec init now");
-  178   2          IAP_CONTR = 0x60;
-  179   2        }
-  180   1      
-C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 4   
+  176   2          setzhi = maxsetzhi;
+  177   2          return;
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 4   
 
-  181   1        if(TI)
-  182   1        {
-  183   2          TI = 0;
-  184   2          
-  185   2            
-  186   2        }
-  187   1      }
-  188          // 电源板子，风扇没开
-  189          
-  190          // lcd板子，按键按下，才能旋转设置值。。其他是ok的，，再按下，保存。。
-  191          
-  192          
-  193          
-  194          void Uart3() interrupt 17
-  195          {
-  196   1        char temp3; 
-  197   1          if (S3CON & S3RI)
-  198   1          {
-  199   2              S3CON &= ~S3RI; //??S3RI?
-  200   2          temp3 = S3BUF;
-  201   2          // chuankou1put(temp3);
-  202   2          }
-  203   1          if (S3CON & S3TI)
-  204   1          {
-  205   2              S3CON &= ~S3TI; // 清除S3TI位
-  206   2              busy3 = 0;      // 清忙标志
-  207   2          }
-  208   1      }
+  178   2        }
+  179   1        setzhi = setzhi + a;
+  180   1        flasetzhichange = 1;
+  181   1        setdianliu(setzhi);
+  182   1      }
+  183          int writedizhi(int dizhi, int zhi)
+  184          {
+  185   1        push(dizhi,zhi);
+  186   1      }
+  187          void writebuf();
+  188          void keydown(int i) // 按键按下的处理、、、
+  189          {
+  190   1        printf("key down%d",i);
+  191   1        if (i == keyon)
+  192   1        {
+  193   2          LED0 = ~LED0;
+  194   2          // 结束时候关灯， 开机键盘开灯。。。
+  195   2          if (flagsystemrun == 0)
+  196   2          {
+  197   3            flagsystemrun = 1;
+  198   3            LCD_ShowString(0, 0, "Circle TAC", RED, WHITE, 32, 0);
+  199   3            showhenxiang();
+  200   3            writedizhi(2,1);
+  201   3            delay_ms(30);
+  202   3            writedizhi(2,1);
+  203   3            delay_ms(30);
+  204   3            setdianliu(setzhi);
+  205   3            delay_ms(10);
+  206   3          }
+  207   2          else
+  208   2          {
+  209   3            writedizhi(2,0);
+  210   3            delay_ms(100);
+  211   3            writedizhi(2,0);
+  212   3            IAP_CONTR = 0x60;
+  213   3          }
+  214   2        }
+  215   1        if (flagcanset)
+  216   1        {
+  217   2          ledopen(i);
+  218   2        }
+  219   1        if (i == keylow)
+  220   1        {
+  221   2          setzhichange(-1);
+  222   2          return;
+  223   2        }
+  224   1        if (i == keyup)
+  225   1        {
+  226   2          setzhichange(1);
+  227   2          return;
+  228   2        }
+  229   1        if (i == keyok)
+  230   1        {
+  231   2          if(flagcanset==1)
+  232   2          {
+  233   3            writebuf();
+  234   3          }
+  235   2          flagcanset = 1 - flagcanset;
+  236   2          LED2 = ~LED2;
+  237   2        }
+  238   1      }
+  239          int keyshi = 3;
+  240          // 按键连续按下多少次的操作。。
+  241          int setbizhi(int times)
+  242          {
+  243   1        if (times < 15 * keyshi)
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 5   
+
+  244   1        {
+  245   2          return 10;
+  246   2        }
+  247   1        if (times < 50 * keyshi)
+  248   1        {
+  249   2          return 50;
+  250   2        }
+  251   1        return 100;
+  252   1      }
+  253          // 2ms 一次的话，那300ms一次ok的吧。。
+  254          void dolongtimes(int i, int times)
+  255          {
+  256   1        int xielv;
+  257   1        times = times - 300;
+  258   1        if (times < 0)
+  259   1        {
+  260   2          return;
+  261   2        }
+  262   1        xielv = setbizhi(times);
+  263   1        if (times % keyshi != 0)
+  264   1        {
+  265   2          return;
+  266   2        }
+  267   1        if (i == keylow)
+  268   1        {
+  269   2          setzhichange(-xielv);
+  270   2          return;
+  271   2        }
+  272   1        if (i == keyup)
+  273   1        {
+  274   2          setzhichange(xielv);
+  275   2          return;
+  276   2        }
+  277   1      }
+  278          void yout_set(char weizhi, char zhi)
+  279          {
+  280   1        if (weizhi == 0)
+  281   1          Y0 = zhi;
+  282   1        if (weizhi == 1)
+  283   1          Y1 = zhi;
+  284   1        if (weizhi == 2)
+  285   1          Y2 = zhi;
+  286   1        if (weizhi == 3)
+  287   1          Y3 = zhi;
+  288   1      }
+  289          void ledclose(int weizhi)
+  290          {
+  291   1        if (weizhi == keyon || weizhi == keyok)
+  292   1        {
+  293   2          return;
+  294   2        }
+  295   1        yout_set(weizhi, 1);
+*** WARNING C188 IN LINE 295 OF ..\User\main.c: 'parameter 1': value truncated
+  296   1      }
+  297          void ledopen(int weizhi)
+  298          {
+  299   1        if (weizhi == keyon || weizhi == keyok)
+  300   1        {
+  301   2          return;
+  302   2        }
+  303   1        yout_set(weizhi, 0);
+*** WARNING C188 IN LINE 303 OF ..\User\main.c: 'parameter 1': value truncated
+  304   1      }
+  305          
+  306          
+  307          
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 6   
+
+  308          
+  309          
+  310          char xin[30] = {0};
+  311          void shurulvbo(void)
+  312          {
+  313   1        static u8 keybuf[40] = {
+  314   1          0xFF,
+  315   1          0xFF,
+  316   1          0xFF,
+  317   1          0xFF,
+  318   1          0xFF,
+  319   1          0xFF,
+  320   1          0xFF,
+  321   1          0xFF,
+  322   1          0xFF,
+  323   1          0xFF,
+  324   1          0xFF,
+  325   1          0xFF,
+  326   1          0xFF,
+  327   1          0xFF,
+  328   1          0xFF,
+  329   1          0xFF,
+  330   1          0xFF,
+  331   1          0xFF,
+  332   1          0xFF,
+  333   1          0xFF,
+  334   1          0xFF,
+  335   1          0xFF,
+  336   1          0xFF,
+  337   1          0xFF,
+  338   1          0xFF,
+  339   1          0xFF,
+  340   1          0xFF,
+  341   1          0xFF,
+  342   1          0xFF,
+  343   1          0xFF,
+  344   1          0xFF,
+  345   1          0xFF,
+  346   1          0xFF,
+  347   1          0xFF,
+  348   1          0xFF,
+  349   1          0xFF,
+  350   1          0xFF,
+  351   1          0xFF,
+  352   1          0xFF,
+  353   1          0xFF,
+  354   1        }; // 矩阵按键扫描缓冲区 8ms
+  355   1        unsigned char i;
+  356   1        i = X0;
+  357   1        keybuf[0] = (keybuf[0] << 1) | i;
+  358   1        i = X1;
+  359   1        keybuf[1] = (keybuf[1] << 1) | i;
+  360   1        i = X2;
+  361   1        keybuf[2] = (keybuf[2] << 1) | i;
+  362   1        i = X3;
+  363   1        keybuf[3] = (keybuf[3] << 1) | i;
+  364   1        for (i = 0; i < 10; i++) // 3按键，所以循环3次
+  365   1        {
+  366   2          if ((keybuf[i] & 0xFF) == 0x00)
+  367   2          {
+  368   3            xin[i] = 0;
+  369   3          }
+  370   2          else if ((keybuf[i] & 0xFF) == 0xFF)
+  371   2          { // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
+  372   3            xin[i] = 1;
+  373   3          }
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 7   
+
+  374   2        }
+  375   1      }
+  376          void keyallchuli()
+  377          {
+  378   1        int i;
+  379   1        static char flag[10] = {0};   // 标志记录
+  380   1        static int dowmtimes[10] = {0}; // 标志记录
+  381   1        for (i = 0; i < 6; i++)
+  382   1        {
+  383   2          if (xin[i] == 0)
+  384   2          {
+  385   3            if (flag[i] == 0) // 代表按键第一次按下。。。
+  386   3            {
+  387   4              flag[i] = 1;
+  388   4              keydown(i);
+  389   4            }
+  390   3      
+  391   3            dowmtimes[i]++;
+  392   3            dolongtimes(i, dowmtimes[i]);
+  393   3          }
+  394   2          else
+  395   2          {
+  396   3            flag[i] = 0;
+  397   3            dowmtimes[i] = 0;
+  398   3            ledclose(i);
+  399   3          }
+  400   2        }
+  401   1      }
+  402          
+  403          int tmp = 203; // 温度值
+  404          void shownwendu()
+  405          {
+  406   1        char dataxx[40];
+  407   1        sprintf(dataxx, "TMP:%3d.%01d  ", tmp / 10, tmp % 10);
+  408   1        LCD_ShowString(0, 80, dataxx, RED, WHITE, 32, 0);
+  409   1      }
+  410          
+  411          void shownow()
+  412          {
+  413   1        // char dataxx[40];
+  414   1        // sprintf(dataxx,"NOW:%05d",nowzhi);
+  415   1        // LCD_ShowString(0,40,dataxx,RED,WHITE,32,0);
+  416   1      }
+  417          
+  418          #define maxjindu 16
+  419          #define qidian 0
+  420          
+  421          void pingmuclear()
+  422          {
+  423   1        char dataxx[60] = {0};
+  424   1        static int runflag2 = 0;
+  425   1        int i;
+  426   1        if (runflag2 == 1)
+  427   1        {
+  428   2          return;
+  429   2        }
+  430   1        runflag2 = 1;
+  431   1        // LCD_Clear(WHITE);
+  432   1      
+  433   1        sprintf(dataxx, "                     ", 1);
+  434   1        for (i = 0; i < 10; i++)
+  435   1        {
+  436   2          LCD_ShowString(0, i * 30, dataxx, RED, WHITE, 32, 0);
+  437   2          // delay_ms(1);
+  438   2        }
+  439   1      }
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 8   
+
+  440          void showhenxiang()
+  441          {
+  442   1        int i;
+  443   1        char dataxx[60] = {0};
+  444   1        static int runflag = 0;
+  445   1        if (runflag == 1)
+  446   1        {
+  447   2          return;
+  448   2        }
+  449   1        runflag = 1;
+  450   1      
+  451   1        for (i = 0; i < maxjindu; i++)
+  452   1        {
+  453   2          dataxx[i] = '-';
+  454   2        }
+  455   1      
+  456   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
+  457   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
+  458   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
+  459   1      }
+  460          
+  461          void showjindtiao()
+  462          {
+  463   1        int i;
+  464   1        char dataxx[60] = {0};
+  465   1        int jindu;
+  466   1        jindu = setzhi * maxjindu / maxsetzhi;
+  467   1        for (i = 0; i < maxjindu; i++)
+  468   1        {
+  469   2          if (i < jindu)
+  470   2            dataxx[i] = '>';
+  471   2          else
+  472   2            dataxx[i] = ' ';
+  473   2        }
+  474   1        showhenxiang();
+  475   1        LCD_ShowString(qidian, 160, dataxx, RED, WHITE, 32, 0);
+  476   1      }
+  477          void showsetzhi()
+  478          {
+  479   1        char dataxx[40];
+  480   1        sprintf(dataxx, "SET:        %04d    ", setzhi);
+  481   1        LCD_ShowString(0, 120, dataxx, RED, WHITE, 32, 0);
+  482   1        showjindtiao();
+  483   1      }
+  484          void showdata()
+  485          {
+  486   1        // 记得复位
+  487   1        if (flagsystemrun == 0)
+  488   1        {
+  489   2          return;
+  490   2        }
+  491   1        shownow();
+  492   1        showsetzhi();
+  493   1        shownwendu();
+  494   1      }
+  495          void showtime()
+  496          {
+  497   1        char i;
+  498   1        for(i=0;i<5;i++)
+  499   1        {
+  500   2          printf("dealy test1");
+  501   2          delay_ms(120);
+  502   2        }
+  503   1      }
+  504          
+  505          void getzhiandchange()
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 9   
+
+  506          {
+  507   1          int weizhi,zhi;
+  508   1          Alltongxininfo2 get={0};
+  509   1          pop22(&get);
+  510   1          if(get.weizhi==0)
+  511   1          {
+  512   2              return ;
+  513   2          }
+  514   1          weizhi=get.weizhi;
+  515   1          zhi=get.zhi;
+  516   1          printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+  517   1        if( weizhi== 6 )
+  518   1        {
+  519   2          tmp=zhi;
+  520   2        }
+  521   1      }
+  522          void readbuf();
+  523          void mainrun()
+  524          {
+  525   1        int rumtimes = 0;
+  526   1        readbuf();
+  527   1        while (1)
+  528   1        {
+  529   2          
+  530   2          delay_ms2(1);
+  531   2          shurulvbo();
+  532   2          keyallchuli(); 
+  533   2          dealorder();
+  534   2          dealchuankou();//处理中控板过来的的数据
+  535   2          getzhiandchange();
+  536   2          if (flasetzhichange == 1)
+  537   2          {
+  538   3            flasetzhichange = 0;
+  539   3            showdata();
+  540   3            rumtimes = 0;
+  541   3          }
+  542   2          else
+  543   2          {
+  544   3            rumtimes++;
+  545   3          }
+  546   2          if (rumtimes++ > 15000)
+  547   2          {
+  548   3            rumtimes = 0;
+  549   3            printf("show one");
+  550   3            // print3("show one");
+  551   3            // tmp = getwendu();
+  552   3            showdata();
+  553   3            printf("show end");
+  554   3      
+  555   3          }
+  556   2        }
+  557   1      }
+  558          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
+  559          {
+  560   1        if(RI)
+  561   1        {
+  562   2          RI = 0;
+  563   2          printf("rec init now");
+  564   2          IAP_CONTR = 0x60;
+  565   2        }
+  566   1      
+  567   1        if(TI)
+  568   1        {
+  569   2          TI = 0;
+  570   2          
+  571   2            
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 10  
+
+  572   2        }
+  573   1      }
+  574          //========================================================================
+  575          // 函数: void main(void)
+  576          // 描述: 主函数程序.
+  577          // 参数: None.
+  578          // 返回: None.
+  579          // 版本: V1.0, 2012-10-22
+  580          //========================================================================
+  581          void test2()
+  582          {
+  583   1        SCON = 0x50;  // 8位数据,可变波特率
+  584   1        AUXR |= 0x40; // 定时器时钟1T模式
+  585   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
+  586   1        TMOD &= 0x0F; // 设置定时器模式
+  587   1        TL1 = 0xCC;   // 设置定时初始值
+  588   1        TH1 = 0xFF;   // 设置定时初始值
+  589   1        ET1 = 0;    // 禁止定时器%d中断
+  590   1        TR1 = 1;    // 定时器1开始计时
+  591   1        ES = 1;
+  592   1        EA = 1;
+  593   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+  594   1      
+  595   1      }
+  596          int errpromdizhi=0x000040;
+  597          #define u8 unsigned char
+  598          void writebuf()
+  599          {
+  600   1        u8 get[10];
+  601   1        get[0]=55;
+  602   1        get[1]=setzhi/100;
+  603   1        get[2]=setzhi%100;
+  604   1        EEPROM_SectorErase(errpromdizhi);
+  605   1        EEPROM_write_n(errpromdizhi,get,3);
+  606   1      }
+  607          
+  608          void readbuf()
+  609          {
+  610   1        u8 get[10];
+  611   1      
+  612   1          EEPROM_read_n(errpromdizhi,get,3);
+  613   1          if(get[0]==55)
+  614   1          {
+  615   2              printf("has init\n");
+  616   2          setzhi=get[1]*100+get[2];
+  617   2          if(setzhi>=2047)
+  618   2          {
+  619   3            setzhi=2047;
+  620   3          }
+  621   2          if(setzhi<=0)
+  622   2          {
+  623   3            setzhi=0;
+  624   3          }
+  625   2          printf("has init %d-%d\n",get[1],get[2]);
+  626   2          }
+  627   1          else
+  628   1          {
+  629   2              printf("not init\n");
+  630   2          get[0]=55;
+  631   2          setzhi=550;
+  632   2            EEPROM_write_n(errpromdizhi,get,1);
+  633   2          }
+  634   1      }
+  635          void main(void)
+  636          {
+  637   1        WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:57:02  PAGE 11  
+
+  638   1        EAXSFR();   //扩展SFR(XFR)访问使能 
+  639   1        CKCON = 0;      //提高访问XRAM速度
+  640   1        
+  641   1        XOSCCR = 0xc0;        //启动外部晶振
+  642   1        while(!(XOSCCR&1));   //等待时钟稳定
+  643   1        CLKDIV = 0x00;        //时钟不分频
+  644   1        CLKSEL = 0x01;        //选择外部时钟    
+  645   1        GPIO_confibase();
+  646   1        SYS_Init();
+  647   1        test2();
+  648   1        GPIO_configcom3();
+  649   1        Uart23Init();
+  650   1        P4_MODE_IO_PU(GPIO_Pin_0|GPIO_Pin_1);
+  651   1        P3_MODE_IO_PU(GPIO_Pin_6|GPIO_Pin_4);
+  652   1        Timer0Init();
+  653   1        LCD_Init();
+  654   1        LCD_Fill(0, 0, 320, 240, WHITE);
+  655   1      
+  656   1        mainrun();
+  657   1        // LCD_Fill(0, 0, 320, 240, WHITE);
+  658   1        
+  659   1      }
+*** WARNING C135 IN LINE 186 OF ..\User\main.c: 'writedizhi?': no return value
+*** WARNING C135 IN LINE 186 OF ..\User\main.c: 'writedizhi?': no return value
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =         8     ------
-  ecode size           =       636     ------
+  code size            =        12     ------
+  ecode size           =      2660     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =         2         71
+  xdata size           =       127        333
   xdata-const size     =    ------     ------
   edata size           =    ------     ------
   bit size             =    ------     ------
@@ -251,8 +723,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =       119     ------
+  hconst size          =       680     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  13 WARNING(S),  0 ERROR(S)

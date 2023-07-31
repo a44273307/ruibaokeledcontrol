@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Exti                                                        31/07/23  21:38:27  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Exti                                                        31/07/23  22:33:09  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Exti
@@ -67,7 +67,7 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-C251 COMPILER V5.60.0,  STC32G_Exti                                                        31/07/23  21:38:27  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Exti                                                        31/07/23  22:33:09  PAGE 2   
 
   hconst size          =    ------     ------
 End of Module Information.

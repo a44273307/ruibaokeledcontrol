@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "app.h": "c",
-        "app_lamp.h": "c"
+        "app_lamp.h": "c",
+        "tongxin.h": "c"
     }
 }

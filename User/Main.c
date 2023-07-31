@@ -9,17 +9,77 @@
 /* --- QQ:  800003751 -------------------------------------------------*/
 /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
 /*---------------------------------------------------------------------*/
+#include <string.h>
+#include "stc32g.h"
+#include "config.h"
 
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+#include <stdlib.h>
 #include	"Task.h"
 #include	"System_init.h"
 #include	"APP.h"
 
+#include	"config.h"
 #include	"STC32G_GPIO.h"
 #include	"STC32G_UART.h"
 #include	"STC32G_NVIC.h"
 #include	"STC32G_Delay.h"
 #include	"STC32G_Switch.h"
 #include "uart.h"
+#include "tongxin2.h"
+#include "tongxin.h"
+#include "STC32G_EEPROM.h"
+
+void showhenxiang();
+void ledopen(int weizhi);
+
+int keyon = 0;
+int keylow = 1;
+int keyok = 2;
+int keyup = 3;
+
+int nowzhi = 0;
+int setzhi = 0;
+sbit X0 = P4 ^ 0;
+sbit X3 = P3 ^ 4;
+sbit X2 = P3 ^ 6;
+sbit X1 = P4 ^ 1;
+
+sbit LED1 = P4 ^ 2;
+sbit LED2 = P3 ^ 7;
+
+sbit LED3 = P3 ^ 5;
+sbit LED0 = P3 ^ 3;
+
+
+sbit Y1 =  P4 ^ 2;
+sbit Y2 =  P3 ^ 7;
+
+sbit Y3 =  P3 ^ 5;
+sbit Y0 =  P3 ^ 3;
+
+
+
+char flagsystemrun = 0;
+#define maxsetzhi 2047
+
+
+void	GPIO_confibase(void)
+{
+//	P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );		//P2 设置为准双向口
+//	P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
+    P2_MODE_IO_PU(GPIO_Pin_All);	
+	
+	P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
+	P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
+	
+	P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
+	P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
+}
 
 void	GPIO_configcom3(void)
 {
@@ -46,71 +106,347 @@ void	UART_configcom3(void)
 }
 
 
-//========================================================================
-// 函数: void	main(void)
-// 描述: 主函数程序.
-// 参数: None.
-// 返回: None.
-// 版本: V1.0, 2012-10-22
-//========================================================================
-void test2()
+static int timepush=0;
+void dealorder()
 {
-		SCON = 0x50;  // 8位数据,可变波特率
-	AUXR |= 0x40; // 定时器时钟1T模式
-	AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
-	TMOD &= 0x0F; // 设置定时器模式
-	TL1 = 0xCC;	  // 设置定时初始值
-	TH1 = 0xFF;	  // 设置定时初始值
-	ET1 = 0;	  // 禁止定时器%d中断
-	TR1 = 1;	  // 定时器1开始计时
-	ES = 1;
-	EA = 1;
-	P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
-
-}
-void Delay1ms()		//@11.0592MHz
-{
-	unsigned long i;
-
-	_nop_();
-	_nop_();
-	_nop_();
-	i = 5998UL;
-	while (i) i--;
-}
-
-
-void delayx_ms(unsigned int ms)
-{
-	while(ms--)
+	char out[30]={0};
+	Alltongxininfo get;
+	if(timepush>45)
 	{
-		Delay1ms();
+		timepush=0;
+		pop2(&get);
+		if(get.weizhi==4)
+		{
+			get.zhi=get.zhi;
+		}
+		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+		print3(out);
 	}
 }
-extern void Sample_Lamp(void);
-void sendbytecom1(unsigned char ch)
+void time0() interrupt 1
+{
+	if(!empty())
+	{
+		timepush++;
+	}
+	chuankou1time();
+}
+
+void Uart3() interrupt 17
+{
+	char temp3; 
+    if (S3CON & S3RI)
+    {
+        S3CON &= ~S3RI; //??S3RI?
+		temp3 = S3BUF;
+		chuankou1put(temp3);
+    }
+    if (S3CON & S3TI)
+    {
+        S3CON &= ~S3TI; // 清除S3TI位
+        busy3 = 0;      // 清忙标志
+    }
+}
+
+char flasetzhichange = 0;
+// 是否能够设置值的状态。。。  ok键按下 即可。。。
+char flagcanset = 0;
+void setdianliu(int zhi)
+{
+	push(4,zhi);
+}
+
+
+
+void setzhichange(int a)
+{
+	if (flagcanset == 0)
+		return;
+	if (setzhi + a < 0)
+	{
+		setzhi = 0;
+		// 0的情况也发，保证能够被收到。。
+		flasetzhichange = 1;
+		setdianliu(setzhi);
+		// printf("setdianliu%d\r\n",setzhi);
+		return;
+	}
+	if (setzhi + a > maxsetzhi)
+	{
+		setzhi = maxsetzhi;
+		return;
+	}
+	setzhi = setzhi + a;
+	flasetzhichange = 1;
+	setdianliu(setzhi);
+}
+int writedizhi(int dizhi, int zhi)
+{
+	push(dizhi,zhi);
+}
+void writebuf();
+void keydown(int i) // 按键按下的处理、、、
+{
+	printf("key down%d",i);
+	if (i == keyon)
+	{
+		LED0 = ~LED0;
+		// 结束时候关灯， 开机键盘开灯。。。
+		if (flagsystemrun == 0)
+		{
+			flagsystemrun = 1;
+			LCD_ShowString(0, 0, "Circle TAC", RED, WHITE, 32, 0);
+			showhenxiang();
+			writedizhi(2,1);
+			delay_ms(30);
+			writedizhi(2,1);
+			delay_ms(30);
+			setdianliu(setzhi);
+			delay_ms(10);
+		}
+		else
+		{
+			writedizhi(2,0);
+			delay_ms(100);
+			writedizhi(2,0);
+			IAP_CONTR = 0x60;
+		}
+	}
+	if (flagcanset)
+	{
+		ledopen(i);
+	}
+	if (i == keylow)
+	{
+		setzhichange(-1);
+		return;
+	}
+	if (i == keyup)
+	{
+		setzhichange(1);
+		return;
+	}
+	if (i == keyok)
+	{
+		if(flagcanset==1)
+		{
+			writebuf();
+		}
+		flagcanset = 1 - flagcanset;
+		LED2 = ~LED2;
+	}
+}
+int keyshi = 3;
+// 按键连续按下多少次的操作。。
+int setbizhi(int times)
+{
+	if (times < 15 * keyshi)
+	{
+		return 10;
+	}
+	if (times < 50 * keyshi)
+	{
+		return 50;
+	}
+	return 100;
+}
+// 2ms 一次的话，那300ms一次ok的吧。。
+void dolongtimes(int i, int times)
+{
+	int xielv;
+	times = times - 300;
+	if (times < 0)
+	{
+		return;
+	}
+	xielv = setbizhi(times);
+	if (times % keyshi != 0)
+	{
+		return;
+	}
+	if (i == keylow)
+	{
+		setzhichange(-xielv);
+		return;
+	}
+	if (i == keyup)
+	{
+		setzhichange(xielv);
+		return;
+	}
+}
+void yout_set(char weizhi, char zhi)
+{
+	if (weizhi == 0)
+		Y0 = zhi;
+	if (weizhi == 1)
+		Y1 = zhi;
+	if (weizhi == 2)
+		Y2 = zhi;
+	if (weizhi == 3)
+		Y3 = zhi;
+}
+void ledclose(int weizhi)
+{
+	if (weizhi == keyon || weizhi == keyok)
+	{
+		return;
+	}
+	yout_set(weizhi, 1);
+}
+void ledopen(int weizhi)
+{
+	if (weizhi == keyon || weizhi == keyok)
+	{
+		return;
+	}
+	yout_set(weizhi, 0);
+}
+
+
+
+
+
+char xin[30] = {0};
+void shurulvbo(void)
+{
+	static u8 keybuf[40] = {
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+		0xFF,
+	}; // 矩阵按键扫描缓冲区 8ms
+	unsigned char i;
+	i = X0;
+	keybuf[0] = (keybuf[0] << 1) | i;
+	i = X1;
+	keybuf[1] = (keybuf[1] << 1) | i;
+	i = X2;
+	keybuf[2] = (keybuf[2] << 1) | i;
+	i = X3;
+	keybuf[3] = (keybuf[3] << 1) | i;
+	for (i = 0; i < 10; i++) // 3按键，所以循环3次
+	{
+		if ((keybuf[i] & 0xFF) == 0x00)
+		{
+			xin[i] = 0;
+		}
+		else if ((keybuf[i] & 0xFF) == 0xFF)
+		{ // 连续3次扫描值为1，即1*8ms内都是弹起状态时，可认为按键已稳定的弹起
+			xin[i] = 1;
+		}
+	}
+}
+void keyallchuli()
 {
 	int i;
-	// EA=0;
-    TI     =   0;  //清零串口发送完成中断请求标志
-    SBUF   =   ch;
-    while(TI ==0) //等待发送完成
+	static char flag[10] = {0};		// 标志记录
+	static int dowmtimes[10] = {0}; // 标志记录
+	for (i = 0; i < 6; i++)
 	{
-		for(i=0;i<2000; i++){
-			if(	TI) break;
+		if (xin[i] == 0)
+		{
+			if (flag[i] == 0) // 代表按键第一次按下。。。
+			{
+				flag[i] = 1;
+				keydown(i);
+			}
+
+			dowmtimes[i]++;
+			dolongtimes(i, dowmtimes[i]);
 		}
-		break;
+		else
+		{
+			flag[i] = 0;
+			dowmtimes[i] = 0;
+			ledclose(i);
+		}
 	}
-	EA=1;
 }
+
+int tmp = 203; // 温度值
+void shownwendu()
+{
+	char dataxx[40];
+	sprintf(dataxx, "TMP:%3d.%01d  ", tmp / 10, tmp % 10);
+	LCD_ShowString(0, 80, dataxx, RED, WHITE, 32, 0);
+}
+
+void shownow()
+{
+	// char dataxx[40];
+	// sprintf(dataxx,"NOW:%05d",nowzhi);
+	// LCD_ShowString(0,40,dataxx,RED,WHITE,32,0);
+}
+
 #define maxjindu 16
 #define qidian 0
+
+void pingmuclear()
+{
+	char dataxx[60] = {0};
+	static int runflag2 = 0;
+	int i;
+	if (runflag2 == 1)
+	{
+		return;
+	}
+	runflag2 = 1;
+	// LCD_Clear(WHITE);
+
+	sprintf(dataxx, "                     ", 1);
+	for (i = 0; i < 10; i++)
+	{
+		LCD_ShowString(0, i * 30, dataxx, RED, WHITE, 32, 0);
+		// delay_ms(1);
+	}
+}
 void showhenxiang()
 {
 	int i;
 	char dataxx[60] = {0};
 	static int runflag = 0;
-
+	if (runflag == 1)
+	{
+		return;
+	}
+	runflag = 1;
 
 	for (i = 0; i < maxjindu; i++)
 	{
@@ -122,55 +458,105 @@ void showhenxiang()
 	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
 }
 
-void	GPIO_confibase(void)
+void showjindtiao()
 {
-//	P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );		//P2 设置为准双向口
-//	P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
-    P2_MODE_IO_PU(GPIO_Pin_All);	
-	
-	P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
-	P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
-	
-	P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
-	P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
-}
-void main(void)
-{
-	WTST = 0;		//设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
-	EAXSFR();		//扩展SFR(XFR)访问使能 
-	CKCON = 0;      //提高访问XRAM速度
-	
-	XOSCCR = 0xc0;        //启动外部晶振
-	while(!(XOSCCR&1));   //等待时钟稳定
-	CLKDIV = 0x00;        //时钟不分频
-	CLKSEL = 0x01;        //选择外部时钟		
-	GPIO_confibase();
-	SYS_Init();
-
-	test2();
-	sendbytecom1('c');
-	GPIO_configcom3();
-	sendbytecom1('d');
-	Uart23Init();
-	sendbytecom1('e');
-
-	while (1)
+	int i;
+	char dataxx[60] = {0};
+	int jindu;
+	jindu = setzhi * maxjindu / maxsetzhi;
+	for (i = 0; i < maxjindu; i++)
 	{
-		
-		sendbytecom1('a');
-		print3("test3");
-		delayx_ms(100);
-		sendbytecom1('b');
-		Sample_Lamp();
-		showhenxiang();
-		
+		if (i < jindu)
+			dataxx[i] = '>';
+		else
+			dataxx[i] = ' ';
+	}
+	showhenxiang();
+	LCD_ShowString(qidian, 160, dataxx, RED, WHITE, 32, 0);
+}
+void showsetzhi()
+{
+	char dataxx[40];
+	sprintf(dataxx, "SET:        %04d    ", setzhi);
+	LCD_ShowString(0, 120, dataxx, RED, WHITE, 32, 0);
+	showjindtiao();
+}
+void showdata()
+{
+	// 记得复位
+	if (flagsystemrun == 0)
+	{
+		return;
+	}
+	shownow();
+	showsetzhi();
+	shownwendu();
+}
+void showtime()
+{
+	char i;
+	for(i=0;i<5;i++)
+	{
+		printf("dealy test1");
+		delay_ms(120);
 	}
 }
 
+void getzhiandchange()
+{
+    int weizhi,zhi;
+    Alltongxininfo2 get={0};
+    pop22(&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+    printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+	if( weizhi== 6 )
+	{
+		tmp=zhi;
+	}
+}
+void readbuf();
+void mainrun()
+{
+	int rumtimes = 0;
+	readbuf();
+	while (1)
+	{
+		
+		delay_ms2(1);
+		shurulvbo();
+		keyallchuli(); 
+		dealorder();
+		dealchuankou();//处理中控板过来的的数据
+		getzhiandchange();
+		if (flasetzhichange == 1)
+		{
+			flasetzhichange = 0;
+			showdata();
+			rumtimes = 0;
+		}
+		else
+		{
+			rumtimes++;
+		}
+		if (rumtimes++ > 15000)
+		{
+			rumtimes = 0;
+			printf("show one");
+			// print3("show one");
+			// tmp = getwendu();
+			showdata();
+			printf("show end");
+
+		}
+	}
+}
 void UART1_ISR_Handler (void) interrupt UART1_VECTOR
 {
-
-
 	if(RI)
 	{
 		RI = 0;
@@ -185,24 +571,89 @@ void UART1_ISR_Handler (void) interrupt UART1_VECTOR
       
 	}
 }
-// 电源板子，风扇没开
-
-// lcd板子，按键按下，才能旋转设置值。。其他是ok的，，再按下，保存。。
-
-
-
-void Uart3() interrupt 17
+//========================================================================
+// 函数: void	main(void)
+// 描述: 主函数程序.
+// 参数: None.
+// 返回: None.
+// 版本: V1.0, 2012-10-22
+//========================================================================
+void test2()
 {
-	char temp3; 
-    if (S3CON & S3RI)
+	SCON = 0x50;  // 8位数据,可变波特率
+	AUXR |= 0x40; // 定时器时钟1T模式
+	AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
+	TMOD &= 0x0F; // 设置定时器模式
+	TL1 = 0xCC;	  // 设置定时初始值
+	TH1 = 0xFF;	  // 设置定时初始值
+	ET1 = 0;	  // 禁止定时器%d中断
+	TR1 = 1;	  // 定时器1开始计时
+	ES = 1;
+	EA = 1;
+	P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+
+}
+int errpromdizhi=0x000040;
+#define u8 unsigned char
+void writebuf()
+{
+	u8 get[10];
+	get[0]=55;
+	get[1]=setzhi/100;
+	get[2]=setzhi%100;
+	EEPROM_SectorErase(errpromdizhi);
+	EEPROM_write_n(errpromdizhi,get,3);
+}
+
+void readbuf()
+{
+	u8 get[10];
+
+    EEPROM_read_n(errpromdizhi,get,3);
+    if(get[0]==55)
     {
-        S3CON &= ~S3RI; //??S3RI?
-		temp3 = S3BUF;
-		// chuankou1put(temp3);
+        printf("has init\n");
+		setzhi=get[1]*100+get[2];
+		if(setzhi>=2047)
+		{
+			setzhi=2047;
+		}
+		if(setzhi<=0)
+		{
+			setzhi=0;
+		}
+		printf("has init %d-%d\n",get[1],get[2]);
     }
-    if (S3CON & S3TI)
+    else
     {
-        S3CON &= ~S3TI; // 清除S3TI位
-        busy3 = 0;      // 清忙标志
+        printf("not init\n");
+		get[0]=55;
+		setzhi=550;
+    	EEPROM_write_n(errpromdizhi,get,1);
     }
+}
+void main(void)
+{
+	WTST = 0;		//设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+	EAXSFR();		//扩展SFR(XFR)访问使能 
+	CKCON = 0;      //提高访问XRAM速度
+	
+	XOSCCR = 0xc0;        //启动外部晶振
+	while(!(XOSCCR&1));   //等待时钟稳定
+	CLKDIV = 0x00;        //时钟不分频
+	CLKSEL = 0x01;        //选择外部时钟		
+	GPIO_confibase();
+	SYS_Init();
+	test2();
+	GPIO_configcom3();
+	Uart23Init();
+	P4_MODE_IO_PU(GPIO_Pin_0|GPIO_Pin_1);
+	P3_MODE_IO_PU(GPIO_Pin_6|GPIO_Pin_4);
+	Timer0Init();
+	LCD_Init();
+	LCD_Fill(0, 0, 320, 240, WHITE);
+
+	mainrun();
+	// LCD_Fill(0, 0, 320, 240, WHITE);
+	
 }

@@ -1,0 +1,162 @@
+C251 COMPILER V5.60.0,  STC32G_UART_Isr                                                    28/07/23  07:43:33  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_UART_Isr
+OBJECT MODULE PLACED IN .\list\STC32G_UART_Isr.obj
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_UART_Isr.c XSMALL INTR2 BROWSE INCDIR(..\Driver\
+                    -inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_UART_Isr.lst) TABS(2) OBJECT(.\list\STC32G_UART_Isr.obj) 
+
+stmt  level    source
+
+    1          /*---------------------------------------------------------------------*/
+    2          /* --- STC MCU Limited ------------------------------------------------*/
+    3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+    4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+    5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+    6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+    7          /* --- Web: www.STCAI.com ---------------------------------------------*/
+    8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+    9          /* --- BBS: www.STCAIMCU.com  -----------------------------------------*/
+   10          /* --- QQ:  800003751 -------------------------------------------------*/
+   11          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+   12          /*---------------------------------------------------------------------*/
+   13          
+   14          #include "STC32G_UART.h"
+   15          
+   16          bit B_ULinRX1_Flag;
+   17          bit B_ULinRX2_Flag;
+   18          
+   19          //========================================================================
+   20          // 函数: UART1_ISR_Handler
+   21          // 描述: UART1中断函数.
+   22          // 参数: none.
+   23          // 返回: none.
+   24          // 版本: V1.0, 2020-09-23
+   25          //========================================================================
+   26          #ifdef UART1
+   27          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
+   28          {
+   29   1      
+   30   1      
+   31   1        if(RI)
+   32   1        {
+   33   2          RI = 0;
+   34   2      
+   35   2          
+   36   2        }
+   37   1      
+   38   1        if(TI)
+   39   1        {
+   40   2          TI = 0;
+   41   2          
+   42   2            
+   43   2        }
+   44   1      }
+   45          #endif
+   46          
+   47          //========================================================================
+   48          // 函数: UART2_ISR_Handler
+   49          // 描述: UART2中断函数.
+   50          // 参数: none.
+   51          // 返回: none.
+   52          // 版本: V1.0, 2020-09-23
+   53          //========================================================================
+   54          #ifdef UART2
+   55          void UART2_ISR_Handler (void) interrupt UART2_VECTOR
+   56          {
+   57   1      
+   58   1      
+C251 COMPILER V5.60.0,  STC32G_UART_Isr                                                    28/07/23  07:43:33  PAGE 2   
+
+   59   1        if(S2RI)
+   60   1        {
+   61   2          CLR_RI2();
+   62   2      
+   63   2          
+   64   2        }
+   65   1      
+   66   1        if(S2TI)
+   67   1        {
+   68   2          CLR_TI2();
+   69   2          
+   70   2            
+   71   2        }
+   72   1      }
+   73          #endif
+   74          
+   75          //========================================================================
+   76          // 函数: UART3_ISR_Handler
+   77          // 描述: UART3中断函数.
+   78          // 参数: none.
+   79          // 返回: none.
+   80          // 版本: V1.0, 2020-09-23
+   81          //========================================================================
+   82          #ifdef UART3
+   83          void UART3_ISR_Handler (void) interrupt UART3_VECTOR
+   84          {
+   85   1        if(S3RI)
+   86   1        {
+   87   2          CLR_RI3();
+   88   2      
+   89   2             
+   90   2        }
+   91   1      
+   92   1        if(S3TI)
+   93   1        {
+   94   2          CLR_TI3();
+   95   2          
+   96   2             
+   97   2        }
+   98   1      }
+   99          #endif
+  100          
+  101          //========================================================================
+  102          // 函数: UART4_ISR_Handler
+  103          // 描述: UART4中断函数.
+  104          // 参数: none.
+  105          // 返回: none.
+  106          // 版本: V1.0, 2020-09-23
+  107          //========================================================================
+  108          #ifdef UART4
+  109          void UART4_ISR_Handler (void) interrupt UART4_VECTOR
+  110          {
+  111   1        if(S4RI)
+  112   1        {
+  113   2          CLR_RI4();
+  114   2      
+  115   2        }
+  116   1      
+  117   1        if(S4TI)
+  118   1        {
+  119   2          CLR_TI4();
+  120   2          
+  121   2             
+  122   2        }
+  123   1      }
+  124          #endif
+C251 COMPILER V5.60.0,  STC32G_UART_Isr                                                    28/07/23  07:43:33  PAGE 3   
+
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =        84     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =         2     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

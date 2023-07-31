@@ -1,0 +1,173 @@
+C251 COMPILER V5.60.0,  main                                                               31/07/23  20:54:26  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main
+OBJECT MODULE PLACED IN .\list\main.obj
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\User\main.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\User;..\Ap
+                    -p\inc) DEBUG PRINT(.\list\main.lst) TABS(2) OBJECT(.\list\main.obj) 
+
+stmt  level    source
+
+    1          /*---------------------------------------------------------------------*/
+    2          /* --- STC MCU Limited ------------------------------------------------*/
+    3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+    4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+    5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+    6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+    7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+    8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+    9          /* --- QQ:  800003751 -------------------------------------------------*/
+   10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+   11          /*---------------------------------------------------------------------*/
+   12          
+   13          #include  "Task.h"
+   14          #include  "System_init.h"
+   15          #include  "APP.h"
+*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
+*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
+*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
+*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
+   16          //========================================================================
+   17          // 函数: void main(void)
+   18          // 描述: 主函数程序.
+   19          // 参数: None.
+   20          // 返回: None.
+   21          // 版本: V1.0, 2012-10-22
+   22          //========================================================================
+   23          void test2()
+   24          {
+   25   1          SCON = 0x50;  // 8位数据,可变波特率
+   26   1        AUXR |= 0x40; // 定时器时钟1T模式
+   27   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
+   28   1        TMOD &= 0x0F; // 设置定时器模式
+   29   1        TL1 = 0xCC;   // 设置定时初始值
+   30   1        TH1 = 0xFF;   // 设置定时初始值
+   31   1        ET1 = 0;    // 禁止定时器%d中断
+   32   1        TR1 = 1;    // 定时器1开始计时
+   33   1        ES = 1;
+   34   1        EA = 1;
+   35   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+   36   1      
+   37   1      }
+   38          void Delay1ms()   //@11.0592MHz
+   39          {
+   40   1        unsigned long i;
+   41   1      
+   42   1        _nop_();
+   43   1        _nop_();
+   44   1        _nop_();
+   45   1        i = 5998UL;
+   46   1        while (i) i--;
+   47   1      }
+   48          
+   49          
+   50          void delayx_ms(unsigned int ms)
+   51          {
+   52   1        while(ms--)
+   53   1        {
+   54   2          Delay1ms();
+C251 COMPILER V5.60.0,  main                                                               31/07/23  20:54:26  PAGE 2   
+
+   55   2        }
+   56   1      }
+   57          extern void Sample_Lamp(void);
+   58          void sendbyte1(unsigned char ch)
+   59          {
+   60   1        int i;
+   61   1        // EA=0;
+   62   1          TI     =   0;  //清零串口发送完成中断请求标志
+   63   1          SBUF   =   ch;
+   64   1          while(TI ==0) //等待发送完成
+   65   1        {
+   66   2          for(i=0;i<2000; i++){
+   67   3            if( TI) break;
+   68   3          }
+   69   2          break;
+   70   2        }
+   71   1        EA=1;
+   72   1      }
+   73          #define maxjindu 16
+   74          #define qidian 0
+   75          void showhenxiang()
+   76          {
+   77   1        int i;
+   78   1        char dataxx[60] = {0};
+   79   1        static int runflag = 0;
+   80   1      
+   81   1      
+   82   1        for (i = 0; i < maxjindu; i++)
+   83   1        {
+   84   2          dataxx[i] = '-';
+   85   2        }
+   86   1      
+   87   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
+   88   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
+   89   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
+   90   1      }
+   91          
+   92          
+   93          void main(void)
+   94          {
+   95   1        WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+   96   1        EAXSFR();   //扩展SFR(XFR)访问使能 
+   97   1        CKCON = 0;      //提高访问XRAM速度
+   98   1        
+   99   1        XOSCCR = 0xc0;        //启动外部晶振
+  100   1        while(!(XOSCCR&1));   //等待时钟稳定
+  101   1        CLKDIV = 0x00;        //时钟不分频
+  102   1        CLKSEL = 0x01;        //选择外部时钟    
+  103   1      
+  104   1        SYS_Init();
+  105   1        test2();
+  106   1        while (1)
+  107   1        {
+  108   2          sendbyte1('a');
+  109   2          delayx_ms(100);
+  110   2          sendbyte1('b');
+  111   2        // pingmuclear();
+  112   2        // printf("system begin over\r");
+  113   2      
+  114   2          Sample_Lamp();
+  115   2          showhenxiang();
+  116   2      //      POINT_COLOR=RED;  
+  117   2      //      LCD_ShowString(30,70,200,16,16,"TFTLCD TEST");                               
+  118   2      //      x++;
+  119   2      //    if(x==9)x=0;   
+  120   2          // delay_ms(1000);
+C251 COMPILER V5.60.0,  main                                                               31/07/23  20:54:26  PAGE 3   
+
+  121   2              // Task_Pro_Handler_Callback();
+  122   2          //Lamp_run();
+  123   2        }
+  124   1      }
+  125          
+  126          // 电源板子，风扇没开
+  127          
+  128          // lcd板子，按键按下，才能旋转设置值。。其他是ok的，，再按下，保存。。
+  129          
+  130          
+  131          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       326     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         2         60
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        99     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)

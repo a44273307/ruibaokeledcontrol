@@ -1,0 +1,221 @@
+C251 COMPILER V5.60.0,  FPC2801MS-H134-40C-41 ILI9341_HSD2                                 26/07/23  11:26:43  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE FPC2801MS-H134-40C-41 ILI9341_HSD2
+OBJECT MODULE PLACED IN .\list\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5 c251\C251\BIN\C251.EXE ..\App\src\FPC2801MS-H134-40C-41 ILI9341_HSD2
+                    -.8 MCU8bit.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\FPC2801MS-H134-40C-41 ILI93
+                    -41_HSD2.8 MCU8bit.lst) OBJECT(.\list\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.obj) 
+
+stmt  level    source
+
+    1          #include        "APP.h"
+    2          #include        "STC32G_GPIO.h"
+    3          #include        "STC32G_SPI.h"
+    4          #include        "STC32G_UART.h"
+    5          #include        "STC32G_NVIC.h"
+    6          #include        "STC32G_Delay.h"
+    7          #include    "lcd.h"
+    8          void WriteComm(unsigned char i)
+    9          {       
+   10   1      
+   11   1                      RS=0;   
+   12   1                      CS0=0;
+   13   1                      RD0=1;
+   14   1                      WR0=0;  
+   15   1                      DBL=i;  
+   16   1                      WR0=1;  
+   17   1                      CS0=1; 
+   18   1      
+   19   1      }
+   20          
+   21          void WriteData(unsigned char i)
+   22          {
+   23   1              
+   24   1                      RS=1;           
+   25   1                      CS0=0;
+   26   1                      RD0=1;
+   27   1                      WR0=0;          
+   28   1                      DBL=i;  
+   29   1                      WR0=1; 
+   30   1                      CS0=1; 
+   31   1      
+   32   1              
+   33   1      }
+   34          
+   35          
+   36          void BlockWrite(unsigned int Xstart,unsigned int Xend,unsigned int Ystart,unsigned int Yend) reentrant
+   37          {
+   38   1              WriteComm(0x2a);   
+   39   1              WriteData(Xstart>>8);
+*** WARNING C188 IN LINE 39 OF ..\App\src\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.c: 'parameter 1': value truncated
+   40   1              WriteData(Xstart&0xff);
+   41   1              WriteData(Xend>>8);
+*** WARNING C188 IN LINE 41 OF ..\App\src\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.c: 'parameter 1': value truncated
+   42   1              WriteData(Xend&0xff);
+   43   1      
+   44   1              WriteComm(0x2b);   
+   45   1              WriteData(Ystart>>8);
+*** WARNING C188 IN LINE 45 OF ..\App\src\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.c: 'parameter 1': value truncated
+   46   1              WriteData(Ystart&0xff);
+   47   1              WriteData(Yend>>8);
+*** WARNING C188 IN LINE 47 OF ..\App\src\FPC2801MS-H134-40C-41 ILI9341_HSD2.8 MCU8bit.c: 'parameter 1': value truncated
+   48   1              WriteData(Yend&0xff);
+   49   1      
+   50   1              WriteComm(0x2c);
+   51   1      }
+   52          
+   53          
+C251 COMPILER V5.60.0,  FPC2801MS-H134-40C-41 ILI9341_HSD2                                 26/07/23  11:26:43  PAGE 2   
+
+   54          
+   55          void LCD_Init(void)
+   56          {
+   57   1      
+   58   1              
+   59   1              RST=1;  
+   60   1              Delay(5);
+   61   1      
+   62   1              RST=0;
+   63   1              Delay(10);
+   64   1      
+   65   1              RST=1;
+   66   1              Delay(120);
+   67   1      
+   68   1      
+   69   1      
+   70   1      //------------------------------------LCD_CODE-----------------------------------------------------------
+             --------------------------------------------------------------//
+   71   1      //************* Start Initial Sequence **********// 
+   72   1      WriteComm(0xCF);  
+   73   1      WriteData(0x00); 
+   74   1      WriteData(0xC1); 
+   75   1      WriteData(0X30); 
+   76   1       
+   77   1      WriteComm(0xED);  
+   78   1      WriteData(0x64); 
+   79   1      WriteData(0x03); 
+   80   1      WriteData(0X12); 
+   81   1      WriteData(0X81); 
+   82   1       
+   83   1      WriteComm(0xE8);  
+   84   1      WriteData(0x85); 
+   85   1      WriteData(0x00); 
+   86   1      WriteData(0x78); 
+   87   1       
+   88   1      WriteComm(0xCB);  
+   89   1      WriteData(0x39); 
+   90   1      WriteData(0x2C); 
+   91   1      WriteData(0x00); 
+   92   1      WriteData(0x34); 
+   93   1      WriteData(0x02); 
+   94   1       
+   95   1      WriteComm(0xF7);  
+   96   1      WriteData(0x20); 
+   97   1       
+   98   1      WriteComm(0xEA);  
+   99   1      WriteData(0x00); 
+  100   1      WriteData(0x00); 
+  101   1       
+  102   1      WriteComm(0xC0);    //Power control 
+  103   1      WriteData(0x22);   //VRH[5:0] 
+  104   1       
+  105   1      WriteComm(0xC1);    //Power control 
+  106   1      WriteData(0x11);   //SAP[2:0];BT[3:0] 
+  107   1       
+  108   1      WriteComm(0xC5);    //VCM control 
+  109   1      WriteData(0x3F); 
+  110   1      WriteData(0x3C); 
+  111   1       
+  112   1      WriteComm(0xC7);    //VCM control2 
+  113   1      WriteData(0X90); 
+  114   1       
+  115   1      WriteComm(0x36);    // Memory Access Control 
+  116   1      WriteData(0x08); 
+  117   1       
+  118   1      WriteComm(0x3A);   
+C251 COMPILER V5.60.0,  FPC2801MS-H134-40C-41 ILI9341_HSD2                                 26/07/23  11:26:43  PAGE 3   
+
+  119   1      WriteData(0x55); 
+  120   1      
+  121   1      WriteComm(0xB1);   
+  122   1      WriteData(0x00);   
+  123   1      WriteData(0x18); 
+  124   1       
+  125   1      WriteComm(0xB6);    // Display Function Control 
+  126   1      WriteData(0x0A); 
+  127   1      WriteData(0xA2); 
+  128   1      
+  129   1      WriteComm(0xF2);    // 3Gamma Function Disable 
+  130   1      WriteData(0x00); 
+  131   1       
+  132   1      WriteComm(0x26);    //Gamma curve selected 
+  133   1      WriteData(0x01); 
+  134   1       
+  135   1      WriteComm(0xE0);    //Set Gamma 
+  136   1      WriteData(0x0F); 
+  137   1      WriteData(0x0B); 
+  138   1      WriteData(0x17); 
+  139   1      WriteData(0x07); 
+  140   1      WriteData(0x0D); 
+  141   1      WriteData(0x05); 
+  142   1      WriteData(0X45); 
+  143   1      WriteData(0xB5); 
+  144   1      WriteData(0x39); 
+  145   1      WriteData(0x0A); 
+  146   1      WriteData(0x15); 
+  147   1      WriteData(0x07); 
+  148   1      WriteData(0x09); 
+  149   1      WriteData(0x02); 
+  150   1      WriteData(0x00); 
+  151   1      
+  152   1      WriteComm(0XE1);    //Set Gamma 
+  153   1      WriteData(0x00); 
+  154   1      WriteData(0x0E); 
+  155   1      WriteData(0x1A); 
+  156   1      WriteData(0x02); 
+  157   1      WriteData(0x0E); 
+  158   1      WriteData(0x04); 
+  159   1      WriteData(0x2F); 
+  160   1      WriteData(0x34); 
+  161   1      WriteData(0x45); 
+  162   1      WriteData(0x03); 
+  163   1      WriteData(0x0E); 
+  164   1      WriteData(0x0D); 
+  165   1      WriteData(0x33); 
+  166   1      WriteData(0x36); 
+  167   1      WriteData(0x0F); 
+  168   1       
+  169   1      WriteComm(0x11);    //Exit Sleep 
+  170   1      Delay(120); 
+  171   1      WriteComm(0x29);    //Display on 
+  172   1      
+  173   1      
+  174   1      }
+  175          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       539     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+C251 COMPILER V5.60.0,  FPC2801MS-H134-40C-41 ILI9341_HSD2                                 26/07/23  11:26:43  PAGE 4   
+
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)

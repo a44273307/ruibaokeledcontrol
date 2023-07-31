@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "config.h": "c",
-        "max7219.h": "c"
+        "app.h": "c",
+        "app_lamp.h": "c"
     }
 }

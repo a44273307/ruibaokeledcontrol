@@ -3,7 +3,8 @@
 ".\Objects\uart.obj",
 ".\Objects\tongxin.obj",
 ".\Objects\func.obj",
-".\Objects\tongxin2.obj" 
+".\Objects\tongxin2.obj",
+".\Objects\STC32G_EEPROM.obj" 
 TO ".\Objects\PWM1" 
 PRINT(".\Listings\PWM1.map") CASE 
 REMOVEUNUSED 

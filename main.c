@@ -25,7 +25,7 @@
 #include "uart.h"
 #include "tongxin.h"
 #include "tongxin2.h"
-
+#include "STC32G_EEPROM.h"
 
 void SYS_Ini();		// STC32初始化设置
 void EC11_Handle(); // EC11数据处理
@@ -361,6 +361,7 @@ void changedainliuzhi()
 
 char xin[30] = {0};
 sbit X0=P1^3;
+sbit X1=P1^1;
 void shurulvbo(void)
 {
 	static u8 keybuf[40] = {
@@ -408,13 +409,13 @@ void shurulvbo(void)
 	unsigned char i;
 	i = X0;
 	keybuf[0] = (keybuf[0] << 1) | i;
-	// i = X1;
-	// keybuf[1] = (keybuf[1] << 1) | i;
+	i = X1;
+	keybuf[1] = (keybuf[1] << 1) | i;
 	// i = X2;
 	// keybuf[2] = (keybuf[2] << 1) | i;
 	// i = X3;
 	// keybuf[3] = (keybuf[3] << 1) | i;
-	for (i = 0; i < 1; i++) // 3按键，所以循环3次
+	for (i = 0; i < 2; i++) // 3按键，所以循环3次
 	{
 		if ((keybuf[i] & 0xFF) == 0x00)
 		{
@@ -426,15 +427,35 @@ void shurulvbo(void)
 		}
 	}
 }
+char flagsetliangdu=0;
+void writebuf();
 void keydown(int i) // 按键按下的处理、、、
 {
+	
 	printf1("keydown %d",i);
-	setzhione(2,1);
+	if(i==0)
+		setzhione(4,gsetzhi);
+	if(i==1)
+	{
+		// if(flagsetliangdu==0)//不能设置值。。变成设置
+		// {
+
+		// }
+		if(flagsetliangdu==1)//保存记录的值
+		{
+			printf1("flagsetliangdusetzhi %d",gsetzhi);
+			writebuf();		
+		}
+		flagsetliangdu=1-flagsetliangdu;
+	}
+		
+
 }
 void keyup(int i) // 按键按下的处理、、、
 {
 	printf1("keyup %d",i);
-	setzhione(2,0);
+	if(i==0)
+		setzhione(4,0);
 }
 void keyallchuli()
 {
@@ -498,7 +519,65 @@ void init2test()
 	}
 	
 }
+int errpromdizhi=0x000040;
+void writebuf()
+{
+	u8 get[10];
+	get[0]=55;
+	get[1]=gsetzhi/100;
+	get[2]=gsetzhi%100;
+	EEPROM_SectorErase(errpromdizhi);
+	EEPROM_write_n(errpromdizhi,get,3);
+}
 
+void readbuf()
+{
+	u8 get[10];
+
+    EEPROM_read_n(errpromdizhi,get,3);
+    if(get[0]==55)
+    {
+        printf("has init\n");
+		gsetzhi=get[1]*100+get[2];
+		if(gsetzhi>=1023)
+		{
+			gsetzhi=1023;
+		}
+		if(gsetzhi<=0)
+		{
+			gsetzhi=0;
+		}
+		printf("has init %d-%d\n",get[1],get[2]);
+    }
+    else
+    {
+        printf("not init\n");
+		get[0]=55;
+		gsetzhi=550;
+    	EEPROM_write_n(errpromdizhi,get,1);
+    }
+}
+sbit keyled1=P3^6;
+sbit keyled2=P3^5;
+#define ledon 0
+#define ledclose 1
+void showled()
+{
+	keyled1=ledclose;
+	keyled2=ledclose;
+	keyled2=ledon;
+}
+// void test3()
+// {
+// 	int i;
+// 	for(i=0;i<1023;i=i+100)
+// 	{
+// 		gsetzhi=i;
+		
+// 		writebuf();
+// 		readbuf();
+// 	}
+// }
 void main(void)
 {
 
@@ -511,11 +590,15 @@ void main(void)
 	printf1("system is ok");
 	Timer0Init();
 	printf1("system is overall");
-	init2test();
+	
 	keyallchuli();
 	flaginit=1;
+	setzhione(4,0);
+	// test3();
+	readbuf();
 	while (1)
 	{
+		showled();
 		keyallchuli();
 		showpre(gsetzhi);
 		dealorder();//取缓冲区里面的命令进行发送
@@ -608,7 +691,6 @@ void UARTInterrupt(void) interrupt 4
 	else
 	{
 		TI = 0;
-		
 	}
 	if (TI) // 发送中断..
 	{
@@ -659,16 +741,21 @@ void EC11_Handle() // EC11数据处理函数
 	nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
 	ans = calculateChange(previous, nowzhi);
 	previous = nowzhi;
-	if (ans == 4)
+	if(flagsetliangdu==1)
 	{
-		addgetsetzhi(1);
+		if (ans == 4)
+		{
+			addgetsetzhi(1);
+		}
+		else
+		{
+			addgetsetzhi(-1);
+		}
+		// 设定电流值。。。
+		setzhione(4,gsetzhi);
+		// setzhione(2,1);//开灯。。
 	}
-	else
-	{
-		addgetsetzhi(-1);
-	}
-	// 设定电流值。。。
-	setzhione(4,gsetzhi);
+	
 }
 
 int step=0;

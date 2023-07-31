@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  uart                                                               27/07/23  14:58:06  PAGE 1   
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  20:41:15  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE uart
@@ -66,7 +66,7 @@ stmt  level    source
    55   1        EA = 1;
    56   1      }
    57          /*----------------------------
-C251 COMPILER V5.60.0,  uart                                                               27/07/23  14:58:06  PAGE 2   
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  20:41:15  PAGE 2   
 
    58          串口初始化
    59          ----------------------------*/
@@ -134,7 +134,7 @@ stmt  level    source
   121          //    TI     =   0;  //清零串口发送完成中断请求标志
   122          //    SBUF   =   ch;
   123          //    while(TI ==0); //等待发送完成
-C251 COMPILER V5.60.0,  uart                                                               27/07/23  14:58:06  PAGE 3   
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  20:41:15  PAGE 3   
 
   124          //}
   125          
@@ -202,7 +202,7 @@ stmt  level    source
   187   2          sendbyte4(*p);
   188   2          p++;
   189   2        }
-C251 COMPILER V5.60.0,  uart                                                               27/07/23  14:58:06  PAGE 4   
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  20:41:15  PAGE 4   
 
   190   1      }
   191          void print4len(unsigned char *p,int len)

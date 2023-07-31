@@ -3,6 +3,7 @@
         "config.h": "c",
         "max7219.h": "c",
         "tongxin.h": "c",
-        "tongxin2.h": "c"
+        "tongxin2.h": "c",
+        "func.h": "c"
     }
 }

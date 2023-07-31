@@ -195,7 +195,7 @@ void keydown(int i) // 按键按下的处理、、、
 		if (flagsystemrun == 0)
 		{
 			flagsystemrun = 1;
-			LCD_ShowString(0, 0, "Circle TAC", RED, WHITE, 32, 0);
+			LCD_ShowString(0, 0, "Circle TAC", WHITE, BLACK, 32, 0);
 			showhenxiang();
 			writedizhi(2,1);
 			delay_ms(30);
@@ -405,14 +405,14 @@ void shownwendu()
 {
 	char dataxx[40];
 	sprintf(dataxx, "TMP:%3d.%01d  ", tmp / 10, tmp % 10);
-	LCD_ShowString(0, 80, dataxx, RED, WHITE, 32, 0);
+	LCD_ShowString(0, 80, dataxx, WHITE, BLACK, 32, 0);
 }
 
 void shownow()
 {
 	// char dataxx[40];
 	// sprintf(dataxx,"NOW:%05d",nowzhi);
-	// LCD_ShowString(0,40,dataxx,RED,WHITE,32,0);
+	// LCD_ShowString(0,40,dataxx,WHITE,BLACK,32,0);
 }
 
 #define maxjindu 16
@@ -428,12 +428,12 @@ void pingmuclear()
 		return;
 	}
 	runflag2 = 1;
-	// LCD_Clear(WHITE);
+	// LCD_Clear(BLACK);
 
 	sprintf(dataxx, "                     ", 1);
 	for (i = 0; i < 10; i++)
 	{
-		LCD_ShowString(0, i * 30, dataxx, RED, WHITE, 32, 0);
+		LCD_ShowString(0, i * 30, dataxx, WHITE, BLACK, 32, 0);
 		// delay_ms(1);
 	}
 }
@@ -453,9 +453,9 @@ void showhenxiang()
 		dataxx[i] = '-';
 	}
 
-	LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
-	LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
-	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
+	LCD_ShowString(qidian, 140, dataxx, WHITE, BLACK, 32, 0);
+	LCD_ShowString(qidian, 140 + 40, dataxx, WHITE, BLACK, 32, 0);
+	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", WHITE, BLACK, 16, 0);
 }
 
 void showjindtiao()
@@ -472,13 +472,13 @@ void showjindtiao()
 			dataxx[i] = ' ';
 	}
 	showhenxiang();
-	LCD_ShowString(qidian, 160, dataxx, RED, WHITE, 32, 0);
+	LCD_ShowString(qidian, 160, dataxx, WHITE, BLACK, 32, 0);
 }
 void showsetzhi()
 {
 	char dataxx[40];
 	sprintf(dataxx, "SET:        %04d    ", setzhi);
-	LCD_ShowString(0, 120, dataxx, RED, WHITE, 32, 0);
+	LCD_ShowString(0, 120, dataxx, WHITE, BLACK, 32, 0);
 	showjindtiao();
 }
 void showdata()
@@ -523,7 +523,9 @@ void readbuf();
 void mainrun()
 {
 	int rumtimes = 0;
+	LED0 = ~LED0;
 	readbuf();
+	
 	while (1)
 	{
 		
@@ -650,10 +652,15 @@ void main(void)
 	P4_MODE_IO_PU(GPIO_Pin_0|GPIO_Pin_1);
 	P3_MODE_IO_PU(GPIO_Pin_6|GPIO_Pin_4);
 	Timer0Init();
-	LCD_Init();
-	LCD_Fill(0, 0, 320, 240, WHITE);
+	delay_ms(50);
 
+	LCD_Init();
+	delay_ms(50);
+	LCD_Fill(0, 0, 320, 240, BLACK);
+	delay_ms(50);
+	pingmuclear();
+delay_ms(50);
 	mainrun();
-	// LCD_Fill(0, 0, 320, 240, WHITE);
+	// LCD_Fill(0, 0, 320, 240, BLACK);
 	
 }

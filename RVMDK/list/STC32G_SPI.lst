@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_SPI                                                         28/07/23  07:43:24  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_SPI                                                         31/07/23  21:38:28  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_SPI
 OBJECT MODULE PLACED IN .\list\STC32G_SPI.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_SPI.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;.
-                    -.\User;..\App\inc) DEBUG PRINT(.\list\STC32G_SPI.lst) TABS(2) OBJECT(.\list\STC32G_SPI.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_SPI.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Dri
+                    -ver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_SPI.lst) TABS(2) OBJECT(.\list\STC32G_SPI.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        else
    57   1        {
    58   2          MSTR = 1;   //使能 SPI 主机模式
-C251 COMPILER V5.60.0,  STC32G_SPI                                                         28/07/23  07:43:24  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_SPI                                                         31/07/23  21:38:28  PAGE 2   
 
    59   2          SSIG = 1;   //忽略SS引脚功能
    60   2        }
@@ -113,14 +113,14 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       155     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =       155     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =         1     ------
   xdata-const size     =    ------     ------
-  edata size           =       129     ------
+  edata size           =       128     ------
   bit size             =         1     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

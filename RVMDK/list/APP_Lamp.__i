@@ -1,1 +1,0 @@
-"..\App\src\APP_Lamp.c" XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\APP_Lamp.lst) TABS (2) OBJECT(.\list\APP_Lamp.obj)

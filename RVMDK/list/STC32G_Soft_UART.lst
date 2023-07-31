@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   28/07/23  07:43:24  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   31/07/23  21:38:28  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Soft_UART
 OBJECT MODULE PLACED IN .\list\STC32G_Soft_UART.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_Soft_UART.c XSMALL INTR2 BROWSE INCDIR(..\Driver
-                    -\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Soft_UART.lst) TABS(2) OBJECT(.\list\STC32G_Soft_UART.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_Soft_UART.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(
+                    -..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Soft_UART.lst) TABS(2) OBJECT(.\list\STC32G_Soft_UART.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        P_TXD = 0;
    57   1        BitTime();
    58   1        for(i=0; i<8; i++)
-C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   28/07/23  07:43:24  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   31/07/23  21:38:28  PAGE 2   
 
    59   1        {
    60   2          if(dat & 1)   P_TXD = 1;
@@ -98,8 +98,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =        92     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =        99     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

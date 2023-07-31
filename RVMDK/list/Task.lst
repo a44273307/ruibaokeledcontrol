@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  Task                                                               31/07/23  20:50:19  PAGE 1   
+C251 COMPILER V5.60.0,  Task                                                               31/07/23  21:38:24  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Task
 OBJECT MODULE PLACED IN .\list\Task.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\User\Task.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\User;..\Ap
-                    -p\inc) DEBUG PRINT(.\list\Task.lst) TABS(2) OBJECT(.\list\Task.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\User\Task.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\U
+                    -ser;..\App\inc) DEBUG PRINT(.\list\Task.lst) TABS(2) OBJECT(.\list\Task.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    52          // 描述: 任务标记回调函数.
    53          // 参数: None.
    54          // 返回: None.
-C251 COMPILER V5.60.0,  Task                                                               31/07/23  20:50:19  PAGE 2   
+C251 COMPILER V5.60.0,  Task                                                               31/07/23  21:38:24  PAGE 2   
 
    55          // 版本: V1.0, 2012-10-22
    56          //========================================================================
@@ -113,14 +113,14 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       102     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =       177     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =        10     ------
   xdata-const size     =    ------     ------
-  edata size           =         8     ------
+  edata size           =    ------     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
@@ -128,7 +128,7 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =        16     ------
+  hconst size          =        20     ------
 End of Module Information.
 
 

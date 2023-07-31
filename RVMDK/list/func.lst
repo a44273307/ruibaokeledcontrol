@@ -1,0 +1,50 @@
+C251 COMPILER V5.60.0,  func                                                               31/07/23  21:38:25  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE func
+OBJECT MODULE PLACED IN .\list\func.obj
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\User\func.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\U
+                    -ser;..\App\inc) DEBUG PRINT(.\list\func.lst) TABS(2) OBJECT(.\list\func.obj) 
+
+stmt  level    source
+
+    1          #include <stdio.h>
+    2          void* memcpy(void* destination, const void* source, size_t num) 
+    3          {
+    4   1      size_t i;   
+    5   1        char* dest = (char*)destination;
+    6   1          const char* src = (const char*)source;
+    7   1      
+    8   1          for ( i = 0; i < num; i++) {
+    9   2              dest[i] = src[i];
+   10   2          }
+   11   1      
+   12   1          return destination;
+   13   1      }
+   14          
+   15          
+   16          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =    ------     ------
+  ecode size           =        45     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------          2
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

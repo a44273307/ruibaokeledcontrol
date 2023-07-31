@@ -55,7 +55,7 @@ void delayx_ms(unsigned int ms)
 	}
 }
 extern void Sample_Lamp(void);
-void sendbyte1(unsigned char ch)
+void sendbytecom1(unsigned char ch)
 {
 	int i;
 	// EA=0;
@@ -103,11 +103,12 @@ void main(void)
 
 	SYS_Init();
 	test2();
+		sendbytecom1('c');
 	while (1)
 	{
-		sendbyte1('a');
+		sendbytecom1('a');
 		delayx_ms(100);
-		sendbyte1('b');
+		sendbytecom1('b');
 		Sample_Lamp();
 		showhenxiang();
 	}

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_DMA                                                         28/07/23  07:43:26  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_DMA                                                         31/07/23  21:38:29  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_DMA
 OBJECT MODULE PLACED IN .\list\STC32G_DMA.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_DMA.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;.
-                    -.\User;..\App\inc) DEBUG PRINT(.\list\STC32G_DMA.lst) TABS(2) OBJECT(.\list\STC32G_DMA.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_DMA.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Dri
+                    -ver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_DMA.lst) TABS(2) OBJECT(.\list\STC32G_DMA.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        else DMA_M2M_CFG &= ~0x10;  //数据写入后地址自减
    57   1        
    58   1        if(DMA->DMA_Enable == ENABLE)   DMA_M2M_CR |= 0x80; //使能M2M DMA
-C251 COMPILER V5.60.0,  STC32G_DMA                                                         28/07/23  07:43:26  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_DMA                                                         31/07/23  21:38:29  PAGE 2   
 
    59   1        else DMA_M2M_CR &= ~0x80; //禁止M2M DMA
    60   1      }
@@ -134,7 +134,7 @@ stmt  level    source
   121   1      #endif
   122   1      #ifdef UART2
   123   1        if(UARTx == UART2)
-C251 COMPILER V5.60.0,  STC32G_DMA                                                         28/07/23  07:43:26  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_DMA                                                         31/07/23  21:38:29  PAGE 3   
 
   124   1        {
   125   2          DMA_UR2T_STA = 0x00;
@@ -202,7 +202,7 @@ stmt  level    source
   187          //========================================================================
   188          void DMA_LCM_Inilize(DMA_LCM_InitTypeDef *DMA)
   189          {
-C251 COMPILER V5.60.0,  STC32G_DMA                                                         28/07/23  07:43:26  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_DMA                                                         31/07/23  21:38:29  PAGE 4   
 
   190   1        DMA_LCM_STA = 0x00;
   191   1        DMA_LCM_RXAH = (u8)(DMA->DMA_Rx_Buffer>>8);
@@ -247,8 +247,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1587     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =      1587     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

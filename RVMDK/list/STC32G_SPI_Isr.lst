@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_SPI_Isr                                                     28/07/23  07:43:32  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_SPI_Isr                                                     31/07/23  21:38:32  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_SPI_Isr
 OBJECT MODULE PLACED IN .\list\STC32G_SPI_Isr.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_SPI_Isr.c XSMALL INTR2 BROWSE INCDIR(..\Driver\i
-                    -nc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_SPI_Isr.lst) TABS(2) OBJECT(.\list\STC32G_SPI_Isr.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_SPI_Isr.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..
+                    -\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_SPI_Isr.lst) TABS(2) OBJECT(.\list\STC32G_SPI_Isr.obj) 
 
 stmt  level    source
 
@@ -55,19 +55,19 @@ stmt  level    source
 Module Information          Static   Overlayable
 ------------------------------------------------
   code size            =         4     ------
-  ecode size           =    ------     ------
+  ecode size           =         1     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =         1     ------
   xdata-const size     =    ------     ------
-  edata size           =         1     ------
+  edata size           =    ------     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------
   ebitaddressable size =    ------     ------
   far data size        =    ------     ------
-C251 COMPILER V5.60.0,  STC32G_SPI_Isr                                                     28/07/23  07:43:32  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_SPI_Isr                                                     31/07/23  21:38:32  PAGE 2   
 
   huge data size       =    ------     ------
   const size           =    ------     ------

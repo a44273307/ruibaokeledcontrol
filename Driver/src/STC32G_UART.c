@@ -363,38 +363,3 @@ void PrintString(u8 UARTx, u8 *puts)
     for (; *puts != 0;	puts++)  COMx_write2buff(UARTx,*puts); 	//Óöµ½Í£Ö¹·û0½áÊø
 }
 */
-
-/********************* Printf º¯Êý ************************/
-#if(PRINTF_SELECT == 1)
-
-char putchar(char c)
-{
-	TX1_write2buff(c);
-	return c;
-}
-
-#elif(PRINTF_SELECT == 2)
-
-char putchar(char c)
-{
-	TX2_write2buff(c);
-	return c;
-}
-
-#elif(PRINTF_SELECT == 3)
-
-char putchar(char c)
-{
-	TX3_write2buff(c);
-	return c;
-}
-
-#elif(PRINTF_SELECT == 4)
-
-char putchar(char c)
-{
-	TX4_write2buff(c);
-	return c;
-}
-
-#endif

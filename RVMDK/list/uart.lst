@@ -1,0 +1,419 @@
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE uart
+OBJECT MODULE PLACED IN .\list\uart.obj
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\User\uart.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\U
+                    -ser;..\App\inc) DEBUG PRINT(.\list\uart.lst) TABS(2) OBJECT(.\list\uart.obj) 
+
+stmt  level    source
+
+    1          /************************************************************************************
+    2          Copyright,  LCE STUDIO  
+    3          程序名称：串口通信（晶振频率18.432MHz）  
+    4          功能说明: 串口1和串口3初始化,字符发送与字符串发送函数,波特率9600bps
+    5          程序版本：1.0 （2014/06）
+    6          阿里旺旺：rob1983
+    7          淘宝店铺：http://shop67639654.taobao.com 
+    8          ************************************************************************************/ 
+    9          
+   10          #include <string.h>
+   11          #include "stc32g.h"
+   12          #include "config.h"
+*** WARNING C317 IN LINE 39 OF ..\User\type_def.h: attempt to redefine macro 'NULL'
+   13          
+   14          
+   15          #include <stdio.h>
+   16          #include <stdarg.h>
+   17          #include <stdio.h>
+   18          
+   19          #include <stdlib.h>
+   20          
+   21          
+   22          #include "uart.h"
+   23          #include "tongxin.h"
+   24          #include "tongxin2.h"
+   25          #include "STC32G_Delay.h"
+   26          #include "STC32G_UART.h"
+*** WARNING C317 IN LINE 81 OF ..\Driver\inc\STC32G_UART.h: attempt to redefine macro 'CLR_TI4'
+*** WARNING C317 IN LINE 82 OF ..\Driver\inc\STC32G_UART.h: attempt to redefine macro 'CLR_RI4'
+   27          //#include "main.h"
+   28           bit busy4;
+   29           bit busy2;
+   30           bit busy3;
+   31          //bit busy4;
+   32          //void SendData(unsigned char ch);
+   33          //void SendString(char *s);
+   34          //void UartInit(void);
+   35          //void U3SendData(unsigned char ch);
+   36          //void U3SendString(char *s);
+   37          //void U2SendData(unsigned char ch);
+   38          //void U2SendString(char *s);
+   39          
+   40          
+   41          /*----------------------------
+   42          定时器0初始化
+   43          ----------------------------*/
+   44          
+   45          void Timer0Init(void) // 0.5ms @24.000MHz
+   46          {
+   47   1      
+   48   1        AUXR |= 0x80; // 定时器时钟1T模式
+   49   1        TMOD &= 0xF0; // 设置定时器模式
+   50   1        TL0 = 0x80;   // 设置定时初始值
+   51   1        TH0 = 0x44;   // 设置定时初始值
+   52   1        TF0 = 0;    // 清除TF0标志
+   53   1        TR0 = 1;    // 定时器0开始计时
+   54   1        TR0 = 1;    // 定时器0开始计时
+   55   1        ET0 = 1;    // 使能定时器0中断
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 2   
+
+   56   1        PT0 = 1;
+   57   1        EA = 1;
+   58   1      }
+   59          /*----------------------------
+   60          串口初始化
+   61          ----------------------------*/
+   62          
+   63          void UartInit(void)   //115200@24.000MHz
+   64          {
+   65   1        SCON = 0x50;  // 8位数据,可变波特率
+   66   1        AUXR |= 0x40; // 定时器时钟1T模式
+   67   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
+   68   1        TMOD &= 0x0F; // 设置定时器模式
+   69   1        TL1 = 0xCC;   // 设置定时初始值
+   70   1        TH1 = 0xFF;   // 设置定时初始值
+   71   1        ET1 = 0;    // 禁止定时器%d中断
+   72   1        TR1 = 1;    // 定时器1开始计时
+   73   1        ES = 1;
+   74   1        EA = 1;
+   75   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+   76   1      }
+   77          #define  UART3_SW(Pin)        P_SW2 = (P_SW2 & 0xFD) | (Pin << 1)
+   78          void Uart23Init(void)   //115200@24.000MHz
+   79          {
+   80   1        S3CON = 0x10;   //8位数据,可变波特率
+   81   1        S3CON &= 0xBF;    //串口3选择定时器2为波特率发生器
+   82   1        S2CON = 0x50;   //8位数据,可变波特率
+   83   1        AUXR |= 0x04;   //定时器2时钟为Fosc,即1T
+   84   1        T2L = 0xCC;     //设置定时初始值
+   85   1        T2H = 0xFF;     //设置定时初始值
+   86   1        AUXR |= 0x10;   //启动定时器2
+   87   1        
+   88   1        // S3_S=1;
+   89   1        // P_SW2 =P_SW2|0x80;
+   90   1        // P_SW2=P_SW2|0x02;
+   91   1          UART3_SW(1);    //UART3_SW_P00_P01,UART3_SW_P50_P51
+   92   1          IE2 |= 0x01;                 //使能串口2中断
+   93   1          IE2 |= 0x08;                 //使能串口3中断
+   94   1          EA=1;
+   95   1          ES3=1;
+   96   1        // P_SW2 = (P_SW2 & ~2) | (0 & 0x02); //切换IO
+   97   1        // P_SW2=P_SW2|0x02;
+   98   1        //  //IE2&=0xFE关闭串口2
+   99   1      //  IE2&=0xF7;  //关闭串口3
+  100   1      }
+  101          void Uart4Init(void)    //9600bps@24.000MHz .串口4
+  102          {
+  103   1        S4CON = 0x10;   //8位数据,可变波特率
+  104   1        S4CON |= 0x40;    //串口4选择定时器4为波特率发生器
+  105   1        T4T3M |= 0x20;    //定时器4时钟为Fosc,即1T
+  106   1        T4L = 0xCC;   //设定定时初值
+  107   1        T4H = 0xFF;   //设定定时初值
+  108   1        T4T3M |= 0x80;    //启动定时器4 
+  109   1        S4CON &= ~(1<<5); //禁止多机通讯方式
+  110   1        S4CON &= ~(1<<7); // 8位数据, 1位起始位, 1位停止位, 无校验
+  111   1        IE2   |=  (1<<4); //允许中断
+  112   1        //IE2&=0xEF关闭串口4
+  113   1        S4CON |=  (1<<4); //允许接收
+  114   1      //  P_SW2 &= ~4;    //切换到 P0.2 P0.3
+  115   1      }
+  116          
+  117          
+  118          /*----------------------------
+  119          通过串口1发送串口数据
+  120          ----------------------------*/
+  121          //void SendData(unsigned char ch)
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 3   
+
+  122          //{
+  123          //    TI     =   0;  //清零串口发送完成中断请求标志
+  124          //    SBUF   =   ch;
+  125          //    while(TI ==0); //等待发送完成
+  126          //}
+  127          
+  128          //void sendbyte1(unsigned char ch)
+  129          //{
+  130          //    TI     =   0;  //清零串口发送完成中断请求标志
+  131          //    SBUF   =   ch;
+  132          //    while(TI ==0); //等待发送完成
+  133          //}
+  134          
+  135          
+  136          void sendbyte1(unsigned char ch)
+  137          {
+  138   1        int i;
+  139   1        // EA=0;
+  140   1          TI     =   0;  //清零串口发送完成中断请求标志
+  141   1          SBUF   =   ch;
+  142   1          while(TI ==0) //等待发送完成
+  143   1        {
+  144   2          for(i=0;i<2000; i++){
+  145   3            if( TI) break;
+  146   3          }
+  147   2          break;
+  148   2        }
+  149   1        EA=1;
+  150   1      }
+  151          
+  152          /*----------------------------
+  153          通过串口2发送串口数据
+  154          ----------------------------*/
+  155          void sendbyte2(unsigned char ch)
+  156          {
+  157   1         while (busy2);               //等待前面的数据发送完成                      //获取校验位P (PSW.
+  158   1          busy2 = 1;
+  159   1          S2BUF = ch;                //写数据到UART2数据寄存器
+  160   1      }
+  161          
+  162          
+  163          
+  164          
+  165          /*----------------------------
+  166          通过串口3发送串口数据
+  167          ----------------------------*/
+  168          void sendbyte3(unsigned char ch)
+  169          {
+  170   1          while (busy3);               //等待前面的数据发送完成
+  171   1          busy3 = 1;
+  172   1          S3BUF = ch;                //写数据到UART2数据寄存器
+  173   1      }
+  174          void print3(char *p)
+  175          {
+  176   1        while (*p != '\0')
+  177   1        {
+  178   2          sendbyte3(*p);
+  179   2          p++;
+  180   2        }
+  181   1      }
+  182          
+  183          /*----------------------------
+  184          通过串口4发送串口数据
+  185          ----------------------------*/
+  186          void sendbyte4(unsigned char ch)
+  187          {
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 4   
+
+  188   1          while (busy4);               //等待前面的数据发送完成
+  189   1        busy4 = 1;
+  190   1          S4BUF = ch;                //写数据到UART2数据寄存器
+  191   1      }
+  192          void print4(char *p)
+  193          {
+  194   1        while (*p != '\0')
+  195   1        {
+  196   2          sendbyte4(*p);
+  197   2          p++;
+  198   2        }
+  199   1      }
+  200          void print4len(unsigned char *p,int len)
+  201          {
+  202   1        int i;
+  203   1        for(i=0;i<len;i++)
+  204   1        {
+  205   2          sendbyte4(*p);
+  206   2          p++;
+  207   2        }
+  208   1      }
+  209          
+  210          void Delay1us()   //@24.000MHz
+  211          {
+  212   1        unsigned char i;
+  213   1      
+  214   1        _nop_();
+  215   1        _nop_();
+  216   1        i = 57;
+  217   1        while (--i);
+  218   1      }
+  219          char putchar(char dat)
+  220          {
+  221   1        // Delay1us();
+  222   1        sendbyte1(dat);
+  223   1        return (dat);
+  224   1      }
+  225          
+  226          
+  227          char flag3 = 0;
+  228          int weishu1, weishu2, weishu3, weishu4;
+  229          char buf3[300];
+  230          char buf1[300]={0};
+  231          int timeleft1, timeleft2, timeleft3, timeleft4;
+  232          char falgchuankou1 = 0;
+  233          void chuankou1put(char c)
+  234          {
+  235   1        buf3[weishu3++] = c;
+  236   1        if (weishu3 > sizeof(buf3) - 3)
+  237   1          weishu3 = 0;
+  238   1        timeleft3 = 3;
+  239   1      }
+  240          void chuankou1time()
+  241          {
+  242   1        if (timeleft3 > 0)
+  243   1        {
+  244   2          timeleft3--;
+  245   2          if (timeleft3 == 0) // 数据一次收完了.
+  246   2          {
+  247   3            flag3 = 1;
+  248   3          }
+  249   2        }
+  250   1      }
+  251          void jiexi(char* input);
+  252          
+  253          char* mystrstr(const char* haystack, const char* needle) {
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 5   
+
+  254   1          if (*needle == '\0') {
+  255   2              return (char*)haystack;
+  256   2          }
+  257   1      
+  258   1          while (*haystack != '\0') {
+  259   2              const char* h = haystack;
+  260   2              const char* n = needle;
+  261   2      
+  262   2              while (*n != '\0' && *h == *n) {
+  263   3                  h++;
+  264   3                  n++;
+  265   3              }
+  266   2      
+  267   2              if (*n == '\0') {
+  268   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
+  269   3              }
+  270   2      
+  271   2              haystack++;
+  272   2          }
+  273   1      
+  274   1          return NULL; // 未找到子串，返回NULL
+  275   1      }
+  276          void dealchuankou()
+  277          {
+  278   1        if (flag3 == 1)
+  279   1        {
+  280   2          flag3 = 0;
+  281   2          jiexi(buf3);
+  282   2          memset(buf3, 0, sizeof(buf3));
+  283   2          weishu3 = 0;
+  284   2        }
+  285   1      }
+  286          size_t mystrlen(const char* str) {
+  287   1          size_t length = 0;
+  288   1          while (str[length] != '\0') {
+  289   2              length++;
+  290   2          }
+  291   1          return length;
+  292   1      }
+  293          
+  294          char* myaddstrstr(const char* haystack, const char* needle)
+  295          { 
+  296   1        char* result = mystrstr(haystack, needle);
+  297   1         if (result != NULL)
+  298   1         {
+  299   2          result=result+mystrlen(needle);
+  300   2         }
+  301   1         return result;
+  302   1      }
+  303          // 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
+  304          void jixi2(char* input)
+  305          {
+  306   1        char *p=input;
+  307   1        char *p1;
+  308   1        int i;
+  309   1        unsigned int weizhi;
+  310   1        unsigned int zhi;
+  311   1        //1234-2234;333-4;end
+  312   1        for( i=0;i<100;i++)
+  313   1        {
+  314   2          p1=myaddstrstr(p,";"); //找有没有下一个的
+  315   2          if(p1==NULL)
+  316   2          {
+  317   3            break;
+  318   3          }
+  319   2          weizhi = atoi(p);
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 6   
+
+  320   2          p=myaddstrstr(p,"-");
+  321   2          zhi = atoi(p);
+  322   2          p=myaddstrstr(p,";");  //指向下一个后面
+  323   2          printf("get set%d-%d",weizhi,zhi);
+  324   2          push2(weizhi,zhi);
+  325   2          
+  326   2        }
+  327   1      }
+  328          void jiexi(char* input)
+  329          {
+  330   1        char par[500]={0};
+  331   1        char *begin,end;
+  332   1        begin=myaddstrstr(input,"set:");
+  333   1        // printf("input begin%s",begin);
+  334   1        end=myaddstrstr(begin,"end");
+*** WARNING C161 IN LINE 334 OF ..\User\uart.c: 'far' pointer truncated to 'char'
+*** WARNING C10 IN LINE 334 OF ..\User\uart.c: conversion: 'pointer' to 'char'
+  335   1        // printf("input end%s",end);
+  336   1        if(begin!=NULL && end!=NULL)
+*** WARNING C40 IN LINE 336 OF ..\User\uart.c: 'char' converted to 'far' pointer
+  337   1        {
+  338   2          strcpy(par,begin);
+  339   2          jixi2(par);
+  340   2        }
+  341   1      }
+  342          
+  343           void chuliguankji(char *ans1)
+  344          {
+  345   1        char *index;
+  346   1        index = mystrstr(ans1, "@STCISP#");
+  347   1        if (index == 0)
+  348   1        {
+  349   2          return;
+  350   2        }
+  351   1        printf("rec @STCISP#,researt now");
+  352   1        IAP_CONTR = 0x60;
+  353   1      }
+  354          
+  355          
+  356          
+  357          void showbuf()
+  358          {
+  359   1        // if(weishu1>0)
+  360   1        // {
+  361   1        //  delay_ms(2);
+  362   1        //  printf(buf1);
+  363   1        // }
+  364   1      
+  365   1        // weishu1 = 0;
+  366   1        // buf1[0]=0;
+  367   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =    ------     ------
+  ecode size           =       911     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =       618        518
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =         3     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+C251 COMPILER V5.60.0,  uart                                                               31/07/23  21:38:24  PAGE 7   
+
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =       877     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)

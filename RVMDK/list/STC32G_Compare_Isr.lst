@@ -1,10 +1,11 @@
-C251 COMPILER V5.60.0,  STC32G_Compare_Isr                                                 28/07/23  07:43:30  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Compare_Isr                                                 31/07/23  21:38:31  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Compare_Isr
 OBJECT MODULE PLACED IN .\list\STC32G_Compare_Isr.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_Compare_Isr.c XSMALL INTR2 BROWSE INCDIR(..\Driv
-                    -er\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Compare_Isr.lst) TABS(2) OBJECT(.\list\STC32G_Compare_Isr.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_Compare_Isr.c LARGE INTR2 ROM(HUGE) BROWSE INCDI
+                    -R(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Compare_Isr.lst) TABS(2) OBJECT(.\list\STC32G_Compare_Isr.
+                    -obj) 
 
 stmt  level    source
 
@@ -40,8 +41,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =        11     ------
-  ecode size           =    ------     ------
+  code size            =         4     ------
+  ecode size           =         8     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

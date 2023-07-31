@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_ADC                                                         28/07/23  07:43:20  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_ADC                                                         31/07/23  21:38:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_ADC
 OBJECT MODULE PLACED IN .\list\STC32G_ADC.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_ADC.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;.
-                    -.\User;..\App\inc) DEBUG PRINT(.\list\STC32G_ADC.lst) TABS(2) OBJECT(.\list\STC32G_ADC.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_ADC.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Dri
+                    -ver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_ADC.lst) TABS(2) OBJECT(.\list\STC32G_ADC.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    55          //========================================================================
    56          u16 Get_ADCResult(u8 channel) //channel = 0~15
    57          {
-C251 COMPILER V5.60.0,  STC32G_ADC                                                         28/07/23  07:43:20  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_ADC                                                         31/07/23  21:38:26  PAGE 2   
 
    58   1        u16 adc;
    59   1        u8  i;
@@ -102,8 +102,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =       202     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =       202     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_CAN_Isr                                                     28/07/23  07:43:35  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_CAN_Isr                                                     31/07/23  21:38:34  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_CAN_Isr
 OBJECT MODULE PLACED IN .\list\STC32G_CAN_Isr.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_CAN_Isr.c XSMALL INTR2 BROWSE INCDIR(..\Driver\i
-                    -nc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_CAN_Isr.lst) TABS(2) OBJECT(.\list\STC32G_CAN_Isr.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_CAN_Isr.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..
+                    -\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_CAN_Isr.lst) TABS(2) OBJECT(.\list\STC32G_CAN_Isr.obj) 
 
 stmt  level    source
 
@@ -58,7 +58,7 @@ stmt  level    source
 Module Information          Static   Overlayable
 ------------------------------------------------
   code size            =         8     ------
-  ecode size           =    ------     ------
+  ecode size           =         2     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
@@ -67,7 +67,7 @@ Module Information          Static   Overlayable
   edata size           =    ------     ------
   bit size             =         4     ------
   ebit size            =    ------     ------
-C251 COMPILER V5.60.0,  STC32G_CAN_Isr                                                     28/07/23  07:43:35  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_CAN_Isr                                                     31/07/23  21:38:34  PAGE 2   
 
   bitaddressable size  =    ------     ------
   ebitaddressable size =    ------     ------

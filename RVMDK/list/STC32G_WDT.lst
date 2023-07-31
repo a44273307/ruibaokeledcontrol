@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_WDT                                                         28/07/23  07:43:26  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_WDT                                                         31/07/23  21:38:29  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_WDT
 OBJECT MODULE PLACED IN .\list\STC32G_WDT.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_WDT.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;.
-                    -.\User;..\App\inc) DEBUG PRINT(.\list\STC32G_WDT.lst) TABS(2) OBJECT(.\list\STC32G_WDT.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_WDT.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Dri
+                    -ver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_WDT.lst) TABS(2) OBJECT(.\list\STC32G_WDT.obj) 
 
 stmt  level    source
 
@@ -48,8 +48,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =        42     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =        42     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

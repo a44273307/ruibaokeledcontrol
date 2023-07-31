@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_Delay                                                       28/07/23  07:43:21  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Delay                                                       31/07/23  21:38:26  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Delay
 OBJECT MODULE PLACED IN .\list\STC32G_Delay.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_Delay.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc
-                    -;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Delay.lst) TABS(2) OBJECT(.\list\STC32G_Delay.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_Delay.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\D
+                    -river\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_Delay.lst) TABS(2) OBJECT(.\list\STC32G_Delay.obj) 
 
 stmt  level    source
 
@@ -43,8 +43,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =        23     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =        23     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

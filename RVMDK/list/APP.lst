@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  APP                                                                31/07/23  20:50:19  PAGE 1   
+C251 COMPILER V5.60.0,  APP                                                                31/07/23  21:38:25  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE APP
 OBJECT MODULE PLACED IN .\list\APP.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\App\src\APP.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\User;..\
-                    -App\inc) DEBUG PRINT(.\list\APP.lst) TABS(2) OBJECT(.\list\APP.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\App\src\APP.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..
+                    -\User;..\App\inc) DEBUG PRINT(.\list\APP.lst) TABS(2) OBJECT(.\list\APP.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    52   1      //  EEPROM_init();
    53   1      //  WDT_init();
    54   1      //  PWMA_Output_init();
-C251 COMPILER V5.60.0,  APP                                                                31/07/23  20:50:19  PAGE 2   
+C251 COMPILER V5.60.0,  APP                                                                31/07/23  21:38:25  PAGE 2   
 
    55   1      //  PWMB_Output_init();
    56   1      //  DMA_AD_init();
@@ -88,8 +88,8 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =         3     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =         4     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

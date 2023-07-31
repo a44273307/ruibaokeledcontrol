@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         28/07/23  07:43:28  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  21:38:30  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_CAN
 OBJECT MODULE PLACED IN .\list\STC32G_CAN.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_CAN.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;.
-                    -.\User;..\App\inc) DEBUG PRINT(.\list\STC32G_CAN.lst) TABS(2) OBJECT(.\list\STC32G_CAN.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\src\STC32G_CAN.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Dri
+                    -ver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_CAN.lst) TABS(2) OBJECT(.\list\STC32G_CAN.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56          // 描述: CAN 初始化程序.
    57          // 参数: CAN: 结构参数,请参考CAN.h里的定义.
    58          // 返回: none.
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         28/07/23  07:43:28  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  21:38:30  PAGE 2   
 
    59          // 版本: V1.0, 2021-06-02
    60          //========================================================================
@@ -134,7 +134,7 @@ stmt  level    source
   122          // 版本: VER2.0
   123          // 日期: 2023-01-31
   124          // 备注: 
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         28/07/23  07:43:28  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  21:38:30  PAGE 3   
 
   125          //========================================================================
   126          void CanReadFifo(CAN_DataDef *CAN)
@@ -202,7 +202,7 @@ stmt  level    source
   187          // 描述: CAN发送标准帧函数。
   188          // 参数: *CANx: 存放CAN总线发送数据..
   189          // 返回: none.
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         28/07/23  07:43:28  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  21:38:30  PAGE 4   
 
   190          // 版本: VER1.0
   191          // 日期: 2020-11-19
@@ -270,7 +270,7 @@ stmt  level    source
   249   2              B_Can2Send = 1;     //设置CAN2发送忙标志
   250   2          }
   251   1          else
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         28/07/23  07:43:28  PAGE 5   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  21:38:30  PAGE 5   
 
   252   1          {
   253   2              B_Can1Send = 1;     //设置CAN1发送忙标志
@@ -280,14 +280,14 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      1102     ------
-  ecode size           =    ------     ------
+  code size            =    ------     ------
+  ecode size           =      1216     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =       234         15
   xdata-const size     =    ------     ------
-  edata size           =       234         15
+  edata size           =    ------     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     28/07/23  07:43:33  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     31/07/23  21:38:33  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_DMA_Isr
 OBJECT MODULE PLACED IN .\list\STC32G_DMA_Isr.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_DMA_Isr.c XSMALL INTR2 BROWSE INCDIR(..\Driver\i
-                    -nc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_DMA_Isr.lst) TABS(2) OBJECT(.\list\STC32G_DMA_Isr.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\Driver\isr\STC32G_DMA_Isr.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..
+                    -\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_DMA_Isr.lst) TABS(2) OBJECT(.\list\STC32G_DMA_Isr.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    56          
    57          //========================================================================
    58          // 函数: DMA_UART1RX_ISR_Handler
-C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     28/07/23  07:43:33  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     31/07/23  21:38:33  PAGE 2   
 
    59          // 描述: DMA UART1 RX 中断函数.
    60          // 参数: none.
@@ -134,7 +134,7 @@ stmt  level    source
   122          //========================================================================
   123          // 函数: DMA_UART4TX_ISR_Handler
   124          // 描述: DMA UART4 TX 中断函数.
-C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     28/07/23  07:43:33  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     31/07/23  21:38:33  PAGE 3   
 
   125          // 参数: none.
   126          // 返回: none.
@@ -202,7 +202,7 @@ stmt  level    source
   188          // 函数: DMA_LCM_ISR_Handler
   189          // 描述: DMA LCM 中断函数.
   190          // 参数: none.
-C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     28/07/23  07:43:33  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_DMA_Isr                                                     31/07/23  21:38:33  PAGE 4   
 
   191          // 返回: none.
   192          // 版本: V1.0, 2022-03-23
@@ -231,7 +231,7 @@ stmt  level    source
 Module Information          Static   Overlayable
 ------------------------------------------------
   code size            =        60     ------
-  ecode size           =    ------     ------
+  ecode size           =        15     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------

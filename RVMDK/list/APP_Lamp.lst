@@ -1,10 +1,10 @@
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 1   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE APP_Lamp
 OBJECT MODULE PLACED IN .\list\APP_Lamp.obj
-COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\App\src\APP_Lamp.c XSMALL INTR2 BROWSE INCDIR(..\Driver\inc;..\Use
-                    -r;..\App\inc) DEBUG PRINT(.\list\APP_Lamp.lst) TABS(2) OBJECT(.\list\APP_Lamp.obj) 
+COMPILER INVOKED BY: D:\keilc251\C251\BIN\C251.EXE ..\App\src\APP_Lamp.c LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\i
+                    -nc;..\User;..\App\inc) DEBUG PRINT(.\list\APP_Lamp.lst) TABS(2) OBJECT(.\list\APP_Lamp.obj) 
 
 stmt  level    source
 
@@ -66,7 +66,7 @@ stmt  level    source
    52   1        for(bit_ctr=0;bit_ctr<8;bit_ctr++) // 输出8位
    53   1        {
    54   2          LCD_SCK=0;
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 2   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 2   
 
    55   2          LCD_MOSI=(byte&0x80); // MSB TO MOSI
    56   2          byte=(byte<<1); // shift next bit to MSB
@@ -134,7 +134,7 @@ stmt  level    source
   118   1        LCD_CD_DATA(0x01);   //SAP[2:0];BT[3:0] 
   119   1        LCD_CD_REG(0xC5);    //VCM control 
   120   1        LCD_CD_DATA(0x30);   //3F
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 3   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 3   
 
   121   1        LCD_CD_DATA(0x30);   //3C
   122   1        LCD_CD_REG(0xC7);    //VCM control2 
@@ -202,7 +202,7 @@ stmt  level    source
   184          
   185          void LCD_SetArea(unsigned int stx,unsigned int sty,unsigned int endx,unsigned int endy)
   186          {
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 4   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 4   
 
   187   1        LCD_CD_REG(0x2A);  
   188   1        LCD_CD_DATA(stx>>8);    
@@ -270,7 +270,7 @@ stmt  level    source
   244          // 版本: V1.0, 2020-09-23
   245          //========================================================================
   246          void Sample_Lamp(void)
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 5   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 5   
 
   247          {
   248   1        // P33 = !P33;
@@ -338,7 +338,7 @@ stmt  level    source
   310   1        {                               
   311   2          for(j=xsta;j<xend;j++)
   312   2          {
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 6   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 6   
 
   313   3            LCD_WR_DATA(color);
   314   3          }
@@ -406,7 +406,7 @@ stmt  level    source
   376                入口数据：x1,y1   起始坐标
   377                          x2,y2   终止坐标
   378                          color   矩形的颜色
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 7   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 7   
 
   379                返回值：  无
   380          ******************************************************************************/
@@ -474,7 +474,7 @@ stmt  level    source
   442   1        for(i=0;i<TypefaceNum;i++)
   443   1        { 
   444   2          if(sizey==12)temp=ascii_1206[num][i];          //调用6x12字体
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 8   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 8   
 
   445   2          else if(sizey==16)temp=ascii_1608[num][i];     //调用8x16字体
   446   2          else if(sizey==24)temp=ascii_2412[num][i];     //调用12x24字体
@@ -542,7 +542,7 @@ stmt  level    source
   508   1        return result;
   509   1      }
   510          
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 9   
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 9   
 
   511          
   512          /******************************************************************************
@@ -610,7 +610,7 @@ stmt  level    source
   570   2        }
   571   1      }
   572          
-C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  20:56:14  PAGE 10  
+C251 COMPILER V5.60.0,  APP_Lamp                                                           31/07/23  21:38:25  PAGE 10  
 
   573          
   574          /******************************************************************************
@@ -643,14 +643,14 @@ stmt  level    source
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =     15853     ------
-  ecode size           =    ------     ------
+  code size            =     13308     ------
+  ecode size           =      3107     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =    ------     ------
+  xdata size           =    ------        109
   xdata-const size     =    ------     ------
-  edata size           =    ------        109
+  edata size           =    ------     ------
   bit size             =    ------     ------
   ebit size            =    ------     ------
   bitaddressable size  =    ------     ------

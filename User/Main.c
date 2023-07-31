@@ -13,6 +13,39 @@
 #include	"Task.h"
 #include	"System_init.h"
 #include	"APP.h"
+
+#include	"STC32G_GPIO.h"
+#include	"STC32G_UART.h"
+#include	"STC32G_NVIC.h"
+#include	"STC32G_Delay.h"
+#include	"STC32G_Switch.h"
+#include "uart.h"
+
+void	GPIO_configcom3(void)
+{
+	GPIO_InitTypeDef	GPIO_InitStructure;		//结构定义
+
+	GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1;		//指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
+	GPIO_InitStructure.Mode = GPIO_PullUp;	//指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_OUT_PP
+	GPIO_Inilize(GPIO_P5,&GPIO_InitStructure);	//初始化
+}
+
+/***************  串口初始化函数 *****************/
+void	UART_configcom3(void)
+{
+	COMx_InitDefine		COMx_InitStructure;					//结构定义
+
+	COMx_InitStructure.UART_Mode      = UART_8bit_BRTx;	//模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UART_9bit_BRTx
+	COMx_InitStructure.UART_BRT_Use   = BRT_Timer3;			//选择波特率发生器, BRT_Timer3, BRT_Timer2 (注意: 串口2固定使用BRT_Timer2)
+	COMx_InitStructure.UART_BaudRate  = 115200ul;			//波特率, 一般 110 ~ 115200
+	COMx_InitStructure.UART_RxEnable  = ENABLE;				//接收允许,   ENABLE或DISABLE
+	UART_Configuration(UART3, &COMx_InitStructure);		//初始化串口1 UART1,UART2,UART3,UART4
+	NVIC_UART3_Init(ENABLE,Priority_1);		//中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Priority_2,Priority_3
+
+	UART3_SW(UART3_SW_P50_P51);		//UART3_SW_P00_P01,UART3_SW_P50_P51
+}
+
+
 //========================================================================
 // 函数: void	main(void)
 // 描述: 主函数程序.
@@ -89,7 +122,18 @@ void showhenxiang()
 	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
 }
 
-
+void	GPIO_confibase(void)
+{
+//	P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );		//P2 设置为准双向口
+//	P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
+    P2_MODE_IO_PU(GPIO_Pin_All);	
+	
+	P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
+	P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
+	
+	P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
+	P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
+}
 void main(void)
 {
 	WTST = 0;		//设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
@@ -100,17 +144,26 @@ void main(void)
 	while(!(XOSCCR&1));   //等待时钟稳定
 	CLKDIV = 0x00;        //时钟不分频
 	CLKSEL = 0x01;        //选择外部时钟		
-
+	GPIO_confibase();
 	SYS_Init();
+
 	test2();
-		sendbytecom1('c');
+	sendbytecom1('c');
+	GPIO_configcom3();
+	sendbytecom1('d');
+	Uart23Init();
+	sendbytecom1('e');
+
 	while (1)
 	{
+		
 		sendbytecom1('a');
+		print3("test3");
 		delayx_ms(100);
 		sendbytecom1('b');
 		Sample_Lamp();
 		showhenxiang();
+		
 	}
 }
 
@@ -121,6 +174,7 @@ void UART1_ISR_Handler (void) interrupt UART1_VECTOR
 	if(RI)
 	{
 		RI = 0;
+		printf("rec init now");
 		IAP_CONTR = 0x60;
 	}
 
@@ -137,3 +191,18 @@ void UART1_ISR_Handler (void) interrupt UART1_VECTOR
 
 
 
+void Uart3() interrupt 17
+{
+	char temp3; 
+    if (S3CON & S3RI)
+    {
+        S3CON &= ~S3RI; //??S3RI?
+		temp3 = S3BUF;
+		// chuankou1put(temp3);
+    }
+    if (S3CON & S3TI)
+    {
+        S3CON &= ~S3TI; // 清除S3TI位
+        busy3 = 0;      // 清忙标志
+    }
+}

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               31/07/23  21:38:23  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -27,144 +27,221 @@ stmt  level    source
 *** WARNING C317 IN LINE 91 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
 *** WARNING C317 IN LINE 95 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
 *** WARNING C317 IN LINE 97 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
-   16          //========================================================================
-   17          // 函数: void main(void)
-   18          // 描述: 主函数程序.
-   19          // 参数: None.
-   20          // 返回: None.
-   21          // 版本: V1.0, 2012-10-22
-   22          //========================================================================
-   23          void test2()
-   24          {
-   25   1          SCON = 0x50;  // 8位数据,可变波特率
-   26   1        AUXR |= 0x40; // 定时器时钟1T模式
-   27   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
-   28   1        TMOD &= 0x0F; // 设置定时器模式
-   29   1        TL1 = 0xCC;   // 设置定时初始值
-   30   1        TH1 = 0xFF;   // 设置定时初始值
-   31   1        ET1 = 0;    // 禁止定时器%d中断
-   32   1        TR1 = 1;    // 定时器1开始计时
-   33   1        ES = 1;
-   34   1        EA = 1;
-   35   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
-   36   1      
-   37   1      }
-   38          void Delay1ms()   //@11.0592MHz
-   39          {
-   40   1        unsigned long i;
-   41   1      
-   42   1        _nop_();
-   43   1        _nop_();
-   44   1        _nop_();
-   45   1        i = 5998UL;
-   46   1        while (i) i--;
-   47   1      }
+   16          
+   17          #include  "STC32G_GPIO.h"
+   18          #include  "STC32G_UART.h"
+   19          #include  "STC32G_NVIC.h"
+   20          #include  "STC32G_Delay.h"
+   21          #include  "STC32G_Switch.h"
+   22          #include "uart.h"
+*** WARNING C317 IN LINE 17 OF ..\User\uart.h: attempt to redefine macro 'CLR_TI4'
+*** WARNING C317 IN LINE 18 OF ..\User\uart.h: attempt to redefine macro 'CLR_RI4'
+   23          
+   24          void  GPIO_configcom3(void)
+   25          {
+   26   1        GPIO_InitTypeDef  GPIO_InitStructure;   //结构定义
+   27   1      
+   28   1        GPIO_InitStructure.Pin  = GPIO_Pin_0 | GPIO_Pin_1;    //指定要初始化的IO, GPIO_Pin_0 ~ GPIO_Pin_7
+   29   1        GPIO_InitStructure.Mode = GPIO_PullUp;  //指定IO的输入或输出方式,GPIO_PullUp,GPIO_HighZ,GPIO_OUT_OD,GPIO_
+             -OUT_PP
+   30   1        GPIO_Inilize(GPIO_P5,&GPIO_InitStructure);  //初始化
+   31   1      }
+   32          
+   33          /***************  串口初始化函数 *****************/
+   34          void  UART_configcom3(void)
+   35          {
+   36   1        COMx_InitDefine   COMx_InitStructure;         //结构定义
+   37   1      
+   38   1        COMx_InitStructure.UART_Mode      = UART_8bit_BRTx; //模式, UART_ShiftRight,UART_8bit_BRTx,UART_9bit,UAR
+             -T_9bit_BRTx
+   39   1        COMx_InitStructure.UART_BRT_Use   = BRT_Timer3;     //选择波特率发生器, BRT_Timer3, BRT_Timer2 (注意: 串口
+             -2固定使用BRT_Timer2)
+   40   1        COMx_InitStructure.UART_BaudRate  = 115200ul;     //波特率, 一般 110 ~ 115200
+   41   1        COMx_InitStructure.UART_RxEnable  = ENABLE;       //接收允许,   ENABLE或DISABLE
+   42   1        UART_Configuration(UART3, &COMx_InitStructure);   //初始化串口1 UART1,UART2,UART3,UART4
+   43   1        NVIC_UART3_Init(ENABLE,Priority_1);   //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pr
+             -iority_2,Priority_3
+   44   1      
+   45   1        UART3_SW(UART3_SW_P50_P51);   //UART3_SW_P00_P01,UART3_SW_P50_P51
+   46   1      }
+   47          
    48          
-   49          
-   50          void delayx_ms(unsigned int ms)
-   51          {
-   52   1        while(ms--)
-   53   1        {
-   54   2          Delay1ms();
-C251 COMPILER V5.60.0,  main                                                               31/07/23  21:38:23  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 2   
 
-   55   2        }
-   56   1      }
-   57          extern void Sample_Lamp(void);
-   58          void sendbytecom1(unsigned char ch)
-   59          {
-   60   1        int i;
-   61   1        // EA=0;
-   62   1          TI     =   0;  //清零串口发送完成中断请求标志
-   63   1          SBUF   =   ch;
-   64   1          while(TI ==0) //等待发送完成
-   65   1        {
-   66   2          for(i=0;i<2000; i++){
-   67   3            if( TI) break;
-   68   3          }
-   69   2          break;
-   70   2        }
-   71   1        EA=1;
-   72   1      }
-   73          #define maxjindu 16
-   74          #define qidian 0
-   75          void showhenxiang()
-   76          {
-   77   1        int i;
-   78   1        char dataxx[60] = {0};
-   79   1        static int runflag = 0;
-   80   1      
-   81   1      
-   82   1        for (i = 0; i < maxjindu; i++)
-   83   1        {
-   84   2          dataxx[i] = '-';
-   85   2        }
-   86   1      
-   87   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
-   88   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
-   89   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
-   90   1      }
-   91          
-   92          
-   93          void main(void)
-   94          {
-   95   1        WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
-   96   1        EAXSFR();   //扩展SFR(XFR)访问使能 
-   97   1        CKCON = 0;      //提高访问XRAM速度
-   98   1        
-   99   1        XOSCCR = 0xc0;        //启动外部晶振
-  100   1        while(!(XOSCCR&1));   //等待时钟稳定
-  101   1        CLKDIV = 0x00;        //时钟不分频
-  102   1        CLKSEL = 0x01;        //选择外部时钟    
-  103   1      
-  104   1        SYS_Init();
-  105   1        test2();
-  106   1          sendbytecom1('c');
-  107   1        while (1)
-  108   1        {
-  109   2          sendbytecom1('a');
-  110   2          delayx_ms(100);
-  111   2          sendbytecom1('b');
-  112   2          Sample_Lamp();
-  113   2          showhenxiang();
-  114   2        }
-  115   1      }
-  116          
-  117          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
-  118          {
+   49          //========================================================================
+   50          // 函数: void main(void)
+   51          // 描述: 主函数程序.
+   52          // 参数: None.
+   53          // 返回: None.
+   54          // 版本: V1.0, 2012-10-22
+   55          //========================================================================
+   56          void test2()
+   57          {
+   58   1          SCON = 0x50;  // 8位数据,可变波特率
+   59   1        AUXR |= 0x40; // 定时器时钟1T模式
+   60   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
+   61   1        TMOD &= 0x0F; // 设置定时器模式
+   62   1        TL1 = 0xCC;   // 设置定时初始值
+   63   1        TH1 = 0xFF;   // 设置定时初始值
+   64   1        ET1 = 0;    // 禁止定时器%d中断
+   65   1        TR1 = 1;    // 定时器1开始计时
+   66   1        ES = 1;
+   67   1        EA = 1;
+   68   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
+   69   1      
+   70   1      }
+   71          void Delay1ms()   //@11.0592MHz
+   72          {
+   73   1        unsigned long i;
+   74   1      
+   75   1        _nop_();
+   76   1        _nop_();
+   77   1        _nop_();
+   78   1        i = 5998UL;
+   79   1        while (i) i--;
+   80   1      }
+   81          
+   82          
+   83          void delayx_ms(unsigned int ms)
+   84          {
+   85   1        while(ms--)
+   86   1        {
+   87   2          Delay1ms();
+   88   2        }
+   89   1      }
+   90          extern void Sample_Lamp(void);
+   91          void sendbytecom1(unsigned char ch)
+   92          {
+   93   1        int i;
+   94   1        // EA=0;
+   95   1          TI     =   0;  //清零串口发送完成中断请求标志
+   96   1          SBUF   =   ch;
+   97   1          while(TI ==0) //等待发送完成
+   98   1        {
+   99   2          for(i=0;i<2000; i++){
+  100   3            if( TI) break;
+  101   3          }
+  102   2          break;
+  103   2        }
+  104   1        EA=1;
+  105   1      }
+  106          #define maxjindu 16
+  107          #define qidian 0
+  108          void showhenxiang()
+  109          {
+  110   1        int i;
+  111   1        char dataxx[60] = {0};
+  112   1        static int runflag = 0;
+  113   1      
+  114   1      
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 3   
+
+  115   1        for (i = 0; i < maxjindu; i++)
+  116   1        {
+  117   2          dataxx[i] = '-';
+  118   2        }
   119   1      
-  120   1      
-C251 COMPILER V5.60.0,  main                                                               31/07/23  21:38:23  PAGE 3   
+  120   1        LCD_ShowString(qidian, 140, dataxx, RED, WHITE, 32, 0);
+  121   1        LCD_ShowString(qidian, 140 + 40, dataxx, RED, WHITE, 32, 0);
+  122   1        LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", RED, WHITE, 16, 0);
+  123   1      }
+  124          
+  125          void  GPIO_confibase(void)
+  126          {
+  127   1      //  P2_MODE_IO_PU( GPIO_Pin_3 | GPIO_Pin_4 );   //P2 设置为准双向口
+  128   1      //  P2_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_5|GPIO_Pin_6|GPIO_Pin_7);
+  129   1          P2_MODE_IO_PU(GPIO_Pin_All);  
+  130   1        
+  131   1        P3_MODE_OUT_PP(GPIO_Pin_3|GPIO_Pin_5|GPIO_Pin_7);
+  132   1        P3_MODE_IN_HIZ(GPIO_Pin_4|GPIO_Pin_6);
+  133   1        
+  134   1        P4_MODE_OUT_PP(GPIO_Pin_2|GPIO_Pin_3);
+  135   1        P4_MODE_IN_HIZ(GPIO_Pin_0|GPIO_Pin_1);
+  136   1      }
+  137          void main(void)
+  138          {
+  139   1        WTST = 0;   //设置程序指令延时参数，赋值为0可将CPU执行指令的速度设置为最快
+  140   1        EAXSFR();   //扩展SFR(XFR)访问使能 
+  141   1        CKCON = 0;      //提高访问XRAM速度
+  142   1        
+  143   1        XOSCCR = 0xc0;        //启动外部晶振
+  144   1        while(!(XOSCCR&1));   //等待时钟稳定
+  145   1        CLKDIV = 0x00;        //时钟不分频
+  146   1        CLKSEL = 0x01;        //选择外部时钟    
+  147   1        GPIO_confibase();
+  148   1        SYS_Init();
+  149   1      
+  150   1        test2();
+  151   1        sendbytecom1('c');
+  152   1        GPIO_configcom3();
+  153   1        sendbytecom1('d');
+  154   1        Uart23Init();
+  155   1        sendbytecom1('e');
+  156   1      
+  157   1        while (1)
+  158   1        {
+  159   2          
+  160   2          sendbytecom1('a');
+  161   2          print3("test3");
+  162   2          delayx_ms(100);
+  163   2          sendbytecom1('b');
+  164   2          Sample_Lamp();
+  165   2          showhenxiang();
+  166   2          
+  167   2        }
+  168   1      }
+  169          
+  170          void UART1_ISR_Handler (void) interrupt UART1_VECTOR
+  171          {
+  172   1      
+  173   1      
+  174   1        if(RI)
+  175   1        {
+  176   2          RI = 0;
+  177   2          printf("rec init now");
+  178   2          IAP_CONTR = 0x60;
+  179   2        }
+  180   1      
+C251 COMPILER V5.60.0,  main                                                               31/07/23  22:01:17  PAGE 4   
 
-  121   1        if(RI)
-  122   1        {
-  123   2          RI = 0;
-  124   2          IAP_CONTR = 0x60;
-  125   2        }
-  126   1      
-  127   1        if(TI)
-  128   1        {
-  129   2          TI = 0;
-  130   2          
-  131   2            
-  132   2        }
-  133   1      }
-  134          // 电源板子，风扇没开
-  135          
-  136          // lcd板子，按键按下，才能旋转设置值。。其他是ok的，，再按下，保存。。
-  137          
-  138          
-  139          
+  181   1        if(TI)
+  182   1        {
+  183   2          TI = 0;
+  184   2          
+  185   2            
+  186   2        }
+  187   1      }
+  188          // 电源板子，风扇没开
+  189          
+  190          // lcd板子，按键按下，才能旋转设置值。。其他是ok的，，再按下，保存。。
+  191          
+  192          
+  193          
+  194          void Uart3() interrupt 17
+  195          {
+  196   1        char temp3; 
+  197   1          if (S3CON & S3RI)
+  198   1          {
+  199   2              S3CON &= ~S3RI; //??S3RI?
+  200   2          temp3 = S3BUF;
+  201   2          // chuankou1put(temp3);
+  202   2          }
+  203   1          if (S3CON & S3TI)
+  204   1          {
+  205   2              S3CON &= ~S3TI; // 清除S3TI位
+  206   2              busy3 = 0;      // 清忙标志
+  207   2          }
+  208   1      }
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =         4     ------
-  ecode size           =       395     ------
+  code size            =         8     ------
+  ecode size           =       636     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =         2         60
+  xdata size           =         2         71
   xdata-const size     =    ------     ------
   edata size           =    ------     ------
   bit size             =    ------     ------
@@ -174,8 +251,8 @@ Module Information          Static   Overlayable
   far data size        =    ------     ------
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =       100     ------
+  hconst size          =       119     ------
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)

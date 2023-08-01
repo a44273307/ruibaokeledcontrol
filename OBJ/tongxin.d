@@ -59,3 +59,4 @@
 ..\obj\tongxin.o: ..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h
 ..\obj\tongxin.o: ..\SYSTEM\delay\delay.h
 ..\obj\tongxin.o: ..\SYSTEM\usart\usart.h
+..\obj\tongxin.o: tongxin.h

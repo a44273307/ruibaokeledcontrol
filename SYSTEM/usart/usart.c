@@ -53,8 +53,8 @@ void _sys_exit(int x)
 //重定义fputc函数 
 int fputc(int ch, FILE *f)
 {      
-	while((USART1->SR&0X40)==0);//循环发送,直到发送完毕   
-    USART1->DR = (u8) ch;      
+	while((USART2->SR&0X40)==0);//循环发送,直到发送完毕   
+    USART2->DR = (u8) ch;      
 	return ch;
 }
 #endif 
@@ -94,7 +94,7 @@ void uart_init(u32 bound)
   
 		//UART 初始化设置
 	UART2_Handler.Instance=USART2;					    //USART1
-	UART2_Handler.Init.BaudRate=9600;				    //波特率
+	UART2_Handler.Init.BaudRate=bound;				    //波特率
 	UART2_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
 	UART2_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
 	UART2_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
@@ -105,7 +105,7 @@ void uart_init(u32 bound)
 	
 	
 	UART3_Handler.Instance=USART3;					    //USART1
-	UART3_Handler.Init.BaudRate=9600;				    //波特率
+	UART3_Handler.Init.BaudRate=bound;				    //波特率
 	UART3_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
 	UART3_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
 	UART3_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
@@ -207,20 +207,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 }
 
-void USART2_IRQHandler(void)                	
+void USART1_IRQHandler(void)                	
 { 
   u8 Res;
 	HAL_StatusTypeDef err;
-	if((__HAL_UART_GET_FLAG(&UART2_Handler,UART_FLAG_RXNE)!=RESET))
+	if((__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_RXNE)!=RESET))
 	{
-		S4BUF=USART2->DR; 
+		// S4BUF=USART2->DR; 
 		chuankou2jisuuan();
 	}
-	HAL_UART_IRQHandler(&UART2_Handler);
+	HAL_UART_IRQHandler(&UART1_Handler);
 } 
 void USART3_IRQHandler(void)                	
 { 
-  u8 Res;
+    u8 Res;
 	HAL_StatusTypeDef err;
 	if((__HAL_UART_GET_FLAG(&UART3_Handler,UART_FLAG_RXNE)!=RESET))
 	{
@@ -237,13 +237,13 @@ void USART3_IRQHandler(void)
 /*下面代码我们直接把中断控制逻辑写在中断服务函数内部。*/
 
 //串口1中断服务程序
-void USART1_IRQHandler(void)                	
+void USART2_IRQHandler(void)                	
 { 
 	u8 Res;
 	HAL_StatusTypeDef err;
-	if((__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	if((__HAL_UART_GET_FLAG(&UART2_Handler,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
-		Res=USART1->DR; 
+		Res=USART2->DR; 
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 		{
 			if(USART_RX_STA&0x4000)//接收到了0x0d
@@ -263,7 +263,7 @@ void USART1_IRQHandler(void)
 			}
 		}   		 
 	}
-	HAL_UART_IRQHandler(&UART1_Handler);	
+	HAL_UART_IRQHandler(&UART2_Handler);	
 }
 
 

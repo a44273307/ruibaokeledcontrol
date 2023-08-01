@@ -12,6 +12,8 @@
 #include "bujindianji1.h"
 #include "bujindianji2.h"
 #include <string.h>
+#include "tongxin2.h"
+#include "tongxin.h"
 /************************************************
  ALIENTEK Mini STM32F103开发板实验7
  定时器中断实验-HAL库函数版 
@@ -34,187 +36,98 @@ void settime(int zhi)
 {
 	flag = zhi;
 }
-void sendbyte2(u8 c) //串口4发送一个字节的函数
-{
-	HAL_UART_Transmit(&UART2_Handler, &c, 1, 0xffffff);
-}
-//2000步一圈...
-#define zheng 0
-#define fan 1
+
+
 void send2(char c)
 {
 	HAL_UART_Transmit(&UART2_Handler, &c, 1, 0xffffff);
+}
+void send3(char c)
+{
+	HAL_UART_Transmit(&UART3_Handler, &c, 1, 0xffffff);
 }
 void sendshuju(char *p)
 {
 	while (*p != '\0')
 	{
-		sendbyte2(*p);
+		send2(*p);
 		p++;
 	}
-	sendbyte2('\r');
-	sendbyte2('\n');
+	// sendbyte2('\r');
+	// sendbyte2('\n');
 }
-void keydown(char i);
-char shuju[15];
-int shujuweizhi = 0;
-int timeleft = 0;
-void chuankou2jisuuan()
-{
-	shuju[shujuweizhi++] = USART2->DR;
-	if (shujuweizhi > 8)
-		shujuweizhi = 0;
-	timeleft = 4;
-}
-void shujuchuli()
-{
-	int c;
-	char *p = 0;
-	char flag = 0;
-	if (shujuweizhi == 3)
-	{
-		if (strstr(shuju, "do") != p)
-		{
-			c = shuju[2] - '0';
-			keydown(c);
-			flag = 1;
-		}
-	}
-	if (flag == 1)
-	{
-		sendshuju("success");
-	}
-	else
-		sendshuju("error");
-}
-void timechulichuankou()
-{
-	if (timeleft > 0)
-	{
-		timeleft--;
-		if (timeleft == 0)
-		{
-			shujuchuli();
-			shujuweizhi = 0;
-		}
-	}
-}
-#define zidong 1
-#define true 1
-int guangset = 50;
-int flagzidong = 0;
-int flagopen = 0;
-int flagopenkey = 0;
-int flagdongzuo = 0;
-void keydown(char i) //按键按下的处理、、、
-{
-	//printf("key%d",i);
-}
-void keyallchuli()
-{
-	int i;
-	static int flag[10] = {0}; //标志记录
-	for (i = 0; i < 10; i++)
-	{
-		if (xin[i] == 0)
-		{
-			if (flag[i] == 0) //代表按键第一次按下。。。
-			{
-				flag[i] = 1;
-				keydown(i);
-			}
-		}
-		else
-			flag[i] = 0;
-	}
-}
-void time02msjisuan()
-{
-	keyallchuli();
-	timechulichuankou();
-}
+
+
 void time03msjisuan() //使用前在主函数初始化  电机的控制。。
 {
+
 }
-int cnt;
-int precnt;
+
 //中断服务函数
 void EXTI0_IRQHandler(void)
 {
-	cnt++;
 	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0); //调用中断处理公用函数
 }
-//从这里结束，，，读取dht22温湿度值	。。读取的值
-void pid_init();				//PID参数初始化
-float pid_realise(float speed); //实现PID算法
-struct
-{
-	float set_speed;	//设定速度
-	float actual_speed; //实际速度
-	float error;		//偏差
-	float error_next;	//上一个偏差
-	float error_last;	//上上一个偏差
-	float kp, ki, kd;	//定义比例，积分，微分参数
-} pid;
-void pid_init() //PID 参数初始化
-{
-	pid.set_speed = 0.0;
-	pid.actual_speed = 0.0;
-	pid.error = 0.0;
-	pid.error_next = 0.0;
-	pid.error_last = 0.0;
-	//可调节PID 参数。使跟踪曲线慢慢接近阶跃函数200.0 //
-	pid.kp = 0.2;
-	pid.ki = 0.8;
-	pid.kd = 0.1;
-}
-float pid_realisexx(float speed, float nowspeed) //实现pid
-{
-	float increment_speed;						  //增量  需要输出的pwm值
-	pid.set_speed = speed;						  //设置目标湿度
-	pid.actual_speed = nowspeed;				  //当前的湿度
-	pid.error = pid.set_speed - pid.actual_speed; //当前的湿度差值	对应的en
-	increment_speed = pid.kp * (pid.error - pid.error_next) + pid.ki * pid.error +
-					  pid.kd * (pid.error - 2 * pid.error_next + pid.error_last); //增量计算公式
-	pid.error_last = pid.error_next;											  //下一次迭代
-	pid.error_next = pid.error;													  //下一次迭代
-	return increment_speed;														  //返回加热的输出值
-}
-int pwm;
-int times = 0;
-void showdianjiweizhi();
 void run()
 {
 	
 }
 
-void zhuanhuan()
-{
-	
-}
-void showdianjiweizhi()
-{
-	
-}
-void zhongduanclose()
-{
-	
-}
-void zhongduanopen()
-{
-	
-}
-__weak void getdata()
-{
-	// zhongduanclose();
-	// DHT11_Read_Data(&wendu, &shidu);
-	// zhongduanopen();
-	//printf("wendu%dshidu%d",wendu,shidu);
-	//Get_Adc_Average(ADC_CHANNEL_6,5)/20;
-	//guang = 100 - Get_Adc_Average(ADC_CHANNEL_4, 5) / 41;
-}
+
 
 void init();
+void dealchuankou();
+void getzhiandchange()
+{
+    int weizhi,zhi;
+    Alltongxininfo2 get={0};
+    pop22(&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+    printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+	// if( weizhi== 4 )
+	// {
+		push(weizhi,zhi);
+		// tmp=zhi;
+	// }
+}
+void print2(char *p)
+{
+	while (*p != '\0')
+	{
+		send2(*p);
+		p++;
+	}
+}
+static int timepush=0;
+void dealorder()
+{
+	char out[30]={0};
+	Alltongxininfo get;
+	if(timepush>45)
+	{
+		timepush=0;
+		pop2(&get);
+		// if(get.weizhi==4)
+		// {
+		// 	get.zhi=get.zhi;
+		// }
+		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+		print2(out);
+		printf("send req2[%s]",out);
+	}
+}
+void jiexi(char* input);
+void inputbuf3(const char *s)
+{
+	char tmpstr[300]={0};
+	strcpy(tmpstr,s);
+	jiexi(tmpstr);
+}
 int main(void)
 {
 	int bushu;
@@ -224,18 +137,15 @@ int main(void)
 	int a[10];
 	int key;
 	
-	// HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-	// TIM_SetTIM1Compare1(0);
-	// TIM1_PWM_Init(1000 - 1, 6400 - 1);
-	// TIM_SetTIM1Compare1(0);
-	// TIM_SetTIM1Compare4(0);
-	// TIM3_Init(64 - 1, 5000 - 1); //10毫秒
-	// TIM2->CNT = 30000;
+
 	init();
+	// inputbuf3("set:6-181;end");
 	while (1)
 	{
-		delay_ms(2000);
-		printf("test run");
+		delay_ms(1);
+		dealchuankou();
+		getzhiandchange();
+		dealorder();
 	}
 }
 
@@ -247,21 +157,146 @@ void init()
 	delay_init(64);		 //初始化延时函数
 	uart_init(115200);	 //初始化串口
 	usmart_dev.init(84); //初始化USMART
-	__HAL_AFIO_REMAP_SWJ_NOJTAG();
+	// __HAL_AFIO_REMAP_SWJ_NOJTAG();
 	Y0 = 0;
 	Y1 = 0;
 	initio(); //IO输出输出初始化
 	Y0 = 0;
 	Y1 = 0;
-	delay_ms(50);
-	nvicset();
-	DHT11_Init();
-	delay_ms(100);
-	OLED_Init();
-	delay_ms(100);
-	OLED_Clear();
-	MY_ADC_Init();
-	delay_ms(50);
-	MX_TIM2_Init();
-	delay_ms(50);
+	TIM3_Init(64-1,1000-1);//1ms 一次
+
+}
+
+
+// 接触到显示屏的，，也就是别人对我是输入。。
+
+char flag3 = 0;
+int weishu1, weishu2, weishu3, weishu4;
+char buf3[300];
+char buf1[300]={0};
+int timeleft1, timeleft2, timeleft3, timeleft4;
+char falgchuankou1 = 0;
+void chuankou1put(char c)
+{
+	buf3[weishu3++] = c;
+	if (weishu3 > sizeof(buf3) - 3)
+		weishu3 = 0;
+	timeleft3 = 3;
+}
+void chuankou1time()
+{
+	if (timeleft3 > 0)
+	{
+		timeleft3--;
+		if (timeleft3 == 0) // 数据一次收完了.
+		{
+			flag3 = 1;
+		}
+	}
+}
+
+
+char* mystrstr(const char* haystack, const char* needle) {
+    if (*needle == '\0') {
+        return (char*)haystack;
+    }
+
+    while (*haystack != '\0') {
+        const char* h = haystack;
+        const char* n = needle;
+
+        while (*n != '\0' && *h == *n) {
+            h++;
+            n++;
+        }
+
+        if (*n == '\0') {
+            return (char*)haystack; // 子串匹配成功，返回起始位置
+        }
+
+        haystack++;
+    }
+
+    return NULL; // 未找到子串，返回NULL
+}
+void dealchuankou()
+{
+	if (flag3 == 1)
+	{
+		flag3 = 0;
+		jiexi(buf3);
+		memset(buf3, 0, sizeof(buf3));
+		weishu3 = 0;
+	}
+}
+
+size_t mystrlen(const char* str) {
+    size_t length = 0;
+    while (str[length] != '\0') {
+        length++;
+    }
+    return length;
+}
+
+char* myaddstrstr(const char* haystack, const char* needle)
+{	
+	char* result = mystrstr(haystack, needle);
+	 if (result != NULL)
+	 {
+		result=result+mystrlen(needle);
+	 }
+	 return result;
+}
+// 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
+void jixi2(char* input)
+{
+	char *p=input;
+	char *p1;
+	int i;
+	unsigned int weizhi;
+	unsigned int zhi;
+	//1234-2234;333-4;end
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+		p=myaddstrstr(p,";");  //指向下一个后面
+		printf("get set%d-%d",weizhi,zhi);
+		push2(weizhi,zhi);
+		
+	}
+}
+void jiexi(char* input)
+{
+	char par[500]={0};
+	char *begin,*end;
+	begin=myaddstrstr(input,"set:");
+	// printf("input begin%s",begin);
+	end=myaddstrstr(begin,"end");
+	// printf("input end%s",end);
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		jixi2(par);
+	}
+}
+void chuankou3jisuuan()
+{
+	chuankou1put(USART3->DR);
+}
+
+void time02msjisuan()
+{
+	
+	if(!empty())
+	{
+		timepush++;
+	}
+	chuankou1time();
 }

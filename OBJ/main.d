@@ -72,3 +72,5 @@
 ..\obj\main.o: bujindianji1.h
 ..\obj\main.o: bujindianji2.h
 ..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\main.o: tongxin2.h
+..\obj\main.o: tongxin.h

@@ -32,6 +32,7 @@
 "..\obj\dht11.o"
 "..\obj\adc.o"
 "..\obj\tongxin.o"
+"..\obj\tongxin2.o"
 "..\obj\usmart.o"
 "..\obj\usmart_config.o"
 "..\obj\usmart_str.o"

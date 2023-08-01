@@ -93,6 +93,8 @@ char* myaddstrstr(const char* haystack, const char* needle)
 	 }
 	 return result;
 }
+int bakweizhi;
+int bakzhi;
 void jixi2(char* input)
 {
 	char *p=input;
@@ -112,8 +114,23 @@ void jixi2(char* input)
 		weizhi = atoi(p);
 		p=myaddstrstr(p,"-");
 		zhi = atoi(p);
-        printf("get set%d-%d",weizhi,zhi);
-        push2(weizhi,zhi);
+        if(i%2==0)
+        {
+            bakweizhi=weizhi;
+            bakzhi=zhi;
+        }
+        if(i%2==1)
+        {
+            if(weizhi==bakweizhi && bakzhi==zhi)
+            {
+                printf("get set%d-%d",weizhi,zhi);
+                push2(weizhi,zhi);
+            }
+            else
+            {
+                printf("get failed");
+            }
+        }
 		p=myaddstrstr(p,";");  //指向下一个后面
 		
 	}
@@ -245,7 +262,7 @@ void sendzhi(int weizhi,int zhi)
 }
 void runreport()
 {
-    if(timereport>300)
+    if(timereport>1000)
     {
         timereport=0;
         sendzhi(4,HoldingReg[4]);
@@ -373,7 +390,7 @@ void initbuf()
     {
         HoldingReg[i]=0;
     }
-    readbuf();
+    // readbuf();
 }
 
 void getzhiandchange()
@@ -396,16 +413,16 @@ void getzhiandchange()
 	{
 		deanyan();
 	}
-    if(IsbuffcheckFailed())
-    {
-        // printf("xiugaidata begin\n");
-        delay_mszhi=0;
-        buffchecktongbu();
-        writebuf();
-        // printf("HoldingReg[4] %d",HoldingReg[4]);
-        // printf("xiugaidata end %d\n",delay_mszhi);
-        readbuf();
-    }
+    // if(IsbuffcheckFailed())
+    // {
+    //     // printf("xiugaidata begin\n");
+    //     delay_mszhi=0;
+    //     buffchecktongbu();
+    //     writebuf();
+    //     // printf("HoldingReg[4] %d",HoldingReg[4]);
+    //     // printf("xiugaidata end %d\n",delay_mszhi);
+    //     readbuf();
+    // }
 }
 void main()		                                       
 {
@@ -483,9 +500,4 @@ void uart2(void ) interrupt 8
         busy2 = 0;               //清忙标志
     }  
 }
-
-  
-
-
-
 

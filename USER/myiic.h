@@ -14,19 +14,19 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
 //IO方向设置
-//#define SDA_IN()  {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)8<<28;}	//PB7输入模式
-//#define SDA_OUT() {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)3<<28;} 	//PB7输出模式
+#define SDA_IN()  {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)8<<28;}	//PB7输入模式
+#define SDA_OUT() {GPIOB->CRL&=0X0FFFFFFF;GPIOB->CRL|=(u32)3<<28;} 	//PB7输出模式
 
 
-#define SDA_IN()  {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=(u32)8<<12;}	//PB3输入模式
-#define SDA_OUT() {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=(u32)3<<12;} 	//PB3输出模式
+// #define SDA_IN()  {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=(u32)8<<12;}	//PB3输入模式
+// #define SDA_OUT() {GPIOB->CRL&=0XFFFF0FFF;GPIOB->CRL|=(u32)3<<12;} 	//PB3输出模式
 
 
 
 //IO操作
-#define IIC_SCL   PBout(4) //SCL
-#define IIC_SDA   PBout(3) //SDA
-#define READ_SDA  PBin(3)  //输入SDA
+#define IIC_SCL   PBout(6) //SCL
+#define IIC_SDA   PBout(7) //SDA
+#define READ_SDA  PBin(7)  //输入SDA
 
 //IIC所有操作函数
 void IIC_Init(void);                //初始化IIC的IO口				 

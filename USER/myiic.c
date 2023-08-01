@@ -21,7 +21,7 @@ void IIC_Init(void)
     __HAL_RCC_GPIOB_CLK_ENABLE();   //使能GPIOB时钟
     
     //PH4,5初始化设置
-    GPIO_Initure.Pin=GPIO_PIN_3|GPIO_PIN_4;
+    GPIO_Initure.Pin=GPIO_PIN_6|GPIO_PIN_7;
     GPIO_Initure.Mode=GPIO_MODE_OUTPUT_PP;  //推挽输出
     GPIO_Initure.Pull=GPIO_PULLUP;          //上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;     //高速

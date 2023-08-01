@@ -14,6 +14,7 @@
 #include <string.h>
 #include "tongxin2.h"
 #include "tongxin.h"
+#include "ntc10k3950.h"
 /************************************************
  ALIENTEK Mini STM32F103开发板实验7
  定时器中断实验-HAL库函数版 
@@ -37,7 +38,10 @@ void settime(int zhi)
 	flag = zhi;
 }
 
-
+void send1(char c)
+{
+	HAL_UART_Transmit(&UART1_Handler, &c, 1, 0xffffff);
+}
 void send2(char c)
 {
 	HAL_UART_Transmit(&UART2_Handler, &c, 1, 0xffffff);
@@ -53,8 +57,6 @@ void sendshuju(char *p)
 		send2(*p);
 		p++;
 	}
-	// sendbyte2('\r');
-	// sendbyte2('\n');
 }
 
 
@@ -103,6 +105,22 @@ void print2(char *p)
 		p++;
 	}
 }
+void print1(char *p)
+{
+	while (*p != '\0')
+	{
+		send1(*p);
+		p++;
+	}
+}
+void print3(char *p)
+{
+	while (*p != '\0')
+	{
+		send3(*p);
+		p++;
+	}
+}
 static int timepush=0;
 void dealorder()
 {
@@ -117,7 +135,7 @@ void dealorder()
 		// 	get.zhi=get.zhi;
 		// }
 		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
-		print2(out);
+		print1(out);
 		printf("send req2[%s]",out);
 	}
 }
@@ -128,6 +146,51 @@ void inputbuf3(const char *s)
 	strcpy(tmpstr,s);
 	jiexi(tmpstr);
 }
+
+long getdianzu(long dianya)
+{
+	if(dianya==4095)
+	{
+		return 4700; 
+	}
+	return 4700*dianya/(4095-dianya);
+	// dianya/1023*
+}
+int jisuanwendu(int R)
+{
+	int p,T;
+	unsigned long Ac = 0;
+        for ( p=1; p<sizeof(NTC10K3950)/sizeof(NTC); p++ ) {
+      if ( R >= NTC10K3950[p].R ) 
+	  {
+        Ac = R - NTC10K3950[p].R; // delta resistance
+        Ac *= 50; //multiply by 5.0 degrees celsius step of table
+        Ac /= NTC10K3950[p-1].R - NTC10K3950[p].R; // divide by range of resistence 
+        T = NTC10K3950[p].t*10 - Ac; // temperature offset
+        break;
+      }
+    }
+	return T;
+}
+int gwendu;
+int gguangzhao;
+void showendu()
+{
+	char out[30]={0};
+	sprintf(out,"set:06-%d;end",gwendu);
+	print3(out);
+}
+int getwendu()
+{
+	int dianya;
+	long dianzu;
+	dianya=Get_Adc_Average(ADC_CHANNEL_10,1);
+	dianzu=getdianzu(dianya);
+	gwendu=jisuanwendu(dianzu);
+	printf("tmp is %d",gwendu);
+	showendu();
+}
+
 int main(void)
 {
 	int bushu;
@@ -136,16 +199,25 @@ int main(void)
 	int ts;
 	int a[10];
 	int key;
-	
+
 
 	init();
 	// inputbuf3("set:6-181;end");
+	MY_ADC_Init();
 	while (1)
 	{
 		delay_ms(1);
 		dealchuankou();
 		getzhiandchange();
 		dealorder();
+		if(i++>1000)
+		{
+			i=0;
+			getwendu();
+
+			// dianya1=Get_Adc_Average(ADC_CHANNEL_11,1);
+			// printf("Get_Adc_Average [%d]-[%d]",dianya,dianya1);
+		}
 	}
 }
 

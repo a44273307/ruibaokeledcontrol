@@ -51,8 +51,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
               
     GPIO_Initure.Mode=GPIO_MODE_ANALOG;     //模拟
     GPIO_Initure.Pull=GPIO_NOPULL;          //不带上下拉
-	 GPIO_Initure.Pin=GPIO_PIN_4; 
-    HAL_GPIO_Init(GPIOA,&GPIO_Initure);
+	 GPIO_Initure.Pin=GPIO_PIN_0|GPIO_PIN_1; 
+    HAL_GPIO_Init(GPIOC,&GPIO_Initure);
 	
 
 }

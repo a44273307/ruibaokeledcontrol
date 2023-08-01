@@ -15,6 +15,7 @@
 #include "tongxin2.h"
 #include "tongxin.h"
 #include "ntc10k3950.h"
+#include "myiic.h"
 /************************************************
  ALIENTEK Mini STM32F103开发板实验7
  定时器中断实验-HAL库函数版 
@@ -90,7 +91,7 @@ void getzhiandchange()
     }
     weizhi=get.weizhi;
     zhi=get.zhi;
-    printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+    // printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
 	// if( weizhi== 4 )
 	// {
 		push(weizhi,zhi);
@@ -134,7 +135,7 @@ void dealorder()
 		// {
 		// 	get.zhi=get.zhi;
 		// }
-		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
+		sprintf(out,"set:%d-%d;%d-%d;end",get.weizhi,get.zhi,get.weizhi,get.zhi);
 		print1(out);
 		printf("send req2[%s]",out);
 	}
@@ -172,12 +173,12 @@ int jisuanwendu(int R)
     }
 	return T;
 }
-int gwendu;
+int g_wendu;
 int gguangzhao;
 void showendu()
 {
 	char out[30]={0};
-	sprintf(out,"set:06-%d;end",gwendu);
+	sprintf(out,"set:06-%d;end",g_wendu);
 	print3(out);
 }
 int getwendu()
@@ -186,11 +187,102 @@ int getwendu()
 	long dianzu;
 	dianya=Get_Adc_Average(ADC_CHANNEL_10,1);
 	dianzu=getdianzu(dianya);
-	gwendu=jisuanwendu(dianzu);
-	printf("tmp is %d",gwendu);
+	g_wendu=jisuanwendu(dianzu);
+	// printf("tmp is %d",g_wendu);
 	showendu();
 }
 
+//*********************************
+#define SlaveAddress 0x46 // 定义器件在IIC总线中的从地址,根据ALT  ADDRESS地址引脚不同修改
+                          // ALT  ADDRESS引脚接地时地址为0x46，接电源时地址为  0xB8
+// #define SlaveAddress 0xB8
+void Single_Write_BH1750(u8 REG_Address)
+{
+    IIC_Start();                // 起始信号
+    IIC_Send_Byte(SlaveAddress); // 发送设备地址+写信号
+	IIC_Wait_Ack();
+    IIC_Send_Byte(REG_Address);  // 内部寄存器地址，
+    IIC_Wait_Ack();
+    IIC_Stop(); // 发送停止信号
+}
+
+
+int Multiple_Read_BH1750()
+{
+    int dis_data; // 变量
+    u8 BUF[8]={0}; // 接收数据缓存区
+    u8 i;
+    IIC_Start();                    // 起始信号
+    IIC_Send_Byte(SlaveAddress + 1); // 发送设备地址+读信号
+	IIC_Wait_Ack();
+    for (i = 0; i < 3; i++) // 连续读取2个地址数据，存储中BUF
+    {
+        // BUF[i] = IIC_Read_Byte(); // BUF[0]存储0x32地址中的数据
+        if (i == 3)
+        {
+			BUF[i] =IIC_Read_Byte(0);
+            // IIC_NAck(); // 最后一个数据需要回NOACK
+        }
+        else
+        {
+			BUF[i] =IIC_Read_Byte(1);
+            // IIC_Ack(); // 回应ACK
+        }
+    }
+
+    IIC_Stop(); // 停止信号
+    dis_data = BUF[0];
+    dis_data = (dis_data << 8) + BUF[1]; // 合成数据，即光照数据
+    return dis_data;
+    // Delay5ms();
+}
+// 每次进来加1，，然后多久后就读数据，发出去。。。
+int runningtimes=0; 
+int g_guangzhi;
+void getiicguang()
+{
+    int dis_data;
+	runningtimes++;
+	if(runningtimes==1)
+	{
+		Single_Write_BH1750(0x01); // power on
+    	Single_Write_BH1750(0x10); // H- resolution mode
+		return ;
+	}
+    // delay_ms(180);
+	if(runningtimes==200)
+	{
+		g_guangzhi = Multiple_Read_BH1750();
+		return ;
+	}
+	if(runningtimes==800)
+	{
+		runningtimes=0;
+	}
+}
+void sendtodiannao()
+{
+	printf("ToComputer guang[%d]wendu[%d]end\n",g_guangzhi,g_wendu);
+}
+int timefengshan=0;
+void checksudu()
+{
+	int i;
+	int count=0;
+	timefengshan=0;
+	while (timefengshan<50)
+	{
+		while (X0==0 && timefengshan<50);
+		while (X0==1 && timefengshan<50);
+		count++;
+	}
+	if(count==1)
+	{
+		printf("speed is low close");
+		push(4,0);
+	}
+	// printf("count is %d",count);
+}
 int main(void)
 {
 	int bushu;
@@ -204,19 +296,26 @@ int main(void)
 	init();
 	// inputbuf3("set:6-181;end");
 	MY_ADC_Init();
+	IIC_Init();
 	while (1)
 	{
+		Y0=0;
 		delay_ms(1);
+		
 		dealchuankou();
 		getzhiandchange();
 		dealorder();
+		getiicguang();
+		if(i==800)
+		{
+			checksudu();
+		}
 		if(i++>1000)
 		{
 			i=0;
 			getwendu();
-
-			// dianya1=Get_Adc_Average(ADC_CHANNEL_11,1);
-			// printf("Get_Adc_Average [%d]-[%d]",dianya,dianya1);
+			sendtodiannao();
+			
 		}
 	}
 }
@@ -341,7 +440,6 @@ void jixi2(char* input)
 		p=myaddstrstr(p,";");  //指向下一个后面
 		printf("get set%d-%d",weizhi,zhi);
 		push2(weizhi,zhi);
-		
 	}
 }
 void jiexi(char* input)
@@ -362,13 +460,38 @@ void chuankou3jisuuan()
 {
 	chuankou1put(USART3->DR);
 }
-
+void showcom1();
 void time02msjisuan()
 {
-	
 	if(!empty())
 	{
 		timepush++;
 	}
 	chuankou1time();
+	showcom1();
+	timefengshan++;
+}
+
+char rec1[1000]={0};
+int weizhi1=0;
+int timeleft1=0;
+void chuankou1jisuuan()
+{
+	rec1[weizhi1++]=USART1->DR;
+	if (weizhi1 > sizeof(rec1) - 3)
+		weizhi1 = 0;
+	timeleft1 = 3;
+}
+void showcom1()
+{
+	if(timeleft1>0)
+	{
+		timeleft1--;
+		if(timeleft1==0)
+		{
+			printf("rec[%s]",rec1);
+			memset(rec1,0,sizeof(rec1));
+			weizhi1=0;
+		}
+	}
 }

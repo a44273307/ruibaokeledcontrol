@@ -34,8 +34,9 @@ struct _m_usmart_nametab usmart_nametab[]=
 (void*)yout_set,"char yout_set(char weizhi,char zhi)",
 	(void*)yout_get,"char yout_get(char weizhi)",
 	(void*)show,"void show()",
-	(void*)pushshow,"void pushshow(int weizhi,int zhi)",
+	(void*)push,"void push(int weizhi,int zhi)",
 	(void*)pop,"int pop()",
+
 						//				char yout_set(char weizhi,char zhi);
 			//	char yout_get(char weizhi);						
 	//void settime(int zhi);

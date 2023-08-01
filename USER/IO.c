@@ -17,7 +17,7 @@ static void inset(void)
     GPIO_Initure.Pull=GPIO_PULLUP;          	//上拉
     GPIO_Initure.Speed=GPIO_SPEED_HIGH;    	 	//高速
 	
-				 GPIO_Initure.Pin=GPIO_PIN_7|GPIO_PIN_6|GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_1;
+				 GPIO_Initure.Pin=GPIO_PIN_8|GPIO_PIN_7|GPIO_PIN_6|GPIO_PIN_15|GPIO_PIN_14|GPIO_PIN_1;
     HAL_GPIO_Init(GPIOB,&GPIO_Initure);
 	
 		GPIO_Initure.Pin=GPIO_PIN_7;
@@ -37,7 +37,8 @@ static void outset(void)
     HAL_GPIO_Init(GPIOA,&GPIO_Initure);
 				 GPIO_Initure.Pin=GPIO_PIN_15;
     HAL_GPIO_Init(GPIOC,&GPIO_Initure);
-	
+			 GPIO_Initure.Pin=GPIO_PIN_9;
+    HAL_GPIO_Init(GPIOB,&GPIO_Initure);
 }
 void initio()
 {

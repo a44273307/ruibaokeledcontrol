@@ -19,7 +19,7 @@
 #define X4 PBin(6)
 #define X6 PBin(1)
 #define X5 PAin(5)
-#define X0 PAin(1)
+#define X0 PBin(8)
 #define X7 PAin(4)
 #define X8 PCin(8)
 #define X9 PCin(9)
@@ -27,7 +27,7 @@
 #define X11 PCin(11)
 
 
-#define Y0 PAout(8)
+#define Y0 PBout(9)
 #define Y1 PAout(11)
 
 

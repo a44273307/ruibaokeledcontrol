@@ -195,7 +195,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
     HAL_NVIC_EnableIRQ(USART2_IRQn);	
 	}
 }
-__weak void chuankou2jisuuan()
+__weak void chuankou1jisuuan()
 {
 	
 }
@@ -214,7 +214,7 @@ void USART1_IRQHandler(void)
 	if((__HAL_UART_GET_FLAG(&UART1_Handler,UART_FLAG_RXNE)!=RESET))
 	{
 		// S4BUF=USART2->DR; 
-		chuankou2jisuuan();
+		chuankou1jisuuan();
 	}
 	HAL_UART_IRQHandler(&UART1_Handler);
 } 

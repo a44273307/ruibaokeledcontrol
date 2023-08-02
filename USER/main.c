@@ -61,10 +61,7 @@ void sendshuju(char *p)
 }
 
 
-void time03msjisuan() //使用前在主函数初始化  电机的控制。。
-{
 
-}
 
 //中断服务函数
 void EXTI0_IRQHandler(void)
@@ -188,7 +185,6 @@ int getwendu()
 	dianya=Get_Adc_Average(ADC_CHANNEL_10,1);
 	dianzu=getdianzu(dianya);
 	g_wendu=jisuanwendu(dianzu);
-	// printf("tmp is %d",g_wendu);
 	showendu();
 }
 
@@ -262,26 +258,56 @@ void getiicguang()
 }
 void sendtodiannao()
 {
-	printf("ToComputer guang[%d]wendu[%d]end\n",g_guangzhi,g_wendu);
+	// printf("ToComputer guang[%d]wendu[%d]end\n",g_guangzhi,g_wendu);
 }
 int timefengshan=0;
-void checksudu()
+
+void exitinit()
 {
-	int i;
-	int count=0;
-	timefengshan=0;
-	while (timefengshan<50)
+	 GPIO_InitTypeDef gpio_init_struct;
+
+    gpio_init_struct.Pin = GPIO_PIN_8;
+    gpio_init_struct.Mode = GPIO_MODE_IT_FALLING;            /* 下升沿触发 */
+    gpio_init_struct.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(GPIOB, &gpio_init_struct);    /* KEY0配置为下降沿触发中断 */
+	  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);     
+}
+int fentmp; //风扇速度临时变量
+int g_fengshan=100; //风扇速度
+void EXTI9_5_IRQHandler(void)
+{ 
+    HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);         /* 调用中断处理公用函数 清除KEY1所在中断线 的中断标志位，中断下半部在HAL_GPIO_EXTI_Callback执行 */
+    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_8);         /* HAL库默认先清中断再处理回调，退出时再清一次中断，避免按键抖动误触发 */
+	fentmp++;
+}
+void time03msjisuan()
+{
+	g_fengshan=fentmp;
+	fentmp=0;
+}
+void WriteToPingmu(int weizhi,int zhi)
+{
+	char out[30]={0};
+	delay_ms(100);
+	sprintf(out,"set:%d-%d;end",weizhi,zhi);
+	print3(out);
+	printf("pingmu[%s]",out);
+	delay_ms(100);
+}
+// 报警处理相关的
+void baojincheck()
+{
+	if(g_fengshan<5)
 	{
-		while (X0==0 && timefengshan<50);
-		while (X0==1 && timefengshan<50);
-		count++;
+		push(4,0);  
+		WriteToPingmu(11,1);//风扇异常告警码
 	}
-	if(count==1)
+	if(g_wendu>600)
 	{
-		printf("speed is low close");
 		push(4,0);
+		WriteToPingmu(12,1);//温度
 	}
-	// printf("count is %d",count);
+
 }
 int main(void)
 {
@@ -297,25 +323,21 @@ int main(void)
 	// inputbuf3("set:6-181;end");
 	MY_ADC_Init();
 	IIC_Init();
+	exitinit();
 	while (1)
 	{
 		Y0=0;
 		delay_ms(1);
-		
-		dealchuankou();
-		getzhiandchange();
-		dealorder();
-		getiicguang();
-		if(i==800)
-		{
-			checksudu();
-		}
+		dealchuankou();//解析屏幕过来的指令
+		getzhiandchange();//解析屏幕过来的指令
+		dealorder();//自己压缩的命令，发出去。。
+		getiicguang();//读光照值。。
 		if(i++>1000)
 		{
 			i=0;
 			getwendu();
 			sendtodiannao();
-			
+			baojincheck();
 		}
 	}
 }
@@ -334,8 +356,8 @@ void init()
 	initio(); //IO输出输出初始化
 	Y0 = 0;
 	Y1 = 0;
-	TIM3_Init(64-1,1000-1);//1ms 一次
-
+	TIM2_Init(64-1,1000-1);//1ms 一次
+	TIM3_Init(6400-1,10000-1);//100ms 一次
 }
 
 

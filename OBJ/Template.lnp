@@ -33,6 +33,7 @@
 "..\obj\tongxin.o"
 "..\obj\tongxin2.o"
 "..\obj\myiic.o"
+"..\obj\stmflash.o"
 "..\obj\usmart.o"
 "..\obj\usmart_config.o"
 "..\obj\usmart_str.o"

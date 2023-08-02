@@ -77,8 +77,8 @@ void TIM3_IRQHandler(void)
 {
     if(__HAL_TIM_GET_IT_SOURCE(&TIM3_Handler,TIM_IT_UPDATE)==SET)
 	{
-    	 shurulvbo();	
-		time02msjisuan();
+    	//  shurulvbo();	
+		time03msjisuan();
 		__HAL_TIM_SET_COUNTER(&TIM3_Handler,0);    //清空定时器的CNT
 	}
    __HAL_TIM_CLEAR_IT(&TIM3_Handler, TIM_IT_UPDATE);
@@ -87,7 +87,7 @@ void TIM2_IRQHandler(void)
 {
 	if(__HAL_TIM_GET_IT_SOURCE(&TIM2_Handler,TIM_IT_UPDATE)==SET)
 	{
-	
+    time02msjisuan();
 		__HAL_TIM_SET_COUNTER(&TIM2_Handler,0);    //清空定时器的CNT
 		__HAL_TIM_SET_AUTORELOAD(&TIM2_Handler,20);//恢复原来的设置
 	}

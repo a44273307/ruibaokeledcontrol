@@ -2,6 +2,7 @@
     "files.associations": {
         "stepkong.h": "c",
         "ds18b20.h": "c",
-        "bujindianji1.h": "c"
+        "bujindianji1.h": "c",
+        "ntc10k3950.h": "c"
     }
 }

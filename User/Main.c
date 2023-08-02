@@ -208,7 +208,10 @@ void keydown(int i) // 按键按下的处理、、、
 		{
 			writedizhi(2,0);
 			delay_ms(100);
+			dealorder();
 			writedizhi(2,0);
+			delay_ms(300);
+			dealorder();
 			IAP_CONTR = 0x60;
 		}
 	}
@@ -254,7 +257,7 @@ int setbizhi(int times)
 void dolongtimes(int i, int times)
 {
 	int xielv;
-	times = times - 300;
+	times = times - 150;
 	if (times < 0)
 	{
 		return;
@@ -404,6 +407,11 @@ int tmp = 203; // 温度值
 void shownwendu()
 {
 	char dataxx[40];
+	// 记得复位
+	if (flagsystemrun == 0)
+	{
+		return;
+	}
 	sprintf(dataxx, "TMP:%3d.%01d  ", tmp / 10, tmp % 10);
 	LCD_ShowString(0, 80, dataxx, WHITE, BLACK, 32, 0);
 }
@@ -490,16 +498,15 @@ void showdata()
 	}
 	shownow();
 	showsetzhi();
-	shownwendu();
 }
-void showtime()
+
+void showfen(int error)
 {
-	char i;
-	for(i=0;i<5;i++)
-	{
-		printf("dealy test1");
-		delay_ms(120);
-	}
+	if(error==11)
+    LCD_ShowString(0, 40,"ERROR FOR FAN", WHITE, BLACK, 32, 0);
+	if(error==12)
+    LCD_ShowString(0, 40,"ERROR FOR TMP", WHITE, BLACK, 32, 0);
+
 }
 
 void getzhiandchange()
@@ -518,6 +525,7 @@ void getzhiandchange()
 	{
 		tmp=zhi;
 	}
+	showfen(weizhi);
 }
 void readbuf();
 void mainrun()
@@ -525,36 +533,35 @@ void mainrun()
 	int rumtimes = 0;
 	LED0 = ~LED0;
 	readbuf();
-	
+	writedizhi(2,0);
+	writedizhi(4,0);
 	while (1)
 	{
-		
 		delay_ms2(1);
 		shurulvbo();
 		keyallchuli(); 
 		dealorder();
 		dealchuankou();//处理中控板过来的的数据
-		getzhiandchange();
+		getzhiandchange();//对数据进行处理。。。
 		if (flasetzhichange == 1)
 		{
 			flasetzhichange = 0;
 			showdata();
 			rumtimes = 0;
 		}
-		else
-		{
-			rumtimes++;
-		}
-		if (rumtimes++ > 15000)
-		{
-			rumtimes = 0;
-			printf("show one");
-			// print3("show one");
-			// tmp = getwendu();
+		rumtimes++;
+		if (rumtimes == 15000)
 			showdata();
-			printf("show end");
-
+		if (rumtimes == 20000)
+		{
+			shownwendu();
+			rumtimes = 0;
 		}
+		
+
+			
+			
+		
 	}
 }
 void UART1_ISR_Handler (void) interrupt UART1_VECTOR
@@ -659,7 +666,7 @@ void main(void)
 	LCD_Fill(0, 0, 320, 240, BLACK);
 	delay_ms(50);
 	pingmuclear();
-delay_ms(50);
+	delay_ms(50);
 	mainrun();
 	// LCD_Fill(0, 0, 320, 240, BLACK);
 	

@@ -128,23 +128,19 @@ void run()
 
 void init();
 void dealchuankou();
+// 屏幕过来的指令，，，下发下去。。。
 void getzhiandchange()
 {
     int weizhi,zhi;
-    Alltongxininfo2 get={0};
-    pop22(&get);
+    VectorInfo get={0};
+    VectorGet(Vectorpingmu,&get);
     if(get.weizhi==0)
     {
         return ;
     }
     weizhi=get.weizhi;
     zhi=get.zhi;
-    // printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
-	// if( weizhi== 4 )
-	// {
-		push(weizhi,zhi);
-		// tmp=zhi;
-	// }
+	push(weizhi,zhi); //压缩到往板子发的指令。。。
 }
 void print2(char *p)
 {
@@ -238,6 +234,7 @@ int jisuandianliu(int predianliu)
 	}
 	return shoumingjisuan(predianliu);
 }
+int g_dianliu=0;
 void dealorder()
 {
 	char out[30]={0};
@@ -248,6 +245,7 @@ void dealorder()
 		pop2(&get);
 		if(get.weizhi==4)
 		{
+			g_dianliu=get.zhi;
 			get.zhi=jisuandianliu(get.zhi);
 		}
 		sprintf(out,"set:%d-%d;%d-%d;end",get.weizhi,get.zhi,get.weizhi,get.zhi);
@@ -258,7 +256,7 @@ void dealorder()
 		else
 		{
 			print1(out);
-			printf("send req2[%s]",out);
+			// printf("send req2[%s]",out);
 		}
 		
 	}
@@ -266,7 +264,7 @@ void dealorder()
 void jiexi(char* input);
 void inputbuf3(const char *s)
 {
-	char tmpstr[300]={0};
+	char tmpstr[1000]={0};
 	strcpy(tmpstr,s);
 	jiexi(tmpstr);
 }
@@ -417,8 +415,20 @@ void WriteToPingmu(int weizhi,int zhi)
 	delay_ms(100);
 	sprintf(out,"set:%d-%d;end",weizhi,zhi);
 	print3(out);
-	printf("pingmu[%s]",out);
+	// printf("pingmu[%s]",out);
 	delay_ms(100);
+}
+int iserror()
+{
+	if(g_fengshan<5)
+	{
+		return 1;
+	}
+	if(g_wendu>600)
+	{
+		return 1;
+	}
+	return 0;
 }
 // 报警处理相关的
 void baojincheck()
@@ -466,14 +476,13 @@ int main(void)
 
 
 	init();
-	// inputbuf3("set:6-181;end");
 	MY_ADC_Init();
 	IIC_Init();
 	EPPROMinit();
 	exitinit();
 	while (1)
 	{
-		send4('d');
+		// send4('d');
 		Y0=0;
 		shoumingjilu();
 		delay_ms(1);
@@ -609,12 +618,12 @@ void jixi2(char* input)
 		zhi = atoi(p);
 		p=myaddstrstr(p,";");  //指向下一个后面
 		printf("get set%d-%d",weizhi,zhi);
-		push2(weizhi,zhi);
+		VectorPush(Vectorpingmu,weizhi,zhi);
 	}
 }
 void jiexi(char* input)
 {
-	char par[500]={0};
+	char par[1000]={0};
 	char *begin,*end;
 	begin=myaddstrstr(input,"set:");
 	// printf("input begin%s",begin);
@@ -663,5 +672,135 @@ void showcom1()
 			memset(rec1,0,sizeof(rec1));
 			weizhi1=0;
 		}
+	}
+}
+
+
+
+
+
+char rec2[1500]={0};
+int weizhi2=0;
+
+
+
+int com2jixi2(char* input)
+{
+	char flagTrue=0;
+	char *p=input;
+	char *p1;
+	int i;
+	 int weizhi;
+	 int zhi;
+	int bakweizhi;
+	int bakzhi;
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+        if(i%2==0)
+        {
+            bakweizhi=weizhi;
+            bakzhi=zhi;
+        }
+        if(i%2==1)
+        {
+            if(weizhi==bakweizhi && bakzhi==zhi)
+            {
+                // printf("get set%d-%d",weizhi,zhi);
+                VectorPush(VectorDiannao,weizhi,zhi);
+				flagTrue=1;
+            }
+            else
+            {
+				flagTrue=0;
+                printf("get failed");
+            }
+        }
+		p=myaddstrstr(p,";");  //指向下一个后面
+	}
+	return flagTrue;
+}
+
+
+
+// 电脑过来的指令，，，处理。。。
+// 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
+void dealDiannaoOrder()
+{
+    int weizhi,zhi;
+    VectorInfo get={0};
+    VectorGet(VectorDiannao,&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+	if(weizhi==4)
+	{
+		VectorPush(VectorToPingmu,32,zhi);
+	}
+	{
+		push(weizhi,zhi); //压缩到往板子发的指令。。。
+	}
+}
+void showrsp()
+{
+	char out[200]={0};
+	sprintf(out,"begin;I:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
+	if(iserror())
+	{
+		strcat(out,"Stat:error;");
+	}
+	else
+	{
+		strcat(out,"Stat:ok;");
+	}
+	strcat(out,"end\n");
+	print2(out);
+}
+
+
+int  com2jiexi(char* input)
+{
+	char par[1000]={0};
+	char *begin,*end;
+	begin=myaddstrstr(input,"set:");
+	end=myaddstrstr(begin,"end");
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		return com2jixi2(par);
+	}
+	return 0;
+}
+
+void chuankou2jisuuan()
+{
+	char c=USART2->DR;
+	if(c=='\n')
+	{
+		if(1==com2jiexi(rec2))
+		{
+			dealDiannaoOrder();
+			showrsp();
+		}
+		else
+		{
+			print2("oder failed\n");
+		}
+		memset(rec2, 0, sizeof(rec2));
+		weizhi2 = 0;
+	}
+	else
+	{
+		rec2[weizhi2++]=USART2->DR;
 	}
 }

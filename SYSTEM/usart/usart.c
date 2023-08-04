@@ -53,8 +53,8 @@ void _sys_exit(int x)
 //重定义fputc函数 
 int fputc(int ch, FILE *f)
 {      
-	while((USART2->SR&0X40)==0);//循环发送,直到发送完毕   
-    USART2->DR = (u8) ch;      
+	while((UART4->SR&0X40)==0);//循环发送,直到发送完毕   
+    UART4->DR = (u8) ch;      
 	return ch;
 }
 #endif 
@@ -117,15 +117,15 @@ void uart_init(u32 bound)
 	HAL_UART_Receive_IT(&UART3_Handler, (u8 *)cRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以
 
 
-	// UART4_Handler.Instance=UART4;					    //USART1
-	// UART4_Handler.Init.BaudRate=bound;				    //波特率
-	// UART4_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
-	// UART4_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
-	// UART4_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
-	// UART4_Handler.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //无硬件流控
-	// UART4_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
-	// HAL_UART_Init(&UART4_Handler);					    //HAL_UART_Init()会使能UART1
-	// HAL_UART_Receive_IT(&UART4_Handler, (u8 *)dRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以
+	UART4_Handler.Instance=UART4;					    //USART1
+	UART4_Handler.Init.BaudRate=bound;				    //波特率
+	UART4_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
+	UART4_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
+	UART4_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
+	UART4_Handler.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //无硬件流控
+	UART4_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
+	HAL_UART_Init(&UART4_Handler);					    //HAL_UART_Init()会使能UART1
+	HAL_UART_Receive_IT(&UART4_Handler, (u8 *)dRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以
 
 
 
@@ -164,9 +164,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 	}
 	if(huart->Instance==UART4)//如果是串口1，进行串口1 MSP初始化
 	{
-		__HAL_RCC_GPIOA_CLK_ENABLE();			//使能GPIOA时钟
+		__HAL_RCC_GPIOC_CLK_ENABLE();			//使能GPIOA时钟
 		__HAL_RCC_UART4_CLK_ENABLE();			//使能USART1时钟
-		__HAL_RCC_AFIO_CLK_ENABLE();
+		// __HAL_RCC_AFIO_CLK_ENABLE();
 	
 		GPIO_Initure.Pin=GPIO_PIN_10;			//PA9
 		GPIO_Initure.Mode=GPIO_MODE_AF_PP;		//复用推挽输出
@@ -240,6 +240,10 @@ __weak void chuankou3jisuuan()
 {
 	
 }
+__weak void chuankou2jisuuan()
+{
+	
+}
 __weak void chuankou4jisuuan()
 {
 	
@@ -269,16 +273,6 @@ void USART3_IRQHandler(void)
 	}
 	HAL_UART_IRQHandler(&UART3_Handler);
 } 
-void UART4_IRQHandler(void)                	
-{ 
-    u8 Res;
-	HAL_StatusTypeDef err;
-	if((__HAL_UART_GET_FLAG(&UART4_Handler,UART_FLAG_RXNE)!=RESET))
-	{
-		chuankou4jisuuan();
-	}
-	HAL_UART_IRQHandler(&UART4_Handler);
-} 
 
 
 
@@ -287,13 +281,16 @@ void UART4_IRQHandler(void)
 /*下面代码我们直接把中断控制逻辑写在中断服务函数内部。*/
 
 //串口1中断服务程序
-void USART2_IRQHandler(void)                	
+
+
+void UART4_IRQHandler(void)                	
 { 
+
 	u8 Res;
 	HAL_StatusTypeDef err;
-	if((__HAL_UART_GET_FLAG(&UART2_Handler,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	if((__HAL_UART_GET_FLAG(&UART4_Handler,UART_FLAG_RXNE)!=RESET))  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
-		Res=USART2->DR; 
+		Res=UART4->DR; 
 		if((USART_RX_STA&0x8000)==0)//接收未完成
 		{
 			if(USART_RX_STA&0x4000)//接收到了0x0d
@@ -313,8 +310,25 @@ void USART2_IRQHandler(void)
 			}
 		}   		 
 	}
-	HAL_UART_IRQHandler(&UART2_Handler);	
+	HAL_UART_IRQHandler(&UART4_Handler);	
+
 }
+    
+
+
+
+
+void USART2_IRQHandler(void)                	
+{ 
+	u8 Res;
+	HAL_StatusTypeDef err;
+	if((__HAL_UART_GET_FLAG(&UART2_Handler,UART_FLAG_RXNE)!=RESET))
+	{
+		chuankou2jisuuan();
+	}
+	HAL_UART_IRQHandler(&UART2_Handler);
+} 
+
 
 
 

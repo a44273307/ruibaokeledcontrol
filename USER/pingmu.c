@@ -210,37 +210,3 @@ int pingmu_read(int a)//a是地址,下载某个地址的值,并且返回..
  该函数会把06 83 00 00 01 00 02保存在buf数组中.
  如果地址是00 00 .屏幕设置的00 00的数据自动下传,所以是自动下穿的数据.
  */
-
- void chuankou2jisuuan()//5A A5 06 83 00 00 01 00 02
-{
-	 if(Recv_Flag4==2)//标志位..发送读取命令前,应该将其清零..
-		{ 
-		   buf[uart_Index4] = S4BUF;
-			if(uart_Index4==buf[0])
-			{
-			  returnnum=buf[buf[0]];//读取的是最后一位的数值.
-				uart_Index4=0;//多少位的标志量.....
-				Recv_Flag4=0;//	
-        chuankou2flag=1;
-         if(buf[2]==0&&buf[3]==0)
-				 {
-				 }					 
-			}
-			uart_Index4++;
-		}
-		else
-		if(S4BUF==0x5A)
-		{
-			Recv_Flag4 = 1;  //接受数据标志 起始标志到后
-		}
-		else if(Recv_Flag4==1&&S4BUF==0xA5)
-		{	
-		    uart_Index4 = 0;	//清零方便计数帧
-		 	Recv_Flag4 = 2;  //接受数据标志 起始标志到后    
-	   	}
-		else
-		{	
-			Recv_Flag4=0;		
-		}
-}
-

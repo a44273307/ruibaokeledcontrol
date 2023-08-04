@@ -2,16 +2,38 @@
 #define _TONGXIN2_H
 
 
-
+#define maxzhi 20 
 
 typedef struct {
     int weizhi;
     int zhi;
     int falg;
-} Alltongxininfo2;
-extern void show2();
-extern void push2(int weizhi,int zhi);
-extern void pushshow2(int weizhi,int zhi);
+} VectorInfo;
 
-int pop22(  Alltongxininfo2 *get);
+
+extern VectorInfo Vectorpingmu[maxzhi];
+extern VectorInfo VectorDiannao[maxzhi];
+extern VectorInfo VectorToPingmu[maxzhi];
+
+
+int getemptyindex2(VectorInfo* Vectorpingmu);
+int empty2(VectorInfo* Vectorpingmu);
+int isfull2(VectorInfo* Vectorpingmu);
+
+
+
+void VectorPush(VectorInfo* Vectorpingmu, int weizhi, int zhi);
+int VectorGet(VectorInfo* Vectorpingmu, VectorInfo* get);
+
+
+
+
+
+
+
+
+
+
+
+
 #endif

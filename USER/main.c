@@ -415,8 +415,8 @@ void WriteToPingmu(int weizhi,int zhi)
 	delay_ms(100);
 	sprintf(out,"set:%d-%d;end",weizhi,zhi);
 	print3(out);
-	// printf("pingmu[%s]",out);
-	delay_ms(100);
+	printf("pingmu[%s]",out);
+	
 }
 int iserror()
 {
@@ -436,13 +436,38 @@ void baojincheck()
 	if(g_fengshan<5)
 	{
 		push(4,0);  
-		WriteToPingmu(11,1);//风扇异常告警码
+		VectorPush(VectorToPingmu,11,1);//风扇异常告警码
+
 	}
 	if(g_wendu>600)
 	{
 		push(4,0);
-		WriteToPingmu(12,1);//温度
+		VectorPush(VectorToPingmu,12,1);//温度
 	}
+}
+void orderFetchToPingmu()
+{
+	static int jishi;
+	int weizhi,zhi;
+
+	VectorInfo get={0};
+		jishi++;
+	if(jishi>30)
+	{
+		jishi=0;
+	}
+	else
+	{
+		return ;
+	}
+    VectorGet(VectorToPingmu,&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+	WriteToPingmu(weizhi,zhi);//发送电脑
 }
 // 65536 小时
 char flagwrie=0;
@@ -490,6 +515,7 @@ int main(void)
 		getzhiandchange();//解析屏幕过来的指令
 		dealorder();//自己压缩的命令，发出去。。
 		getiicguang();//读光照值。。
+		orderFetchToPingmu();
 		if(i++>1000)
 		{
 			i=0;

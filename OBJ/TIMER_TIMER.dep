@@ -1,5 +1,5 @@
 Dependencies for Project 'TIMER', Target 'TIMER': (DO NOT MODIFY !)
-F (.\main.c)(0x64CCFFC5)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\main.o --depend ..\obj\main.d)
+F (.\main.c)(0x64CD04CB)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\main.o --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x5A7C4EC5)
 I (..\USER\stm32f1xx.h)(0x571DE09C)
 I (..\USER\stm32f103xe.h)(0x571DE09C)
@@ -72,7 +72,7 @@ I (myiic.h)(0x64C8EF94)
 I (bujindianji1.h)(0x5DD4F01D)
 I (bujindianji2.h)(0x5DD4F01C)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (tongxin2.h)(0x64CCF58C)
+I (tongxin2.h)(0x64CD0174)
 I (tongxin.h)(0x64C0DE08)
 I (ntc10k3950.h)(0x64C8EC98)
 I (stmflash.h)(0x64CA54E0)
@@ -1943,7 +1943,7 @@ I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x571E2CF8)
 I (..\SYSTEM\delay\delay.h)(0x592658E0)
 I (..\SYSTEM\usart\usart.h)(0x64CCDEBE)
 I (tongxin.h)(0x64C0DE08)
-F (.\tongxin2.c)(0x64CCF58A)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\tongxin2.o --depend ..\obj\tongxin2.d)
+F (.\tongxin2.c)(0x64CD018F)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\tongxin2.o --depend ..\obj\tongxin2.d)
 I (..\SYSTEM\sys\sys.h)(0x5A7C4EC5)
 I (..\USER\stm32f1xx.h)(0x571DE09C)
 I (..\USER\stm32f103xe.h)(0x571DE09C)
@@ -2003,7 +2003,7 @@ I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h)(0x571E2CF8)
 I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x571E2CF8)
 I (..\SYSTEM\delay\delay.h)(0x592658E0)
 I (..\SYSTEM\usart\usart.h)(0x64CCDEBE)
-I (tongxin2.h)(0x64CCF58C)
+I (tongxin2.h)(0x64CD0174)
 F (.\myiic.c)(0x64C8EF17)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\myiic.o --depend ..\obj\myiic.d)
 I (myiic.h)(0x64C8EF94)
 I (..\SYSTEM\sys\sys.h)(0x5A7C4EC5)

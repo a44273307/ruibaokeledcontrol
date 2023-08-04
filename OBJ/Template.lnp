@@ -18,6 +18,8 @@
 "..\obj\stm32f1xx_hal_dma.o"
 "..\obj\stm32f1xx_hal_adc.o"
 "..\obj\stm32f1xx_hal_adc_ex.o"
+"..\obj\stm32f1xx_hal_flash.o"
+"..\obj\stm32f1xx_hal_flash_ex.o"
 "..\obj\delay.o"
 "..\obj\sys.o"
 "..\obj\usart.o"

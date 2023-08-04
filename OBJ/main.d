@@ -75,3 +75,4 @@
 ..\obj\main.o: tongxin2.h
 ..\obj\main.o: tongxin.h
 ..\obj\main.o: ntc10k3950.h
+..\obj\main.o: stmflash.h

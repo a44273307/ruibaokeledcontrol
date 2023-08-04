@@ -16,6 +16,7 @@
 #include "tongxin.h"
 #include "ntc10k3950.h"
 #include "myiic.h"
+#include "stmflash.h"
 /************************************************
  ALIENTEK Mini STM32F103开发板实验7
  定时器中断实验-HAL库函数版 
@@ -25,6 +26,52 @@
  广州市星翼电子科技有限公司  
  作者：正点原子 @ALIENTEK
 ************************************************/
+
+// 01 是用力啊检查地址的，，默认55
+u16 g_reg[40]={0};
+#define indexAdddianliu 20
+#define indexTImeuse 21
+#define indexTImeAll 22
+
+
+
+void EPPROMwrite()
+{
+	g_reg[0]=0x55;
+	STMFLASH_Write(FLASH_SAVE_ADDR,g_reg,30);
+}
+void showzhi()
+{
+	int i;
+	int len2=sizeof(g_reg[0]);
+	int len=sizeof(g_reg);
+	len=len/len2;
+	for(i=0;i<len;i++)
+	{
+		if(g_reg[i]!=0)
+		{
+			printf("[%d-%d]",i,g_reg[i]);
+		}
+	}
+}
+void EPPROMinit()
+{        
+	STMFLASH_Read(FLASH_SAVE_ADDR,g_reg,30);
+	if(g_reg[0]!=0x55)
+	{
+		printf("this is First record");
+		memset(g_reg,0,sizeof(g_reg));
+		g_reg[indexTImeAll]=25000;
+		EPPROMwrite();
+	}
+	else
+	{
+		printf("not First record");
+	}
+	showzhi();
+}
+
+
 void nvicset()
 {
 	HAL_NVIC_SetPriority(USART1_IRQn, 10, 0);
@@ -120,6 +167,73 @@ void print3(char *p)
 	}
 }
 static int timepush=0;
+// push 指令相关的计算。。
+int selfdeal(int weizhi,int zhi)
+{
+	if(weizhi==indexAdddianliu)
+	{
+		g_reg[indexAdddianliu]=zhi;
+		EPPROMwrite();
+		printf("indexAdddianliu:%d-%d;",weizhi,zhi);
+		return 1;
+	}
+	if(weizhi==indexTImeuse)
+	{
+		g_reg[indexTImeuse]=zhi;
+		EPPROMwrite();
+		printf("indexTImeuse:%d-%d;",weizhi,zhi);
+		return 1;
+	}
+	if(weizhi==indexTImeAll)
+	{
+		g_reg[indexTImeAll]=zhi;
+		EPPROMwrite();
+		printf("indexTImeAll:%d-%d;",weizhi,zhi);
+		return 1;
+	}
+	return 0;
+
+}
+// 25000
+// 
+int shoumingjisuan(int predianliu)
+{
+	int bili;
+	if(g_reg[indexTImeAll]==0)
+	return predianliu;
+	bili=g_reg[indexTImeuse]*100/g_reg[indexTImeAll];
+	if(bili>100)
+	{
+		return 0;
+	}
+	if(bili>90)
+	{
+		return predianliu*0.3;
+	}
+	if(bili>80)
+	{
+		return predianliu*0.5;
+	}
+	if(bili>70)
+	{
+		return predianliu*0.8;
+	}
+	return predianliu;
+}
+// 电流输出计算
+int jisuandianliu(int predianliu)
+{
+	if(predianliu==0)
+	{
+		return 0;
+	}
+	predianliu=predianliu+g_reg[indexAdddianliu];
+	if(predianliu>2047)
+	{
+		predianliu=2047;
+	}
+	return shoumingjisuan(predianliu);
+}
 void dealorder()
 {
 	char out[30]={0};
@@ -128,13 +242,21 @@ void dealorder()
 	{
 		timepush=0;
 		pop2(&get);
-		// if(get.weizhi==4)
-		// {
-		// 	get.zhi=get.zhi;
-		// }
+		if(get.weizhi==4)
+		{
+			get.zhi=jisuandianliu(get.zhi);
+		}
 		sprintf(out,"set:%d-%d;%d-%d;end",get.weizhi,get.zhi,get.weizhi,get.zhi);
-		print1(out);
-		printf("send req2[%s]",out);
+		if(selfdeal(get.weizhi,get.zhi))
+		{
+			
+		}
+		else
+		{
+			print1(out);
+			printf("send req2[%s]",out);
+		}
+		
 	}
 }
 void jiexi(char* input);
@@ -307,7 +429,27 @@ void baojincheck()
 		push(4,0);
 		WriteToPingmu(12,1);//温度
 	}
-
+}
+// 65536 小时
+char flagwrie=0;
+void shoumingrun()
+{
+	static long miao=0;
+	miao++;
+	if(miao>60*60)
+	{
+		flagwrie=1;
+		miao=0;
+	}
+}
+void shoumingjilu()
+{
+	if(flagwrie==1)
+	{
+		flagwrie=0;
+		g_reg[indexTImeuse]++;
+		EPPROMwrite();
+	}
 }
 int main(void)
 {
@@ -323,10 +465,12 @@ int main(void)
 	// inputbuf3("set:6-181;end");
 	MY_ADC_Init();
 	IIC_Init();
+	EPPROMinit();
 	exitinit();
 	while (1)
 	{
 		Y0=0;
+		shoumingjilu();
 		delay_ms(1);
 		dealchuankou();//解析屏幕过来的指令
 		getzhiandchange();//解析屏幕过来的指令
@@ -357,7 +501,7 @@ void init()
 	Y0 = 0;
 	Y1 = 0;
 	TIM2_Init(64-1,1000-1);//1ms 一次
-	TIM3_Init(6400-1,10000-1);//100ms 一次
+	TIM3_Init(6400-1,10000-1);//1000ms 一次
 }
 
 

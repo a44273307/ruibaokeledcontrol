@@ -71,10 +71,12 @@ u16 USART_RX_STA=0;       //接收状态标记
 u8 aRxBuffer[RXBUFFERSIZE];//HAL库使用的串口接收缓冲
 u8 bRxBuffer[RXBUFFERSIZE];//HAL库使用的串口接收缓冲
 u8 cRxBuffer[RXBUFFERSIZE];//HAL库使用的串口接收缓冲
+u8 dRxBuffer[RXBUFFERSIZE];//HAL库使用的串口接收缓冲
 
 UART_HandleTypeDef UART1_Handler; //UART句柄
 UART_HandleTypeDef UART2_Handler; //UART句柄 
 UART_HandleTypeDef UART3_Handler; //UART句柄 
+UART_HandleTypeDef UART4_Handler; //UART句柄 
 //初始化IO 串口1 
 //初始化IO 串口1 
 //bound:波特率
@@ -113,6 +115,21 @@ void uart_init(u32 bound)
 	UART3_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
 	HAL_UART_Init(&UART3_Handler);					    //HAL_UART_Init()会使能UART1
 	HAL_UART_Receive_IT(&UART3_Handler, (u8 *)cRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以
+
+
+	// UART4_Handler.Instance=UART4;					    //USART1
+	// UART4_Handler.Init.BaudRate=bound;				    //波特率
+	// UART4_Handler.Init.WordLength=UART_WORDLENGTH_8B;   //字长为8位数据格式
+	// UART4_Handler.Init.StopBits=UART_STOPBITS_1;	    //一个停止位
+	// UART4_Handler.Init.Parity=UART_PARITY_NONE;		    //无奇偶校验位
+	// UART4_Handler.Init.HwFlowCtl=UART_HWCONTROL_NONE;   //无硬件流控
+	// UART4_Handler.Init.Mode=UART_MODE_TX_RX;		    //收发模式
+	// HAL_UART_Init(&UART4_Handler);					    //HAL_UART_Init()会使能UART1
+	// HAL_UART_Receive_IT(&UART4_Handler, (u8 *)dRxBuffer, RXBUFFERSIZE);//该函数会开启接收中断：标志位UART_IT_RXNE，并且设置接收缓冲以
+
+
+
+
 }
 
 //UART底层初始化，时钟使能，引脚配置，中断配置
@@ -145,7 +162,26 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 		HAL_NVIC_SetPriority(USART1_IRQn,3,0);			//抢占优先级3，子优先级3
 #endif	
 	}
+	if(huart->Instance==UART4)//如果是串口1，进行串口1 MSP初始化
+	{
+		__HAL_RCC_GPIOA_CLK_ENABLE();			//使能GPIOA时钟
+		__HAL_RCC_UART4_CLK_ENABLE();			//使能USART1时钟
+		__HAL_RCC_AFIO_CLK_ENABLE();
 	
+		GPIO_Initure.Pin=GPIO_PIN_10;			//PA9
+		GPIO_Initure.Mode=GPIO_MODE_AF_PP;		//复用推挽输出
+		GPIO_Initure.Pull=GPIO_PULLUP;			//上拉
+		GPIO_Initure.Speed=GPIO_SPEED_FREQ_HIGH;//高速
+		HAL_GPIO_Init(GPIOC,&GPIO_Initure);	   	//初始化PA9
+
+		GPIO_Initure.Pin=GPIO_PIN_11;			//PA10
+		GPIO_Initure.Mode=GPIO_MODE_AF_INPUT;	//模式要设置为复用输入模式！	
+		HAL_GPIO_Init(GPIOC,&GPIO_Initure);	   	//初始化PA10
+
+		HAL_NVIC_EnableIRQ(UART4_IRQn);				//使能USART1中断通道
+		HAL_NVIC_SetPriority(UART4_IRQn,3,0);			//抢占优先级3，子优先级3
+	
+	}
 	//GPIO端口设置
 		if(huart->Instance==USART3)//如果是串口1，进行串口1 MSP初始化
 	{
@@ -168,6 +204,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
 		HAL_NVIC_SetPriority(USART3_IRQn,5,0);			//抢占优先级3，子优先级3
 
 	}
+	
 	if(huart->Instance==USART2)//如果是串口2，进行串口2 MSP初始化
 	{
 				__HAL_RCC_GPIOA_CLK_ENABLE();			//使能GPIOA时钟
@@ -203,6 +240,10 @@ __weak void chuankou3jisuuan()
 {
 	
 }
+__weak void chuankou4jisuuan()
+{
+	
+}
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 }
@@ -228,7 +269,16 @@ void USART3_IRQHandler(void)
 	}
 	HAL_UART_IRQHandler(&UART3_Handler);
 } 
-
+void UART4_IRQHandler(void)                	
+{ 
+    u8 Res;
+	HAL_StatusTypeDef err;
+	if((__HAL_UART_GET_FLAG(&UART4_Handler,UART_FLAG_RXNE)!=RESET))
+	{
+		chuankou4jisuuan();
+	}
+	HAL_UART_IRQHandler(&UART4_Handler);
+} 
 
 
 

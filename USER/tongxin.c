@@ -105,7 +105,7 @@ int pop()
     for(i=0;i<dizhi-1;i++)
     {
         xmemcpy(&tongxindata[i],&tongxindata[i+1],sizeof(Alltongxininfo));
-    }
+    }   
     return 1;
 }
 

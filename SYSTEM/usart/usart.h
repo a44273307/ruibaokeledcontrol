@@ -35,10 +35,13 @@ extern UART_HandleTypeDef UART1_Handler; 	//UART句柄
 
 extern UART_HandleTypeDef UART2_Handler; 	//UART句柄
 extern UART_HandleTypeDef UART3_Handler; 	//UART句柄
+extern UART_HandleTypeDef UART4_Handler; 	//UART句柄
+
 #define RXBUFFERSIZE   1 					//缓存大小
 extern u8 aRxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
 extern u8 bRxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
 extern u8 cRxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
+extern u8 dRxBuffer[RXBUFFERSIZE];			//HAL库USART接收Buffer
 #define  SBUF aRxBuffer[0]  //串口1和电脑通信.
 #define  S4BUF bRxBuffer[0] //串口2和屏幕通信
 

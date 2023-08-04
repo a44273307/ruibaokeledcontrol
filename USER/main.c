@@ -98,6 +98,10 @@ void send3(char c)
 {
 	HAL_UART_Transmit(&UART3_Handler, &c, 1, 0xffffff);
 }
+void send4(char c)
+{
+	HAL_UART_Transmit(&UART4_Handler, &c, 1, 0xffffff);
+}
 void sendshuju(char *p)
 {
 	while (*p != '\0')
@@ -469,6 +473,7 @@ int main(void)
 	exitinit();
 	while (1)
 	{
+		send4('d');
 		Y0=0;
 		shoumingjilu();
 		delay_ms(1);
@@ -485,7 +490,6 @@ int main(void)
 		}
 	}
 }
-
 void init()
 {
 	HAL_Init();

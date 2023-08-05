@@ -5,7 +5,8 @@
         "bujindianji1.h": "c",
         "ntc10k3950.h": "c",
         "tongxin2.h": "c",
-        "tongxin.h": "c"
+        "tongxin.h": "c",
+        "bujindianji2.h": "c"
     },
     "files.exclude": {
         "**/Template.*": true,

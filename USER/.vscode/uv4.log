@@ -1,38 +1,18 @@
-Load "..\\OBJ\\Template.axf" 
-Set JLink Project File to "d:\Èð±¦¿Æ\new2\stm32\USER\JLinkSettings.ini"* JLink Info: Device "STM32F103RC" selected.
-
-JLink info:
-------------
-DLL: V6.10i, compiled Oct 25 2016 19:31:51
-Firmware: J-Link V9 compiled May  7 2021 16:26:12
-Hardware: V9.70
-S/N : 20730101 
-Feature(s) : GDB, RDI, FlashBP, FlashDL, JFlash 
-
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: Found SWD-DP with ID 0x1BA01477
-* JLink Info: AP-IDR: 0x14770011, Type: AHB-AP
-* JLink Info: Found Cortex-M3 r1p1, Little endian.
-* JLink Info: FPUnit: 6 code (BP) slots and 2 literal slots
-* JLink Info: CoreSight components:
-* JLink Info: ROMTbl 0 @ E00FF000
-* JLink Info: ROMTbl 0 [0]: FFF0F000, CID: B105E00D, PID: 001BB000 SCS
-* JLink Info: ROMTbl 0 [1]: FFF02000, CID: B105E00D, PID: 001BB002 DWT
-* JLink Info: ROMTbl 0 [2]: FFF03000, CID: B105E00D, PID: 000BB003 FPB
-* JLink Info: ROMTbl 0 [3]: FFF01000, CID: B105E00D, PID: 001BB001 ITM
-* JLink Info: ROMTbl 0 [4]: FFF41000, CID: B105900D, PID: 001BB923 TPIU-Lite
-* JLink Info: ROMTbl 0 [5]: FFF42000, CID: B105900D, PID: 101BB924 ETM-M3
-ROMTableAddr = 0xE00FF000
-
-Target info:
-------------
-Device: STM32F103RC
-VTarget = 3.277V
-State of Pins: TCK: 0, TDI: 1, TDO: 0, TMS: 1, TRES: 1, TRST: 1
-Hardware-Breakpoints: 6
-Software-Breakpoints: 8192
-Watchpoints:          4
-JTAG speed: 12000 kHz
-
-Full Chip Erase Done.Programming Done.Application running ...
-Flash Load finished at 16:59:50
+*** Using Compiler 'V5.06 update 4 (build 422)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'TIMER'
+compiling main.c...
+linking...
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol do_tcp_server (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol gpio_for_w5500_config (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol local_port (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol reset_w5500 (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol rxsize (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol set_w5500_ip (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol set_w5500_mac (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol socket_buf_init (referred from main.o).
+..\OBJ\Template.axf: Error: L6218E: Undefined symbol txsize (referred from main.o).
+Not enough information to list image symbols.
+Finished: 1 information, 0 warning and 9 error messages.
+"..\OBJ\Template.axf" - 9 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:03

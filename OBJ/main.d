@@ -76,3 +76,7 @@
 ..\obj\main.o: tongxin.h
 ..\obj\main.o: ntc10k3950.h
 ..\obj\main.o: stmflash.h
+..\obj\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+..\obj\main.o: w5500.h
+..\obj\main.o: types.h
+..\obj\main.o: w5500_conf.h

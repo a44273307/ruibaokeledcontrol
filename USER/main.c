@@ -17,6 +17,9 @@
 #include "ntc10k3950.h"
 #include "myiic.h"
 #include "stmflash.h"
+#include <stdarg.h>
+#include "w5500.h"
+#include "w5500_conf.h"
 /************************************************
  ALIENTEK Mini STM32F103开发板实验7
  定时器中断实验-HAL库函数版 
@@ -32,6 +35,7 @@ u16 g_reg[40]={0};
 #define indexAdddianliu 20
 #define indexTImeuse 21
 #define indexTImeAll 22
+#define indexMAXdianliu 23
 
 
 
@@ -142,14 +146,24 @@ void getzhiandchange()
     zhi=get.zhi;
 	// getnowaitiicguang(weizhi,zhi); //压缩到往板子发的指令。。。
 }
-void print2(char *p)
+// 定义printf函数
+void print2(const char *fmt, ...)
 {
+	char *p;
+	char buf[400]={0}; // 定义一个缓冲区，足够存储输出的字符串
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args); // 将格式化的字符串写入缓冲区
+	va_end(args);
+	p = (unsigned char *)buf;
 	while (*p != '\0')
 	{
 		send2(*p);
 		p++;
 	}
 }
+
+
 void print1(char *p)
 {
 	while (*p != '\0')
@@ -167,35 +181,75 @@ void print3(char *p)
 	}
 }
 static int timepush=0;
-// push 指令相关的计算。。
-int selfdeal(int weizhi,int zhi)
+int isCanSetWeizhi(int weizhi)
 {
-	if(weizhi==indexAdddianliu)
+	if(weizhi>=indexAdddianliu && weizhi<=indexMAXdianliu)
 	{
-		g_reg[indexAdddianliu]=zhi;
-		EPPROMwrite();
-		printf("indexAdddianliu:%d-%d;",weizhi,zhi);
-		return 1;
-	}
-	if(weizhi==indexTImeuse)
-	{
-		g_reg[indexTImeuse]=zhi;
-		EPPROMwrite();
-		printf("indexTImeuse:%d-%d;",weizhi,zhi);
-		return 1;
-	}
-	if(weizhi==indexTImeAll)
-	{
-		g_reg[indexTImeAll]=zhi;
-		EPPROMwrite();
-		printf("indexTImeAll:%d-%d;",weizhi,zhi);
 		return 1;
 	}
 	return 0;
-
 }
-// 25000
-// 
+void getlogstr(int weizhi,char* input)
+{
+	if(weizhi==indexAdddianliu)
+	{
+		strcpy(input,"初始电流");
+	}
+	if(weizhi==indexAdddianliu+1)
+	{
+		strcpy(input,"已用寿命");
+	}
+	if(weizhi==indexAdddianliu+2)
+	{
+		strcpy(input,"总的寿命");
+	}
+	if(weizhi==indexAdddianliu+3)
+	{
+		strcpy(input,"最大寿命");
+	}
+}
+int flag_canset=0;
+// push 指令相关的计算。。
+int selfdeal(int weizhi,int zhi)
+{
+	char rspstr[100]={0};
+	char rsp2[100]={0};
+	if(flag_canset==0)
+	{
+		return 0;
+	}
+	if(0==isCanSetWeizhi(weizhi))
+	{
+		return 0;
+	}
+	g_reg[weizhi]=zhi;
+	getlogstr(weizhi,rspstr);
+	EPPROMwrite();
+	sprintf(rsp2,"%s设定:%d-%d 成功;",rspstr,weizhi,zhi);
+	print2(rsp2);
+	return 1;
+}
+int selfdealread(int weizhi,int zhi)
+{
+	char rspstr[100]={0};
+	char rsp2[100]={0};
+	if(weizhi<1000)
+	return 0;
+	if(flag_canset==0)
+	{
+		return 0;
+	}
+	weizhi=weizhi-1000;
+	if(0==isCanSetWeizhi(weizhi))
+	{
+		return 0;
+	}
+	getlogstr(weizhi,rspstr);
+	sprintf(rsp2,"%s读取:%d-%d 成功;",rspstr,weizhi,g_reg[weizhi]);
+	print2(rsp2);
+	return 1;
+}
+
 int shoumingjisuan(int predianliu)
 {
 	int bili;
@@ -551,6 +605,7 @@ void runstep()
 	getnowaitiicguang();
 	ShowInfoToDiannan();
 }
+
 // 电脑过来的指令，，，处理。。。
 // 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
 void dealDiannaoOrder()
@@ -569,11 +624,36 @@ void dealDiannaoOrder()
 		g_dianliu=zhi;
 		VectorPush(VectorToPingmu,32,zhi);
 		flagrsp=1;
+		push(weizhi,zhi); //压缩到往板子发的指令。。。
 	}
-	push(weizhi,zhi); //压缩到往板子发的指令。。。
+	else
+	{
+		selfdeal(weizhi,zhi);
+		selfdealread(weizhi,zhi);
+	}
 }
 char rec2[1500]={0};
 int weizhi2=0;
+
+
+int precom2check(char *input)
+{
+	char *p;
+	p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
+	if(p!=NULL)
+	{
+		print2("passwd checkpass,you can set now\n");
+		print2("\n");
+		print2("初始电流值 20\n");
+		print2("已使用寿命 21\n");
+		print2("总寿命 22\n");
+		print2("最大电流值 23\n");
+		print2("使用方式 set:20-601;20-601;end\n");
+		flag_canset=1;
+		return 1;
+	}
+	return 0;
+}
 void com2checkrun()
 {
 	if (weizhi2 == 0)
@@ -581,6 +661,12 @@ void com2checkrun()
 		return;
 	}
 	delay_ms(2); // 等待收完
+	if(1==precom2check(rec2))
+	{
+		memset(rec2, 0, sizeof(rec2));
+		weizhi2 = 0;
+		return ;
+	}
 	if (1 == com2jiexi(rec2))
 	{
 	}
@@ -591,15 +677,8 @@ void com2checkrun()
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
-int main(void)
+void initall()
 {
-	int bushu;
-	int times;
-	int i, j, k;
-	int ts;
-	int a[10];
-	int key;
-
 
 	init();
 	MY_ADC_Init();
@@ -607,6 +686,26 @@ int main(void)
 	EPPROMinit();
 	exitinit();
 
+	gpio_for_w5500_config();						/*初始化MCU相关引脚*/
+	reset_w5500();                     /* W5500硬件复位 */
+	set_w5500_mac();										/*配置MAC地址*/
+	set_w5500_ip();											/*配置IP地址*/
+		
+	socket_buf_init(txsize, rxsize);		/*初始化8个Socket的发送接收缓存大小*/
+		
+	printf(" W5500网络作为TCP 服务器，建立侦听，等待PC作为TCP Client建立连接 \n");
+	printf(" W5500监听端口为： %d \n",local_port);
+	printf(" 连接成功后，TCP Client发送数据给W5500，W5500将返回对应数据 \n");
+}
+
+int main(void)
+{
+	int i, j, k;
+	initall();
+	// while (1)
+	// {
+	// 	do_tcp_server();                  /*TCP_Client 数据回环测试程序*/
+	// }
 	while (1)
 	{
 		// send4('d');
@@ -630,8 +729,7 @@ int main(void)
 				baojincheck();
 				if(iserror())
 				ShowInfoToDiannan();
-			}
-			
+			}	
 		}
 	}
 }

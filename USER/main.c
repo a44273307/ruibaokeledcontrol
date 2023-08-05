@@ -140,7 +140,7 @@ void getzhiandchange()
     }
     weizhi=get.weizhi;
     zhi=get.zhi;
-	push(weizhi,zhi); //压缩到往板子发的指令。。。
+	// getnowaitiicguang(weizhi,zhi); //压缩到往板子发的指令。。。
 }
 void print2(char *p)
 {
@@ -235,6 +235,18 @@ int jisuandianliu(int predianliu)
 	return shoumingjisuan(predianliu);
 }
 int g_dianliu=0;
+int flagrsp=0;
+// 往屏幕发的，，和屏幕回来的。。。
+void dianliusendcheck(int weizhi)
+{
+	if(weizhi==4)
+	{
+		if(flagrsp==1)
+		{
+			flagrsp=2;
+		}
+	}
+}
 void dealorder()
 {
 	char out[30]={0};
@@ -256,9 +268,8 @@ void dealorder()
 		else
 		{
 			print1(out);
-			// printf("send req2[%s]",out);
 		}
-		
+		dianliusendcheck(get.weizhi);
 	}
 }
 void jiexi(char* input);
@@ -380,9 +391,15 @@ void getiicguang()
 		runningtimes=0;
 	}
 }
-void sendtodiannao()
+void getnowaitiicguang()
 {
-	// printf("ToComputer guang[%d]wendu[%d]end\n",g_guangzhi,g_wendu);
+    int dis_data;
+	delay_ms(10);
+		Single_Write_BH1750(0x01); // power on
+    	Single_Write_BH1750(0x10); // H- resolution mode
+    delay_ms(200);
+		g_guangzhi = Multiple_Read_BH1750();
+	
 }
 int timefengshan=0;
 
@@ -412,7 +429,6 @@ void time03msjisuan()
 void WriteToPingmu(int weizhi,int zhi)
 {
 	char out[30]={0};
-	delay_ms(100);
 	sprintf(out,"set:%d-%d;end",weizhi,zhi);
 	print3(out);
 	printf("pingmu[%s]",out);
@@ -430,6 +446,9 @@ int iserror()
 	}
 	return 0;
 }
+void ShowInfoToDiannan();
+int debug=1;
+
 // 报警处理相关的
 void baojincheck()
 {
@@ -437,7 +456,6 @@ void baojincheck()
 	{
 		push(4,0);  
 		VectorPush(VectorToPingmu,11,1);//风扇异常告警码
-
 	}
 	if(g_wendu>600)
 	{
@@ -490,6 +508,89 @@ void shoumingjilu()
 		EPPROMwrite();
 	}
 }
+
+char rec1[1000]={0};
+int weizhi1=0;
+int timeleft1=0;
+void chuankou1jisuuan()
+{
+	rec1[weizhi1++]=USART1->DR;
+	if (weizhi1 > sizeof(rec1) - 3)
+		weizhi1 = 0;
+	timeleft1 = 3;
+}
+void showcom1()
+{
+	if(timeleft1>0)
+	{
+		timeleft1--;
+		if(timeleft1==0)
+		{
+			printf("rec[%s]",rec1);
+			memset(rec1,0,sizeof(rec1));
+			weizhi1=0;
+		}
+	}
+}
+
+
+
+char* mystrstr(const char* haystack, const char* needle);
+void runstep()
+{
+	char *p;
+	int times=0;
+	if(flagrsp!=2)
+	{ 
+		return ;
+	}
+	flagrsp=0;
+	delay_ms(100);
+	
+	delay_ms(600);
+	getnowaitiicguang();
+	ShowInfoToDiannan();
+}
+// 电脑过来的指令，，，处理。。。
+// 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
+void dealDiannaoOrder()
+{
+    int weizhi,zhi;
+    VectorInfo get={0};
+    VectorGet(VectorDiannao,&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+	if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
+	{
+		g_dianliu=zhi;
+		VectorPush(VectorToPingmu,32,zhi);
+		flagrsp=1;
+	}
+	push(weizhi,zhi); //压缩到往板子发的指令。。。
+}
+char rec2[1500]={0};
+int weizhi2=0;
+void com2checkrun()
+{
+	if (weizhi2 == 0)
+	{
+		return;
+	}
+	delay_ms(2); // 等待收完
+	if (1 == com2jiexi(rec2))
+	{
+	}
+	else
+	{
+		print2("oder format error,pleas check\n");
+	}
+	memset(rec2, 0, sizeof(rec2));
+	weizhi2 = 0;
+}
 int main(void)
 {
 	int bushu;
@@ -505,23 +606,32 @@ int main(void)
 	IIC_Init();
 	EPPROMinit();
 	exitinit();
+
 	while (1)
 	{
 		// send4('d');
-		Y0=0;
-		shoumingjilu();
+		// Y0=0;
+		shoumingjilu();//寿命
 		delay_ms(1);
 		dealchuankou();//解析屏幕过来的指令
 		getzhiandchange();//解析屏幕过来的指令
-		dealorder();//自己压缩的命令，发出去。。
-		getiicguang();//读光照值。。
+		dealorder();//自己压缩的命令，处理，可能是走屏幕的，或者自己就处理了
 		orderFetchToPingmu();
+		com2checkrun();
+		dealDiannaoOrder();	//com过来的电脑命令解析。。。
+		runstep();//解析完了后，拿到设定的值。。。
 		if(i++>1000)
 		{
 			i=0;
 			getwendu();
-			sendtodiannao();
-			baojincheck();
+			
+			if(debug==0)
+			{
+				baojincheck();
+				if(iserror())
+				ShowInfoToDiannan();
+			}
+			
 		}
 	}
 }
@@ -677,36 +787,13 @@ void time02msjisuan()
 	timefengshan++;
 }
 
-char rec1[1000]={0};
-int weizhi1=0;
-int timeleft1=0;
-void chuankou1jisuuan()
-{
-	rec1[weizhi1++]=USART1->DR;
-	if (weizhi1 > sizeof(rec1) - 3)
-		weizhi1 = 0;
-	timeleft1 = 3;
-}
-void showcom1()
-{
-	if(timeleft1>0)
-	{
-		timeleft1--;
-		if(timeleft1==0)
-		{
-			printf("rec[%s]",rec1);
-			memset(rec1,0,sizeof(rec1));
-			weizhi1=0;
-		}
-	}
-}
 
 
 
 
 
-char rec2[1500]={0};
-int weizhi2=0;
+
+
 
 
 
@@ -716,8 +803,8 @@ int com2jixi2(char* input)
 	char *p=input;
 	char *p1;
 	int i;
-	 int weizhi;
-	 int zhi;
+	int weizhi;
+	int zhi;
 	int bakweizhi;
 	int bakzhi;
 	for( i=0;i<100;i++)
@@ -756,31 +843,23 @@ int com2jixi2(char* input)
 
 
 
-// 电脑过来的指令，，，处理。。。
-// 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
-void dealDiannaoOrder()
+// 密码加入
+int mimashi[10];
+void checkmima()
 {
-    int weizhi,zhi;
-    VectorInfo get={0};
-    VectorGet(VectorDiannao,&get);
-    if(get.weizhi==0)
-    {
-        return ;
-    }
-    weizhi=get.weizhi;
-    zhi=get.zhi;
-	if(weizhi==4)
-	{
-		VectorPush(VectorToPingmu,32,zhi);
-	}
-	{
-		push(weizhi,zhi); //压缩到往板子发的指令。。。
-	}
+
 }
-void showrsp()
+
+
+
+
+void ShowInfoToDiannan()
 {
 	char out[200]={0};
-	sprintf(out,"begin;I:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
+	if(g_dianliu>0)
+	sprintf(out,"begin;open:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
+	else
+	sprintf(out,"begin;close:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
 	if(iserror())
 	{
 		strcat(out,"Stat:error;");
@@ -792,8 +871,6 @@ void showrsp()
 	strcat(out,"end\n");
 	print2(out);
 }
-
-
 int  com2jiexi(char* input)
 {
 	char par[1000]={0};
@@ -808,25 +885,16 @@ int  com2jiexi(char* input)
 	return 0;
 }
 
+
+// 电脑通信过来的。
 void chuankou2jisuuan()
 {
-	char c=USART2->DR;
-	if(c=='\n')
-	{
-		if(1==com2jiexi(rec2))
-		{
-			dealDiannaoOrder();
-			showrsp();
-		}
-		else
-		{
-			print2("oder failed\n");
-		}
-		memset(rec2, 0, sizeof(rec2));
-		weizhi2 = 0;
-	}
-	else
+
 	{
 		rec2[weizhi2++]=USART2->DR;
+		if(weizhi2>sizeof(rec2)-3)
+		{
+			weizhi2=0;
+		}
 	}
 }

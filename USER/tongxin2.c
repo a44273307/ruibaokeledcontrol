@@ -11,77 +11,76 @@ VectorInfo Vectorpingmu[maxzhi];
 VectorInfo VectorDiannao[maxzhi];
 VectorInfo VectorToPingmu[maxzhi];
 
-
-int getemptyindex2(VectorInfo* Vectorpingmu)
+int getemptyindex2(VectorInfo* Vectorbase)
 {
     int i;
     for(i = 0; i < maxzhi; i++)
     {
-        if(Vectorpingmu[i].falg == 0)
+        if(Vectorbase[i].falg == 0)
             return i;
     }
     return i;
 }
 
-int empty2(VectorInfo* Vectorpingmu)
+int empty2(VectorInfo* Vectorbase)
 {
-    if(0 == getemptyindex2(Vectorpingmu))
+    if(0 == getemptyindex2(Vectorbase))
     {
         return 1;
     }
     return 0;
 }
 
-int isfull2(VectorInfo* Vectorpingmu)
+int isfull2(VectorInfo* Vectorbase)
 {
-    if(maxzhi == getemptyindex2(Vectorpingmu))
+    if(maxzhi == getemptyindex2(Vectorbase))
     {
         return 1;
     }
     return 0;
 }
 
-void VectorPush(VectorInfo* Vectorpingmu, int weizhi, int zhi)
+void VectorPush(VectorInfo* Vectorbase, int weizhi, int zhi)
 {
     int dizhi;
     int i, j, k;
-    dizhi = getemptyindex2(Vectorpingmu);
+    // printf("VectorPush %d %d",weizhi,zhi);
+    dizhi = getemptyindex2(Vectorbase);
     // 有就更新
     for(i = 0; i < dizhi; i++)
     {
-        if(Vectorpingmu[i].weizhi == weizhi)
+        if(Vectorbase[i].weizhi == weizhi)
         {
-            Vectorpingmu[i].zhi = zhi;
+            Vectorbase[i].zhi = zhi;
             return;
         }
     }
     // 满了丢
-    if(maxzhi == getemptyindex2(Vectorpingmu))
+    if(maxzhi == getemptyindex2(Vectorbase))
     {
         return;
     }
     // 入。
-    Vectorpingmu[dizhi].weizhi = weizhi;
-    Vectorpingmu[dizhi].zhi = zhi;
-    Vectorpingmu[dizhi].falg = 1;
+    Vectorbase[dizhi].weizhi = weizhi;
+    Vectorbase[dizhi].zhi = zhi;
+    Vectorbase[dizhi].falg = 1;
 }
 
-int VectorGet(VectorInfo* Vectorpingmu, VectorInfo* get)
+int VectorGet(VectorInfo* Vectorbase, VectorInfo* get)
 {
     int i, j, k;
-    int dizhi = getemptyindex2(Vectorpingmu);
-    if(0 == getemptyindex2(Vectorpingmu))
+    int dizhi = getemptyindex2(Vectorbase);
+    if(0 == getemptyindex2(Vectorbase))
     {
         return 0;
     }
-    memcpy(get, &Vectorpingmu[0], sizeof(VectorInfo));
+    memcpy(get, &Vectorbase[0], sizeof(VectorInfo));
     for(i = 0; i < dizhi - 1; i++)
     {
-        memcpy(&Vectorpingmu[i], &Vectorpingmu[i + 1], sizeof(VectorInfo));
+        memcpy(&Vectorbase[i], &Vectorbase[i + 1], sizeof(VectorInfo));
     }
-    Vectorpingmu[dizhi - 1].falg = nouse;
+    // printf("VectorGet %d %d",get->weizhi,get->zhi);
+
+    Vectorbase[dizhi - 1].falg = nouse;
     return 1;
 }
-
-
-

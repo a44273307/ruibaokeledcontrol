@@ -702,7 +702,6 @@ char* mystrstr(const char* haystack, const char* needle) {
 
         haystack++;
     }
-
     return NULL; // 未找到子串，返回NULL
 }
 void dealchuankou()
@@ -715,7 +714,6 @@ void dealchuankou()
 		weishu3 = 0;
 	}
 }
-
 size_t mystrlen(const char* str) {
     size_t length = 0;
     while (str[length] != '\0') {
@@ -762,9 +760,7 @@ void jiexi(char* input)
 	char par[1000]={0};
 	char *begin,*end;
 	begin=myaddstrstr(input,"set:");
-	// printf("input begin%s",begin);
 	end=myaddstrstr(begin,"end");
-	// printf("input end%s",end);
 	if(begin!=NULL && end!=NULL)
 	{
 		strcpy(par,begin);
@@ -786,17 +782,6 @@ void time02msjisuan()
 	showcom1();
 	timefengshan++;
 }
-
-
-
-
-
-
-
-
-
-
-
 int com2jixi2(char* input)
 {
 	char flagTrue=0;
@@ -826,7 +811,6 @@ int com2jixi2(char* input)
         {
             if(weizhi==bakweizhi && bakzhi==zhi)
             {
-                // printf("get set%d-%d",weizhi,zhi);
                 VectorPush(VectorDiannao,weizhi,zhi);
 				flagTrue=1;
             }
@@ -889,7 +873,6 @@ int  com2jiexi(char* input)
 // 电脑通信过来的。
 void chuankou2jisuuan()
 {
-
 	{
 		rec2[weizhi2++]=USART2->DR;
 		if(weizhi2>sizeof(rec2)-3)

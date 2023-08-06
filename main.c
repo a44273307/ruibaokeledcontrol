@@ -51,7 +51,7 @@ u16 g_reg[40]={0};
 
 // 最后下去到板子的要乘以2，，最后的计算值。。
 
-int bili=2;
+
 void SYS_Ini() // STC32初始化设置
 {
 	EAXFR = 1;	  // 使能访问 XFR
@@ -295,8 +295,7 @@ void showgetzhi()
 	}
 }
 
-#define MAXgetzhi 100
-int getzhi[MAXgetzhi]={0};
+
 void jixi3(char* input)
 {
 	char *p=input;
@@ -688,12 +687,25 @@ int jisuandianliu(int predianliu)
 	}
 	return shoumingjisuan(predianliu);
 }
+int formatzhi(int zhi)
+{
+	if (zhi>2047)
+	{
+		zhi=2047;
+	}
+	if (zhi<0)
+	{
+		zhi=0;
+	}
+	return zhi;
+	
+}
 void dianliusendtokongzhiban(int zhi)
 {
 	char out[30]={0};
 	int weizhi=4;
+	zhi=formatzhi(zhi);
 	g_dianliu=zhi;
-	zhi=zhi*bili;
 	zhi=jisuandianliu(zhi);
 	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
 	printfTopingmu(out);
@@ -1010,7 +1022,7 @@ void addgetsetzhi(int i)
 {
 	int ans;
 	ans=g_dianliu+i;
-	if(ans>=0 && ans<=1023)
+	if(ans>=0 && ans<=2047)
 	{
 		g_dianliu=ans;
 	}

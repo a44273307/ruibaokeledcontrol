@@ -123,11 +123,17 @@ void set_w5500_ip(void)
 	setSIPR(ConfigMsg.lip);
 	
 	getSIPR (local_ip);			
-	printf(" W5500 IPµØÖ·   : %d.%d.%d.%d\r\n", local_ip[0],local_ip[1],local_ip[2],local_ip[3]);
-	getSUBR(subnet);
-	printf(" W5500 ×ÓÍøÑÚÂë : %d.%d.%d.%d\r\n", subnet[0],subnet[1],subnet[2],subnet[3]);
-	getGAR(gateway);
-	printf(" W5500 Íø¹Ø     : %d.%d.%d.%d\r\n", gateway[0],gateway[1],gateway[2],gateway[3]);
+  getSUBR(subnet);
+  getGAR(gateway);
+	printf(" LCDcontrol IP address   : %d.%d.%d.%d\r\n", local_ip[0],local_ip[1],local_ip[2],local_ip[3]);
+	printf(" LCDcontrol Subnet Mask : %d.%d.%d.%d\r\n", subnet[0],subnet[1],subnet[2],subnet[3]);
+	printf(" LCDcontrol gateway     : %d.%d.%d.%d\r\n", gateway[0],gateway[1],gateway[2],gateway[3]);
+  printf(" LCDcontrol local prot     : 5000 \r\n");
+
+  print2(" LCDcontrol IP address   : %d.%d.%d.%d\r\n", local_ip[0],local_ip[1],local_ip[2],local_ip[3]);
+	print2(" LCDcontrol Subnet Mask : %d.%d.%d.%d\r\n", subnet[0],subnet[1],subnet[2],subnet[3]);
+	print2(" LCDcontrol gateway     : %d.%d.%d.%d\r\n", gateway[0],gateway[1],gateway[2],gateway[3]);
+  print2(" LCDcontrol local prot     : 5000 \r\n");
 }
 
 /**

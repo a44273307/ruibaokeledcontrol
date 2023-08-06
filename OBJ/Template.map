@@ -136,6 +136,7 @@ Section Cross References
     main.o(i.getwendu) refers to main.o(i.showendu) for showendu
     main.o(i.getwendu) refers to main.o(.data) for g_wendu
     main.o(i.getzhiandchange) refers to tongxin2.o(i.VectorGet) for VectorGet
+    main.o(i.getzhiandchange) refers to main.o(i.dianliusendtokongzhiban) for dianliusendtokongzhiban
     main.o(i.getzhiandchange) refers to tongxin2.o(.bss) for Vectorpingmu
     main.o(i.init) refers to stm32f1xx_hal.o(i.HAL_Init) for HAL_Init
     main.o(i.init) refers to sys.o(i.Stm32_Clock_Init) for Stm32_Clock_Init
@@ -154,6 +155,7 @@ Section Cross References
     main.o(i.initall) refers to myiic.o(i.IIC_Init) for IIC_Init
     main.o(i.initall) refers to main.o(i.EPPROMinit) for EPPROMinit
     main.o(i.initall) refers to main.o(i.exitinit) for exitinit
+    main.o(i.initall) refers to main.o(i.print2) for print2
     main.o(i.initall) refers to w5500_conf.o(i.gpio_for_w5500_config) for gpio_for_w5500_config
     main.o(i.initall) refers to w5500_conf.o(i.reset_w5500) for reset_w5500
     main.o(i.initall) refers to w5500_conf.o(i.set_w5500_mac) for set_w5500_mac
@@ -1017,6 +1019,7 @@ Section Cross References
     w5500_conf.o(i.set_w5500_ip) refers to w5500.o(i.getSIPR) for getSIPR
     w5500_conf.o(i.set_w5500_ip) refers to w5500.o(i.getSUBR) for getSUBR
     w5500_conf.o(i.set_w5500_ip) refers to w5500.o(i.getGAR) for getGAR
+    w5500_conf.o(i.set_w5500_ip) refers to main.o(i.print2) for print2
     w5500_conf.o(i.set_w5500_ip) refers to w5500_conf.o(.bss) for ConfigMsg
     w5500_conf.o(i.set_w5500_ip) refers to w5500_conf.o(.data) for mac
     w5500_conf.o(i.set_w5500_ip) refers to dhcp.o(.bss) for DHCP_GET
@@ -2871,125 +2874,125 @@ Image Symbol Table
     i.getnowaitiicguang                      0x08005e68   Section        0  main.o(i.getnowaitiicguang)
     i.getwendu                               0x08005e90   Section        0  main.o(i.getwendu)
     i.getzhiandchange                        0x08005eb8   Section        0  main.o(i.getzhiandchange)
-    i.gpio_for_w5500_config                  0x08005edc   Section        0  w5500_conf.o(i.gpio_for_w5500_config)
-    i.iinchip_csoff                          0x08006020   Section        0  w5500_conf.o(i.iinchip_csoff)
-    i.iinchip_cson                           0x0800602a   Section        0  w5500_conf.o(i.iinchip_cson)
-    i.init                                   0x08006034   Section        0  main.o(i.init)
-    i.initall                                0x080060a0   Section        0  main.o(i.initall)
-    i.initio                                 0x08006150   Section        0  io.o(i.initio)
-    i.inset                                  0x0800615c   Section        0  io.o(i.inset)
-    inset                                    0x0800615d   Thumb Code   204  io.o(i.inset)
-    i.isCanSetWeizhi                         0x08006234   Section        0  main.o(i.isCanSetWeizhi)
-    i.iserror                                0x08006248   Section        0  main.o(i.iserror)
-    i.jiexi                                  0x08006270   Section        0  main.o(i.jiexi)
-    i.jisuandianliu                          0x080062bc   Section        0  main.o(i.jisuandianliu)
-    i.jisuanwendu                            0x080062e4   Section        0  main.o(i.jisuanwendu)
-    i.jixi2                                  0x0800633c   Section        0  main.o(i.jixi2)
-    i.listen                                 0x080063b8   Section        0  socket.o(i.listen)
-    i.main                                   0x080063f8   Section        0  main.o(i.main)
-    i.myaddstrstr                            0x08006454   Section        0  main.o(i.myaddstrstr)
-    i.mystrlen                               0x08006472   Section        0  main.o(i.mystrlen)
-    i.mystrstr                               0x08006482   Section        0  main.o(i.mystrstr)
-    i.orderFetchToPingmu                     0x080064c0   Section        0  main.o(i.orderFetchToPingmu)
-    i.outset                                 0x0800650c   Section        0  io.o(i.outset)
-    outset                                   0x0800650d   Thumb Code    56  io.o(i.outset)
-    i.pop                                    0x08006550   Section        0  tongxin.o(i.pop)
-    i.pop2                                   0x0800659c   Section        0  tongxin.o(i.pop2)
-    i.precom2check                           0x080065f8   Section        0  main.o(i.precom2check)
-    i.print1                                 0x080066f4   Section        0  main.o(i.print1)
-    i.print2                                 0x0800670a   Section        0  main.o(i.print2)
-    i.print3                                 0x08006746   Section        0  main.o(i.print3)
-    i.push                                   0x0800675c   Section        0  tongxin.o(i.push)
-    i.read_config_from_eeprom                0x080067c0   Section        0  w5500_conf.o(i.read_config_from_eeprom)
-    i.recv                                   0x080067dc   Section        0  socket.o(i.recv)
-    i.recv_data_processing                   0x08006820   Section        0  w5500.o(i.recv_data_processing)
-    i.reset_w5500                            0x080068b4   Section        0  w5500_conf.o(i.reset_w5500)
-    i.selfdeal                               0x080068e0   Section        0  main.o(i.selfdeal)
-    i.selfdealread                           0x08006958   Section        0  main.o(i.selfdealread)
-    i.send                                   0x080069d8   Section        0  socket.o(i.send)
-    i.send1                                  0x08006ac4   Section        0  main.o(i.send1)
-    i.send2                                  0x08006adc   Section        0  main.o(i.send2)
-    i.send3                                  0x08006af4   Section        0  main.o(i.send3)
-    i.send_data_processing                   0x08006b0c   Section        0  w5500.o(i.send_data_processing)
-    i.sendwangkoutodiannao                   0x08006ba0   Section        0  tcp_demo.o(i.sendwangkoutodiannao)
-    i.setGAR                                 0x08006bc8   Section        0  w5500.o(i.setGAR)
-    i.setSHAR                                0x08006bd8   Section        0  w5500.o(i.setSHAR)
-    i.setSIPR                                0x08006bea   Section        0  w5500.o(i.setSIPR)
-    i.setSUBR                                0x08006bfc   Section        0  w5500.o(i.setSUBR)
-    i.setSn_IR                               0x08006c0e   Section        0  w5500.o(i.setSn_IR)
-    i.set_w5500_ip                           0x08006c24   Section        0  w5500_conf.o(i.set_w5500_ip)
-    i.set_w5500_mac                          0x08006e98   Section        0  w5500_conf.o(i.set_w5500_mac)
-    i.settime                                0x08006ec4   Section        0  main.o(i.settime)
-    i.shoumingjilu                           0x08006ed0   Section        0  main.o(i.shoumingjilu)
-    i.shoumingjisuan                         0x08006ef8   Section        0  main.o(i.shoumingjisuan)
-    i.show                                   0x08006f90   Section        0  tongxin.o(i.show)
-    i.showcom1                               0x08006fd4   Section        0  main.o(i.showcom1)
-    i.showendu                               0x0800701c   Section        0  main.o(i.showendu)
-    i.showzhi                                0x08007054   Section        0  main.o(i.showzhi)
-    i.socket                                 0x0800708c   Section        0  socket.o(i.socket)
-    i.socket_buf_init                        0x08007150   Section        0  w5500.o(i.socket_buf_init)
-    i.time02msjisuan                         0x080071d8   Section        0  main.o(i.time02msjisuan)
-    i.time03msjisuan                         0x08007208   Section        0  main.o(i.time03msjisuan)
-    i.uart_init                              0x08007220   Section        0  usart.o(i.uart_init)
-    i.usmart_cmd_rec                         0x080072f0   Section        0  usmart.o(i.usmart_cmd_rec)
-    i.usmart_exe                             0x080073a0   Section        0  usmart.o(i.usmart_exe)
-    i.usmart_get_aparm                       0x08007678   Section        0  usmart_str.o(i.usmart_get_aparm)
-    i.usmart_get_cmdname                     0x0800774c   Section        0  usmart_str.o(i.usmart_get_cmdname)
-    i.usmart_get_fname                       0x08007784   Section        0  usmart_str.o(i.usmart_get_fname)
-    i.usmart_get_fparam                      0x08007944   Section        0  usmart_str.o(i.usmart_get_fparam)
-    i.usmart_get_parmpos                     0x08007a50   Section        0  usmart_str.o(i.usmart_get_parmpos)
-    i.usmart_get_runtime                     0x08007a70   Section        0  usmart.o(i.usmart_get_runtime)
-    i.usmart_init                            0x08007ab4   Section        0  usmart.o(i.usmart_init)
-    i.usmart_pow                             0x08007adc   Section        0  usmart_str.o(i.usmart_pow)
-    i.usmart_reset_runtime                   0x08007af4   Section        0  usmart.o(i.usmart_reset_runtime)
-    i.usmart_scan                            0x08007b28   Section        0  usmart.o(i.usmart_scan)
-    i.usmart_search_nextc                    0x08007be4   Section        0  usmart_str.o(i.usmart_search_nextc)
-    i.usmart_str2num                         0x08007bfa   Section        0  usmart_str.o(i.usmart_str2num)
-    i.usmart_strcmp                          0x08007d00   Section        0  usmart_str.o(i.usmart_strcmp)
-    i.usmart_strcopy                         0x08007d22   Section        0  usmart_str.o(i.usmart_strcopy)
-    i.usmart_strlen                          0x08007d38   Section        0  usmart_str.o(i.usmart_strlen)
-    i.usmart_sys_cmd_exe                     0x08007d50   Section        0  usmart.o(i.usmart_sys_cmd_exe)
-    i.wiz_cs                                 0x08008444   Section        0  w5500_conf.o(i.wiz_cs)
-    i.wiz_read_buf                           0x0800846c   Section        0  w5500_conf.o(i.wiz_read_buf)
-    i.wiz_write_buf                          0x080084d4   Section        0  w5500_conf.o(i.wiz_write_buf)
-    i.write_config_to_eeprom                 0x0800853c   Section        0  w5500_conf.o(i.write_config_to_eeprom)
-    i.xmemcpy                                0x0800855c   Section        0  tongxin.o(i.xmemcpy)
-    i.yout_get                               0x08008574   Section        0  io.o(i.yout_get)
-    i.yout_set                               0x080086a4   Section        0  io.o(i.yout_set)
-    locale$$code                             0x0800878c   Section       44  lc_ctype_c.o(locale$$code)
-    locale$$code                             0x080087b8   Section       44  lc_numeric_c.o(locale$$code)
-    x$fpl$dfix                               0x080087e4   Section       94  dfix.o(x$fpl$dfix)
-    x$fpl$dflt                               0x08008842   Section       46  dflt_clz.o(x$fpl$dflt)
-    x$fpl$dmul                               0x08008870   Section      340  dmul.o(x$fpl$dmul)
-    x$fpl$dnaninf                            0x080089c4   Section      156  dnaninf.o(x$fpl$dnaninf)
-    x$fpl$dretinf                            0x08008a60   Section       12  dretinf.o(x$fpl$dretinf)
-    x$fpl$printf1                            0x08008a6c   Section        4  printf1.o(x$fpl$printf1)
-    .constdata                               0x08008a70   Section       24  system_stm32f1xx.o(.constdata)
-    x$fpl$usenofp                            0x08008a70   Section        0  usenofp.o(x$fpl$usenofp)
-    .constdata                               0x08008a88   Section       40  _printf_hex_int_ll_ptr.o(.constdata)
-    uc_hextab                                0x08008a88   Data          20  _printf_hex_int_ll_ptr.o(.constdata)
-    lc_hextab                                0x08008a9c   Data          20  _printf_hex_int_ll_ptr.o(.constdata)
-    .constdata                               0x08008ab0   Section       17  __printf_flags_ss_wp.o(.constdata)
-    maptable                                 0x08008ab0   Data          17  __printf_flags_ss_wp.o(.constdata)
-    .constdata                               0x08008ac4   Section        8  _printf_wctomb.o(.constdata)
-    initial_mbstate                          0x08008ac4   Data           8  _printf_wctomb.o(.constdata)
-    .constdata                               0x08008acc   Section      148  bigflt0.o(.constdata)
-    tenpwrs_x                                0x08008acc   Data          60  bigflt0.o(.constdata)
-    tenpwrs_i                                0x08008b08   Data          64  bigflt0.o(.constdata)
-    .conststring                             0x08008b60   Section       67  main.o(.conststring)
-    .conststring                             0x08008ba4   Section       40  usmart.o(.conststring)
-    .conststring                             0x08008bcc   Section      211  usmart_config.o(.conststring)
-    locale$$data                             0x08008cc0   Section      272  lc_ctype_c.o(locale$$data)
-    __lcctype_c_name                         0x08008cc4   Data           2  lc_ctype_c.o(locale$$data)
-    __lcctype_c_start                        0x08008ccc   Data           0  lc_ctype_c.o(locale$$data)
-    locale$$data                             0x08008dd0   Section       28  lc_numeric_c.o(locale$$data)
-    __lcctype_c_end                          0x08008dd0   Data           0  lc_ctype_c.o(locale$$data)
-    __lcnum_c_name                           0x08008dd4   Data           2  lc_numeric_c.o(locale$$data)
-    __lcnum_c_start                          0x08008ddc   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_point                          0x08008de8   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_thousands                      0x08008dea   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_grouping                       0x08008deb   Data           0  lc_numeric_c.o(locale$$data)
-    __lcnum_c_end                            0x08008dec   Data           0  lc_numeric_c.o(locale$$data)
+    i.gpio_for_w5500_config                  0x08005ee8   Section        0  w5500_conf.o(i.gpio_for_w5500_config)
+    i.iinchip_csoff                          0x0800602c   Section        0  w5500_conf.o(i.iinchip_csoff)
+    i.iinchip_cson                           0x08006036   Section        0  w5500_conf.o(i.iinchip_cson)
+    i.init                                   0x08006040   Section        0  main.o(i.init)
+    i.initall                                0x080060ac   Section        0  main.o(i.initall)
+    i.initio                                 0x08006180   Section        0  io.o(i.initio)
+    i.inset                                  0x0800618c   Section        0  io.o(i.inset)
+    inset                                    0x0800618d   Thumb Code   204  io.o(i.inset)
+    i.isCanSetWeizhi                         0x08006264   Section        0  main.o(i.isCanSetWeizhi)
+    i.iserror                                0x08006278   Section        0  main.o(i.iserror)
+    i.jiexi                                  0x080062a0   Section        0  main.o(i.jiexi)
+    i.jisuandianliu                          0x080062ec   Section        0  main.o(i.jisuandianliu)
+    i.jisuanwendu                            0x08006314   Section        0  main.o(i.jisuanwendu)
+    i.jixi2                                  0x0800636c   Section        0  main.o(i.jixi2)
+    i.listen                                 0x080063e8   Section        0  socket.o(i.listen)
+    i.main                                   0x08006428   Section        0  main.o(i.main)
+    i.myaddstrstr                            0x08006484   Section        0  main.o(i.myaddstrstr)
+    i.mystrlen                               0x080064a2   Section        0  main.o(i.mystrlen)
+    i.mystrstr                               0x080064b2   Section        0  main.o(i.mystrstr)
+    i.orderFetchToPingmu                     0x080064f0   Section        0  main.o(i.orderFetchToPingmu)
+    i.outset                                 0x0800653c   Section        0  io.o(i.outset)
+    outset                                   0x0800653d   Thumb Code    56  io.o(i.outset)
+    i.pop                                    0x08006580   Section        0  tongxin.o(i.pop)
+    i.pop2                                   0x080065cc   Section        0  tongxin.o(i.pop2)
+    i.precom2check                           0x08006628   Section        0  main.o(i.precom2check)
+    i.print1                                 0x08006724   Section        0  main.o(i.print1)
+    i.print2                                 0x0800673a   Section        0  main.o(i.print2)
+    i.print3                                 0x08006776   Section        0  main.o(i.print3)
+    i.push                                   0x0800678c   Section        0  tongxin.o(i.push)
+    i.read_config_from_eeprom                0x080067f0   Section        0  w5500_conf.o(i.read_config_from_eeprom)
+    i.recv                                   0x0800680c   Section        0  socket.o(i.recv)
+    i.recv_data_processing                   0x08006850   Section        0  w5500.o(i.recv_data_processing)
+    i.reset_w5500                            0x080068e4   Section        0  w5500_conf.o(i.reset_w5500)
+    i.selfdeal                               0x08006910   Section        0  main.o(i.selfdeal)
+    i.selfdealread                           0x08006988   Section        0  main.o(i.selfdealread)
+    i.send                                   0x08006a08   Section        0  socket.o(i.send)
+    i.send1                                  0x08006af4   Section        0  main.o(i.send1)
+    i.send2                                  0x08006b0c   Section        0  main.o(i.send2)
+    i.send3                                  0x08006b24   Section        0  main.o(i.send3)
+    i.send_data_processing                   0x08006b3c   Section        0  w5500.o(i.send_data_processing)
+    i.sendwangkoutodiannao                   0x08006bd0   Section        0  tcp_demo.o(i.sendwangkoutodiannao)
+    i.setGAR                                 0x08006bf8   Section        0  w5500.o(i.setGAR)
+    i.setSHAR                                0x08006c08   Section        0  w5500.o(i.setSHAR)
+    i.setSIPR                                0x08006c1a   Section        0  w5500.o(i.setSIPR)
+    i.setSUBR                                0x08006c2c   Section        0  w5500.o(i.setSUBR)
+    i.setSn_IR                               0x08006c3e   Section        0  w5500.o(i.setSn_IR)
+    i.set_w5500_ip                           0x08006c54   Section        0  w5500_conf.o(i.set_w5500_ip)
+    i.set_w5500_mac                          0x08006f54   Section        0  w5500_conf.o(i.set_w5500_mac)
+    i.settime                                0x08006f80   Section        0  main.o(i.settime)
+    i.shoumingjilu                           0x08006f8c   Section        0  main.o(i.shoumingjilu)
+    i.shoumingjisuan                         0x08006fb4   Section        0  main.o(i.shoumingjisuan)
+    i.show                                   0x0800704c   Section        0  tongxin.o(i.show)
+    i.showcom1                               0x08007090   Section        0  main.o(i.showcom1)
+    i.showendu                               0x080070d8   Section        0  main.o(i.showendu)
+    i.showzhi                                0x08007110   Section        0  main.o(i.showzhi)
+    i.socket                                 0x08007148   Section        0  socket.o(i.socket)
+    i.socket_buf_init                        0x0800720c   Section        0  w5500.o(i.socket_buf_init)
+    i.time02msjisuan                         0x08007294   Section        0  main.o(i.time02msjisuan)
+    i.time03msjisuan                         0x080072c4   Section        0  main.o(i.time03msjisuan)
+    i.uart_init                              0x080072dc   Section        0  usart.o(i.uart_init)
+    i.usmart_cmd_rec                         0x080073ac   Section        0  usmart.o(i.usmart_cmd_rec)
+    i.usmart_exe                             0x0800745c   Section        0  usmart.o(i.usmart_exe)
+    i.usmart_get_aparm                       0x08007734   Section        0  usmart_str.o(i.usmart_get_aparm)
+    i.usmart_get_cmdname                     0x08007808   Section        0  usmart_str.o(i.usmart_get_cmdname)
+    i.usmart_get_fname                       0x08007840   Section        0  usmart_str.o(i.usmart_get_fname)
+    i.usmart_get_fparam                      0x08007a00   Section        0  usmart_str.o(i.usmart_get_fparam)
+    i.usmart_get_parmpos                     0x08007b0c   Section        0  usmart_str.o(i.usmart_get_parmpos)
+    i.usmart_get_runtime                     0x08007b2c   Section        0  usmart.o(i.usmart_get_runtime)
+    i.usmart_init                            0x08007b70   Section        0  usmart.o(i.usmart_init)
+    i.usmart_pow                             0x08007b98   Section        0  usmart_str.o(i.usmart_pow)
+    i.usmart_reset_runtime                   0x08007bb0   Section        0  usmart.o(i.usmart_reset_runtime)
+    i.usmart_scan                            0x08007be4   Section        0  usmart.o(i.usmart_scan)
+    i.usmart_search_nextc                    0x08007ca0   Section        0  usmart_str.o(i.usmart_search_nextc)
+    i.usmart_str2num                         0x08007cb6   Section        0  usmart_str.o(i.usmart_str2num)
+    i.usmart_strcmp                          0x08007dbc   Section        0  usmart_str.o(i.usmart_strcmp)
+    i.usmart_strcopy                         0x08007dde   Section        0  usmart_str.o(i.usmart_strcopy)
+    i.usmart_strlen                          0x08007df4   Section        0  usmart_str.o(i.usmart_strlen)
+    i.usmart_sys_cmd_exe                     0x08007e0c   Section        0  usmart.o(i.usmart_sys_cmd_exe)
+    i.wiz_cs                                 0x08008500   Section        0  w5500_conf.o(i.wiz_cs)
+    i.wiz_read_buf                           0x08008528   Section        0  w5500_conf.o(i.wiz_read_buf)
+    i.wiz_write_buf                          0x08008590   Section        0  w5500_conf.o(i.wiz_write_buf)
+    i.write_config_to_eeprom                 0x080085f8   Section        0  w5500_conf.o(i.write_config_to_eeprom)
+    i.xmemcpy                                0x08008618   Section        0  tongxin.o(i.xmemcpy)
+    i.yout_get                               0x08008630   Section        0  io.o(i.yout_get)
+    i.yout_set                               0x08008760   Section        0  io.o(i.yout_set)
+    locale$$code                             0x08008848   Section       44  lc_ctype_c.o(locale$$code)
+    locale$$code                             0x08008874   Section       44  lc_numeric_c.o(locale$$code)
+    x$fpl$dfix                               0x080088a0   Section       94  dfix.o(x$fpl$dfix)
+    x$fpl$dflt                               0x080088fe   Section       46  dflt_clz.o(x$fpl$dflt)
+    x$fpl$dmul                               0x0800892c   Section      340  dmul.o(x$fpl$dmul)
+    x$fpl$dnaninf                            0x08008a80   Section      156  dnaninf.o(x$fpl$dnaninf)
+    x$fpl$dretinf                            0x08008b1c   Section       12  dretinf.o(x$fpl$dretinf)
+    x$fpl$printf1                            0x08008b28   Section        4  printf1.o(x$fpl$printf1)
+    .constdata                               0x08008b2c   Section       24  system_stm32f1xx.o(.constdata)
+    x$fpl$usenofp                            0x08008b2c   Section        0  usenofp.o(x$fpl$usenofp)
+    .constdata                               0x08008b44   Section       40  _printf_hex_int_ll_ptr.o(.constdata)
+    uc_hextab                                0x08008b44   Data          20  _printf_hex_int_ll_ptr.o(.constdata)
+    lc_hextab                                0x08008b58   Data          20  _printf_hex_int_ll_ptr.o(.constdata)
+    .constdata                               0x08008b6c   Section       17  __printf_flags_ss_wp.o(.constdata)
+    maptable                                 0x08008b6c   Data          17  __printf_flags_ss_wp.o(.constdata)
+    .constdata                               0x08008b80   Section        8  _printf_wctomb.o(.constdata)
+    initial_mbstate                          0x08008b80   Data           8  _printf_wctomb.o(.constdata)
+    .constdata                               0x08008b88   Section      148  bigflt0.o(.constdata)
+    tenpwrs_x                                0x08008b88   Data          60  bigflt0.o(.constdata)
+    tenpwrs_i                                0x08008bc4   Data          64  bigflt0.o(.constdata)
+    .conststring                             0x08008c1c   Section       67  main.o(.conststring)
+    .conststring                             0x08008c60   Section       40  usmart.o(.conststring)
+    .conststring                             0x08008c88   Section      211  usmart_config.o(.conststring)
+    locale$$data                             0x08008d7c   Section      272  lc_ctype_c.o(locale$$data)
+    __lcctype_c_name                         0x08008d80   Data           2  lc_ctype_c.o(locale$$data)
+    __lcctype_c_start                        0x08008d88   Data           0  lc_ctype_c.o(locale$$data)
+    locale$$data                             0x08008e8c   Section       28  lc_numeric_c.o(locale$$data)
+    __lcctype_c_end                          0x08008e8c   Data           0  lc_ctype_c.o(locale$$data)
+    __lcnum_c_name                           0x08008e90   Data           2  lc_numeric_c.o(locale$$data)
+    __lcnum_c_start                          0x08008e98   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_point                          0x08008ea4   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_thousands                      0x08008ea6   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_grouping                       0x08008ea7   Data           0  lc_numeric_c.o(locale$$data)
+    __lcnum_c_end                            0x08008ea8   Data           0  lc_numeric_c.o(locale$$data)
     .data                                    0x20000000   Section      404  main.o(.data)
     timepush                                 0x2000012c   Data           4  main.o(.data)
     jishi                                    0x2000018c   Data           4  main.o(.data)
@@ -3420,105 +3423,105 @@ Image Symbol Table
     getlogstr                                0x08005e01   Thumb Code    56  main.o(i.getlogstr)
     getnowaitiicguang                        0x08005e69   Thumb Code    36  main.o(i.getnowaitiicguang)
     getwendu                                 0x08005e91   Thumb Code    36  main.o(i.getwendu)
-    getzhiandchange                          0x08005eb9   Thumb Code    32  main.o(i.getzhiandchange)
-    gpio_for_w5500_config                    0x08005edd   Thumb Code   302  w5500_conf.o(i.gpio_for_w5500_config)
-    iinchip_csoff                            0x08006021   Thumb Code    10  w5500_conf.o(i.iinchip_csoff)
-    iinchip_cson                             0x0800602b   Thumb Code    10  w5500_conf.o(i.iinchip_cson)
-    init                                     0x08006035   Thumb Code    94  main.o(i.init)
-    initall                                  0x080060a1   Thumb Code    70  main.o(i.initall)
-    initio                                   0x08006151   Thumb Code    12  io.o(i.initio)
-    isCanSetWeizhi                           0x08006235   Thumb Code    18  main.o(i.isCanSetWeizhi)
-    iserror                                  0x08006249   Thumb Code    30  main.o(i.iserror)
-    jiexi                                    0x08006271   Thumb Code    62  main.o(i.jiexi)
-    jisuandianliu                            0x080062bd   Thumb Code    34  main.o(i.jisuandianliu)
-    jisuanwendu                              0x080062e5   Thumb Code    84  main.o(i.jisuanwendu)
-    jixi2                                    0x0800633d   Thumb Code    94  main.o(i.jixi2)
-    listen                                   0x080063b9   Thumb Code    62  socket.o(i.listen)
-    main                                     0x080063f9   Thumb Code    86  main.o(i.main)
-    myaddstrstr                              0x08006455   Thumb Code    30  main.o(i.myaddstrstr)
-    mystrlen                                 0x08006473   Thumb Code    16  main.o(i.mystrlen)
-    mystrstr                                 0x08006483   Thumb Code    60  main.o(i.mystrstr)
-    orderFetchToPingmu                       0x080064c1   Thumb Code    66  main.o(i.orderFetchToPingmu)
-    pop                                      0x08006551   Thumb Code    70  tongxin.o(i.pop)
-    pop2                                     0x0800659d   Thumb Code    86  tongxin.o(i.pop2)
-    precom2check                             0x080065f9   Thumb Code    88  main.o(i.precom2check)
-    print1                                   0x080066f5   Thumb Code    22  main.o(i.print1)
-    print2                                   0x0800670b   Thumb Code    60  main.o(i.print2)
-    print3                                   0x08006747   Thumb Code    22  main.o(i.print3)
-    push                                     0x0800675d   Thumb Code    96  tongxin.o(i.push)
-    read_config_from_eeprom                  0x080067c1   Thumb Code    20  w5500_conf.o(i.read_config_from_eeprom)
-    recv                                     0x080067dd   Thumb Code    66  socket.o(i.recv)
-    recv_data_processing                     0x08006821   Thumb Code   116  w5500.o(i.recv_data_processing)
-    reset_w5500                              0x080068b5   Thumb Code    38  w5500_conf.o(i.reset_w5500)
-    selfdeal                                 0x080068e1   Thumb Code    90  main.o(i.selfdeal)
-    selfdealread                             0x08006959   Thumb Code   100  main.o(i.selfdealread)
-    send                                     0x080069d9   Thumb Code   216  socket.o(i.send)
-    send1                                    0x08006ac5   Thumb Code    18  main.o(i.send1)
-    send2                                    0x08006add   Thumb Code    18  main.o(i.send2)
-    send3                                    0x08006af5   Thumb Code    18  main.o(i.send3)
-    send_data_processing                     0x08006b0d   Thumb Code   116  w5500.o(i.send_data_processing)
-    sendwangkoutodiannao                     0x08006ba1   Thumb Code    34  tcp_demo.o(i.sendwangkoutodiannao)
-    setGAR                                   0x08006bc9   Thumb Code    16  w5500.o(i.setGAR)
-    setSHAR                                  0x08006bd9   Thumb Code    18  w5500.o(i.setSHAR)
-    setSIPR                                  0x08006beb   Thumb Code    18  w5500.o(i.setSIPR)
-    setSUBR                                  0x08006bfd   Thumb Code    18  w5500.o(i.setSUBR)
-    setSn_IR                                 0x08006c0f   Thumb Code    22  w5500.o(i.setSn_IR)
-    set_w5500_ip                             0x08006c25   Thumb Code   334  w5500_conf.o(i.set_w5500_ip)
-    set_w5500_mac                            0x08006e99   Thumb Code    32  w5500_conf.o(i.set_w5500_mac)
-    settime                                  0x08006ec5   Thumb Code     6  main.o(i.settime)
-    shoumingjilu                             0x08006ed1   Thumb Code    32  main.o(i.shoumingjilu)
-    shoumingjisuan                           0x08006ef9   Thumb Code   132  main.o(i.shoumingjisuan)
-    show                                     0x08006f91   Thumb Code    46  tongxin.o(i.show)
-    showcom1                                 0x08006fd5   Thumb Code    52  main.o(i.showcom1)
-    showendu                                 0x0800701d   Thumb Code    34  main.o(i.showendu)
-    showzhi                                  0x08007055   Thumb Code    44  main.o(i.showzhi)
-    socket                                   0x0800708d   Thumb Code   192  socket.o(i.socket)
-    socket_buf_init                          0x08007151   Thumb Code   128  w5500.o(i.socket_buf_init)
-    time02msjisuan                           0x080071d9   Thumb Code    38  main.o(i.time02msjisuan)
-    time03msjisuan                           0x08007209   Thumb Code    16  main.o(i.time03msjisuan)
-    uart_init                                0x08007221   Thumb Code   158  usart.o(i.uart_init)
-    usmart_cmd_rec                           0x080072f1   Thumb Code   170  usmart.o(i.usmart_cmd_rec)
-    usmart_exe                               0x080073a1   Thumb Code   636  usmart.o(i.usmart_exe)
-    usmart_get_aparm                         0x08007679   Thumb Code   212  usmart_str.o(i.usmart_get_aparm)
-    usmart_get_cmdname                       0x0800774d   Thumb Code    54  usmart_str.o(i.usmart_get_cmdname)
-    usmart_get_fname                         0x08007785   Thumb Code   440  usmart_str.o(i.usmart_get_fname)
-    usmart_get_fparam                        0x08007945   Thumb Code   262  usmart_str.o(i.usmart_get_fparam)
-    usmart_get_parmpos                       0x08007a51   Thumb Code    26  usmart_str.o(i.usmart_get_parmpos)
-    usmart_get_runtime                       0x08007a71   Thumb Code    58  usmart.o(i.usmart_get_runtime)
-    usmart_init                              0x08007ab5   Thumb Code    36  usmart.o(i.usmart_init)
-    usmart_pow                               0x08007add   Thumb Code    22  usmart_str.o(i.usmart_pow)
-    usmart_reset_runtime                     0x08007af5   Thumb Code    44  usmart.o(i.usmart_reset_runtime)
-    usmart_scan                              0x08007b29   Thumb Code   120  usmart.o(i.usmart_scan)
-    usmart_search_nextc                      0x08007be5   Thumb Code    22  usmart_str.o(i.usmart_search_nextc)
-    usmart_str2num                           0x08007bfb   Thumb Code   262  usmart_str.o(i.usmart_str2num)
-    usmart_strcmp                            0x08007d01   Thumb Code    34  usmart_str.o(i.usmart_strcmp)
-    usmart_strcopy                           0x08007d23   Thumb Code    22  usmart_str.o(i.usmart_strcopy)
-    usmart_strlen                            0x08007d39   Thumb Code    24  usmart_str.o(i.usmart_strlen)
-    usmart_sys_cmd_exe                       0x08007d51   Thumb Code  1570  usmart.o(i.usmart_sys_cmd_exe)
-    wiz_cs                                   0x08008445   Thumb Code    34  w5500_conf.o(i.wiz_cs)
-    wiz_read_buf                             0x0800846d   Thumb Code    78  w5500_conf.o(i.wiz_read_buf)
-    wiz_write_buf                            0x080084d5   Thumb Code    80  w5500_conf.o(i.wiz_write_buf)
-    write_config_to_eeprom                   0x0800853d   Thumb Code    22  w5500_conf.o(i.write_config_to_eeprom)
-    xmemcpy                                  0x0800855d   Thumb Code    24  tongxin.o(i.xmemcpy)
-    yout_get                                 0x08008575   Thumb Code   284  io.o(i.yout_get)
-    yout_set                                 0x080086a5   Thumb Code   212  io.o(i.yout_set)
-    _get_lc_ctype                            0x0800878d   Thumb Code    44  lc_ctype_c.o(locale$$code)
-    _get_lc_numeric                          0x080087b9   Thumb Code    44  lc_numeric_c.o(locale$$code)
-    __aeabi_d2iz                             0x080087e5   Thumb Code     0  dfix.o(x$fpl$dfix)
-    _dfix                                    0x080087e5   Thumb Code    94  dfix.o(x$fpl$dfix)
-    __aeabi_i2d                              0x08008843   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
-    _dflt                                    0x08008843   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
-    __aeabi_dmul                             0x08008871   Thumb Code     0  dmul.o(x$fpl$dmul)
-    _dmul                                    0x08008871   Thumb Code   332  dmul.o(x$fpl$dmul)
-    __fpl_dnaninf                            0x080089c5   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
-    __fpl_dretinf                            0x08008a61   Thumb Code    12  dretinf.o(x$fpl$dretinf)
-    _printf_fp_dec                           0x08008a6d   Thumb Code     4  printf1.o(x$fpl$printf1)
-    AHBPrescTable                            0x08008a70   Data          16  system_stm32f1xx.o(.constdata)
-    __I$use$fp                               0x08008a70   Number         0  usenofp.o(x$fpl$usenofp)
-    APBPrescTable                            0x08008a80   Data           8  system_stm32f1xx.o(.constdata)
-    Region$$Table$$Base                      0x08008ca0   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08008cc0   Number         0  anon$$obj.o(Region$$Table)
-    __ctype                                  0x08008ccd   Data           0  lc_ctype_c.o(locale$$data)
+    getzhiandchange                          0x08005eb9   Thumb Code    44  main.o(i.getzhiandchange)
+    gpio_for_w5500_config                    0x08005ee9   Thumb Code   302  w5500_conf.o(i.gpio_for_w5500_config)
+    iinchip_csoff                            0x0800602d   Thumb Code    10  w5500_conf.o(i.iinchip_csoff)
+    iinchip_cson                             0x08006037   Thumb Code    10  w5500_conf.o(i.iinchip_cson)
+    init                                     0x08006041   Thumb Code    94  main.o(i.init)
+    initall                                  0x080060ad   Thumb Code    76  main.o(i.initall)
+    initio                                   0x08006181   Thumb Code    12  io.o(i.initio)
+    isCanSetWeizhi                           0x08006265   Thumb Code    18  main.o(i.isCanSetWeizhi)
+    iserror                                  0x08006279   Thumb Code    30  main.o(i.iserror)
+    jiexi                                    0x080062a1   Thumb Code    62  main.o(i.jiexi)
+    jisuandianliu                            0x080062ed   Thumb Code    34  main.o(i.jisuandianliu)
+    jisuanwendu                              0x08006315   Thumb Code    84  main.o(i.jisuanwendu)
+    jixi2                                    0x0800636d   Thumb Code    94  main.o(i.jixi2)
+    listen                                   0x080063e9   Thumb Code    62  socket.o(i.listen)
+    main                                     0x08006429   Thumb Code    86  main.o(i.main)
+    myaddstrstr                              0x08006485   Thumb Code    30  main.o(i.myaddstrstr)
+    mystrlen                                 0x080064a3   Thumb Code    16  main.o(i.mystrlen)
+    mystrstr                                 0x080064b3   Thumb Code    60  main.o(i.mystrstr)
+    orderFetchToPingmu                       0x080064f1   Thumb Code    66  main.o(i.orderFetchToPingmu)
+    pop                                      0x08006581   Thumb Code    70  tongxin.o(i.pop)
+    pop2                                     0x080065cd   Thumb Code    86  tongxin.o(i.pop2)
+    precom2check                             0x08006629   Thumb Code    88  main.o(i.precom2check)
+    print1                                   0x08006725   Thumb Code    22  main.o(i.print1)
+    print2                                   0x0800673b   Thumb Code    60  main.o(i.print2)
+    print3                                   0x08006777   Thumb Code    22  main.o(i.print3)
+    push                                     0x0800678d   Thumb Code    96  tongxin.o(i.push)
+    read_config_from_eeprom                  0x080067f1   Thumb Code    20  w5500_conf.o(i.read_config_from_eeprom)
+    recv                                     0x0800680d   Thumb Code    66  socket.o(i.recv)
+    recv_data_processing                     0x08006851   Thumb Code   116  w5500.o(i.recv_data_processing)
+    reset_w5500                              0x080068e5   Thumb Code    38  w5500_conf.o(i.reset_w5500)
+    selfdeal                                 0x08006911   Thumb Code    90  main.o(i.selfdeal)
+    selfdealread                             0x08006989   Thumb Code   100  main.o(i.selfdealread)
+    send                                     0x08006a09   Thumb Code   216  socket.o(i.send)
+    send1                                    0x08006af5   Thumb Code    18  main.o(i.send1)
+    send2                                    0x08006b0d   Thumb Code    18  main.o(i.send2)
+    send3                                    0x08006b25   Thumb Code    18  main.o(i.send3)
+    send_data_processing                     0x08006b3d   Thumb Code   116  w5500.o(i.send_data_processing)
+    sendwangkoutodiannao                     0x08006bd1   Thumb Code    34  tcp_demo.o(i.sendwangkoutodiannao)
+    setGAR                                   0x08006bf9   Thumb Code    16  w5500.o(i.setGAR)
+    setSHAR                                  0x08006c09   Thumb Code    18  w5500.o(i.setSHAR)
+    setSIPR                                  0x08006c1b   Thumb Code    18  w5500.o(i.setSIPR)
+    setSUBR                                  0x08006c2d   Thumb Code    18  w5500.o(i.setSUBR)
+    setSn_IR                                 0x08006c3f   Thumb Code    22  w5500.o(i.setSn_IR)
+    set_w5500_ip                             0x08006c55   Thumb Code   406  w5500_conf.o(i.set_w5500_ip)
+    set_w5500_mac                            0x08006f55   Thumb Code    32  w5500_conf.o(i.set_w5500_mac)
+    settime                                  0x08006f81   Thumb Code     6  main.o(i.settime)
+    shoumingjilu                             0x08006f8d   Thumb Code    32  main.o(i.shoumingjilu)
+    shoumingjisuan                           0x08006fb5   Thumb Code   132  main.o(i.shoumingjisuan)
+    show                                     0x0800704d   Thumb Code    46  tongxin.o(i.show)
+    showcom1                                 0x08007091   Thumb Code    52  main.o(i.showcom1)
+    showendu                                 0x080070d9   Thumb Code    34  main.o(i.showendu)
+    showzhi                                  0x08007111   Thumb Code    44  main.o(i.showzhi)
+    socket                                   0x08007149   Thumb Code   192  socket.o(i.socket)
+    socket_buf_init                          0x0800720d   Thumb Code   128  w5500.o(i.socket_buf_init)
+    time02msjisuan                           0x08007295   Thumb Code    38  main.o(i.time02msjisuan)
+    time03msjisuan                           0x080072c5   Thumb Code    16  main.o(i.time03msjisuan)
+    uart_init                                0x080072dd   Thumb Code   158  usart.o(i.uart_init)
+    usmart_cmd_rec                           0x080073ad   Thumb Code   170  usmart.o(i.usmart_cmd_rec)
+    usmart_exe                               0x0800745d   Thumb Code   636  usmart.o(i.usmart_exe)
+    usmart_get_aparm                         0x08007735   Thumb Code   212  usmart_str.o(i.usmart_get_aparm)
+    usmart_get_cmdname                       0x08007809   Thumb Code    54  usmart_str.o(i.usmart_get_cmdname)
+    usmart_get_fname                         0x08007841   Thumb Code   440  usmart_str.o(i.usmart_get_fname)
+    usmart_get_fparam                        0x08007a01   Thumb Code   262  usmart_str.o(i.usmart_get_fparam)
+    usmart_get_parmpos                       0x08007b0d   Thumb Code    26  usmart_str.o(i.usmart_get_parmpos)
+    usmart_get_runtime                       0x08007b2d   Thumb Code    58  usmart.o(i.usmart_get_runtime)
+    usmart_init                              0x08007b71   Thumb Code    36  usmart.o(i.usmart_init)
+    usmart_pow                               0x08007b99   Thumb Code    22  usmart_str.o(i.usmart_pow)
+    usmart_reset_runtime                     0x08007bb1   Thumb Code    44  usmart.o(i.usmart_reset_runtime)
+    usmart_scan                              0x08007be5   Thumb Code   120  usmart.o(i.usmart_scan)
+    usmart_search_nextc                      0x08007ca1   Thumb Code    22  usmart_str.o(i.usmart_search_nextc)
+    usmart_str2num                           0x08007cb7   Thumb Code   262  usmart_str.o(i.usmart_str2num)
+    usmart_strcmp                            0x08007dbd   Thumb Code    34  usmart_str.o(i.usmart_strcmp)
+    usmart_strcopy                           0x08007ddf   Thumb Code    22  usmart_str.o(i.usmart_strcopy)
+    usmart_strlen                            0x08007df5   Thumb Code    24  usmart_str.o(i.usmart_strlen)
+    usmart_sys_cmd_exe                       0x08007e0d   Thumb Code  1570  usmart.o(i.usmart_sys_cmd_exe)
+    wiz_cs                                   0x08008501   Thumb Code    34  w5500_conf.o(i.wiz_cs)
+    wiz_read_buf                             0x08008529   Thumb Code    78  w5500_conf.o(i.wiz_read_buf)
+    wiz_write_buf                            0x08008591   Thumb Code    80  w5500_conf.o(i.wiz_write_buf)
+    write_config_to_eeprom                   0x080085f9   Thumb Code    22  w5500_conf.o(i.write_config_to_eeprom)
+    xmemcpy                                  0x08008619   Thumb Code    24  tongxin.o(i.xmemcpy)
+    yout_get                                 0x08008631   Thumb Code   284  io.o(i.yout_get)
+    yout_set                                 0x08008761   Thumb Code   212  io.o(i.yout_set)
+    _get_lc_ctype                            0x08008849   Thumb Code    44  lc_ctype_c.o(locale$$code)
+    _get_lc_numeric                          0x08008875   Thumb Code    44  lc_numeric_c.o(locale$$code)
+    __aeabi_d2iz                             0x080088a1   Thumb Code     0  dfix.o(x$fpl$dfix)
+    _dfix                                    0x080088a1   Thumb Code    94  dfix.o(x$fpl$dfix)
+    __aeabi_i2d                              0x080088ff   Thumb Code     0  dflt_clz.o(x$fpl$dflt)
+    _dflt                                    0x080088ff   Thumb Code    46  dflt_clz.o(x$fpl$dflt)
+    __aeabi_dmul                             0x0800892d   Thumb Code     0  dmul.o(x$fpl$dmul)
+    _dmul                                    0x0800892d   Thumb Code   332  dmul.o(x$fpl$dmul)
+    __fpl_dnaninf                            0x08008a81   Thumb Code   156  dnaninf.o(x$fpl$dnaninf)
+    __fpl_dretinf                            0x08008b1d   Thumb Code    12  dretinf.o(x$fpl$dretinf)
+    _printf_fp_dec                           0x08008b29   Thumb Code     4  printf1.o(x$fpl$printf1)
+    AHBPrescTable                            0x08008b2c   Data          16  system_stm32f1xx.o(.constdata)
+    __I$use$fp                               0x08008b2c   Number         0  usenofp.o(x$fpl$usenofp)
+    APBPrescTable                            0x08008b3c   Data           8  system_stm32f1xx.o(.constdata)
+    Region$$Table$$Base                      0x08008d5c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08008d7c   Number         0  anon$$obj.o(Region$$Table)
+    __ctype                                  0x08008d89   Data           0  lc_ctype_c.o(locale$$data)
     NTC10K3950                               0x20000000   Data         296  main.o(.data)
     flag                                     0x20000128   Data           1  main.o(.data)
     flag_canset                              0x20000130   Data           4  main.o(.data)
@@ -3616,9 +3619,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000131
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00009134, Max: 0x00040000, ABSOLUTE, COMPRESSED[0x00008f50])
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x000091f0, Max: 0x00040000, ABSOLUTE, COMPRESSED[0x00009004])
 
-    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00008dec, Max: 0x00040000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00008ea8, Max: 0x00040000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -3923,122 +3926,122 @@ Memory Map of the image
     0x08005e00   0x00000068   Code   RO           33    i.getlogstr         main.o
     0x08005e68   0x00000028   Code   RO           34    i.getnowaitiicguang  main.o
     0x08005e90   0x00000028   Code   RO           35    i.getwendu          main.o
-    0x08005eb8   0x00000024   Code   RO           36    i.getzhiandchange   main.o
-    0x08005edc   0x00000144   Code   RO         4483    i.gpio_for_w5500_config  w5500_conf.o
-    0x08006020   0x0000000a   Code   RO         4484    i.iinchip_csoff     w5500_conf.o
-    0x0800602a   0x0000000a   Code   RO         4485    i.iinchip_cson      w5500_conf.o
-    0x08006034   0x0000006c   Code   RO           37    i.init              main.o
-    0x080060a0   0x000000b0   Code   RO           38    i.initall           main.o
-    0x08006150   0x0000000c   Code   RO         4803    i.initio            io.o
-    0x0800615c   0x000000d8   Code   RO         4804    i.inset             io.o
-    0x08006234   0x00000012   Code   RO           40    i.isCanSetWeizhi    main.o
-    0x08006246   0x00000002   PAD
-    0x08006248   0x00000028   Code   RO           41    i.iserror           main.o
-    0x08006270   0x0000004c   Code   RO           42    i.jiexi             main.o
-    0x080062bc   0x00000028   Code   RO           43    i.jisuandianliu     main.o
-    0x080062e4   0x00000058   Code   RO           44    i.jisuanwendu       main.o
-    0x0800633c   0x0000007c   Code   RO           45    i.jixi2             main.o
-    0x080063b8   0x0000003e   Code   RO         4075    i.listen            socket.o
-    0x080063f6   0x00000002   PAD
-    0x080063f8   0x0000005c   Code   RO           46    i.main              main.o
-    0x08006454   0x0000001e   Code   RO           47    i.myaddstrstr       main.o
-    0x08006472   0x00000010   Code   RO           48    i.mystrlen          main.o
-    0x08006482   0x0000003c   Code   RO           49    i.mystrstr          main.o
-    0x080064be   0x00000002   PAD
-    0x080064c0   0x0000004c   Code   RO           51    i.orderFetchToPingmu  main.o
-    0x0800650c   0x00000044   Code   RO         4805    i.outset            io.o
-    0x08006550   0x0000004c   Code   RO         5288    i.pop               tongxin.o
-    0x0800659c   0x0000005c   Code   RO         5289    i.pop2              tongxin.o
-    0x080065f8   0x000000fc   Code   RO           52    i.precom2check      main.o
-    0x080066f4   0x00000016   Code   RO           53    i.print1            main.o
-    0x0800670a   0x0000003c   Code   RO           54    i.print2            main.o
-    0x08006746   0x00000016   Code   RO           55    i.print3            main.o
-    0x0800675c   0x00000064   Code   RO         5290    i.push              tongxin.o
-    0x080067c0   0x0000001c   Code   RO         4487    i.read_config_from_eeprom  w5500_conf.o
-    0x080067dc   0x00000042   Code   RO         4076    i.recv              socket.o
-    0x0800681e   0x00000002   PAD
-    0x08006820   0x00000094   Code   RO         4309    i.recv_data_processing  w5500.o
-    0x080068b4   0x0000002c   Code   RO         4489    i.reset_w5500       w5500_conf.o
-    0x080068e0   0x00000078   Code   RO           57    i.selfdeal          main.o
-    0x08006958   0x00000080   Code   RO           58    i.selfdealread      main.o
-    0x080069d8   0x000000ec   Code   RO         4078    i.send              socket.o
-    0x08006ac4   0x00000018   Code   RO           59    i.send1             main.o
-    0x08006adc   0x00000018   Code   RO           60    i.send2             main.o
-    0x08006af4   0x00000018   Code   RO           61    i.send3             main.o
-    0x08006b0c   0x00000094   Code   RO         4310    i.send_data_processing  w5500.o
-    0x08006ba0   0x00000028   Code   RO         4026    i.sendwangkoutodiannao  tcp_demo.o
-    0x08006bc8   0x00000010   Code   RO         4311    i.setGAR            w5500.o
-    0x08006bd8   0x00000012   Code   RO         4315    i.setSHAR           w5500.o
-    0x08006bea   0x00000012   Code   RO         4316    i.setSIPR           w5500.o
-    0x08006bfc   0x00000012   Code   RO         4317    i.setSUBR           w5500.o
-    0x08006c0e   0x00000016   Code   RO         4318    i.setSn_IR          w5500.o
-    0x08006c24   0x00000274   Code   RO         4490    i.set_w5500_ip      w5500_conf.o
-    0x08006e98   0x0000002c   Code   RO         4491    i.set_w5500_mac     w5500_conf.o
-    0x08006ec4   0x0000000c   Code   RO           64    i.settime           main.o
-    0x08006ed0   0x00000028   Code   RO           65    i.shoumingjilu      main.o
-    0x08006ef8   0x00000098   Code   RO           66    i.shoumingjisuan    main.o
-    0x08006f90   0x00000044   Code   RO         5292    i.show              tongxin.o
-    0x08006fd4   0x00000048   Code   RO           68    i.showcom1          main.o
-    0x0800701c   0x00000038   Code   RO           69    i.showendu          main.o
-    0x08007054   0x00000038   Code   RO           70    i.showzhi           main.o
-    0x0800708c   0x000000c4   Code   RO         4080    i.socket            socket.o
-    0x08007150   0x00000088   Code   RO         4321    i.socket_buf_init   w5500.o
-    0x080071d8   0x00000030   Code   RO           71    i.time02msjisuan    main.o
-    0x08007208   0x00000018   Code   RO           72    i.time03msjisuan    main.o
-    0x08007220   0x000000d0   Code   RO         3819    i.uart_init         usart.o
-    0x080072f0   0x000000b0   Code   RO         5539    i.usmart_cmd_rec    usmart.o
-    0x080073a0   0x000002d8   Code   RO         5540    i.usmart_exe        usmart.o
-    0x08007678   0x000000d4   Code   RO         5670    i.usmart_get_aparm  usmart_str.o
-    0x0800774c   0x00000036   Code   RO         5671    i.usmart_get_cmdname  usmart_str.o
-    0x08007782   0x00000002   PAD
-    0x08007784   0x000001c0   Code   RO         5672    i.usmart_get_fname  usmart_str.o
-    0x08007944   0x0000010c   Code   RO         5673    i.usmart_get_fparam  usmart_str.o
-    0x08007a50   0x00000020   Code   RO         5674    i.usmart_get_parmpos  usmart_str.o
-    0x08007a70   0x00000044   Code   RO         5541    i.usmart_get_runtime  usmart.o
-    0x08007ab4   0x00000028   Code   RO         5542    i.usmart_init       usmart.o
-    0x08007adc   0x00000016   Code   RO         5675    i.usmart_pow        usmart_str.o
-    0x08007af2   0x00000002   PAD
-    0x08007af4   0x00000034   Code   RO         5543    i.usmart_reset_runtime  usmart.o
-    0x08007b28   0x000000bc   Code   RO         5544    i.usmart_scan       usmart.o
-    0x08007be4   0x00000016   Code   RO         5676    i.usmart_search_nextc  usmart_str.o
-    0x08007bfa   0x00000106   Code   RO         5677    i.usmart_str2num    usmart_str.o
-    0x08007d00   0x00000022   Code   RO         5678    i.usmart_strcmp     usmart_str.o
-    0x08007d22   0x00000016   Code   RO         5679    i.usmart_strcopy    usmart_str.o
-    0x08007d38   0x00000018   Code   RO         5680    i.usmart_strlen     usmart_str.o
-    0x08007d50   0x000006f4   Code   RO         5545    i.usmart_sys_cmd_exe  usmart.o
-    0x08008444   0x00000028   Code   RO         4494    i.wiz_cs            w5500_conf.o
-    0x0800846c   0x00000068   Code   RO         4495    i.wiz_read_buf      w5500_conf.o
-    0x080084d4   0x00000068   Code   RO         4496    i.wiz_write_buf     w5500_conf.o
-    0x0800853c   0x00000020   Code   RO         4497    i.write_config_to_eeprom  w5500_conf.o
-    0x0800855c   0x00000018   Code   RO         5293    i.xmemcpy           tongxin.o
-    0x08008574   0x00000130   Code   RO         4811    i.yout_get          io.o
-    0x080086a4   0x000000e8   Code   RO         4812    i.yout_set          io.o
-    0x0800878c   0x0000002c   Code   RO         5998    locale$$code        c_w.l(lc_ctype_c.o)
-    0x080087b8   0x0000002c   Code   RO         6001    locale$$code        c_w.l(lc_numeric_c.o)
-    0x080087e4   0x0000005e   Code   RO         5849    x$fpl$dfix          fz_ws.l(dfix.o)
-    0x08008842   0x0000002e   Code   RO         5854    x$fpl$dflt          fz_ws.l(dflt_clz.o)
-    0x08008870   0x00000154   Code   RO         5859    x$fpl$dmul          fz_ws.l(dmul.o)
-    0x080089c4   0x0000009c   Code   RO         5914    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
-    0x08008a60   0x0000000c   Code   RO         5916    x$fpl$dretinf       fz_ws.l(dretinf.o)
-    0x08008a6c   0x00000004   Code   RO         5918    x$fpl$printf1       fz_ws.l(printf1.o)
-    0x08008a70   0x00000000   Code   RO         5920    x$fpl$usenofp       fz_ws.l(usenofp.o)
-    0x08008a70   0x00000018   Data   RO          778    .constdata          system_stm32f1xx.o
-    0x08008a88   0x00000028   Data   RO         5794    .constdata          c_w.l(_printf_hex_int_ll_ptr.o)
-    0x08008ab0   0x00000011   Data   RO         5814    .constdata          c_w.l(__printf_flags_ss_wp.o)
-    0x08008ac1   0x00000003   PAD
-    0x08008ac4   0x00000008   Data   RO         5882    .constdata          c_w.l(_printf_wctomb.o)
-    0x08008acc   0x00000094   Data   RO         5973    .constdata          c_w.l(bigflt0.o)
-    0x08008b60   0x00000043   Data   RO           74    .conststring        main.o
-    0x08008ba3   0x00000001   PAD
-    0x08008ba4   0x00000028   Data   RO         5548    .conststring        usmart.o
-    0x08008bcc   0x000000d3   Data   RO         5625    .conststring        usmart_config.o
-    0x08008c9f   0x00000001   PAD
-    0x08008ca0   0x00000020   Data   RO         6139    Region$$Table       anon$$obj.o
-    0x08008cc0   0x00000110   Data   RO         5997    locale$$data        c_w.l(lc_ctype_c.o)
-    0x08008dd0   0x0000001c   Data   RO         6000    locale$$data        c_w.l(lc_numeric_c.o)
+    0x08005eb8   0x00000030   Code   RO           36    i.getzhiandchange   main.o
+    0x08005ee8   0x00000144   Code   RO         4483    i.gpio_for_w5500_config  w5500_conf.o
+    0x0800602c   0x0000000a   Code   RO         4484    i.iinchip_csoff     w5500_conf.o
+    0x08006036   0x0000000a   Code   RO         4485    i.iinchip_cson      w5500_conf.o
+    0x08006040   0x0000006c   Code   RO           37    i.init              main.o
+    0x080060ac   0x000000d4   Code   RO           38    i.initall           main.o
+    0x08006180   0x0000000c   Code   RO         4803    i.initio            io.o
+    0x0800618c   0x000000d8   Code   RO         4804    i.inset             io.o
+    0x08006264   0x00000012   Code   RO           40    i.isCanSetWeizhi    main.o
+    0x08006276   0x00000002   PAD
+    0x08006278   0x00000028   Code   RO           41    i.iserror           main.o
+    0x080062a0   0x0000004c   Code   RO           42    i.jiexi             main.o
+    0x080062ec   0x00000028   Code   RO           43    i.jisuandianliu     main.o
+    0x08006314   0x00000058   Code   RO           44    i.jisuanwendu       main.o
+    0x0800636c   0x0000007c   Code   RO           45    i.jixi2             main.o
+    0x080063e8   0x0000003e   Code   RO         4075    i.listen            socket.o
+    0x08006426   0x00000002   PAD
+    0x08006428   0x0000005c   Code   RO           46    i.main              main.o
+    0x08006484   0x0000001e   Code   RO           47    i.myaddstrstr       main.o
+    0x080064a2   0x00000010   Code   RO           48    i.mystrlen          main.o
+    0x080064b2   0x0000003c   Code   RO           49    i.mystrstr          main.o
+    0x080064ee   0x00000002   PAD
+    0x080064f0   0x0000004c   Code   RO           51    i.orderFetchToPingmu  main.o
+    0x0800653c   0x00000044   Code   RO         4805    i.outset            io.o
+    0x08006580   0x0000004c   Code   RO         5288    i.pop               tongxin.o
+    0x080065cc   0x0000005c   Code   RO         5289    i.pop2              tongxin.o
+    0x08006628   0x000000fc   Code   RO           52    i.precom2check      main.o
+    0x08006724   0x00000016   Code   RO           53    i.print1            main.o
+    0x0800673a   0x0000003c   Code   RO           54    i.print2            main.o
+    0x08006776   0x00000016   Code   RO           55    i.print3            main.o
+    0x0800678c   0x00000064   Code   RO         5290    i.push              tongxin.o
+    0x080067f0   0x0000001c   Code   RO         4487    i.read_config_from_eeprom  w5500_conf.o
+    0x0800680c   0x00000042   Code   RO         4076    i.recv              socket.o
+    0x0800684e   0x00000002   PAD
+    0x08006850   0x00000094   Code   RO         4309    i.recv_data_processing  w5500.o
+    0x080068e4   0x0000002c   Code   RO         4489    i.reset_w5500       w5500_conf.o
+    0x08006910   0x00000078   Code   RO           57    i.selfdeal          main.o
+    0x08006988   0x00000080   Code   RO           58    i.selfdealread      main.o
+    0x08006a08   0x000000ec   Code   RO         4078    i.send              socket.o
+    0x08006af4   0x00000018   Code   RO           59    i.send1             main.o
+    0x08006b0c   0x00000018   Code   RO           60    i.send2             main.o
+    0x08006b24   0x00000018   Code   RO           61    i.send3             main.o
+    0x08006b3c   0x00000094   Code   RO         4310    i.send_data_processing  w5500.o
+    0x08006bd0   0x00000028   Code   RO         4026    i.sendwangkoutodiannao  tcp_demo.o
+    0x08006bf8   0x00000010   Code   RO         4311    i.setGAR            w5500.o
+    0x08006c08   0x00000012   Code   RO         4315    i.setSHAR           w5500.o
+    0x08006c1a   0x00000012   Code   RO         4316    i.setSIPR           w5500.o
+    0x08006c2c   0x00000012   Code   RO         4317    i.setSUBR           w5500.o
+    0x08006c3e   0x00000016   Code   RO         4318    i.setSn_IR          w5500.o
+    0x08006c54   0x00000300   Code   RO         4490    i.set_w5500_ip      w5500_conf.o
+    0x08006f54   0x0000002c   Code   RO         4491    i.set_w5500_mac     w5500_conf.o
+    0x08006f80   0x0000000c   Code   RO           64    i.settime           main.o
+    0x08006f8c   0x00000028   Code   RO           65    i.shoumingjilu      main.o
+    0x08006fb4   0x00000098   Code   RO           66    i.shoumingjisuan    main.o
+    0x0800704c   0x00000044   Code   RO         5292    i.show              tongxin.o
+    0x08007090   0x00000048   Code   RO           68    i.showcom1          main.o
+    0x080070d8   0x00000038   Code   RO           69    i.showendu          main.o
+    0x08007110   0x00000038   Code   RO           70    i.showzhi           main.o
+    0x08007148   0x000000c4   Code   RO         4080    i.socket            socket.o
+    0x0800720c   0x00000088   Code   RO         4321    i.socket_buf_init   w5500.o
+    0x08007294   0x00000030   Code   RO           71    i.time02msjisuan    main.o
+    0x080072c4   0x00000018   Code   RO           72    i.time03msjisuan    main.o
+    0x080072dc   0x000000d0   Code   RO         3819    i.uart_init         usart.o
+    0x080073ac   0x000000b0   Code   RO         5539    i.usmart_cmd_rec    usmart.o
+    0x0800745c   0x000002d8   Code   RO         5540    i.usmart_exe        usmart.o
+    0x08007734   0x000000d4   Code   RO         5670    i.usmart_get_aparm  usmart_str.o
+    0x08007808   0x00000036   Code   RO         5671    i.usmart_get_cmdname  usmart_str.o
+    0x0800783e   0x00000002   PAD
+    0x08007840   0x000001c0   Code   RO         5672    i.usmart_get_fname  usmart_str.o
+    0x08007a00   0x0000010c   Code   RO         5673    i.usmart_get_fparam  usmart_str.o
+    0x08007b0c   0x00000020   Code   RO         5674    i.usmart_get_parmpos  usmart_str.o
+    0x08007b2c   0x00000044   Code   RO         5541    i.usmart_get_runtime  usmart.o
+    0x08007b70   0x00000028   Code   RO         5542    i.usmart_init       usmart.o
+    0x08007b98   0x00000016   Code   RO         5675    i.usmart_pow        usmart_str.o
+    0x08007bae   0x00000002   PAD
+    0x08007bb0   0x00000034   Code   RO         5543    i.usmart_reset_runtime  usmart.o
+    0x08007be4   0x000000bc   Code   RO         5544    i.usmart_scan       usmart.o
+    0x08007ca0   0x00000016   Code   RO         5676    i.usmart_search_nextc  usmart_str.o
+    0x08007cb6   0x00000106   Code   RO         5677    i.usmart_str2num    usmart_str.o
+    0x08007dbc   0x00000022   Code   RO         5678    i.usmart_strcmp     usmart_str.o
+    0x08007dde   0x00000016   Code   RO         5679    i.usmart_strcopy    usmart_str.o
+    0x08007df4   0x00000018   Code   RO         5680    i.usmart_strlen     usmart_str.o
+    0x08007e0c   0x000006f4   Code   RO         5545    i.usmart_sys_cmd_exe  usmart.o
+    0x08008500   0x00000028   Code   RO         4494    i.wiz_cs            w5500_conf.o
+    0x08008528   0x00000068   Code   RO         4495    i.wiz_read_buf      w5500_conf.o
+    0x08008590   0x00000068   Code   RO         4496    i.wiz_write_buf     w5500_conf.o
+    0x080085f8   0x00000020   Code   RO         4497    i.write_config_to_eeprom  w5500_conf.o
+    0x08008618   0x00000018   Code   RO         5293    i.xmemcpy           tongxin.o
+    0x08008630   0x00000130   Code   RO         4811    i.yout_get          io.o
+    0x08008760   0x000000e8   Code   RO         4812    i.yout_set          io.o
+    0x08008848   0x0000002c   Code   RO         5998    locale$$code        c_w.l(lc_ctype_c.o)
+    0x08008874   0x0000002c   Code   RO         6001    locale$$code        c_w.l(lc_numeric_c.o)
+    0x080088a0   0x0000005e   Code   RO         5849    x$fpl$dfix          fz_ws.l(dfix.o)
+    0x080088fe   0x0000002e   Code   RO         5854    x$fpl$dflt          fz_ws.l(dflt_clz.o)
+    0x0800892c   0x00000154   Code   RO         5859    x$fpl$dmul          fz_ws.l(dmul.o)
+    0x08008a80   0x0000009c   Code   RO         5914    x$fpl$dnaninf       fz_ws.l(dnaninf.o)
+    0x08008b1c   0x0000000c   Code   RO         5916    x$fpl$dretinf       fz_ws.l(dretinf.o)
+    0x08008b28   0x00000004   Code   RO         5918    x$fpl$printf1       fz_ws.l(printf1.o)
+    0x08008b2c   0x00000000   Code   RO         5920    x$fpl$usenofp       fz_ws.l(usenofp.o)
+    0x08008b2c   0x00000018   Data   RO          778    .constdata          system_stm32f1xx.o
+    0x08008b44   0x00000028   Data   RO         5794    .constdata          c_w.l(_printf_hex_int_ll_ptr.o)
+    0x08008b6c   0x00000011   Data   RO         5814    .constdata          c_w.l(__printf_flags_ss_wp.o)
+    0x08008b7d   0x00000003   PAD
+    0x08008b80   0x00000008   Data   RO         5882    .constdata          c_w.l(_printf_wctomb.o)
+    0x08008b88   0x00000094   Data   RO         5973    .constdata          c_w.l(bigflt0.o)
+    0x08008c1c   0x00000043   Data   RO           74    .conststring        main.o
+    0x08008c5f   0x00000001   PAD
+    0x08008c60   0x00000028   Data   RO         5548    .conststring        usmart.o
+    0x08008c88   0x000000d3   Data   RO         5625    .conststring        usmart_config.o
+    0x08008d5b   0x00000001   PAD
+    0x08008d5c   0x00000020   Data   RO         6139    Region$$Table       anon$$obj.o
+    0x08008d7c   0x00000110   Data   RO         5997    locale$$data        c_w.l(lc_ctype_c.o)
+    0x08008e8c   0x0000001c   Data   RO         6000    locale$$data        c_w.l(lc_numeric_c.o)
 
 
-    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00003260, Max: 0x0000c000, ABSOLUTE, COMPRESSED[0x00000164])
+    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00003260, Max: 0x0000c000, ABSOLUTE, COMPRESSED[0x0000015c])
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -4089,7 +4092,7 @@ Image component sizes
        116          8          0          4          0       1719   delay.o
          0          0          0          0       1046       4926   dhcp.o
        832         64          0          0         62       3345   io.o
-      4290       1110         67        404       3220     564272   main.o
+      4338       1140         67        404       3220     564308   main.o
        736        118          0          0          0       3990   myiic.o
        612         24          0          0          0       3588   socket.o
         64         26        304          0       1536        760   startup_stm32f103xe.o
@@ -4120,10 +4123,10 @@ Image component sizes
          0          0        211        316          0       1548   usmart_config.o
       1400         20          0          0          0       8189   usmart_str.o
        796         78          0         16         32       9202   w5500.o
-      1520        412          0         41        136      11137   w5500_conf.o
+      1660        480          0         41        136      11165   w5500_conf.o
 
     ----------------------------------------------------------------------
-     27708       3932        680        840      11960     744165   Object Totals
+     27896       4030        680        840      11960     744229   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         40          0          2          8          8          0   (incl. Padding)
 
@@ -4246,15 +4249,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     35136       4224       1196        840      12056     734345   Grand Totals
-     35136       4224       1196        356      12056     734345   ELF Image Totals (compressed)
-     35136       4224       1196        356          0          0   ROM Totals
+     35324       4322       1196        840      12056     734409   Grand Totals
+     35324       4322       1196        348      12056     734409   ELF Image Totals (compressed)
+     35324       4322       1196        348          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                36332 (  35.48kB)
+    Total RO  Size (Code + RO Data)                36520 (  35.66kB)
     Total RW  Size (RW Data + ZI Data)             12896 (  12.59kB)
-    Total ROM Size (Code + RO Data + RW Data)      36688 (  35.83kB)
+    Total ROM Size (Code + RO Data + RW Data)      36868 (  36.00kB)
 
 ==============================================================================
 

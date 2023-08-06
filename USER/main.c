@@ -133,6 +133,7 @@ void run()
 void init();
 void dealchuankou();
 // 屏幕过来的指令，，，下发下去。。。
+void dianliusendtokongzhiban(int zhi);
 void getzhiandchange()
 {
     int weizhi,zhi;
@@ -144,7 +145,10 @@ void getzhiandchange()
     }
     weizhi=get.weizhi;
     zhi=get.zhi;
-	// getnowaitiicguang(weizhi,zhi); //压缩到往板子发的指令。。。
+	if(get.weizhi==4)
+	{
+		dianliusendtokongzhiban(zhi);
+	}
 }
 // 定义printf函数
 void print2(const char *fmt, ...)
@@ -507,7 +511,7 @@ int iserror()
 	return 0;
 }
 void ShowInfoToDiannan(int fangshi);
-int debug=1;
+int debug=0;
 
 // 报警处理相关的
 void baojincheck()
@@ -694,6 +698,7 @@ void initall()
 	IIC_Init();
 	EPPROMinit();
 	exitinit();
+	print2("system start now ,version 1.0\r\n");
 	gpio_for_w5500_config();						/*初始化MCU相关引脚*/
 	reset_w5500();                     /* W5500硬件复位 */
 	set_w5500_mac();										/*配置MAC地址*/
@@ -742,6 +747,7 @@ int main(void)
 {
 	int i, j, k;
 	initall();
+	
 	while (1)
 	{
 		do_tcp_server();                  /*TCP_Client 数据回环测试程序*/

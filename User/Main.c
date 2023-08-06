@@ -125,8 +125,11 @@ void dealorder()
 }
 char flagError=0;
 int timeflagError=0;
+int timetongxin=0;
 void time0() interrupt 1
 {
+	if(flagsystemrun==1)
+		timetongxin++;
 	if(flagError==1)
 	{
 		if(timeflagError++>500)
@@ -523,7 +526,11 @@ void showfen(int error)
     LCD_ShowString(0, 40,"ERROR FOR FAN", WHITE, BLACK, 32, 0);
 	if(error==12)
     LCD_ShowString(0, 40,"ERROR FOR TMP", WHITE, BLACK, 32, 0);
-	if(error==11 || error==12)
+	if(error==13)
+    LCD_ShowString(0, 40,"ERROR FOR REC CENTER", WHITE, BLACK, 32, 0);
+	if(error==14)
+    LCD_ShowString(0, 40,"ERROR FOR REC LIGHT", WHITE, BLACK, 32, 0);
+	if(error>=11 && error<=14)
 	{
 		flagError=1;
 	}
@@ -541,6 +548,7 @@ void getzhiandchange()
     weizhi=get.weizhi;
     zhi=get.zhi;
     printf("getzhiandchange weizhi[%d] zhi[%d]\n",weizhi,zhi);
+	timetongxin=0;
 	if( weizhi== 6 )
 	{
 		tmp=zhi;
@@ -552,7 +560,6 @@ void getzhiandchange()
 		writebuf();
 	}
 	showfen(weizhi);
-
 }
 void readbuf();
 
@@ -577,8 +584,14 @@ void mainrun()
 			showdata();
 			rumtimes = 0;
 		}
-	
-			
+		if(flagsystemrun==1)
+		{
+			if(timetongxin>6000)
+			{
+				timetongxin=0;
+				push2(13,1);
+			}
+		}
 		
 		rumtimes++;
 		if (rumtimes == 15000)
@@ -598,12 +611,9 @@ void UART1_ISR_Handler (void) interrupt UART1_VECTOR
 		printf("rec init now");
 		IAP_CONTR = 0x60;
 	}
-
 	if(TI)
 	{
 		TI = 0;
-		
-      
 	}
 }
 //========================================================================
@@ -694,6 +704,4 @@ void main(void)
 	pingmuclear();
 	delay_ms(50);
 	mainrun();
-	// LCD_Fill(0, 0, 320, 240, BLACK);
-	
 }

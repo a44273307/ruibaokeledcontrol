@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 1   
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE uart
@@ -66,7 +66,7 @@ stmt  level    source
    53   1        TR0 = 1;    // 定时器0开始计时
    54   1        TR0 = 1;    // 定时器0开始计时
    55   1        ET0 = 1;    // 使能定时器0中断
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 2   
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 2   
 
    56   1        PT0 = 1;
    57   1        EA = 1;
@@ -134,7 +134,7 @@ stmt  level    source
   119          通过串口1发送串口数据
   120          ----------------------------*/
   121          //void SendData(unsigned char ch)
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 3   
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 3   
 
   122          //{
   123          //    TI     =   0;  //清零串口发送完成中断请求标志
@@ -202,7 +202,7 @@ stmt  level    source
   185          ----------------------------*/
   186          void sendbyte4(unsigned char ch)
   187          {
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 4   
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 4   
 
   188   1          while (busy4);               //等待前面的数据发送完成
   189   1        busy4 = 1;
@@ -270,7 +270,7 @@ stmt  level    source
   251          void jiexi(char* input);
   252          
   253          char* mystrstr(const char* haystack, const char* needle) {
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 5   
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 5   
 
   254   1          if (*needle == '\0') {
   255   2              return (char*)haystack;
@@ -324,92 +324,94 @@ stmt  level    source
   303          // 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
   304          int bakweizhi;
   305          int bakzhi;
-  306          void jixi2(char* input)
-  307          {
-  308   1        char *p=input;
-  309   1        char *p1;
-  310   1        int i;
-  311   1        unsigned int weizhi;
-  312   1        unsigned int zhi;
-  313   1        //554-2234;333-4;end
-  314   1          // printf("input %s",input);
-  315   1        for( i=0;i<100;i++)
-  316   1        {
-  317   2          p1=myaddstrstr(p,";"); //找有没有下一个的
-  318   2          if(p1==NULL)
-  319   2          {
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 6   
+  306          
+  307          void jixi2(char* input)
+  308          {
+  309   1        char *p=input;
+  310   1        char *p1;
+  311   1        int i;
+  312   1        unsigned int weizhi;
+  313   1        unsigned int zhi;
+  314   1        //554-2234;333-4;end
+  315   1          // printf("input %s",input);
+  316   1        for( i=0;i<100;i++)
+  317   1        {
+  318   2          p1=myaddstrstr(p,";"); //找有没有下一个的
+  319   2          if(p1==NULL)
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 6   
 
-  320   3            break;
-  321   3          }
-  322   2          weizhi = atoi(p);
-  323   2          p=myaddstrstr(p,"-");
-  324   2          zhi = atoi(p);
-  325   2              if(i%2==0)
-  326   2              {
-  327   3                  bakweizhi=weizhi;
-  328   3                  bakzhi=zhi;
-  329   3              }
-  330   2              if(i%2==1)
-  331   2              {
-  332   3                  if(weizhi==bakweizhi && bakzhi==zhi)
-  333   3                  {
-  334   4                      printf("get set%d-%d",weizhi,zhi);
-  335   4                      push2(weizhi,zhi);
-  336   4                  }
-  337   3                  else
-  338   3                  {
-  339   4                      printf("get failed");
-  340   4                  }
-  341   3              }
-  342   2          p=myaddstrstr(p,";");  //指向下一个后面
-  343   2        }
-  344   1      }
-  345          void jiexi(char* input)
-  346          {
-  347   1        char par[500]={0};
-  348   1        char *begin,end;
-  349   1        begin=myaddstrstr(input,"set:");
-  350   1        // printf("input begin%s",begin);
-  351   1        end=myaddstrstr(begin,"end");
-*** WARNING C161 IN LINE 351 OF ..\User\uart.c: 'far' pointer truncated to 'char'
-*** WARNING C10 IN LINE 351 OF ..\User\uart.c: conversion: 'pointer' to 'char'
-  352   1        // printf("input end%s",end);
-  353   1        if(begin!=NULL && end!=NULL)
-*** WARNING C40 IN LINE 353 OF ..\User\uart.c: 'char' converted to 'far' pointer
-  354   1        {
-  355   2          strcpy(par,begin);
-  356   2          jixi2(par);
-  357   2        }
-  358   1      }
-  359          
-  360           void chuliguankji(char *ans1)
-  361          {
-  362   1        char *index;
-  363   1        index = mystrstr(ans1, "@STCISP#");
-  364   1        if (index == 0)
-  365   1        {
-  366   2          return;
-  367   2        }
-  368   1        printf("rec @STCISP#,researt now");
-  369   1        IAP_CONTR = 0x60;
-  370   1      }
-  371          
-  372          
+  320   2          {
+  321   3            break;
+  322   3          }
+  323   2          weizhi = atoi(p);
+  324   2          p=myaddstrstr(p,"-");
+  325   2          zhi = atoi(p);
+  326   2              if(i%2==0)
+  327   2              {
+  328   3                  bakweizhi=weizhi;
+  329   3                  bakzhi=zhi;
+  330   3              }
+  331   2              if(i%2==1)
+  332   2              {
+  333   3                  if(weizhi==bakweizhi && bakzhi==zhi)
+  334   3                  {
+  335   4                      printf("get set%d-%d",weizhi,zhi);
+  336   4                      push2(weizhi,zhi);
+  337   4              
+  338   4                  }
+  339   3                  else
+  340   3                  {
+  341   4                      printf("get failed");
+  342   4                  }
+  343   3              }
+  344   2          p=myaddstrstr(p,";");  //指向下一个后面
+  345   2        }
+  346   1      }
+  347          void jiexi(char* input)
+  348          {
+  349   1        char par[500]={0};
+  350   1        char *begin,end;
+  351   1        begin=myaddstrstr(input,"set:");
+  352   1        // printf("input begin%s",begin);
+  353   1        end=myaddstrstr(begin,"end");
+*** WARNING C161 IN LINE 353 OF ..\User\uart.c: 'far' pointer truncated to 'char'
+*** WARNING C10 IN LINE 353 OF ..\User\uart.c: conversion: 'pointer' to 'char'
+  354   1        // printf("input end%s",end);
+  355   1        if(begin!=NULL && end!=NULL)
+*** WARNING C40 IN LINE 355 OF ..\User\uart.c: 'char' converted to 'far' pointer
+  356   1        {
+  357   2          strcpy(par,begin);
+  358   2          jixi2(par);
+  359   2        }
+  360   1      }
+  361          
+  362           void chuliguankji(char *ans1)
+  363          {
+  364   1        char *index;
+  365   1        index = mystrstr(ans1, "@STCISP#");
+  366   1        if (index == 0)
+  367   1        {
+  368   2          return;
+  369   2        }
+  370   1        printf("rec @STCISP#,researt now");
+  371   1        IAP_CONTR = 0x60;
+  372   1      }
   373          
-  374          void showbuf()
-  375          {
-  376   1        // if(weishu1>0)
-  377   1        // {
-  378   1        //  delay_ms(2);
-  379   1        //  printf(buf1);
-  380   1        // }
-  381   1      
-  382   1        // weishu1 = 0;
-C251 COMPILER V5.60.0,  uart                                                               06/08/23  17:44:44  PAGE 7   
+  374          
+  375          
+  376          void showbuf()
+  377          {
+  378   1        // if(weishu1>0)
+  379   1        // {
+  380   1        //  delay_ms(2);
+  381   1        //  printf(buf1);
+  382   1        // }
+C251 COMPILER V5.60.0,  uart                                                               06/08/23  19:40:16  PAGE 7   
 
-  383   1        // buf1[0]=0;
-  384   1      }
+  383   1      
+  384   1        // weishu1 = 0;
+  385   1        // buf1[0]=0;
+  386   1      }
 
 
 Module Information          Static   Overlayable

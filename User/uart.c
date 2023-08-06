@@ -303,6 +303,7 @@ char* myaddstrstr(const char* haystack, const char* needle)
 // 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
 int bakweizhi;
 int bakzhi;
+
 void jixi2(char* input)
 {
 	char *p=input;
@@ -333,6 +334,7 @@ void jixi2(char* input)
             {
                 printf("get set%d-%d",weizhi,zhi);
                 push2(weizhi,zhi);
+				
             }
             else
             {

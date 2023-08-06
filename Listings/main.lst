@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -49,7 +49,7 @@ stmt  level    source
    38          
    39          
    40          
-   41          char rec2[500];
+   41          char rec2[200]={0};
    42          int weizhi2=0;
    43          // 01 是用力啊检查地址的，，默认55
    44          u16 g_reg[40]={0};
@@ -66,7 +66,7 @@ stmt  level    source
    55          void SYS_Ini() // STC32初始化设置
    56          {
    57   1        EAXFR = 1;    // 使能访问 XFR
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 2   
 
    58   1        CKCON = 0x00; // 设置外部数据总线速度为最快
    59   1        WTST = 0x00;  // 设置程序代码等待参数，赋值为 0 可将 CPU 执行程序的速度设置为最快
@@ -130,11 +130,11 @@ stmt  level    source
   117   1        p = (unsigned char *)buf;
   118   1        while (*p != '\0')
   119   1        {
-  120   2          sendbyte1(*p);
+  120   2          sendbyte2(*p);
   121   2          p++;
   122   2        }
   123   1      }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 3   
 
   124          
   125          
@@ -202,7 +202,7 @@ stmt  level    source
   186   1        while (i)
   187   1          i--;
   188   1      }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 4   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 4   
 
   189          void delay10x(int i)
   190          {
@@ -270,7 +270,7 @@ stmt  level    source
   249   3                  return (char*)haystack; // 子串匹配成功，返回起始位置
   250   3              }
   251   2      
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 5   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 5   
 
   252   2              haystack++;
   253   2          }
@@ -338,7 +338,7 @@ stmt  level    source
   315   2          p=myaddstrstr(p,"-");
   316   2          registers[numRegisters].value = atoi(p);
   317   2          numRegisters++;
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 6   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 6   
 
   318   2          p=myaddstrstr(p,";");  //指向下一个后面
   319   2        }
@@ -406,7 +406,7 @@ stmt  level    source
   381   1          0xFF,
   382   1          0xFF,
   383   1          0xFF,
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 7   
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 7   
 
   384   1          0xFF,
   385   1          0xFF,
@@ -460,663 +460,762 @@ stmt  level    source
   433   1          setzhione(4,g_dianliu);
   434   1        if(i==1)
   435   1        {
-  436   2          // if(flagsetliangdu==0)//不能设置值。。变成设置
-  437   2          // {
-  438   2      
-  439   2          // }
-  440   2          if(flagsetliangdu==1)//保存记录的值
-  441   2          {
-  442   3            printf1("flagsetliangdusetzhi %d",g_dianliu);
-  443   3            writebuf();   
-  444   3          }
-  445   2          flagsetliangdu=1-flagsetliangdu;
-  446   2        }
-  447   1          
-  448   1      
-  449   1      }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 8   
+  436   2          if(flagsetliangdu==1)//保存记录的值
+  437   2          {
+  438   3            printf1("flagsetliangdusetzhi %d",g_dianliu);
+  439   3            writebuf();   
+  440   3          }
+  441   2          flagsetliangdu=1-flagsetliangdu;
+  442   2        }
+  443   1          
+  444   1      
+  445   1      }
+  446          void keyup(int i) // 按键按下的处理、、、
+  447          {
+  448   1        printf1("keyup %d",i);
+  449   1        if(i==0)
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 8   
 
-  450          void keyup(int i) // 按键按下的处理、、、
-  451          {
-  452   1        printf1("keyup %d",i);
-  453   1        if(i==0)
-  454   1          setzhione(4,0);
-  455   1      }
-  456          void keyallchuli()
-  457          {
-  458   1        int i;
-  459   1        static char flag[10] = {0};   // 标志记录
-  460   1        static int dowmtimes[10] = {0}; // 标志记录
-  461   1        for (i = 0; i < 6; i++)
-  462   1        {
-  463   2          if (xin[i] == 0)
-  464   2          {
-  465   3            if (flag[i] == 0) // 代表按键第一次按下。。。
-  466   3            {
-  467   4              flag[i] = 1;
-  468   4              keydown(i);
-  469   4            }
-  470   3          }
-  471   2          if (xin[i] == 1)
-  472   2          {
-  473   3            if (flag[i] == 1) // 代表下去了又上来
-  474   3            {
-  475   4              keyup(i);
-  476   4            }
-  477   3            flag[i] = 0;
-  478   3            
-  479   3          }
-  480   2        }
-  481   1      }
-  482          
-  483          int FLASH_SAVE_ADDR=0x000040; 
-  484          void STMFLASH_Write(u8 WriteAddr,u16 *pBuffer,u16 NumToWrite) 
-  485          {
-  486   1        EEPROM_SectorErase(WriteAddr);
-  487   1        EEPROM_write_n(WriteAddr,(u8 *)pBuffer,NumToWrite*2);
-  488   1      }
-  489          void EPPROMwrite()
-  490          {
-  491   1        g_reg[0]=0x55;
-  492   1        STMFLASH_Write(FLASH_SAVE_ADDR,g_reg,30);
-*** WARNING C188 IN LINE 492 OF main.c: 'parameter 1': value truncated
+  450   1          setzhione(4,0);
+  451   1      }
+  452          void keyallchuli()
+  453          {
+  454   1        int i;
+  455   1        static char flag[10] = {0};   // 标志记录
+  456   1        static int dowmtimes[10] = {0}; // 标志记录
+  457   1        for (i = 0; i < 6; i++)
+  458   1        {
+  459   2          if (xin[i] == 0)
+  460   2          {
+  461   3            if (flag[i] == 0) // 代表按键第一次按下。。。
+  462   3            {
+  463   4              flag[i] = 1;
+  464   4              keydown(i);
+  465   4            }
+  466   3          }
+  467   2          if (xin[i] == 1)
+  468   2          {
+  469   3            if (flag[i] == 1) // 代表下去了又上来
+  470   3            {
+  471   4              keyup(i);
+  472   4            }
+  473   3            flag[i] = 0;
+  474   3            
+  475   3          }
+  476   2        }
+  477   1      }
+  478          
+  479          int FLASH_SAVE_ADDR=0x000040; 
+  480          void STMFLASH_Write(u8 WriteAddr,u16 *pBuffer,u16 NumToWrite) 
+  481          {
+  482   1        EEPROM_SectorErase(WriteAddr);
+  483   1        EEPROM_write_n(WriteAddr,(u8 *)pBuffer,NumToWrite*2);
+  484   1      }
+  485          void EPPROMwrite()
+  486          {
+  487   1        g_reg[0]=0x55;
+  488   1        STMFLASH_Write(FLASH_SAVE_ADDR,g_reg,30);
+*** WARNING C188 IN LINE 488 OF main.c: 'parameter 1': value truncated
+  489   1      }
+  490          void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead) 
+  491          {
+  492   1        EEPROM_read_n(ReadAddr,(u8 *)pBuffer,NumToRead*2);
   493   1      }
-  494          void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead) 
-  495          {
-  496   1        EEPROM_read_n(ReadAddr,(u8 *)pBuffer,NumToRead*2);
-  497   1      }
-  498          
-  499          void dealorder();
-  500          void getdianliupre()
-  501          {
-  502   1      
-  503   1      }
-  504          int timereport=0;
-  505          
-  506          int errpromdizhi=0x000040;
-  507          void writebuf()
-  508          {
-  509   1        u8 get[10];
-  510   1        get[0]=55;
-  511   1        get[1]=g_dianliu/100;
-  512   1        get[2]=g_dianliu%100;
-  513   1        EEPROM_SectorErase(errpromdizhi);
-  514   1        EEPROM_write_n(errpromdizhi,get,3);
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 9   
+  494          void dealorder();
+  495          void getdianliupre()
+  496          {
+  497   1      
+  498   1      }
+  499          int timereport=0;
+  500          
+  501          int errpromdizhi=0x000040;
+  502          void writebuf()
+  503          {
+  504   1        u8 get[10];
+  505   1        get[0]=55;
+  506   1        get[1]=g_dianliu/100;
+  507   1        get[2]=g_dianliu%100;
+  508   1        EEPROM_SectorErase(errpromdizhi);
+  509   1        EEPROM_write_n(errpromdizhi,get,3);
+  510   1      }
+  511          void showzhi()
+  512          {
+  513   1        int i;
+  514   1        int len2=sizeof(g_reg[0]);
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 9   
 
-  515   1      }
-  516          void showzhi()
-  517          {
-  518   1        int i;
-  519   1        int len2=sizeof(g_reg[0]);
-  520   1        int len=sizeof(g_reg);
-  521   1        len=len/len2;
-  522   1        for(i=0;i<len;i++)
-  523   1        {
-  524   2          if(g_reg[i]!=0)
-  525   2          {
-  526   3            printf("[%d-%d]",i,g_reg[i]);
-  527   3          }
-  528   2        }
-  529   1      }
-  530          void EPPROMinit()
-  531          {        
-  532   1        STMFLASH_Read(FLASH_SAVE_ADDR,g_reg,30);
-  533   1        if(g_reg[0]!=0x55)
-  534   1        {
-  535   2          printf("this is First record");
-  536   2          memset(g_reg,0,sizeof(g_reg));
-  537   2          g_reg[indexTImeAll]=25000;
-  538   2          EPPROMwrite();
-  539   2        }
-  540   1        else
-  541   1        {
-  542   2          printf("not First record");
-  543   2        }
-  544   1        showzhi();
-  545   1      }
-  546          
-  547          sbit keyled1=P3^6;
-  548          sbit keyled2=P3^5;
-  549          #define ledon 0
-  550          #define ledclose 1
-  551          void showled()
-  552          {
-  553   1        keyled1=ledclose;
-  554   1        keyled2=ledclose;
-  555   1        keyled2=ledon;
-  556   1      }
-  557          void delay_ms(unsigned int ms)
-  558          {
-  559   1        unsigned int i;
-  560   1        do{
-  561   2          i = MAIN_Fosc / 6030;
-  562   2          while(--i);
-  563   2        }while(--ms);
-  564   1      }
-  565          
-  566          void fuwei()
-  567          {
-  568   1        IAP_CONTR=0x60;
-  569   1      }
-  570          
-  571          int com2jixi2(char* input)
-  572          {
-  573   1        char flagTrue=0;
-  574   1        char *p=input;
-  575   1        char *p1;
-  576   1        int i;
-  577   1        int weizhi;
-  578   1        int zhi;
-  579   1        int bakweizhi;
-  580   1        int bakzhi;
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 10  
+  515   1        int len=sizeof(g_reg);
+  516   1        len=len/len2;
+  517   1        for(i=0;i<len;i++)
+  518   1        {
+  519   2          if(g_reg[i]!=0)
+  520   2          {
+  521   3            printf("[%d-%d]",i,g_reg[i]);
+  522   3          }
+  523   2        }
+  524   1      }
+  525          void EPPROMinit()
+  526          {        
+  527   1        STMFLASH_Read(FLASH_SAVE_ADDR,g_reg,30);
+  528   1        if(g_reg[0]!=0x55)
+  529   1        {
+  530   2          printf("this is First record");
+  531   2          memset(g_reg,0,sizeof(g_reg));
+  532   2          g_reg[indexTImeAll]=25000;
+  533   2          EPPROMwrite();
+  534   2        }
+  535   1        else
+  536   1        {
+  537   2          printf("not First record");
+  538   2        }
+  539   1        showzhi();
+  540   1      }
+  541          void systemshowkaiji()
+  542          {
+  543   1        printtoDianao("system start now ,version 1.0,build 2023.08.06");
+  544   1      }
+  545          // sbit keyled1=P3^6;
+  546          // sbit keyled2=P3^5;
+  547          // #define ledon 0
+  548          // #define ledclose 1
+  549          // void showled()
+  550          // {
+  551          //  keyled1=ledclose;
+  552          //  keyled2=ledclose;
+  553          //  keyled2=ledon;
+  554          // }
+  555          void delay_ms(unsigned int ms)
+  556          {
+  557   1        unsigned int i;
+  558   1        do{
+  559   2          i = MAIN_Fosc / 6030;
+  560   2          while(--i);
+  561   2        }while(--ms);
+  562   1      }
+  563          
+  564          void fuwei()
+  565          {
+  566   1        IAP_CONTR=0x60;
+  567   1      }
+  568          
+  569          int com2jixi2(char* input)
+  570          {
+  571   1        char flagTrue=0;
+  572   1        char *p=input;
+  573   1        char *p1;
+  574   1        int i;
+  575   1        int weizhi;
+  576   1        int zhi;
+  577   1        int bakweizhi;
+  578   1        int bakzhi;
+  579   1        for( i=0;i<100;i++)
+  580   1        {
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 10  
 
-  581   1        for( i=0;i<100;i++)
-  582   1        {
-  583   2          p1=myaddstrstr(p,";"); //找有没有下一个的
-  584   2          if(p1==NULL)
-  585   2          {
-  586   3            break;
-  587   3          }
-  588   2          weizhi = atoi(p);
-  589   2          p=myaddstrstr(p,"-");
-  590   2          zhi = atoi(p);
-  591   2              if(i%2==0)
-  592   2              {
-  593   3                  bakweizhi=weizhi;
-  594   3                  bakzhi=zhi;
-  595   3              }
-  596   2              if(i%2==1)
-  597   2              {
-  598   3                  if(weizhi==bakweizhi && bakzhi==zhi)
-  599   3                  {
-  600   4                      VectorPush(VectorDiannao,weizhi,zhi);
-  601   4              flagTrue=1;
-  602   4                  }
-  603   3                  else
-  604   3                  {
-  605   4              flagTrue=0;
-  606   4                      printf("get failed");
-  607   4                  }
-  608   3              }
-  609   2          p=myaddstrstr(p,";");  //指向下一个后面
-  610   2        }
-  611   1        return flagTrue;
-  612   1      }
-  613          
-  614          int  com2jiexi(char* input)
-  615          {
-  616   1        char par[1000]={0};
-  617   1        char *begin,*end;
-  618   1        begin=myaddstrstr(input,"set:");
-  619   1        end=myaddstrstr(begin,"end");
-  620   1        if(begin!=NULL && end!=NULL)
-  621   1        {
-  622   2          strcpy(par,begin);
-  623   2          return com2jixi2(par);
-  624   2        }
-  625   1        return 0;
-  626   1      }
-  627          
-  628          
-  629          int flag_canset=0;
-  630          int precom2check(char *input)
-  631          {
-  632   1        char *p;
-  633   1        p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
-  634   1        if(p!=NULL)
-  635   1        {
-  636   2          printtoDianao("passwd checkpass,you can set now\n");
-  637   2          printtoDianao("\n");
-  638   2          printtoDianao("初始电流值 20\n");
-  639   2          printtoDianao("已使用寿命 21\n");
-  640   2          printtoDianao("总寿命 22\n");
-  641   2          printtoDianao("最大电流值 23\n");
-  642   2          printtoDianao("使用方式 set:20-601;20-601;end\n");
-  643   2          flag_canset=1;
-  644   2          return 1;
-  645   2        }
-  646   1        p=mystrstr(input,"fuwei()"); //找有没有下一个的)
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 11  
+  581   2          p1=myaddstrstr(p,";"); //找有没有下一个的
+  582   2          if(p1==NULL)
+  583   2          {
+  584   3            break;
+  585   3          }
+  586   2          weizhi = atoi(p);
+  587   2          p=myaddstrstr(p,"-");
+  588   2          zhi = atoi(p);
+  589   2              if(i%2==0)
+  590   2              {
+  591   3                  bakweizhi=weizhi;
+  592   3                  bakzhi=zhi;
+  593   3              }
+  594   2              if(i%2==1)
+  595   2              {
+  596   3                  if(weizhi==bakweizhi && bakzhi==zhi)
+  597   3                  {
+  598   4                      VectorPush(VectorDiannao,weizhi,zhi);
+  599   4              flagTrue=1;
+  600   4                  }
+  601   3                  else
+  602   3                  {
+  603   4              flagTrue=0;
+  604   4                      printf("get failed");
+  605   4                  }
+  606   3              }
+  607   2          p=myaddstrstr(p,";");  //指向下一个后面
+  608   2        }
+  609   1        return flagTrue;
+  610   1      }
+  611          
+  612          int  com2jiexi(char* input)
+  613          {
+  614   1        char par[1000]={0};
+  615   1        char *begin,*end;
+  616   1        begin=myaddstrstr(input,"set:");
+  617   1        end=myaddstrstr(begin,"end");
+  618   1        if(begin!=NULL && end!=NULL)
+  619   1        {
+  620   2          strcpy(par,begin);
+  621   2          return com2jixi2(par);
+  622   2        }
+  623   1        return 0;
+  624   1      }
+  625          
+  626          
+  627          int flag_canset=0;
+  628          int precom2check(char *input)
+  629          {
+  630   1        char *p;
+  631   1        p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
+  632   1        if(p!=NULL)
+  633   1        {
+  634   2          printtoDianao("passwd checkpass,you can set now\n");
+  635   2          printtoDianao("\n");
+  636   2          printtoDianao("初始电流值 20\n");
+  637   2          printtoDianao("已使用寿命 21\n");
+  638   2          printtoDianao("总寿命 22\n");
+  639   2          printtoDianao("最大电流值 23\n");
+  640   2          printtoDianao("使用方式 set:20-601;20-601;end\n");
+  641   2          flag_canset=1;
+  642   2          return 1;
+  643   2        }
+  644   1        p=mystrstr(input,"fuwei()"); //找有没有下一个的)
+  645   1        if(p!=NULL)
+  646   1        {
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 11  
 
-  647   1        if(p!=NULL)
-  648   1        {
-  649   2          fuwei();
-  650   2        }
-  651   1        return 0;
-  652   1      }
-  653          
-  654          
-  655          int shoumingjisuan(int predianliu)
-  656          {
-  657   1        int bili;
-  658   1        if(g_reg[indexTImeAll]==0)
-  659   1        return predianliu;
-  660   1        bili=g_reg[indexTImeuse]*100/g_reg[indexTImeAll];
-  661   1        if(bili>100)
-  662   1        {
-  663   2          return 0;
-  664   2        }
-  665   1        if(bili>90)
-  666   1        {
-  667   2          return predianliu*0.3;
-  668   2        }
-  669   1        if(bili>80)
-  670   1        {
-  671   2          return predianliu*0.5;
-  672   2        }
-  673   1        if(bili>70)
-  674   1        {
-  675   2          return predianliu*0.8;
-  676   2        }
-  677   1        return predianliu;
-  678   1      }
-  679          // 电流输出计算
-  680          int jisuandianliu(int predianliu)
-  681          {
-  682   1        if(predianliu==0)
-  683   1        {
-  684   2          return 0;
-  685   2        }
-  686   1        predianliu=predianliu+g_reg[indexAdddianliu];
-  687   1        if(predianliu>2047)
-  688   1        {
-  689   2          predianliu=2047;
-  690   2        }
-  691   1        return shoumingjisuan(predianliu);
-  692   1      }
-  693          void dianliusendtokongzhiban(int zhi)
-  694          {
-  695   1        char out[30]={0};
-  696   1        int weizhi=4;
-  697   1        g_dianliu=zhi;
-  698   1        zhi=zhi*bili;
-  699   1        zhi=jisuandianliu(zhi);
-  700   1        sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
-  701   1        printfTopingmu(out);
-  702   1        printf("%s",out);
-  703   1      }
+  647   2          fuwei();
+  648   2        }
+  649   1        return 0;
+  650   1      }
+  651          
+  652          
+  653          int shoumingjisuan(int predianliu)
+  654          {
+  655   1        int bili;
+  656   1        if(g_reg[indexTImeAll]==0)
+  657   1        return predianliu;
+  658   1        bili=g_reg[indexTImeuse]*100/g_reg[indexTImeAll];
+  659   1        if(bili>100)
+  660   1        {
+  661   2          return 0;
+  662   2        }
+  663   1        if(bili>90)
+  664   1        {
+  665   2          return predianliu*0.3;
+  666   2        }
+  667   1        if(bili>80)
+  668   1        {
+  669   2          return predianliu*0.5;
+  670   2        }
+  671   1        if(bili>70)
+  672   1        {
+  673   2          return predianliu*0.8;
+  674   2        }
+  675   1        return predianliu;
+  676   1      }
+  677          // 电流输出计算
+  678          int jisuandianliu(int predianliu)
+  679          {
+  680   1        if(predianliu==0)
+  681   1        {
+  682   2          return 0;
+  683   2        }
+  684   1        predianliu=predianliu+g_reg[indexAdddianliu];
+  685   1        if(predianliu>2047)
+  686   1        {
+  687   2          predianliu=2047;
+  688   2        }
+  689   1        return shoumingjisuan(predianliu);
+  690   1      }
+  691          void dianliusendtokongzhiban(int zhi)
+  692          {
+  693   1        char out[30]={0};
+  694   1        int weizhi=4;
+  695   1        g_dianliu=zhi;
+  696   1        zhi=zhi*bili;
+  697   1        zhi=jisuandianliu(zhi);
+  698   1        sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
+  699   1        printfTopingmu(out);
+  700   1        printf("%s",out);
+  701   1      }
+  702          
+  703          
   704          
-  705          
-  706          
-  707          int isCanSetWeizhi(int weizhi)
-  708          {
-  709   1        if(weizhi>=indexAdddianliu && weizhi<=indexMAXdianliu)
-  710   1        {
-  711   2          return 1;
-  712   2        }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 12  
+  705          int isCanSetWeizhi(int weizhi)
+  706          {
+  707   1        if(weizhi>=indexAdddianliu && weizhi<=indexMAXdianliu)
+  708   1        {
+  709   2          return 1;
+  710   2        }
+  711   1        return 0;
+  712   1      }
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 12  
 
-  713   1        return 0;
-  714   1      }
-  715          void getlogstr(int weizhi,char* input)
-  716          {
-  717   1        if(weizhi==indexAdddianliu)
-  718   1        {
-  719   2          strcpy(input,"初始电流");
-  720   2        }
-  721   1        if(weizhi==indexAdddianliu+1)
-  722   1        {
-  723   2          strcpy(input,"已用寿命");
-  724   2        }
-  725   1        if(weizhi==indexAdddianliu+2)
-  726   1        {
-  727   2          strcpy(input,"总的寿命");
-  728   2        }
-  729   1        if(weizhi==indexAdddianliu+3)
-  730   1        {
-  731   2          strcpy(input,"最大寿命");
-  732   2        }
-  733   1      }
-  734          
-  735          // push 指令相关的计算。。
-  736          int selfdeal(int weizhi,int zhi)
-  737          {
-  738   1        char rspstr[100]={0};
-  739   1        char rsp2[100]={0};
-  740   1        if(flag_canset==0)
-  741   1        {
-  742   2          return 0;
-  743   2        }
-  744   1        if(0==isCanSetWeizhi(weizhi))
-  745   1        {
-  746   2          return 0;
-  747   2        }
-  748   1        g_reg[weizhi]=zhi;
-  749   1        getlogstr(weizhi,rspstr);
-  750   1        EPPROMwrite();
-  751   1        sprintf(rsp2,"%s设定:%d-%d 成功;",rspstr,weizhi,zhi);
-  752   1        printtoDianao(rsp2);
-  753   1        return 1;
-  754   1      }
-  755          int selfdealread(int weizhi,int zhi)
-  756          {
-  757   1        char rspstr[100]={0};
-  758   1        char rsp2[100]={0};
-  759   1        if(weizhi<1000)
-  760   1        return 0;
-  761   1        if(flag_canset==0)
-  762   1        {
-  763   2          return 0;
-  764   2        }
-  765   1        weizhi=weizhi-1000;
-  766   1        if(0==isCanSetWeizhi(weizhi))
-  767   1        {
-  768   2          return 0;
-  769   2        }
-  770   1        getlogstr(weizhi,rspstr);
-  771   1        sprintf(rsp2,"%s读取:%d-%d 成功;",rspstr,weizhi,g_reg[weizhi]);
-  772   1        printtoDianao(rsp2);
-  773   1        return 1;
-  774   1      }
-*** WARNING C47 IN LINE 755 OF main.c: 'zhi': unreferenced parameter
-  775          // 电脑过来的指令，，，处理。。。
-  776          // 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
-  777          void dealDiannaoOrder()
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 13  
+  713          void getlogstr(int weizhi,char* input)
+  714          {
+  715   1        if(weizhi==indexAdddianliu)
+  716   1        {
+  717   2          strcpy(input,"初始电流");
+  718   2        }
+  719   1        if(weizhi==indexAdddianliu+1)
+  720   1        {
+  721   2          strcpy(input,"已用寿命");
+  722   2        }
+  723   1        if(weizhi==indexAdddianliu+2)
+  724   1        {
+  725   2          strcpy(input,"总的寿命");
+  726   2        }
+  727   1        if(weizhi==indexAdddianliu+3)
+  728   1        {
+  729   2          strcpy(input,"最大寿命");
+  730   2        }
+  731   1      }
+  732          
+  733          // push 指令相关的计算。。
+  734          int selfdeal(int weizhi,int zhi)
+  735          {
+  736   1        char rspstr[100]={0};
+  737   1        char rsp2[100]={0};
+  738   1        if(flag_canset==0)
+  739   1        {
+  740   2          return 0;
+  741   2        }
+  742   1        if(0==isCanSetWeizhi(weizhi))
+  743   1        {
+  744   2          return 0;
+  745   2        }
+  746   1        g_reg[weizhi]=zhi;
+  747   1        getlogstr(weizhi,rspstr);
+  748   1        EPPROMwrite();
+  749   1        sprintf(rsp2,"%s设定:%d-%d 成功;",rspstr,weizhi,zhi);
+  750   1        printtoDianao(rsp2);
+  751   1        return 1;
+  752   1      }
+  753          int selfdealread(int weizhi,int zhi)
+  754          {
+  755   1        char rspstr[100]={0};
+  756   1        char rsp2[100]={0};
+  757   1        if(weizhi<1000)
+  758   1        return 0;
+  759   1        if(flag_canset==0)
+  760   1        {
+  761   2          return 0;
+  762   2        }
+  763   1        weizhi=weizhi-1000;
+  764   1        if(0==isCanSetWeizhi(weizhi))
+  765   1        {
+  766   2          return 0;
+  767   2        }
+  768   1        getlogstr(weizhi,rspstr);
+  769   1        sprintf(rsp2,"%s读取:%d-%d 成功;",rspstr,weizhi,g_reg[weizhi]);
+  770   1        printtoDianao(rsp2);
+  771   1        return 1;
+  772   1      }
+*** WARNING C47 IN LINE 753 OF main.c: 'zhi': unreferenced parameter
+  773          // 电脑过来的指令，，，处理。。。
+  774          // 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
+  775          void dealDiannaoOrder()
+  776          {
+  777   1          int weizhi,zhi;
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 13  
 
-  778          {
-  779   1          int weizhi,zhi;
-  780   1          VectorInfo get={0};
-  781   1          VectorGet(VectorDiannao,&get);
-  782   1          if(get.weizhi==0)
-  783   1          {
-  784   2              return ;
-  785   2          }
-  786   1          weizhi=get.weizhi;
-  787   1          zhi=get.zhi;
-  788   1        if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
-  789   1        {
+  778   1          VectorInfo get={0};
+  779   1          VectorGet(VectorDiannao,&get);
+  780   1          if(get.weizhi==0)
+  781   1          {
+  782   2              return ;
+  783   2          }
+  784   1          weizhi=get.weizhi;
+  785   1          zhi=get.zhi;
+  786   1        if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
+  787   1        {
+  788   2          delay_ms(10);
+  789   2          dianliusendtokongzhiban(zhi);
   790   2          delay_ms(10);
-  791   2          dianliusendtokongzhiban(zhi);
-  792   2          delay_ms(10);
-  793   2        }
-  794   1        else
-  795   1        {
-  796   2          selfdeal(weizhi,zhi);
-  797   2          selfdealread(weizhi,zhi);
-  798   2        }
-  799   1      }
-  800          void diannaoinputset()
-  801          {
-  802   1        int i;
-  803   1        if(1==precom2check(rec2))
+  791   2        }
+  792   1        else
+  793   1        {
+  794   2          selfdeal(weizhi,zhi);
+  795   2          selfdealread(weizhi,zhi);
+  796   2        }
+  797   1      }
+  798          sbit keywendu1=P2^4;
+  799          sbit keywendu2=P2^5;
+  800          int flag_error=0;
+  801          int iserror()
+  802          {
+  803   1        if(keywendu1==0)
   804   1        {
-  805   2          return ;
-  806   2        }
-  807   1        com2jiexi(rec2);
-  808   1        if(VectorIsEmpty(VectorDiannao))
+  805   2          flag_error=1;
+  806   2          return 1;
+  807   2        }
+  808   1        if(keywendu2==0)
   809   1        {
-  810   2          printtoDianao("oder format error,pleas check\n");
-  811   2          return ;
+  810   2          flag_error=1;
+  811   2          return 1;
   812   2        }
-  813   1        for(i=0;i<10;i++)
-  814   1        {
-  815   2          dealDiannaoOrder(); //com过来的电脑命令解析。。。
-  816   2        }
-  817   1        // ShowInfoToDiannan(1);
-  818   1      }
-  819          void diannaocheck()
-  820          {
-  821   1        if(weizhi2==0)
-  822   1        {
-  823   2          return ;
-  824   2        }
-  825   1        delay_ms(2);
-  826   1        diannaoinputset();
-  827   1        memset(rec2, 0, sizeof(rec2));
-  828   1        weizhi2 = 0;
-  829   1      }
-  830          void main(void)
-  831          {
-  832   1        SYS_Ini();    // STC32初始化设置
-  833   1        PWM_Config(); // PWM初始化设置
-  834   1        EA = 1;     // 使能EA总中断
-  835   1      
-  836   1        UartInit();
-  837   1        Uart23Init();
-  838   1        printf1("system is ok");
-  839   1        Timer0Init();
-  840   1        printf1("system is overall");
-  841   1        keyallchuli();
-  842   1        flaginit=1;
-  843   1        EPPROMinit();
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 14  
+  813   1        return 0;
+  814   1      }
+  815          void ShowInfoToDiannan()
+  816          {
+  817   1        char out[200]={0};
+  818   1        if(g_dianliu>0)
+  819   1        sprintf(out,"begin;open:%d;",g_dianliu);
+  820   1        else
+  821   1        sprintf(out,"begin;close:%d;",g_dianliu);
+  822   1        if(iserror())
+  823   1          {
+  824   2            strcat(out,"tmp:error;"); 
+  825   2          }
+  826   1          else
+  827   1          {
+  828   2            strcat(out,"tmp:ok;");
+  829   2          }
+  830   1        if(iserror())
+  831   1        {
+  832   2          strcat(out,"Stat:error;");
+  833   2        }
+  834   1        else
+  835   1        {
+  836   2          strcat(out,"Stat:ok;");
+  837   2        }
+  838   1        strcat(out,"end\n");
+  839   1        printtoDianao(out);
+  840   1      }
+  841          void diannaoinputset()
+  842          {
+  843   1        int i;
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 14  
 
-  844   1        setzhione(4,0);
-  845   1        
-  846   1        // test3();
-  847   1        // 没有什么时序时序要求，，指点函数里面做算了。。
-  848   1        // 算了，之前都写成这样了。。不改了。。原有逻辑上面改改就行吧，，
-  849   1        while (1)
+  844   1        if(1==precom2check(rec2))
+  845   1        {
+  846   2          return ;
+  847   2        }
+  848   1        com2jiexi(rec2);
+  849   1        if(VectorIsEmpty(VectorDiannao))
   850   1        {
-  851   2          showled();
-  852   2          keyallchuli();
-  853   2          showpre(g_dianliu);
-  854   2          dealorder();//取缓冲区里面的命令进行发送
-  855   2          diannaocheck();
-  856   2          
+  851   2          printtoDianao("oder format error,pleas check[%s]\n",rec2);
+  852   2          return ;
+  853   2        }
+  854   1        for(i=0;i<10;i++)
+  855   1        {
+  856   2          dealDiannaoOrder(); //com过来的电脑命令解析。。。
   857   2        }
-  858   1      }
-  859          
-  860          void PWM_ISR() interrupt 26
-  861          {
-  862   1        if (PWMA_SR1 & 0X02) // 当捕获中断标志置1
-  863   1        {
-  864   2          cnt_H = PWMA_CCR1H; // 读取计数值高8位
-  865   2          cnt_L = PWMA_CCR1L; // 读取计数值低8位
-  866   2          PWMA_SR1 &= ~0X02;  // 清零捕获中断标志
-  867   2          EC11_Handle();    // 处理EC11数据
-  868   2        }
-  869   1      }
-  870          void PWM_Config() // PWM初始化设置
-  871          {
-  872   1        PWMA_CCER1 = 0x00; // 关闭通道
-  873   1        PWMA_CCMR1 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-  874   1        PWMA_CCMR2 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
-  875   1        PWMA_CCER1 = 0x55; // 使能捕获/比较通道1、通道2
-  876   1      
-  877   1        //  PWMA_SMCR = 0x01;         // 编码器模式 1
-  878   1        //  PWMA_SMCR = 0x02;         // 编码器模式 2
-  879   1        PWMA_SMCR = 0x03; // 编码器模式 3
-  880   1      
-  881   1        PWMA_IER = 0x02;  // 使能中断
-  882   1        PWMA_CR1 |= 0x01; // 使能计数器
-  883   1        PWMA_PS |= 0x04;  // 选择 PWM2_2 通道
-  884   1      }
-  885          
-  886          // 返回变化的步数
-  887          long calculateChange(unsigned int previous, unsigned int current)
-  888          {
-  889   1        long diff = (current - previous + 65536) % 65536;
-*** WARNING C188 IN LINE 889 OF main.c: 'initialization': value truncated
-  890   1        return diff;
+  858   1        ShowInfoToDiannan();
+  859   1      }
+  860          sbit ledgree=P3^5;
+  861          sbit ledgread=P3^6;
+  862          void setledisok(int i)
+  863          {
+  864   1        ledgree=1;
+  865   1        ledgread=1;
+  866   1        if(i==1)
+  867   1        {
+  868   2          ledgree=0;
+  869   2        }
+  870   1        else
+  871   1        {
+  872   2          ledgread=0;
+  873   2        }
+  874   1      }
+  875          void diannaocheck()
+  876          {
+  877   1        int i=0;
+  878   1        if(weizhi2==0)
+  879   1        {
+  880   2          return ;
+  881   2        }
+  882   1        for(i=0;i<5;i++)
+  883   1        {
+  884   2          delay_ms(2);
+  885   2          showpre(g_dianliu);
+  886   2        }
+  887   1        
+  888   1        diannaoinputset();
+  889   1        memset(rec2, 0, sizeof(rec2));
+  890   1        weizhi2 = 0;
   891   1      }
-  892          
-  893          
-  894          char flag3 = 0;
-  895          int timeleft1, timeleft2, timeleft3, timeleft4;
-  896          void chuankou1put(char c)
-  897          {
-  898   1        rec2[weizhi2++] = c;
-  899   1        if (weizhi2 > sizeof(rec2) - 3)
-  900   1          weizhi2 = 0;
-  901   1        // timeleft3 = 3;
-  902   1      }
-  903          void chuankou1time()
-  904          {
-  905   1        if (timeleft3 > 0)
-  906   1        {
-  907   2          timeleft3--;
-  908   2          if (timeleft3 == 0) // 数据一次收完了.
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 15  
+  892          void main(void)
+  893          {
+  894   1        int i=0;
+  895   1        SYS_Ini();    // STC32初始化设置
+  896   1        PWM_Config(); // PWM初始化设置
+  897   1        EA = 1;     // 使能EA总中断
+  898   1      
+  899   1        UartInit();
+  900   1        Uart23Init();
+  901   1        printf1("system is ok");
+  902   1        Timer0Init();
+  903   1        keyallchuli();
+  904   1        flaginit=1;
+  905   1        delay_ms(40);
+  906   1        EPPROMinit();
+  907   1        setzhione(4,0);
+  908   1        systemshowkaiji();
+  909   1        // test3();
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 15  
 
-  909   2          {
-  910   3            flag3 = 1;
-  911   3          }
-  912   2        }
-  913   1      }
-  914          char get1[100];
-  915          int weizhi1=0;
-  916          void chuliguankji(char *get1)
-  917          {
-  918   1          char* index;
-  919   1          index=mystrstr(get1,"@STCISP#");
-  920   1        if(index==0)
-  921   1        {
-  922   2            return  ;
-  923   2        }
-  924   1          IAP_CONTR=0x60;
-  925   1      }
-  926          
-  927          void addgetsetzhi(int i)
-  928          {
-  929   1        int ans;
-  930   1        ans=g_dianliu+i;
-  931   1        if(ans>=0 && ans<=1023)
-  932   1        {
-  933   2          g_dianliu=ans;
-  934   2        }
-  935   1      }
-  936          static int timepush=0;
-  937          void dealorder()
-  938          {
-  939   1        Alltongxininfo get;
-  940   1        if(timepush>45)
-  941   1        {
-  942   2          timepush=0;
-  943   2          pop2(&get);
-  944   2          if(get.weizhi==4)
-  945   2          {
-  946   3            dianliusendtokongzhiban(get.zhi);
-  947   3          }
-  948   2        }
-  949   1      }
-  950          void Timer0() interrupt 1
-  951          {
-  952   1        timereport++;
-  953   1        shurulvbo();
-  954   1        chuankou1time();
-  955   1        if(!empty())
-*** WARNING C140 IN LINE 955 OF main.c: 'empty' undefined; assuming 'extern int empty()'
-  956   1        {
-  957   2          timepush++;
-  958   2        }
-  959   1      }
-  960          void EC11_Handle() // EC11数据处理函数
-  961          {
-  962   1        static unsigned int previous = 0;
-  963   1        unsigned int nowzhi;
-  964   1        long ans;
-  965   1        nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
-  966   1        ans = calculateChange(previous, nowzhi);
-  967   1        previous = nowzhi;
-  968   1        if(flagsetliangdu==1)
-  969   1        {
-  970   2          if (ans == 4)
-  971   2          {
-  972   3            addgetsetzhi(1);
-  973   3          }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 16  
+  910   1        // 没有什么时序时序要求，，指点函数里面做算了。。
+  911   1        // 算了，之前都写成这样了。。不改了。。原有逻辑上面改改就行吧，，
+  912   1        keywendu1=1;
+  913   1        keywendu2=1;
+  914   1        setledisok(0);
+  915   1        memset(rec2,0,sizeof(rec2));
+  916   1        weizhi2=0;
+  917   1        while (1)
+  918   1        {
+  919   2          keyallchuli();
+  920   2          showpre(g_dianliu);
+  921   2          dealorder();//取缓冲区里面的命令进行发送
+  922   2          diannaocheck();
+  923   2          iserror();
+  924   2          if(i++>10000)
+  925   2          {
+  926   3            i=0;
+  927   3            if(flag_error==1)
+  928   3            {
+  929   4              setledisok(0);
+  930   4              ShowInfoToDiannan();
+  931   4              setzhione(4,0);
+  932   4              printf1("system error");
+  933   4            }
+  934   3            else
+  935   3            {
+  936   4              setledisok(1);
+  937   4            }
+  938   3          }
+  939   2        }
+  940   1      }
+  941          
+  942          void PWM_ISR() interrupt 26
+  943          {
+  944   1        if (PWMA_SR1 & 0X02) // 当捕获中断标志置1
+  945   1        {
+  946   2          cnt_H = PWMA_CCR1H; // 读取计数值高8位
+  947   2          cnt_L = PWMA_CCR1L; // 读取计数值低8位
+  948   2          PWMA_SR1 &= ~0X02;  // 清零捕获中断标志
+  949   2          EC11_Handle();    // 处理EC11数据
+  950   2        }
+  951   1      }
+  952          void PWM_Config() // PWM初始化设置
+  953          {
+  954   1        PWMA_CCER1 = 0x00; // 关闭通道
+  955   1        PWMA_CCMR1 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+  956   1        PWMA_CCMR2 = 0xA1; // 通道模式配置为输入，接编码器 , 滤波器 80 时钟
+  957   1        PWMA_CCER1 = 0x55; // 使能捕获/比较通道1、通道2
+  958   1      
+  959   1        //  PWMA_SMCR = 0x01;         // 编码器模式 1
+  960   1        //  PWMA_SMCR = 0x02;         // 编码器模式 2
+  961   1        PWMA_SMCR = 0x03; // 编码器模式 3
+  962   1      
+  963   1        PWMA_IER = 0x02;  // 使能中断
+  964   1        PWMA_CR1 |= 0x01; // 使能计数器
+  965   1        PWMA_PS |= 0x04;  // 选择 PWM2_2 通道
+  966   1      }
+  967          
+  968          // 返回变化的步数
+  969          long calculateChange(unsigned int previous, unsigned int current)
+  970          {
+  971   1        long diff = (current - previous + 65536) % 65536;
+*** WARNING C188 IN LINE 971 OF main.c: 'initialization': value truncated
+  972   1        return diff;
+  973   1      }
+  974          
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 16  
 
-  974   2          else
-  975   2          {
-  976   3            addgetsetzhi(-1);
-  977   3          }
-  978   2          // 设定电流值。。。
-  979   2          setzhione(4,g_dianliu);
-  980   2          // setzhione(2,1);//开灯。。
-  981   2        }
-  982   1        
-  983   1      }
-  984          
-  985          int step=0;
-  986          void showstep(const char *s)
-  987          {
-  988   1        printf1("%s\n",s);
-  989   1      }
-  990          char* my_strstr(const char* haystack, const char* needle) {
-  991   1          if (*needle == '\0') {
-  992   2              return (char*) haystack;
-  993   2          }
-  994   1      
-  995   1          while (*haystack != '\0') {
-  996   2              const char* h = haystack;
-  997   2              const char* n = needle;
-  998   2      
-  999   2              while (*h == *n && *n != '\0') {
- 1000   3                  h++;
- 1001   3                  n++;
- 1002   3              }
- 1003   2      
- 1004   2              if (*n == '\0') {
- 1005   3                  return (char*) haystack;
- 1006   3              }
- 1007   2      
- 1008   2              haystack++;
- 1009   2          }
- 1010   1      
- 1011   1          return NULL;
- 1012   1      }
- 1013          
- 1014          void dealchuankou()
- 1015          {
- 1016   1      
+  975          
+  976          char flag3 = 0;
+  977          int timeleft1, timeleft2, timeleft3, timeleft4;
+  978          void chuankou1put(char c)
+  979          {
+  980   1        rec2[weizhi2++] = c;
+  981   1        if (weizhi2 > sizeof(rec2) - 3)
+  982   1          weizhi2 = 0;
+  983   1        // timeleft3 = 3;
+  984   1      }
+  985          void chuankou1time()
+  986          {
+  987   1        if (timeleft3 > 0)
+  988   1        {
+  989   2          timeleft3--;
+  990   2          if (timeleft3 == 0) // 数据一次收完了.
+  991   2          {
+  992   3            flag3 = 1;
+  993   3          }
+  994   2        }
+  995   1      }
+  996          char get1[100];
+  997          int weizhi1=0;
+  998          void chuliguankji(char *get1)
+  999          {
+ 1000   1          char* index;
+ 1001   1          index=mystrstr(get1,"@STCISP#");
+ 1002   1        if(index==0)
+ 1003   1        {
+ 1004   2            return  ;
+ 1005   2        }
+ 1006   1          IAP_CONTR=0x60;
+ 1007   1      }
+ 1008          
+ 1009          void addgetsetzhi(int i)
+ 1010          {
+ 1011   1        int ans;
+ 1012   1        ans=g_dianliu+i;
+ 1013   1        if(ans>=0 && ans<=1023)
+ 1014   1        {
+ 1015   2          g_dianliu=ans;
+ 1016   2        }
  1017   1      }
- 1018          
- 1019          void UARTInterrupt(void) interrupt 4
+ 1018          static int timepush=0;
+ 1019          void dealorder()
  1020          {
- 1021   1        unsigned char ans;
- 1022   1        if (RI)
+ 1021   1        Alltongxininfo get;
+ 1022   1        if(timepush>45)
  1023   1        {
- 1024   2          RI = 0;
- 1025   2          ans = SBUF;
- 1026   2          get1[weizhi1++]=ans;
- 1027   2          if(weizhi1>80)
- 1028   2          {
- 1029   3            weizhi1=0;
- 1030   3          }
- 1031   2          chuliguankji(get1);
- 1032   2          chuankou1put(ans);
- 1033   2        }
- 1034   1        else
- 1035   1        {
- 1036   2          TI = 0;
- 1037   2        }
- 1038   1        if (TI) // 发送中断..
- 1039   1        {
-C251 COMPILER V5.60.0,  main                                                               06/08/23  15:41:02  PAGE 17  
+ 1024   2          timepush=0;
+ 1025   2          pop2(&get);
+ 1026   2          if(get.weizhi==4)
+ 1027   2          {
+ 1028   3            dianliusendtokongzhiban(get.zhi);
+ 1029   3          }
+ 1030   2        }
+ 1031   1      }
+ 1032          void Timer0() interrupt 1
+ 1033          {
+ 1034   1        timereport++;
+ 1035   1        shurulvbo();
+ 1036   1        chuankou1time();
+ 1037   1        if(!empty())
+*** WARNING C140 IN LINE 1037 OF main.c: 'empty' undefined; assuming 'extern int empty()'
+ 1038   1        {
+ 1039   2          timepush++;
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 17  
 
- 1040   2          TI = 0;
- 1041   2        }
- 1042   1      }
- 1043          void Uart3() interrupt 17 using 1
- 1044          {
- 1045   1        char temp3; 
- 1046   1          if (S3CON & S3RI)
- 1047   1          {
- 1048   2              S3CON &= ~S3RI; //??S3RI?
- 1049   2          temp3 = S3BUF;
- 1050   2          }
- 1051   1          if (S3CON & S3TI)
- 1052   1          {
- 1053   2              S3CON &= ~S3TI; // 清除S3TI位
- 1054   2              busy3 = 0;      // 清忙标志
- 1055   2          }
- 1056   1      }
- 1057          
- 1058          // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16
+ 1040   2        }
+ 1041   1      }
+ 1042          void EC11_Handle() // EC11数据处理函数
+ 1043          {
+ 1044   1        static unsigned int previous = 0;
+ 1045   1        unsigned int nowzhi;
+ 1046   1        long ans;
+ 1047   1        nowzhi = cnt_H * 256 + cnt_L; // 读取当前计数值
+ 1048   1        ans = calculateChange(previous, nowzhi);
+ 1049   1        previous = nowzhi;
+ 1050   1        if(flagsetliangdu==1)
+ 1051   1        {
+ 1052   2          if (ans == 4)
+ 1053   2          {
+ 1054   3            addgetsetzhi(1);
+ 1055   3          }
+ 1056   2          else
+ 1057   2          {
+ 1058   3            addgetsetzhi(-1);
+ 1059   3          }
+ 1060   2          // 设定电流值。。。
+ 1061   2          setzhione(4,g_dianliu);
+ 1062   2          // setzhione(2,1);//开灯。。
+ 1063   2        }
+ 1064   1        
+ 1065   1      }
+ 1066          
+ 1067          int step=0;
+ 1068          void showstep(const char *s)
+ 1069          {
+ 1070   1        printf1("%s\n",s);
+ 1071   1      }
+ 1072          char* my_strstr(const char* haystack, const char* needle) {
+ 1073   1          if (*needle == '\0') {
+ 1074   2              return (char*) haystack;
+ 1075   2          }
+ 1076   1      
+ 1077   1          while (*haystack != '\0') {
+ 1078   2              const char* h = haystack;
+ 1079   2              const char* n = needle;
+ 1080   2      
+ 1081   2              while (*h == *n && *n != '\0') {
+ 1082   3                  h++;
+ 1083   3                  n++;
+ 1084   3              }
+ 1085   2      
+ 1086   2              if (*n == '\0') {
+ 1087   3                  return (char*) haystack;
+ 1088   3              }
+ 1089   2      
+ 1090   2              haystack++;
+ 1091   2          }
+ 1092   1      
+ 1093   1          return NULL;
+ 1094   1      }
+ 1095          
+ 1096          void dealchuankou()
+ 1097          {
+ 1098   1      
+ 1099   1      }
+ 1100          
+ 1101          void UARTInterrupt(void) interrupt 4
+ 1102          {
+ 1103   1        unsigned char ans;
+ 1104   1        if (RI)
+ 1105   1        {
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 18  
+
+ 1106   2          RI = 0;
+ 1107   2          ans = SBUF;
+ 1108   2          get1[weizhi1++]=ans;
+ 1109   2          if(weizhi1>80)
+ 1110   2          {
+ 1111   3            weizhi1=0;
+ 1112   3          }
+ 1113   2          chuliguankji(get1);
+ 1114   2        }
+ 1115   1        else
+ 1116   1        {
+ 1117   2          TI = 0;
+ 1118   2        }
+ 1119   1        if (TI) // 发送中断..
+ 1120   1        {
+ 1121   2          TI = 0;
+ 1122   2        }
+ 1123   1      }
+ 1124          void Uart3() interrupt 17 using 1
+ 1125          {
+ 1126   1        char temp3; 
+ 1127   1          if (S3CON & S3RI)
+ 1128   1          {
+ 1129   2              S3CON &= ~S3RI; //??S3RI?
+ 1130   2          temp3 = S3BUF;
+ 1131   2          }
+ 1132   1          if (S3CON & S3TI)
+ 1133   1          {
+ 1134   2              S3CON &= ~S3TI; // 清除S3TI位
+ 1135   2              busy3 = 0;      // 清忙标志
+ 1136   2          }
+ 1137   1      }
+ 1138          void uart2(void) interrupt 8
+ 1139          {
+ 1140   1        char ans;
+ 1141   1        if (S2CON & S2RI)
+ 1142   1        {
+ 1143   2          S2CON &= ~S2RI;
+ 1144   2          ans = S2BUF;
+ 1145   2          chuankou1put(ans);
+ 1146   2        }
+ 1147   1        if (S2CON & S2TI)
+ 1148   1        {
+ 1149   2          // y1=0;
+ 1150   2          S2CON &= ~S2TI; // 清除S2TI位
+ 1151   2          busy2 = 0;    // 清忙标志
+ 1152   2        }
+ 1153   1      }
+ 1154          
+ 1155          // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16
 
 
 Module Information          Static   Overlayable
 ------------------------------------------------
-  code size            =      4150     ------
+  code size            =      4563     ------
   ecode size           =    ------     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
-  xdata size           =      1067       2285
+  xdata size           =       769       2485
   xdata-const size     =    ------     ------
   edata size           =    ------     ------
   bit size             =    ------     ------
@@ -1124,9 +1223,11 @@ Module Information          Static   Overlayable
   bitaddressable size  =    ------     ------
   ebitaddressable size =    ------     ------
   far data size        =    ------     ------
+C251 COMPILER V5.60.0,  main                                                               06/08/23  16:55:49  PAGE 19  
+
   huge data size       =    ------     ------
   const size           =    ------     ------
-  hconst size          =      2838     ------
+  hconst size          =      3372     ------
 End of Module Information.
 
 

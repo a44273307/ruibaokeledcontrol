@@ -72,6 +72,7 @@ void UartInit(void)		//115200@24.000MHz
 	//	ES=0;//关闭串口0中断
 	EA=1;
 }
+#define  UART2_SW(Pin)				P_SW2 = (P_SW2 & 0xFE) | (Pin)
 void Uart23Init(void)		//115200@24.000MHz
 {
 	S3CON = 0x10;		//8位数据,可变波特率
@@ -81,10 +82,11 @@ void Uart23Init(void)		//115200@24.000MHz
 	T2L = 0xCC;			//设置定时初始值
 	T2H = 0xFF;			//设置定时初始值
 	AUXR |= 0x10;		//启动定时器2
-	// IE2 |= 0x01;                 //使能串口2中断
+	IE2 |= 0x01;                 //使能串口2中断
 	IE2 |= 0x08;                 //使能串口3中断
 	EA=1;
 	S3_S=1;
+	UART2_SW(1);
 	// P_SW2 = (P_SW2 & ~2) | (0 & 0x02);	//切换IO
 	//	//IE2&=0xFE关闭串口2
 //	IE2&=0xF7;	//关闭串口3

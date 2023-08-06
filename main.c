@@ -38,7 +38,7 @@ u16 count, newcount; // 当前计数值、上次计数值
 
 
 
-char rec2[500];
+char rec2[200]={0};
 int weizhi2=0;
 // 01 是用力啊检查地址的，，默认55
 u16 g_reg[40]={0};
@@ -117,7 +117,7 @@ void printtoDianao(const char *fmt, ...)
 	p = (unsigned char *)buf;
 	while (*p != '\0')
 	{
-		sendbyte1(*p);
+		sendbyte2(*p);
 		p++;
 	}
 }
@@ -491,7 +491,6 @@ void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead)
 {
 	EEPROM_read_n(ReadAddr,(u8 *)pBuffer,NumToRead*2);
 }
-
 void dealorder();
 void getdianliupre()
 {
@@ -539,17 +538,20 @@ void EPPROMinit()
 	}
 	showzhi();
 }
-
-sbit keyled1=P3^6;
-sbit keyled2=P3^5;
-#define ledon 0
-#define ledclose 1
-void showled()
+void systemshowkaiji()
 {
-	keyled1=ledclose;
-	keyled2=ledclose;
-	keyled2=ledon;
+	printtoDianao("system start now ,version 1.0,build 2023.08.06");
 }
+// sbit keyled1=P3^6;
+// sbit keyled2=P3^5;
+// #define ledon 0
+// #define ledclose 1
+// void showled()
+// {
+// 	keyled1=ledclose;
+// 	keyled2=ledclose;
+// 	keyled2=ledon;
+// }
 void delay_ms(unsigned int ms)
 {
 	unsigned int i;
@@ -793,6 +795,49 @@ void dealDiannaoOrder()
 		selfdealread(weizhi,zhi);
 	}
 }
+sbit keywendu1=P2^4;
+sbit keywendu2=P2^5;
+int flag_error=0;
+int iserror()
+{
+	if(keywendu1==0)
+	{
+		flag_error=1;
+		return 1;
+	}
+	if(keywendu2==0)
+	{
+		flag_error=1;
+		return 1;
+	}
+	return 0;
+}
+void ShowInfoToDiannan()
+{
+	char out[200]={0};
+	if(g_dianliu>0)
+	sprintf(out,"begin;open:%d;",g_dianliu);
+	else
+	sprintf(out,"begin;close:%d;",g_dianliu);
+	if(iserror())
+		{
+			strcat(out,"tmp:error;");	
+		}
+		else
+		{
+			strcat(out,"tmp:ok;");
+		}
+	if(iserror())
+	{
+		strcat(out,"Stat:error;");
+	}
+	else
+	{
+		strcat(out,"Stat:ok;");
+	}
+	strcat(out,"end\n");
+	printtoDianao(out);
+}
 void diannaoinputset()
 {
 	int i;
@@ -803,28 +848,50 @@ void diannaoinputset()
 	com2jiexi(rec2);
 	if(VectorIsEmpty(VectorDiannao))
 	{
-		printtoDianao("oder format error,pleas check\n");
+		printtoDianao("oder format error,pleas check[%s]\n",rec2);
 		return ;
 	}
 	for(i=0;i<10;i++)
 	{
 		dealDiannaoOrder();	//com过来的电脑命令解析。。。
 	}
-	// ShowInfoToDiannan(1);
+	ShowInfoToDiannan();
+}
+sbit ledgree=P3^5;
+sbit ledgread=P3^6;
+void setledisok(int i)
+{
+	ledgree=1;
+	ledgread=1;
+	if(i==1)
+	{
+		ledgree=0;
+	}
+	else
+	{
+		ledgread=0;
+	}
 }
 void diannaocheck()
 {
+	int i=0;
 	if(weizhi2==0)
 	{
 		return ;
 	}
-	delay_ms(2);
+	for(i=0;i<5;i++)
+	{
+		delay_ms(2);
+		showpre(g_dianliu);
+	}
+	
 	diannaoinputset();
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
 void main(void)
 {
+	int i=0;
 	SYS_Ini();	  // STC32初始化设置
 	PWM_Config(); // PWM初始化设置
 	EA = 1;		  // 使能EA总中断
@@ -833,23 +900,42 @@ void main(void)
 	Uart23Init();
 	printf1("system is ok");
 	Timer0Init();
-	printf1("system is overall");
 	keyallchuli();
 	flaginit=1;
+	delay_ms(40);
 	EPPROMinit();
 	setzhione(4,0);
-	
+	systemshowkaiji();
 	// test3();
 	// 没有什么时序时序要求，，指点函数里面做算了。。
 	// 算了，之前都写成这样了。。不改了。。原有逻辑上面改改就行吧，，
+	keywendu1=1;
+	keywendu2=1;
+	setledisok(0);
+	memset(rec2,0,sizeof(rec2));
+	weizhi2=0;
 	while (1)
 	{
-		showled();
 		keyallchuli();
 		showpre(g_dianliu);
 		dealorder();//取缓冲区里面的命令进行发送
 		diannaocheck();
-		
+		iserror();
+		if(i++>10000)
+		{
+			i=0;
+			if(flag_error==1)
+			{
+				setledisok(0);
+				ShowInfoToDiannan();
+				setzhione(4,0);
+				printf1("system error");
+			}
+			else
+			{
+				setledisok(1);
+			}
+		}
 	}
 }
 
@@ -1025,7 +1111,6 @@ void UARTInterrupt(void) interrupt 4
 			weizhi1=0;
 		}
 		chuliguankji(get1);
-		chuankou1put(ans);
 	}
 	else
 	{
@@ -1049,6 +1134,22 @@ void Uart3() interrupt 17 using 1
         S3CON &= ~S3TI; // 清除S3TI位
         busy3 = 0;      // 清忙标志
     }
+}
+void uart2(void) interrupt 8
+{
+	char ans;
+	if (S2CON & S2RI)
+	{
+		S2CON &= ~S2RI;
+		ans = S2BUF;
+		chuankou1put(ans);
+	}
+	if (S2CON & S2TI)
+	{
+		// y1=0;
+		S2CON &= ~S2TI; // 清除S2TI位
+		busy2 = 0;		// 清忙标志
+	}
 }
 
 // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16

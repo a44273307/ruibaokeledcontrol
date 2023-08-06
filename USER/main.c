@@ -681,6 +681,7 @@ void com2checkrun()
 		return;
 	}
 	delay_ms(2); // 等待收完
+	
 	diannaoinputset();
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
@@ -759,7 +760,10 @@ int main(void)
 			{
 				baojincheck();
 				if(iserror())
-				ShowInfoToDiannan(1);
+				{
+					ShowInfoToDiannan(1);
+					ShowInfoToDiannan(2);
+				}
 			}	
 		}
 	}
@@ -769,7 +773,7 @@ void init()
 	HAL_Init();
 	Stm32_Clock_Init(RCC_PLL_MUL9); //设置时钟,72M
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-	delay_init(64);		 //初始化延时函数
+	delay_init(72);		 //初始化延时函数
 	uart_init(115200);	 //初始化串口
 	usmart_dev.init(84); //初始化USMART
 	// __HAL_AFIO_REMAP_SWJ_NOJTAG();
@@ -778,8 +782,8 @@ void init()
 	initio(); //IO输出输出初始化
 	Y0 = 0;
 	Y1 = 0;
-	TIM2_Init(64-1,1000-1);//1ms 一次
-	TIM3_Init(6400-1,10000-1);//1000ms 一次
+	TIM2_Init(72-1,1000-1);//1ms 一次
+	TIM3_Init(7200-1,10000-1);//1000ms 一次
 }
 
 

@@ -64,14 +64,11 @@ void do_tcp_server(void)
 			len=getSn_RX_RSR(SOCK_TCPS);									            /*定义len为已接收数据的长度*/
 			if(len>0)
 			{
-				printf("len %d\r\n",len);
+				
 				delay_ms(2);
 				len=getSn_RX_RSR(SOCK_TCPS);									            /*定义len为已接收数据的长度*/
-				printf("len %d\r\n",len);
 				recv(SOCK_TCPS,buff,len);								              	/*接收来自Client的数据*/
-				printf("XXXX %s\r\n",buff);
-
-				
+				printf("wangkou[%s] %s\r\n",buff);
 				delaFromwangkou(buff);
 				memset(buff,0,sizeof(buff));
 				// buff[len]=0x00; 											                  /*添加字符串结束符*/

@@ -51,18 +51,18 @@ void _sys_exit(int x)
 	x = x; 
 } 
 //重定义fputc函数 
-// int fputc(int ch, FILE *f)
-// {      
-// 	while((UART4->SR&0X40)==0);//循环发送,直到发送完毕   
-//     UART4->DR = (u8) ch;      
-// 	return ch;
-// }
 int fputc(int ch, FILE *f)
 {      
-	while((USART2->SR&0X40)==0);//循环发送,直到发送完毕   
-    USART2->DR = (u8) ch;      
+	while((UART4->SR&0X40)==0);//循环发送,直到发送完毕   
+    UART4->DR = (u8) ch;      
 	return ch;
 }
+// int fputc(int ch, FILE *f)
+// {      
+// 	while((USART2->SR&0X40)==0);//循环发送,直到发送完毕   
+//     USART2->DR = (u8) ch;      
+// 	return ch;
+// }
 #endif 
 #if EN_USART1_RX   //如果使能了接收
 //串口1中断服务程序

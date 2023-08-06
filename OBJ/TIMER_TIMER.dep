@@ -1,5 +1,5 @@
 Dependencies for Project 'TIMER', Target 'TIMER': (DO NOT MODIFY !)
-F (.\main.c)(0x64CF295F)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\main.o --depend ..\obj\main.d)
+F (.\main.c)(0x64CF2BB6)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\main.o --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x5A7C4EC5)
 I (..\USER\stm32f1xx.h)(0x571DE09C)
 I (..\USER\stm32f103xe.h)(0x571DE09C)
@@ -1346,7 +1346,7 @@ I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd.h)(0x571E2CF8)
 I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_ll_usb.h)(0x571E2CF8)
 I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_pcd_ex.h)(0x571E2CF8)
 I (..\HALLIB\STM32F1xx_HAL_Driver\Inc\stm32f1xx_hal_hcd.h)(0x571E2CF8)
-F (..\SYSTEM\sys\sys.c)(0x64CA4DA8)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\sys.o --depend ..\obj\sys.d)
+F (..\SYSTEM\sys\sys.c)(0x64CF2A28)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\sys.o --depend ..\obj\sys.d)
 I (..\SYSTEM\sys\sys.h)(0x5A7C4EC5)
 I (..\USER\stm32f1xx.h)(0x571DE09C)
 I (..\USER\stm32f103xe.h)(0x571DE09C)
@@ -1527,7 +1527,7 @@ I (..\USER\socket.h)(0x64CE4D56)
 I (..\USER\dhcp.h)(0x56FE0EAD)
 I (..\USER\utility.h)(0x64CE4D56)
 I (..\USER\w5500_conf.h)(0x64CF135A)
-F (..\SYSTEM\Ethernet\Internet\tcp_demo.c)(0x64CF285E)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\tcp_demo.o --depend ..\obj\tcp_demo.d)
+F (..\SYSTEM\Ethernet\Internet\tcp_demo.c)(0x64CF2AF5)(-c --cpu Cortex-M3 -g -W -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\OBJ -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32F1xx_HAL_Driver\Inc -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\USMART -I ..\USER-I.\RTE\_TIMER-ID:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-ID:\Keil_v5\ARM\CMSIS\Include-D__UVISION_VERSION="523" -DSTM32F10X_HD -DUSE_HAL_DRIVER -DSTM32F103xE-o ..\obj\tcp_demo.o --depend ..\obj\tcp_demo.d)
 I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
 I (D:\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
 I (..\USER\tcp_demo.h)(0x64CE4D95)

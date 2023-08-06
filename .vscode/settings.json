@@ -4,6 +4,7 @@
         "max7219.h": "c",
         "tongxin.h": "c",
         "tongxin2.h": "c",
-        "func.h": "c"
+        "func.h": "c",
+        "stc32g_eeprom.h": "c"
     }
 }

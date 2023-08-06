@@ -36,6 +36,14 @@ u8 cnt_H, cnt_L;	 // 计数值高8位、低8位
 u16 count, newcount; // 当前计数值、上次计数值
 					 // 亮度计数值
 
+
+
+char rec2[500];
+int weizhi2=0;
+
+
+// 最后下去到板子的要乘以2，，最后的计算值。。
+
 int bili=2;
 void SYS_Ini() // STC32初始化设置
 {
@@ -89,6 +97,25 @@ void printf1(const char *fmt, ...)
 		p++;
 	}
 }
+
+// 定义printf函数
+void print2(const char *fmt, ...)
+{
+	char *p;
+	char buf[400]={0}; // 定义一个缓冲区，足够存储输出的字符串
+	va_list args;
+	va_start(args, fmt);
+	vsprintf(buf, fmt, args); // 将格式化的字符串写入缓冲区
+	va_end(args);
+	p = (unsigned char *)buf;
+	while (*p != '\0')
+	{
+		sendbyte1(*p);
+		p++;
+	}
+}
+
+
 // 定义printf函数
 void printf3(const char *fmt, ...)
 {
@@ -185,7 +212,7 @@ void testmain()
 }
 
 
-void dealchuankou();
+
 int gsetzhi = 600;
 
 
@@ -282,33 +309,7 @@ void jixi3(char* input)
 	}
 	showgetzhi();
 }
-// 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
-void jixi2(char* input)
-{
-	char *p=input;
-	char *p1;
-	int i;
-	unsigned int weizhi;
-	unsigned int zhi;
-	//1234-2234;333-4;end
-	for( i=0;i<100;i++)
-	{
-		p1=myaddstrstr(p,";"); //找有没有下一个的
-		if(p1==NULL)
-		{
-			break;
-		}
-		weizhi = atoi(p);
-		p=myaddstrstr(p,"-");
-		zhi = atoi(p);
-		if(weizhi<MAXgetzhi)
-		getzhi[weizhi]=zhi;
-		p=myaddstrstr(p,";");  //指向下一个后面
-		printf1("get set%d-%d",weizhi,zhi);
-		push2(weizhi,zhi);
-		
-	}
-}
+
 int flaginit=0;
 void setzhione(int dizhi,int zhi)
 {
@@ -317,20 +318,6 @@ void setzhione(int dizhi,int zhi)
 		return ;
 	}
 	push(dizhi,zhi);
-}
-void jiexi(char* input)
-{
-	char par[500]={0};
-	char *begin,end;
-	begin=myaddstrstr(input,"set:");
-	// printf1("input begin%s",begin);
-	end=myaddstrstr(begin,"end");
-	// printf1("input end%s",end);
-	if(begin!=NULL && end!=NULL)
-	{
-		strcpy(par,begin);
-		jixi2(par);
-	}
 }
 
 
@@ -431,7 +418,6 @@ char flagsetliangdu=0;
 void writebuf();
 void keydown(int i) // 按键按下的处理、、、
 {
-	
 	printf1("keydown %d",i);
 	if(i==0)
 		setzhione(4,gsetzhi);
@@ -490,35 +476,6 @@ void getdianliupre()
 }
 int timereport=0;
 
-void init2test()
-{
-	Alltongxininfo2 get={0};
-	printf1("read begin");
-	while (1)
-	{
-		if(timereport%1000==0)
-		{
-			printf1("read[%d].....",timereport);
-		}
-		if(timereport>3000)
-		{
-			printf1("read failed");
-			break;
-		}
-		pop22(&get);
-		if(get.weizhi==4)
-		{
-			get.zhi=get.zhi/2;
-			gsetzhi=get.zhi;
-			printf1("read over %d ",gsetzhi);
-			break;
-		}
-		dealorder();//取缓冲区里面的命令进行发送
-		showpre(gsetzhi);
-		dealchuankou();//解析上来的串口命令。
-	}
-	
-}
 int errpromdizhi=0x000040;
 void writebuf()
 {
@@ -567,20 +524,132 @@ void showled()
 	keyled2=ledclose;
 	keyled2=ledon;
 }
-// void test3()
-// {
-// 	int i;
-// 	for(i=0;i<1023;i=i+100)
-// 	{
-// 		gsetzhi=i;
-		
-// 		writebuf();
-// 		readbuf();
-// 	}
-// }
-void main(void)
+void delay_ms(int weizhi)
 {
 
+}
+void fuwei()
+{
+	IAP_CONTR=0x60;
+}
+
+int com2jixi2(char* input)
+{
+	char flagTrue=0;
+	char *p=input;
+	char *p1;
+	int i;
+	int weizhi;
+	int zhi;
+	int bakweizhi;
+	int bakzhi;
+	for( i=0;i<100;i++)
+	{
+		p1=myaddstrstr(p,";"); //找有没有下一个的
+		if(p1==NULL)
+		{
+			break;
+		}
+		weizhi = atoi(p);
+		p=myaddstrstr(p,"-");
+		zhi = atoi(p);
+        if(i%2==0)
+        {
+            bakweizhi=weizhi;
+            bakzhi=zhi;
+        }
+        if(i%2==1)
+        {
+            if(weizhi==bakweizhi && bakzhi==zhi)
+            {
+                VectorPush(VectorDiannao,weizhi,zhi);
+				flagTrue=1;
+            }
+            else
+            {
+				flagTrue=0;
+                printf("get failed");
+            }
+        }
+		p=myaddstrstr(p,";");  //指向下一个后面
+	}
+	return flagTrue;
+}
+
+int  com2jiexi(char* input)
+{
+	char par[1000]={0};
+	char *begin,*end;
+	begin=myaddstrstr(input,"set:");
+	end=myaddstrstr(begin,"end");
+	if(begin!=NULL && end!=NULL)
+	{
+		strcpy(par,begin);
+		return com2jixi2(par);
+	}
+	return 0;
+}
+
+
+int flag_canset=0;
+int precom2check(char *input)
+{
+	char *p;
+	p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
+	if(p!=NULL)
+	{
+		print2("passwd checkpass,you can set now\n");
+		print2("\n");
+		print2("初始电流值 20\n");
+		print2("已使用寿命 21\n");
+		print2("总寿命 22\n");
+		print2("最大电流值 23\n");
+		print2("使用方式 set:20-601;20-601;end\n");
+		flag_canset=1;
+		return 1;
+	}
+	p=mystrstr(input,"fuwei()"); //找有没有下一个的)
+	if(p!=NULL)
+	{
+		fuwei();
+	}
+	return 0;
+}
+
+void dealDiannaoOrder()
+{
+
+}
+void diannaoinputset()
+{
+	int i;
+	if(1==precom2check(rec2))
+	{
+		return ;
+	}
+	if(VectorIsEmpty(VectorDiannao))
+	{
+		print2("oder format error,pleas check\n");
+		return ;
+	}
+	for(i=0;i<10;i++)
+	{
+		dealDiannaoOrder();	//com过来的电脑命令解析。。。
+	}
+	// ShowInfoToDiannan(1);
+}
+void diannaocheck()
+{
+	if(weizhi2==0)
+	{
+		return ;
+	}
+	delay_ms(2);
+	memset(rec2, 0, sizeof(rec2));
+	weizhi2 = 0;
+}
+void main(void)
+{
 	SYS_Ini();	  // STC32初始化设置
 	PWM_Config(); // PWM初始化设置
 	EA = 1;		  // 使能EA总中断
@@ -596,13 +665,15 @@ void main(void)
 	setzhione(4,0);
 	// test3();
 	readbuf();
+	// 没有什么时序时序要求，，指点函数里面做算了。。
+	// 算了，之前都写成这样了。。不改了。。原有逻辑上面改改就行吧，，
 	while (1)
 	{
 		showled();
 		keyallchuli();
 		showpre(gsetzhi);
 		dealorder();//取缓冲区里面的命令进行发送
-		dealchuankou();//解析上来的串口命令。
+		
 	}
 }
 
@@ -639,16 +710,15 @@ long calculateChange(unsigned int previous, unsigned int current)
 	return diff;
 }
 
-char buf3[500];
+
 char flag3 = 0;
-int weishu3;
 int timeleft1, timeleft2, timeleft3, timeleft4;
 void chuankou1put(char c)
 {
-	buf3[weishu3++] = c;
-	if (weishu3 > sizeof(buf3) - 3)
-		weishu3 = 0;
-	timeleft3 = 3;
+	rec2[weizhi2++] = c;
+	if (weizhi2 > sizeof(rec2) - 3)
+		weizhi2 = 0;
+	// timeleft3 = 3;
 }
 void chuankou1time()
 {
@@ -663,7 +733,7 @@ void chuankou1time()
 }
 char get1[100];
 int weizhi1=0;
-void chuliguankji()
+void chuliguankji(char *get1)
 {
     char* index;
     index=mystrstr(get1,"@STCISP#");
@@ -673,30 +743,7 @@ void chuliguankji()
 	}
     IAP_CONTR=0x60;
 }
-void UARTInterrupt(void) interrupt 4
-{
-	unsigned char ans;
-	if (RI)
-	{
-		RI = 0;
-		ans = SBUF;
-		get1[weizhi1++]=ans;
-		if(weizhi1>80)
-		{
-			weizhi1=0;
-		}
-		chuliguankji();
-		// IAP_CONTR=0x60;
-	}
-	else
-	{
-		TI = 0;
-	}
-	if (TI) // 发送中断..
-	{
-		TI = 0;
-	}
-}
+
 void addgetsetzhi(int i)
 {
 	int ans;
@@ -721,6 +768,7 @@ void dealorder()
 		}
 		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
 		printf3(out);
+		printf(out);
 	}
 }
 void Timer0() interrupt 1
@@ -789,16 +837,33 @@ char* my_strstr(const char* haystack, const char* needle) {
 
 void dealchuankou()
 {
-	if (flag3 == 1)
-	{
-		flag3 = 0;
-		jiexi(buf3);
-		memset(buf3, 0, sizeof(buf3));
-		weishu3 = 0;
-	}
+
 }
 
-
+void UARTInterrupt(void) interrupt 4
+{
+	unsigned char ans;
+	if (RI)
+	{
+		RI = 0;
+		ans = SBUF;
+		get1[weizhi1++]=ans;
+		if(weizhi1>80)
+		{
+			weizhi1=0;
+		}
+		chuliguankji(get1);
+		chuankou1put(ans);
+	}
+	else
+	{
+		TI = 0;
+	}
+	if (TI) // 发送中断..
+	{
+		TI = 0;
+	}
+}
 void Uart3() interrupt 17 using 1
 {
 	char temp3; 
@@ -806,8 +871,6 @@ void Uart3() interrupt 17 using 1
     {
         S3CON &= ~S3RI; //??S3RI?
 		temp3 = S3BUF;
-		chuankou1put(temp3);
-        // chuankou3put(temp3);
     }
     if (S3CON & S3TI)
     {
@@ -815,4 +878,5 @@ void Uart3() interrupt 17 using 1
         busy3 = 0;      // 清忙标志
     }
 }
+
 // 写个函数，传入两个非负数，计算是前进还是后退了，变化规律 15,16,0,1,2...15,16

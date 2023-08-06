@@ -40,6 +40,13 @@ u16 count, newcount; // 当前计数值、上次计数值
 
 char rec2[500];
 int weizhi2=0;
+// 01 是用力啊检查地址的，，默认55
+u16 g_reg[40]={0};
+#define indexAdddianliu 20
+#define indexTImeuse 21
+#define indexTImeAll 22
+#define indexMAXdianliu 23
+
 
 
 // 最后下去到板子的要乘以2，，最后的计算值。。
@@ -99,7 +106,7 @@ void printf1(const char *fmt, ...)
 }
 
 // 定义printf函数
-void print2(const char *fmt, ...)
+void printtoDianao(const char *fmt, ...)
 {
 	char *p;
 	char buf[400]={0}; // 定义一个缓冲区，足够存储输出的字符串
@@ -116,8 +123,10 @@ void print2(const char *fmt, ...)
 }
 
 
+
+
 // 定义printf函数
-void printf3(const char *fmt, ...)
+void printfTopingmu(const char *fmt, ...)
 {
 	char *p;
 	char buf[128]; // 定义一个缓冲区，足够存储输出的字符串
@@ -133,6 +142,7 @@ void printf3(const char *fmt, ...)
 		p++;
 	}
 }
+
 char code duanzhi[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71, 0x76, 0x00, 0x40, 0xff};
 
 sbit led4 = P4 ^ 3;
@@ -213,7 +223,7 @@ void testmain()
 
 
 
-int gsetzhi = 600;
+int g_dianliu = 600;
 
 
 
@@ -337,9 +347,9 @@ void setdianliusettime(int zhi)
 }
 void changedainliuzhi()
 {
-	if(setprezhi!=gsetzhi)
+	if(setprezhi!=g_dianliu)
 	{
-		setprezhi=gsetzhi;
+		setprezhi=g_dianliu;
 		setdianliusettime(250);
 	}
 }
@@ -420,16 +430,12 @@ void keydown(int i) // 按键按下的处理、、、
 {
 	printf1("keydown %d",i);
 	if(i==0)
-		setzhione(4,gsetzhi);
+		setzhione(4,g_dianliu);
 	if(i==1)
 	{
-		// if(flagsetliangdu==0)//不能设置值。。变成设置
-		// {
-
-		// }
 		if(flagsetliangdu==1)//保存记录的值
 		{
-			printf1("flagsetliangdusetzhi %d",gsetzhi);
+			printf1("flagsetliangdusetzhi %d",g_dianliu);
 			writebuf();		
 		}
 		flagsetliangdu=1-flagsetliangdu;
@@ -469,6 +475,23 @@ void keyallchuli()
 		}
 	}
 }
+
+int FLASH_SAVE_ADDR=0x000040; 
+void STMFLASH_Write(u8 WriteAddr,u16 *pBuffer,u16 NumToWrite)	
+{
+	EEPROM_SectorErase(WriteAddr);
+	EEPROM_write_n(WriteAddr,(u8 *)pBuffer,NumToWrite*2);
+}
+void EPPROMwrite()
+{
+	g_reg[0]=0x55;
+	STMFLASH_Write(FLASH_SAVE_ADDR,g_reg,30);
+}
+void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead) 
+{
+	EEPROM_read_n(ReadAddr,(u8 *)pBuffer,NumToRead*2);
+}
+
 void dealorder();
 void getdianliupre()
 {
@@ -481,39 +504,42 @@ void writebuf()
 {
 	u8 get[10];
 	get[0]=55;
-	get[1]=gsetzhi/100;
-	get[2]=gsetzhi%100;
+	get[1]=g_dianliu/100;
+	get[2]=g_dianliu%100;
 	EEPROM_SectorErase(errpromdizhi);
 	EEPROM_write_n(errpromdizhi,get,3);
 }
-
-void readbuf()
+void showzhi()
 {
-	u8 get[10];
-
-    EEPROM_read_n(errpromdizhi,get,3);
-    if(get[0]==55)
-    {
-        printf("has init\n");
-		gsetzhi=get[1]*100+get[2];
-		if(gsetzhi>=1023)
+	int i;
+	int len2=sizeof(g_reg[0]);
+	int len=sizeof(g_reg);
+	len=len/len2;
+	for(i=0;i<len;i++)
+	{
+		if(g_reg[i]!=0)
 		{
-			gsetzhi=1023;
+			printf("[%d-%d]",i,g_reg[i]);
 		}
-		if(gsetzhi<=0)
-		{
-			gsetzhi=0;
-		}
-		printf("has init %d-%d\n",get[1],get[2]);
-    }
-    else
-    {
-        printf("not init\n");
-		get[0]=55;
-		gsetzhi=550;
-    	EEPROM_write_n(errpromdizhi,get,1);
-    }
+	}
 }
+void EPPROMinit()
+{        
+	STMFLASH_Read(FLASH_SAVE_ADDR,g_reg,30);
+	if(g_reg[0]!=0x55)
+	{
+		printf("this is First record");
+		memset(g_reg,0,sizeof(g_reg));
+		g_reg[indexTImeAll]=25000;
+		EPPROMwrite();
+	}
+	else
+	{
+		printf("not First record");
+	}
+	showzhi();
+}
+
 sbit keyled1=P3^6;
 sbit keyled2=P3^5;
 #define ledon 0
@@ -524,10 +550,15 @@ void showled()
 	keyled2=ledclose;
 	keyled2=ledon;
 }
-void delay_ms(int weizhi)
+void delay_ms(unsigned int ms)
 {
-
+	unsigned int i;
+	do{
+		i = MAIN_Fosc / 6030;
+		while(--i);
+	}while(--ms);
 }
+
 void fuwei()
 {
 	IAP_CONTR=0x60;
@@ -598,13 +629,13 @@ int precom2check(char *input)
 	p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
 	if(p!=NULL)
 	{
-		print2("passwd checkpass,you can set now\n");
-		print2("\n");
-		print2("初始电流值 20\n");
-		print2("已使用寿命 21\n");
-		print2("总寿命 22\n");
-		print2("最大电流值 23\n");
-		print2("使用方式 set:20-601;20-601;end\n");
+		printtoDianao("passwd checkpass,you can set now\n");
+		printtoDianao("\n");
+		printtoDianao("初始电流值 20\n");
+		printtoDianao("已使用寿命 21\n");
+		printtoDianao("总寿命 22\n");
+		printtoDianao("最大电流值 23\n");
+		printtoDianao("使用方式 set:20-601;20-601;end\n");
 		flag_canset=1;
 		return 1;
 	}
@@ -616,9 +647,151 @@ int precom2check(char *input)
 	return 0;
 }
 
+
+int shoumingjisuan(int predianliu)
+{
+	int bili;
+	if(g_reg[indexTImeAll]==0)
+	return predianliu;
+	bili=g_reg[indexTImeuse]*100/g_reg[indexTImeAll];
+	if(bili>100)
+	{
+		return 0;
+	}
+	if(bili>90)
+	{
+		return predianliu*0.3;
+	}
+	if(bili>80)
+	{
+		return predianliu*0.5;
+	}
+	if(bili>70)
+	{
+		return predianliu*0.8;
+	}
+	return predianliu;
+}
+// 电流输出计算
+int jisuandianliu(int predianliu)
+{
+	if(predianliu==0)
+	{
+		return 0;
+	}
+	predianliu=predianliu+g_reg[indexAdddianliu];
+	if(predianliu>2047)
+	{
+		predianliu=2047;
+	}
+	return shoumingjisuan(predianliu);
+}
+void dianliusendtokongzhiban(int zhi)
+{
+	char out[30]={0};
+	int weizhi=4;
+	g_dianliu=zhi;
+	zhi=zhi*bili;
+	zhi=jisuandianliu(zhi);
+	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
+	printfTopingmu(out);
+	printf("%s",out);
+}
+
+
+
+int isCanSetWeizhi(int weizhi)
+{
+	if(weizhi>=indexAdddianliu && weizhi<=indexMAXdianliu)
+	{
+		return 1;
+	}
+	return 0;
+}
+void getlogstr(int weizhi,char* input)
+{
+	if(weizhi==indexAdddianliu)
+	{
+		strcpy(input,"初始电流");
+	}
+	if(weizhi==indexAdddianliu+1)
+	{
+		strcpy(input,"已用寿命");
+	}
+	if(weizhi==indexAdddianliu+2)
+	{
+		strcpy(input,"总的寿命");
+	}
+	if(weizhi==indexAdddianliu+3)
+	{
+		strcpy(input,"最大寿命");
+	}
+}
+
+// push 指令相关的计算。。
+int selfdeal(int weizhi,int zhi)
+{
+	char rspstr[100]={0};
+	char rsp2[100]={0};
+	if(flag_canset==0)
+	{
+		return 0;
+	}
+	if(0==isCanSetWeizhi(weizhi))
+	{
+		return 0;
+	}
+	g_reg[weizhi]=zhi;
+	getlogstr(weizhi,rspstr);
+	EPPROMwrite();
+	sprintf(rsp2,"%s设定:%d-%d 成功;",rspstr,weizhi,zhi);
+	printtoDianao(rsp2);
+	return 1;
+}
+int selfdealread(int weizhi,int zhi)
+{
+	char rspstr[100]={0};
+	char rsp2[100]={0};
+	if(weizhi<1000)
+	return 0;
+	if(flag_canset==0)
+	{
+		return 0;
+	}
+	weizhi=weizhi-1000;
+	if(0==isCanSetWeizhi(weizhi))
+	{
+		return 0;
+	}
+	getlogstr(weizhi,rspstr);
+	sprintf(rsp2,"%s读取:%d-%d 成功;",rspstr,weizhi,g_reg[weizhi]);
+	printtoDianao(rsp2);
+	return 1;
+}
+// 电脑过来的指令，，，处理。。。
+// 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
 void dealDiannaoOrder()
 {
-
+    int weizhi,zhi;
+    VectorInfo get={0};
+    VectorGet(VectorDiannao,&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+	if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
+	{
+		delay_ms(10);
+		dianliusendtokongzhiban(zhi);
+		delay_ms(10);
+	}
+	else
+	{
+		selfdeal(weizhi,zhi);
+		selfdealread(weizhi,zhi);
+	}
 }
 void diannaoinputset()
 {
@@ -627,9 +800,10 @@ void diannaoinputset()
 	{
 		return ;
 	}
+	com2jiexi(rec2);
 	if(VectorIsEmpty(VectorDiannao))
 	{
-		print2("oder format error,pleas check\n");
+		printtoDianao("oder format error,pleas check\n");
 		return ;
 	}
 	for(i=0;i<10;i++)
@@ -645,6 +819,7 @@ void diannaocheck()
 		return ;
 	}
 	delay_ms(2);
+	diannaoinputset();
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
@@ -659,20 +834,21 @@ void main(void)
 	printf1("system is ok");
 	Timer0Init();
 	printf1("system is overall");
-	
 	keyallchuli();
 	flaginit=1;
+	EPPROMinit();
 	setzhione(4,0);
+	
 	// test3();
-	readbuf();
 	// 没有什么时序时序要求，，指点函数里面做算了。。
 	// 算了，之前都写成这样了。。不改了。。原有逻辑上面改改就行吧，，
 	while (1)
 	{
 		showled();
 		keyallchuli();
-		showpre(gsetzhi);
+		showpre(g_dianliu);
 		dealorder();//取缓冲区里面的命令进行发送
+		diannaocheck();
 		
 	}
 }
@@ -747,16 +923,15 @@ void chuliguankji(char *get1)
 void addgetsetzhi(int i)
 {
 	int ans;
-	ans=gsetzhi+i;
+	ans=g_dianliu+i;
 	if(ans>=0 && ans<=1023)
 	{
-		gsetzhi=ans;
+		g_dianliu=ans;
 	}
 }
 static int timepush=0;
 void dealorder()
 {
-	char out[30]={0};
 	Alltongxininfo get;
 	if(timepush>45)
 	{
@@ -764,11 +939,8 @@ void dealorder()
 		pop2(&get);
 		if(get.weizhi==4)
 		{
-			get.zhi=get.zhi*bili;
+			dianliusendtokongzhiban(get.zhi);
 		}
-		sprintf(out,"set:%d-%d;end",get.weizhi,get.zhi);
-		printf3(out);
-		printf(out);
 	}
 }
 void Timer0() interrupt 1
@@ -800,7 +972,7 @@ void EC11_Handle() // EC11数据处理函数
 			addgetsetzhi(-1);
 		}
 		// 设定电流值。。。
-		setzhione(4,gsetzhi);
+		setzhione(4,g_dianliu);
 		// setzhione(2,1);//开灯。。
 	}
 	

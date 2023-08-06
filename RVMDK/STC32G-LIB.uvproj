@@ -10,7 +10,6 @@
       <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x1</ToolsetNumber>
       <ToolsetName>MCS-251</ToolsetName>
-      <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STC32G12K128 Series</Device>
@@ -149,7 +148,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>1</TargetSelection>
+          <TargetSelection>-1</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>

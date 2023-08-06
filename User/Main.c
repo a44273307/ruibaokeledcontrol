@@ -43,7 +43,7 @@ int keyok = 2;
 int keyup = 3;
 
 int nowzhi = 0;
-int setzhi = 0;
+int g_dianliu = 0;
 sbit X0 = P4 ^ 0;
 sbit X3 = P3 ^ 4;
 sbit X2 = P3 ^ 6;
@@ -123,8 +123,20 @@ void dealorder()
 		print3(out);
 	}
 }
+char flagError=0;
+int timeflagError=0;
 void time0() interrupt 1
 {
+	if(flagError==1)
+	{
+		if(timeflagError++>500)
+		{
+			timeflagError=0;
+			LED0 = ~LED0;
+		}
+		
+	}
+			
 	if(!empty())
 	{
 		timepush++;
@@ -148,7 +160,7 @@ void Uart3() interrupt 17
     }
 }
 
-char flasetzhichange = 0;
+char flag_show = 0;
 // 是否能够设置值的状态。。。  ok键按下 即可。。。
 char flagcanset = 0;
 void setdianliu(int zhi)
@@ -162,23 +174,23 @@ void setzhichange(int a)
 {
 	if (flagcanset == 0)
 		return;
-	if (setzhi + a < 0)
+	if (g_dianliu + a < 0)
 	{
-		setzhi = 0;
+		g_dianliu = 0;
 		// 0的情况也发，保证能够被收到。。
-		flasetzhichange = 1;
-		setdianliu(setzhi);
-		// printf("setdianliu%d\r\n",setzhi);
+		flag_show = 1;
+		setdianliu(g_dianliu);
+		// printf("setdianliu%d\r\n",g_dianliu);
 		return;
 	}
-	if (setzhi + a > maxsetzhi)
+	if (g_dianliu + a > maxsetzhi)
 	{
-		setzhi = maxsetzhi;
+		g_dianliu = maxsetzhi;
 		return;
 	}
-	setzhi = setzhi + a;
-	flasetzhichange = 1;
-	setdianliu(setzhi);
+	g_dianliu = g_dianliu + a;
+	flag_show = 1;
+	setdianliu(g_dianliu);
 }
 int writedizhi(int dizhi, int zhi)
 {
@@ -201,7 +213,7 @@ void keydown(int i) // 按键按下的处理、、、
 			delay_ms(30);
 			writedizhi(2,1);
 			delay_ms(30);
-			setdianliu(setzhi);
+			setdianliu(g_dianliu);
 			delay_ms(10);
 		}
 		else
@@ -471,7 +483,7 @@ void showjindtiao()
 	int i;
 	char dataxx[60] = {0};
 	int jindu;
-	jindu = setzhi * maxjindu / maxsetzhi;
+	jindu = g_dianliu * maxjindu / maxsetzhi;
 	for (i = 0; i < maxjindu; i++)
 	{
 		if (i < jindu)
@@ -485,7 +497,7 @@ void showjindtiao()
 void showsetzhi()
 {
 	char dataxx[40];
-	sprintf(dataxx, "SET:        %04d    ", setzhi);
+	sprintf(dataxx, "SET:        %04d    ", g_dianliu);
 	LCD_ShowString(0, 120, dataxx, WHITE, BLACK, 32, 0);
 	showjindtiao();
 }
@@ -506,7 +518,10 @@ void showfen(int error)
     LCD_ShowString(0, 40,"ERROR FOR FAN", WHITE, BLACK, 32, 0);
 	if(error==12)
     LCD_ShowString(0, 40,"ERROR FOR TMP", WHITE, BLACK, 32, 0);
-
+	if(error==11 || error==12)
+	{
+		flagError=1;
+	}
 }
 
 void getzhiandchange()
@@ -525,15 +540,23 @@ void getzhiandchange()
 	{
 		tmp=zhi;
 	}
+	if( weizhi== 32 )//网络设置过来的电流。。
+	{
+		g_dianliu=zhi;
+		flag_show=1;
+		writebuf();
+	}
 	showfen(weizhi);
+
 }
 void readbuf();
+
 void mainrun()
 {
 	int rumtimes = 0;
 	LED0 = ~LED0;
 	readbuf();
-	writedizhi(2,0);
+	// writedizhi(2,0);
 	writedizhi(4,0);
 	while (1)
 	{
@@ -543,12 +566,15 @@ void mainrun()
 		dealorder();
 		dealchuankou();//处理中控板过来的的数据
 		getzhiandchange();//对数据进行处理。。。
-		if (flasetzhichange == 1)
+		if (flag_show == 1)
 		{
-			flasetzhichange = 0;
+			flag_show = 0;
 			showdata();
 			rumtimes = 0;
 		}
+	
+			
+		
 		rumtimes++;
 		if (rumtimes == 15000)
 			showdata();
@@ -557,11 +583,6 @@ void mainrun()
 			shownwendu();
 			rumtimes = 0;
 		}
-		
-
-			
-			
-		
 	}
 }
 void UART1_ISR_Handler (void) interrupt UART1_VECTOR
@@ -608,8 +629,8 @@ void writebuf()
 {
 	u8 get[10];
 	get[0]=55;
-	get[1]=setzhi/100;
-	get[2]=setzhi%100;
+	get[1]=g_dianliu/100;
+	get[2]=g_dianliu%100;
 	EEPROM_SectorErase(errpromdizhi);
 	EEPROM_write_n(errpromdizhi,get,3);
 }
@@ -622,14 +643,14 @@ void readbuf()
     if(get[0]==55)
     {
         printf("has init\n");
-		setzhi=get[1]*100+get[2];
-		if(setzhi>=2047)
+		g_dianliu=get[1]*100+get[2];
+		if(g_dianliu>=2047)
 		{
-			setzhi=2047;
+			g_dianliu=2047;
 		}
-		if(setzhi<=0)
+		if(g_dianliu<=0)
 		{
-			setzhi=0;
+			g_dianliu=0;
 		}
 		printf("has init %d-%d\n",get[1],get[2]);
     }
@@ -637,7 +658,7 @@ void readbuf()
     {
         printf("not init\n");
 		get[0]=55;
-		setzhi=550;
+		g_dianliu=550;
     	EEPROM_write_n(errpromdizhi,get,1);
     }
 }

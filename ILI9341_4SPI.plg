@@ -60,6 +60,6 @@ linking...
     SEGMENT: ?PR?PRINTF?PRINTF
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?TIMER0?MAIN
-Program Size: data=21.6 xdata=548 code=8146
+Program Size: data=21.6 xdata=548 code=8154
 creating hex file from "ILI9341_4SPI"...
 "ILI9341_4SPI" - 0 Error(s), 24 Warning(s).

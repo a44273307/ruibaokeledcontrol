@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   53          
   54          
   55          
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 2   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 2   
 
   56          char* mystrstr(const char* haystack, const char* needle) {
   57   1          if (*needle == '\0') {
@@ -126,7 +126,7 @@ line level    source
  115   2                      p=myaddstrstr(p,"-");
  116   2                      zhi = atoi(p);
  117   2              if(i%2==0)
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 3   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 3   
 
  118   2              {
  119   3                  bakweizhi=weizhi;
@@ -190,7 +190,7 @@ line level    source
  177          
  178          // 串口的处理，，开机，解析等等。
  179          void dealchuankou()
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 4   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 4   
 
  180          {
  181   1          chuliguankji();
@@ -254,7 +254,7 @@ line level    source
  239   1          {
  240   2              bufcheck[i]=HoldingReg[i];
  241   2          }
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 5   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 5   
 
  242   1      }
  243          int IsbuffcheckFailed()
@@ -318,7 +318,7 @@ line level    source
  301   1          IAP_TRIG = 0xa5;                            //写触发命令(0xa5)
  302   1          _nop_();
  303   1          dat = IAP_DATA;                             //读IAP数据
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 6   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 6   
 
  304   1          IapIdle();                                  //关闭IAP功能
  305   1      
@@ -382,7 +382,7 @@ line level    source
  363   1          int i;
  364   1          int zhi;
  365   1          int dizhi=Iapid;
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 7   
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 7   
 
  366   1          zhi=ExxRead(dizhi);
  367   1          if(zhi==55)
@@ -445,91 +445,96 @@ line level    source
  424   1          //     readbuf();
  425   1          // }
  426   1      }
- 427          void main()                                                    
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 8   
+ 427          
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 8   
 
- 428          {
- 429   1              io_inint();
- 430   1          UartInit();
- 431   1              Uart23Init();
- 432   1              Timer0Init();
- 433   1              Uart4Init();
- 434   1              P_SW2 = 0x80;
- 435   1          I2CCFG = 0xe0;                              //使能I2C主机模式
- 436   1          I2CMSST = 0x00;
- 437   1              EA = 1;
- 438   1              out2=1;
- 439   1              Modbus_ClearBuff();
- 440   1          deanyan();
- 441   1              delay_ms(100);
- 442   1          printf("system init ok\n");
- 443   1          initbuf();
- 444   1          buffchecktongbu();
- 445   1          printf("system init ok1");
- 446   1          HoldingReg[2]=1;
- 447   1          com1clearbuf();
- 448   1          while (1)
- 449   1              {
- 450   2              runreport();
- 451   2              getzhiandchange();
- 452   2              }
- 453   1      } 
- 454          int delay_mszhi;         
- 455          uint time,lv_bo;
- 456          void delay_ms(int m)
- 457          {
- 458   1          delay_mszhi=0;
- 459   1          while (delay_mszhi<=m*2)
- 460   1          {
- 461   2              
- 462   2          }
- 463   1      }
- 464          void Timer0() interrupt 1
- 465          {
- 466   1          chuankou1time();
- 467   1              delay_mszhi++;
- 468   1          timereport++;
- 469   1      }
- 470          void UARTInterrupt(void) interrupt 4
- 471          {
- 472   1              unsigned char ans;
- 473   1              if (RI)
- 474   1              {
- 475   2                      RI = 0;
- 476   2                      ans=SBUF;
- 477   2              chuankou1put(ans);
- 478   2              }
- 479   1              else
- 480   1              {
- 481   2                      TI = 0;
- 482   2              }
- 483   1              if (TI) //发送中断..
- 484   1              {
- 485   2                      TI = 0;
- 486   2              }
- 487   1      }
- 488          
- 489          void uart2(void ) interrupt 8 
-C51 COMPILER V9.00   MAIN                                                                  08/01/2023 22:13:34 PAGE 9   
+ 428          //sbit out2 = P3 ^ 2;
+ 429          void main()                                                    
+ 430          {
+ 431   1              io_inint();
+ 432   1          UartInit();
+ 433   1              Uart23Init();
+ 434   1              Timer0Init();
+ 435   1              Uart4Init();
+ 436   1              P_SW2 = 0x80;
+ 437   1          I2CCFG = 0xe0;                              //使能I2C主机模式
+ 438   1          I2CMSST = 0x00;
+ 439   1              EA = 1;
+ 440   1              out2=1;
+ 441   1              Modbus_ClearBuff();
+ 442   1          deanyan();
+ 443   1              delay_ms(100);
+ 444   1          printf("system init ok\n");
+ 445   1          initbuf();
+ 446   1          buffchecktongbu();
+ 447   1          printf("system init ok1");
+ 448   1          HoldingReg[2]=1;
+ 449   1          com1clearbuf();
+ 450   1          P3M0 = 0x06;
+ 451   1        P3M1 = 0x08;
+ 452   1        out2 = 1;
+ 453   1          while (1)
+ 454   1              {
+ 455   2              runreport();
+ 456   2              getzhiandchange();
+ 457   2              }
+ 458   1      } 
+ 459          int delay_mszhi;         
+ 460          uint time,lv_bo;
+ 461          void delay_ms(int m)
+ 462          {
+ 463   1          delay_mszhi=0;
+ 464   1          while (delay_mszhi<=m*2)
+ 465   1          {
+ 466   2              
+ 467   2          }
+ 468   1      }
+ 469          void Timer0() interrupt 1
+ 470          {
+ 471   1          chuankou1time();
+ 472   1              delay_mszhi++;
+ 473   1          timereport++;
+ 474   1      }
+ 475          void UARTInterrupt(void) interrupt 4
+ 476          {
+ 477   1              unsigned char ans;
+ 478   1              if (RI)
+ 479   1              {
+ 480   2                      RI = 0;
+ 481   2                      ans=SBUF;
+ 482   2              chuankou1put(ans);
+ 483   2              }
+ 484   1              else
+ 485   1              {
+ 486   2                      TI = 0;
+ 487   2              }
+ 488   1              if (TI) //发送中断..
+ 489   1              {
+C51 COMPILER V9.00   MAIN                                                                  08/06/2023 20:18:59 PAGE 9   
 
- 490          {
- 491   1        if (S2CON & S2RI)
- 492   1              {
- 493   2                      S2CON &= ~S2RI;         
- 494   2                      temp2 = S2BUF;
- 495   2              }
- 496   1        if (S2CON & S2TI)
- 497   1          {
- 498   2                              //y1=0;
- 499   2              S2CON &= ~S2TI;         //清除S2TI位
- 500   2              busy2 = 0;               //清忙标志
- 501   2          }  
- 502   1      }
- 503          
+ 490   2                      TI = 0;
+ 491   2              }
+ 492   1      }
+ 493          
+ 494          void uart2(void ) interrupt 8 
+ 495          {
+ 496   1        if (S2CON & S2RI)
+ 497   1              {
+ 498   2                      S2CON &= ~S2RI;         
+ 499   2                      temp2 = S2BUF;
+ 500   2              }
+ 501   1        if (S2CON & S2TI)
+ 502   1          {
+ 503   2                              //y1=0;
+ 504   2              S2CON &= ~S2TI;         //清除S2TI位
+ 505   2              busy2 = 0;               //清忙标志
+ 506   2          }  
+ 507   1      }
+ 508          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2501    ----
+   CODE SIZE        =   2509    ----
    CONSTANT SIZE    =    314    ----
    XDATA SIZE       =    107     219
    PDATA SIZE       =   ----    ----

@@ -424,6 +424,8 @@ void getzhiandchange()
     //     readbuf();
     // }
 }
+
+//sbit out2 = P3 ^ 2;
 void main()		                                       
 {
 	io_inint();
@@ -445,6 +447,9 @@ void main()
     printf("system init ok1");
     HoldingReg[2]=1;
     com1clearbuf();
+    P3M0 = 0x06;
+  P3M1 = 0x08;
+  out2 = 1;
     while (1)
 	{
         runreport();

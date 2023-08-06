@@ -110,5 +110,7 @@ void set_w5500_ip(void);																		/*配置W5500的IP地址*/
 void dhcp_timer_init(void);																	/*dhcp用到的定时器初始化*/
 void ntp_timer_init(void);																	/*npt用到的定时器初始化*/
 
-
+void write_config_to_eeprom(void);
+void read_config_from_eeprom(void);
+extern CONFIG_MSG  ConfigMsg;																	/*配置结构体*/
 #endif

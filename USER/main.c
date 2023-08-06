@@ -229,6 +229,25 @@ int selfdeal(int weizhi,int zhi)
 	print2(rsp2);
 	return 1;
 }
+
+void dealipset(int weizhi,int zhi)
+{
+	uint8* qishi=ConfigMsg.mac;
+	int index;
+	if(weizhi<100) 
+	return ;
+	if(weizhi>=100+EEPROM_MSG_LEN+10) 
+	return ;
+
+	index=weizhi-100;
+	if(index<=EEPROM_MSG_LEN)
+	{
+		qishi[index]=zhi;
+	}
+    write_config_to_eeprom();
+	delay_ms(10);
+	fuwei();
+}
 int selfdealread(int weizhi,int zhi)
 {
 	char rspstr[100]={0};
@@ -604,6 +623,7 @@ void dealDiannaoOrder()
 	else
 	{
 		selfdeal(weizhi,zhi);
+		dealipset(weizhi,zhi);
 		selfdealread(weizhi,zhi);
 	}
 }
@@ -626,6 +646,11 @@ int precom2check(char *input)
 		print2("使用方式 set:20-601;20-601;end\n");
 		flag_canset=1;
 		return 1;
+	}
+	p=mystrstr(input,"fuwei()"); //找有没有下一个的)
+	if(p!=NULL)
+	{
+		fuwei();
 	}
 	return 0;
 }
@@ -668,12 +693,10 @@ void initall()
 	IIC_Init();
 	EPPROMinit();
 	exitinit();
-
 	gpio_for_w5500_config();						/*初始化MCU相关引脚*/
 	reset_w5500();                     /* W5500硬件复位 */
 	set_w5500_mac();										/*配置MAC地址*/
 	set_w5500_ip();											/*配置IP地址*/
-		
 	socket_buf_init(txsize, rxsize);		/*初始化8个Socket的发送接收缓存大小*/
 		
 	printf(" W5500网络作为TCP 服务器，建立侦听，等待PC作为TCP Client建立连接 \n");
@@ -696,13 +719,10 @@ int main(void)
 		dealorder();//自己压缩的命令，处理，可能是走屏幕的，或者自己就处理了
 		orderFetchToPingmu();
 		com2checkrun();
-		
-		
 		if(i++>1000)
 		{
 			i=0;
 			getwendu();
-			
 			if(debug==0)
 			{
 				baojincheck();

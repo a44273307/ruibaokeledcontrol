@@ -36,7 +36,7 @@ uint8  remote_ip[4]={192,168,3,230};			  						/*远端IP地址*/
 uint16 remote_port=8000;																/*远端端口号*/
 
 /*IP配置方法选择，请自行选择*/
-uint8	ip_from=IP_FROM_DEFINE;				
+uint8	ip_from=IP_FROM_EEPROM;				
 
 uint8         dhcp_ok   = 0;													   			/*dhcp成功获取IP*/
 uint32	      ms        = 0;															  	/*毫秒计数*/
@@ -346,11 +346,18 @@ uint16 wiz_read_buf(uint32 addrbsb, uint8* buf,uint16 len)
 *@param		无
 *@return	无
 */
+
+typedef uint32_t  u32;
+typedef uint16_t u16;
+#define FLASH_SAVE_ADDR2  0X08021000
+void STMFLASH_Write(u32 WriteAddr,u16 *pBuffer,u16 NumToWrite);		//从指定地址开始写入指定长度的数据
+void STMFLASH_Read(u32 ReadAddr,u16 *pBuffer,u16 NumToRead);   		//从指定地址开始读出指定长度的数据
 void write_config_to_eeprom(void)
 {
-	// uint16 dAddr=0;
-	// EEPROM_WriteBytes(ConfigMsg.mac,dAddr,(uint8)EEPROM_MSG_LEN);				
-	// delay_ms(10);																							
+  int len=sizeof(EEPROM_MSG);
+  STMFLASH_Write(FLASH_SAVE_ADDR2,(u16 *)ConfigMsg.mac,EEPROM_MSG_LEN/2);
+  // EEPROM_WriteBytes(ConfigMsg.mac,dAddr,(uint8)EEPROM_MSG_LEN/2);				
+  delay_ms(10);																							
 }
 
 /**
@@ -360,9 +367,10 @@ void write_config_to_eeprom(void)
 */
 void read_config_from_eeprom(void)
 {
-  // EEPROM_CheckOk();
-	// EEPROM_ReadBytes(EEPROM_MSG.mac,0,EEPROM_MSG_LEN);
-	// delay_us(10);
+  STMFLASH_Read(FLASH_SAVE_ADDR2,(u16 *)EEPROM_MSG.mac,EEPROM_MSG_LEN/2);
+  // STMFLASH_Write(ConfigMsg.mac,dAddr,(uint8)EEPROM_MSG_LEN/2);
+  	// EEPROM_ReadBytes(EEPROM_MSG.mac,0,EEPROM_MSG_LEN);
+  	delay_us(10);
 }
 
 /**

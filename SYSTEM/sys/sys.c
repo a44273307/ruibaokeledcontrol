@@ -16,6 +16,9 @@
 //时钟系统配置函数
 //PLL:选择的倍频数，RCC_PLL_MUL2~RCC_PLL_MUL16
 //////返回值:0,成功;1,失败
+
+
+//这个是64 ms 的。。。
 void Stm32_Clock_Init(u32 PLL)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct;

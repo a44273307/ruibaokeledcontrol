@@ -506,7 +506,7 @@ int iserror()
 	}
 	return 0;
 }
-void ShowInfoToDiannan();
+void ShowInfoToDiannan(int fangshi);
 int debug=1;
 
 // 报警处理相关的
@@ -672,7 +672,7 @@ void diannaoinputset()
 	{
 		dealDiannaoOrder();	//com过来的电脑命令解析。。。
 	}
-	ShowInfoToDiannan();
+	ShowInfoToDiannan(1);
 }
 void com2checkrun()
 {
@@ -703,21 +703,53 @@ void initall()
 	printf(" W5500监听端口为： %d \n",local_port);
 	printf(" 连接成功后，TCP Client发送数据给W5500，W5500将返回对应数据 \n");
 }
-
+extern void  sendwangkoutodiannao( const uint8 * buf);
+void delawanglkouorder()
+{
+	int weizhi,zhi;
+    VectorInfo get={0};
+    VectorGet(VectorDiannao,&get);
+    if(get.weizhi==0)
+    {
+        return ;
+    }
+    weizhi=get.weizhi;
+    zhi=get.zhi;
+	if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
+	{
+		delay_ms(10);
+		dianliusendtokongzhiban(zhi);
+		delay_ms(10);
+		WriteToPingmu(weizhi,zhi);//发送电脑
+		delay_ms(600);
+		getnowaitiicguang();
+	}
+}
+void delaFromwangkou(char *buf)
+{
+	int i;
+	com2jiexi(buf);
+	if(VectorIsEmpty(VectorDiannao))
+	{
+		sendwangkoutodiannao("oder format error,pleas check\n");
+		return ;
+	}
+	delawanglkouorder();
+	ShowInfoToDiannan(2);
+}
 int main(void)
 {
 	int i, j, k;
 	initall();
 	while (1)
 	{
-		// send4('d');
-		// Y0=0;
+		do_tcp_server();                  /*TCP_Client 数据回环测试程序*/
 		shoumingjilu();//寿命
 		delay_ms(1);
 		dealchuankou();//解析屏幕过来的指令
 		getzhiandchange();//解析屏幕过来的指令
 		dealorder();//自己压缩的命令，处理，可能是走屏幕的，或者自己就处理了
-		orderFetchToPingmu();
+		orderFetchToPingmu();//取指令，发送给屏幕。。。
 		com2checkrun();
 		if(i++>1000)
 		{
@@ -727,7 +759,7 @@ int main(void)
 			{
 				baojincheck();
 				if(iserror())
-				ShowInfoToDiannan();
+				ShowInfoToDiannan(1);
 			}	
 		}
 	}
@@ -930,17 +962,22 @@ void checkmima()
 {
 
 }
-
-
-
-
-void ShowInfoToDiannan()
+void ShowInfoToDiannan(int fangshi)
 {
 	char out[200]={0};
 	if(g_dianliu>0)
 	sprintf(out,"begin;open:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
 	else
 	sprintf(out,"begin;close:%d;Light:%d;Tmp:%d.%d;",g_dianliu,g_guangzhi,g_wendu/10,g_wendu%10);
+
+		if(g_fengshan<5)
+		{
+			strcat(out,"fan:error;");	
+		}
+		else
+		{
+			strcat(out,"fan:ok;");
+		}
 	if(iserror())
 	{
 		strcat(out,"Stat:error;");
@@ -950,7 +987,15 @@ void ShowInfoToDiannan()
 		strcat(out,"Stat:ok;");
 	}
 	strcat(out,"end\n");
-	print2(out);
+	if(fangshi==1)
+	{
+		print2(out);
+	}
+	else
+	{
+		sendwangkoutodiannao(out);
+	}
+	
 }
 int  com2jiexi(char* input)
 {

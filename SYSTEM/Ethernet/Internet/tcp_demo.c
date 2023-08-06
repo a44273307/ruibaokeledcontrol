@@ -23,6 +23,18 @@ uint8 buff[2048];				                              	         /*定义一个2KB的缓存
 *@param		无
 *@return	无
 */
+extern void delaFromwangkou(char *buf);
+int flag_senddiannao=0;
+void  sendwangkoutodiannao( const uint8 * buf)
+{
+	int len;
+	if(flag_senddiannao==0)
+	{
+		return;
+	}
+	len=strlen(buf);
+	send(SOCK_TCPS,buf,len);	
+}
 void do_tcp_server(void)
 {	
 	uint16 len=0;  
@@ -30,23 +42,21 @@ void do_tcp_server(void)
 	{
 		case SOCK_CLOSED:	
 		{
-				printf("%s\r\n","SOCK_CLOSED");
-				socket(SOCK_TCPS ,Sn_MR_TCP,local_port,Sn_MR_ND);	        /*打开socket*/
+			printf("%s\r\n","SOCK_CLOSED");
+			socket(SOCK_TCPS ,Sn_MR_TCP,local_port,Sn_MR_ND);	        /*打开socket*/
 		}												                  /*socket处于关闭状态*/
-			
 		  break;     
     
 		case SOCK_INIT:			
 		{
-				printf("%s\r\n","listen");
-
+			printf("%s\r\n","listen");
 			listen(SOCK_TCPS);												                /*socket建立监听*/
-
 		}											                  /*socket已初始化状态*/
 		  break;
 		
 		case SOCK_ESTABLISHED:												              /*socket处于连接建立状态*/
-		
+		{
+			flag_senddiannao=1;
 			if(getSn_IR(SOCK_TCPS) & Sn_IR_CON)
 			{
 				setSn_IR(SOCK_TCPS, Sn_IR_CON);								          /*清除接收中断标志位*/
@@ -54,13 +64,22 @@ void do_tcp_server(void)
 			len=getSn_RX_RSR(SOCK_TCPS);									            /*定义len为已接收数据的长度*/
 			if(len>0)
 			{
+				printf("len %d\r\n",len);
+				delay_ms(2);
+				len=getSn_RX_RSR(SOCK_TCPS);									            /*定义len为已接收数据的长度*/
+				printf("len %d\r\n",len);
 				recv(SOCK_TCPS,buff,len);								              	/*接收来自Client的数据*/
-				buff[len]=0x00; 											                  /*添加字符串结束符*/
 				printf("XXXX %s\r\n",buff);
-				send(SOCK_TCPS,buff,len);									              /*向Client发送数据*/
+
+				
+				delaFromwangkou(buff);
+				memset(buff,0,sizeof(buff));
+				// buff[len]=0x00; 											                  /*添加字符串结束符*/
+				
+				// send(SOCK_TCPS,buff,len);									              /*向Client发送数据*/
 		  }
-		  break;
-		
+		}
+		break;
 		case SOCK_CLOSE_WAIT:												                /*socket处于等待关闭状态*/
 			close(SOCK_TCPS);
 		  break;

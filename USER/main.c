@@ -289,21 +289,20 @@ int jisuandianliu(int predianliu)
 	return shoumingjisuan(predianliu);
 }
 int g_dianliu=0;
-int flagrsp=0;
-// 往屏幕发的，，和屏幕回来的。。。
-void dianliusendcheck(int weizhi)
+
+
+void dianliusendtokongzhiban(int zhi)
 {
-	if(weizhi==4)
-	{
-		if(flagrsp==1)
-		{
-			flagrsp=2;
-		}
-	}
+	char out[30]={0};
+	int weizhi=4;
+	g_dianliu=zhi;
+	zhi=jisuandianliu(zhi);
+	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
+	print1(out);
+	printf("%s",out);
 }
 void dealorder()
 {
-	char out[30]={0};
 	Alltongxininfo get;
 	if(timepush>45)
 	{
@@ -311,19 +310,8 @@ void dealorder()
 		pop2(&get);
 		if(get.weizhi==4)
 		{
-			g_dianliu=get.zhi;
-			get.zhi=jisuandianliu(get.zhi);
+			dianliusendtokongzhiban(get.zhi);
 		}
-		sprintf(out,"set:%d-%d;%d-%d;end",get.weizhi,get.zhi,get.weizhi,get.zhi);
-		if(selfdeal(get.weizhi,get.zhi))
-		{
-			
-		}
-		else
-		{
-			print1(out);
-		}
-		dianliusendcheck(get.weizhi);
 	}
 }
 void jiexi(char* input);
@@ -486,7 +474,6 @@ void WriteToPingmu(int weizhi,int zhi)
 	sprintf(out,"set:%d-%d;end",weizhi,zhi);
 	print3(out);
 	printf("pingmu[%s]",out);
-	
 }
 int iserror()
 {
@@ -590,21 +577,7 @@ void showcom1()
 
 
 char* mystrstr(const char* haystack, const char* needle);
-void runstep()
-{
-	char *p;
-	int times=0;
-	if(flagrsp!=2)
-	{ 
-		return ;
-	}
-	flagrsp=0;
-	delay_ms(100);
-	
-	delay_ms(600);
-	getnowaitiicguang();
-	ShowInfoToDiannan();
-}
+
 
 // 电脑过来的指令，，，处理。。。
 // 一样是压进队列。。然后处理就可以了。。。就是这种了。。。
@@ -621,10 +594,12 @@ void dealDiannaoOrder()
     zhi=get.zhi;
 	if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
 	{
-		g_dianliu=zhi;
-		VectorPush(VectorToPingmu,32,zhi);
-		flagrsp=1;
-		push(weizhi,zhi); //压缩到往板子发的指令。。。
+		delay_ms(10);
+		dianliusendtokongzhiban(zhi);
+		delay_ms(10);
+		WriteToPingmu(weizhi,zhi);//发送电脑
+		delay_ms(600);
+		getnowaitiicguang();
 	}
 	else
 	{
@@ -654,6 +629,26 @@ int precom2check(char *input)
 	}
 	return 0;
 }
+
+void diannaoinputset()
+{
+	int i;
+	if(1==precom2check(rec2))
+	{
+		return ;
+	}
+	com2jiexi(rec2);
+	if(VectorIsEmpty(VectorDiannao))
+	{
+		print2("oder format error,pleas check\n");
+		return ;
+	}
+	for(i=0;i<10;i++)
+	{
+		dealDiannaoOrder();	//com过来的电脑命令解析。。。
+	}
+	ShowInfoToDiannan();
+}
 void com2checkrun()
 {
 	if (weizhi2 == 0)
@@ -661,19 +656,7 @@ void com2checkrun()
 		return;
 	}
 	delay_ms(2); // 等待收完
-	if(1==precom2check(rec2))
-	{
-		memset(rec2, 0, sizeof(rec2));
-		weizhi2 = 0;
-		return ;
-	}
-	if (1 == com2jiexi(rec2))
-	{
-	}
-	else
-	{
-		print2("oder format error,pleas check\n");
-	}
+	diannaoinputset();
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
@@ -702,10 +685,6 @@ int main(void)
 {
 	int i, j, k;
 	initall();
-	// while (1)
-	// {
-	// 	do_tcp_server();                  /*TCP_Client 数据回环测试程序*/
-	// }
 	while (1)
 	{
 		// send4('d');
@@ -717,8 +696,8 @@ int main(void)
 		dealorder();//自己压缩的命令，处理，可能是走屏幕的，或者自己就处理了
 		orderFetchToPingmu();
 		com2checkrun();
-		dealDiannaoOrder();	//com过来的电脑命令解析。。。
-		runstep();//解析完了后，拿到设定的值。。。
+		
+		
 		if(i++>1000)
 		{
 			i=0;

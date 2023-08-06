@@ -22,7 +22,7 @@ int getemptyindex2(VectorInfo* Vectorbase)
     return i;
 }
 
-int empty2(VectorInfo* Vectorbase)
+int VectorIsEmpty(VectorInfo* Vectorbase)
 {
     if(0 == getemptyindex2(Vectorbase))
     {

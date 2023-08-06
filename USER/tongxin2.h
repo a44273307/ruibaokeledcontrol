@@ -17,7 +17,7 @@ extern VectorInfo VectorToPingmu[maxzhi];
 
 
 int getemptyindex2(VectorInfo* Vectorpingmu);
-int empty2(VectorInfo* Vectorpingmu);
+int VectorIsEmpty(VectorInfo* Vectorpingmu);
 int isfull2(VectorInfo* Vectorpingmu);
 
 

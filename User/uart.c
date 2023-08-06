@@ -301,6 +301,8 @@ char* myaddstrstr(const char* haystack, const char* needle)
 	 return result;
 }
 // 分离，发命令，20发读的命令，返回的值，默认是电流值。。。
+int bakweizhi;
+int bakzhi;
 void jixi2(char* input)
 {
 	char *p=input;
@@ -308,7 +310,8 @@ void jixi2(char* input)
 	int i;
 	unsigned int weizhi;
 	unsigned int zhi;
-	//1234-2234;333-4;end
+	//554-2234;333-4;end
+    // printf("input %s",input);
 	for( i=0;i<100;i++)
 	{
 		p1=myaddstrstr(p,";"); //找有没有下一个的
@@ -319,10 +322,24 @@ void jixi2(char* input)
 		weizhi = atoi(p);
 		p=myaddstrstr(p,"-");
 		zhi = atoi(p);
+        if(i%2==0)
+        {
+            bakweizhi=weizhi;
+            bakzhi=zhi;
+        }
+        if(i%2==1)
+        {
+            if(weizhi==bakweizhi && bakzhi==zhi)
+            {
+                printf("get set%d-%d",weizhi,zhi);
+                push2(weizhi,zhi);
+            }
+            else
+            {
+                printf("get failed");
+            }
+        }
 		p=myaddstrstr(p,";");  //指向下一个后面
-		printf("get set%d-%d",weizhi,zhi);
-		push2(weizhi,zhi);
-		
 	}
 }
 void jiexi(char* input)

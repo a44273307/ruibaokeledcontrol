@@ -514,6 +514,11 @@ void showdata()
 
 void showfen(int error)
 {
+	// ¼ÇµÃ¸´Î»
+	if (flagsystemrun == 0)
+	{
+		return;
+	}
 	if(error==11)
     LCD_ShowString(0, 40,"ERROR FOR FAN", WHITE, BLACK, 32, 0);
 	if(error==12)

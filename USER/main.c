@@ -130,7 +130,7 @@ void run()
 
 
 
-void init();
+
 void dealchuankou();
 // 屏幕过来的指令，，，下发下去。。。
 void dianliusendtokongzhiban(int zhi);
@@ -168,7 +168,7 @@ void print2(const char *fmt, ...)
 }
 
 
-void print1(char *p)
+void printTokongzhiban(char *p)
 {
 	while (*p != '\0')
 	{
@@ -176,7 +176,7 @@ void print1(char *p)
 		p++;
 	}
 }
-void print3(char *p)
+void printToPingmu(char *p)
 {
 	while (*p != '\0')
 	{
@@ -321,7 +321,7 @@ void dianliusendtokongzhiban(int zhi)
 	g_dianliu=zhi;
 	zhi=jisuandianliu(zhi);
 	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
-	print1(out);
+	printTokongzhiban(out);
 	printf("%s",out);
 }
 void dealorder()
@@ -372,20 +372,45 @@ int jisuanwendu(int R)
 }
 int g_wendu;
 int gguangzhao;
-void showendu()
+
+int bubbleSortAndGetMiddle(int arr[], int n) {
+	int i,j;
+	 int temp ;
+	int middleIndex,middleValue;
+    for (i = 0; i < n-1; i++) {
+        for (j = 0; j < n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+
+    middleIndex = n / 2;
+    middleValue = arr[middleIndex];
+    return middleValue;
+}
+int getavergyjisuan()
 {
-	char out[30]={0};
-	sprintf(out,"set:06-%d;end",g_wendu);
-	print3(out);
+	int arr[10];
+	int i;
+	for(i=0;i<10;i++)
+	{
+		arr[i]=Get_Adc_Average(ADC_CHANNEL_10,1);	
+		delay_ms(2);
+	}
+	return bubbleSortAndGetMiddle(arr,10);
 }
 int getwendu()
 {
 	int dianya;
 	long dianzu;
-	dianya=Get_Adc_Average(ADC_CHANNEL_10,1);
+	dianya=getavergyjisuan();
 	dianzu=getdianzu(dianya);
 	g_wendu=jisuanwendu(dianzu);
-	showendu();
+	// 地址 06 
+	VectorPush(VectorToPingmu,6,g_wendu);
 }
 
 //*********************************
@@ -494,8 +519,8 @@ void time03msjisuan()
 void WriteToPingmu(int weizhi,int zhi)
 {
 	char out[30]={0};
-	sprintf(out,"set:%d-%d;end",weizhi,zhi);
-	print3(out);
+	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
+	printToPingmu(out);
 	printf("pingmu[%s]",out);
 }
 int iserror()
@@ -504,7 +529,7 @@ int iserror()
 	{
 		return 1;
 	}
-	if(g_wendu>600)
+	if(g_wendu>650)
 	{
 		return 1;
 	}
@@ -620,7 +645,7 @@ void dealDiannaoOrder()
 		delay_ms(10);
 		dianliusendtokongzhiban(zhi);
 		delay_ms(10);
-		WriteToPingmu(weizhi,zhi);//发送电脑
+		WriteToPingmu(32,zhi);//发送电脑
 		delay_ms(600);
 		getnowaitiicguang();
 	}
@@ -693,7 +718,21 @@ void com2checkrun()
 void initall()
 {
 
-	init();
+	HAL_Init();
+	Stm32_Clock_Init(RCC_PLL_MUL9); //设置时钟,72M
+	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+	delay_init(72);		 //初始化延时函数
+	delay_ms(20);
+	uart_init(115200);	 //初始化串口
+	usmart_dev.init(84); //初始化USMART
+	// __HAL_AFIO_REMAP_SWJ_NOJTAG();
+	Y0 = 0;
+	Y1 = 0;
+	initio(); //IO输出输出初始化
+	Y0 = 0;
+	Y1 = 0;
+	TIM2_Init(72-1,1000-1);//1ms 一次
+	TIM3_Init(7200-1,10000-1);//1000ms 一次
 	MY_ADC_Init();
 	IIC_Init();
 	EPPROMinit();
@@ -726,7 +765,7 @@ void delawanglkouorder()
 		delay_ms(10);
 		dianliusendtokongzhiban(zhi);
 		delay_ms(10);
-		WriteToPingmu(weizhi,zhi);//发送电脑
+		WriteToPingmu(32,zhi);//发送电脑
 		delay_ms(600);
 		getnowaitiicguang();
 	}
@@ -747,7 +786,6 @@ int main(void)
 {
 	int i, j, k;
 	initall();
-	
 	while (1)
 	{
 		do_tcp_server();                  /*TCP_Client 数据回环测试程序*/
@@ -774,23 +812,7 @@ int main(void)
 		}
 	}
 }
-void init()
-{
-	HAL_Init();
-	Stm32_Clock_Init(RCC_PLL_MUL9); //设置时钟,72M
-	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-	delay_init(72);		 //初始化延时函数
-	uart_init(115200);	 //初始化串口
-	usmart_dev.init(84); //初始化USMART
-	// __HAL_AFIO_REMAP_SWJ_NOJTAG();
-	Y0 = 0;
-	Y1 = 0;
-	initio(); //IO输出输出初始化
-	Y0 = 0;
-	Y1 = 0;
-	TIM2_Init(72-1,1000-1);//1ms 一次
-	TIM3_Init(7200-1,10000-1);//1000ms 一次
-}
+
 
 
 // 接触到显示屏的，，也就是别人对我是输入。。

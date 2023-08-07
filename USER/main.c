@@ -35,7 +35,7 @@ u16 g_reg[40]={0};
 #define indexAdddianliu 20
 #define indexTImeuse 21
 #define indexTImeAll 22
-#define indexMAXdianliu 23
+#define indexFengshan 23
 
 
 
@@ -58,6 +58,13 @@ void showzhi()
 		}
 	}
 }
+void checkinzhi()
+{
+	if(g_reg[indexFengshan]<=0)
+	{
+		g_reg[indexFengshan]=800;
+	}
+}
 void EPPROMinit()
 {        
 	STMFLASH_Read(FLASH_SAVE_ADDR,g_reg,30);
@@ -66,12 +73,15 @@ void EPPROMinit()
 		printf("this is First record");
 		memset(g_reg,0,sizeof(g_reg));
 		g_reg[indexTImeAll]=25000;
+		checkinzhi();
 		EPPROMwrite();
 	}
 	else
 	{
+		checkinzhi();
 		printf("not First record");
 	}
+
 	showzhi();
 }
 
@@ -187,7 +197,7 @@ void printToPingmu(char *p)
 static int timepush=0;
 int isCanSetWeizhi(int weizhi)
 {
-	if(weizhi>=indexAdddianliu && weizhi<=indexMAXdianliu)
+	if(weizhi>=indexAdddianliu && weizhi<=indexFengshan)
 	{
 		return 1;
 	}
@@ -209,7 +219,7 @@ void getlogstr(int weizhi,char* input)
 	}
 	if(weizhi==indexAdddianliu+3)
 	{
-		strcpy(input,"最大寿命");
+		strcpy(input,"风扇速度");
 	}
 }
 int flag_canset=0;
@@ -231,6 +241,10 @@ int selfdeal(int weizhi,int zhi)
 	EPPROMwrite();
 	sprintf(rsp2,"%s设定:%d-%d 成功;",rspstr,weizhi,zhi);
 	print2(rsp2);
+	if(weizhi==indexFengshan)
+	{
+		TIM_SetTIM4Compare1(g_reg[indexFengshan]);
+	}
 	return 1;
 }
 
@@ -577,7 +591,7 @@ void orderFetchToPingmu()
 	WriteToPingmu(weizhi,zhi);//发送电脑
 }
 // 65536 小时
-char flagwrie=0;
+char flagwrie=1;
 void shoumingrun()
 {
 	static long miao=0;
@@ -675,7 +689,7 @@ int precom2check(char *input)
 		print2("初始电流值地址 20\n");
 		print2("已使用寿命地址 21\n");
 		print2("总寿命地址 22\n");
-		print2("最大电流值地址 23\n");
+		print2("风扇速度地址 23\n");
 		print2("使用方式 设定地址+值\n");
 		print2("以设定初始电流为例 发送[set:20-601;20-601;end] 其中20代表地址,601代表值\n");
 		for(i=indexAdddianliu;i<indexAdddianliu+4;i++)
@@ -728,7 +742,6 @@ void com2checkrun()
 }
 void initall()
 {
-
 	HAL_Init();
 	Stm32_Clock_Init(RCC_PLL_MUL9); //设置时钟,72M
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
@@ -744,6 +757,7 @@ void initall()
 	Y1 = 0;
 	TIM2_Init(72-1,1000-1);//1ms 一次
 	TIM3_Init(7200-1,10000-1);//1000ms 一次
+	
 	MY_ADC_Init();
 	IIC_Init();
 	EPPROMinit();
@@ -758,6 +772,8 @@ void initall()
 	printf(" W5500网络作为TCP 服务器，建立侦听，等待PC作为TCP Client建立连接 \n");
 	printf(" W5500监听端口为： %d \n",local_port);
 	printf(" 连接成功后，TCP Client发送数据给W5500，W5500将返回对应数据 \n");
+	TIM4_PWM_Init(1000-1,72-1);//1ms的周期。。
+	TIM_SetTIM4Compare1(g_reg[indexFengshan]);
 }
 extern void  sendwangkoutodiannao( const uint8 * buf);
 void delawanglkouorder()

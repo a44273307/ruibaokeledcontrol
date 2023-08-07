@@ -64,7 +64,7 @@
 //V3.3 20160506
 //修正usmart_exe函数在USMART_ENTIMX_SCAN为0的时候，报错的bug
 /////////////////////////////////////////////////////////////////////////////////////
-TIM_HandleTypeDef TIM4_Handler;      //定时器句柄 
+TIM_HandleTypeDef TIM5_Handler;      //定时器句柄 
 //系统命令
 u8 *sys_cmd_tab[]=
 {
@@ -202,16 +202,16 @@ u8 usmart_sys_cmd_exe(u8 *str)
 //usmart_reset_runtime,清除函数运行时间,连同定时器的计数寄存器以及标志位一起清零.并设置重装载值为最大,以最大限度的延长计时时间.
 //usmart_get_runtime,获取函数运行时间,通过读取CNT值获取,由于usmart是通过中断调用的函数,所以定时器中断不再有效,此时最大限度
 //只能统计2次CNT的值,也就是清零后+溢出一次,当溢出超过2次,没法处理,所以最大延时,控制在:2*计数器CNT*0.1ms.对STM32来说,是:13.1s左右
-//其他的:TIM4_IRQHandler和Timer4_Init,需要根据MCU特点自行修改.确保计数器计数频率为:10Khz即可.另外,定时器不要开启自动重装载功能!!
+//其他的:TIM5_IRQHandler和Timer4_Init,需要根据MCU特点自行修改.确保计数器计数频率为:10Khz即可.另外,定时器不要开启自动重装载功能!!
 
 #if USMART_ENTIMX_SCAN==1
 //复位runtime
 //需要根据所移植到的MCU的定时器参数进行修改
 void usmart_reset_runtime(void)
 {
-    __HAL_TIM_CLEAR_FLAG(&TIM4_Handler,TIM_FLAG_UPDATE);//清除中断标志位 
-    __HAL_TIM_SET_AUTORELOAD(&TIM4_Handler,0XFFFF);     //将重装载值设置到最大
-    __HAL_TIM_SET_COUNTER(&TIM4_Handler,0);             //清空定时器的CNT
+    __HAL_TIM_CLEAR_FLAG(&TIM5_Handler,TIM_FLAG_UPDATE);//清除中断标志位 
+    __HAL_TIM_SET_AUTORELOAD(&TIM5_Handler,0XFFFF);     //将重装载值设置到最大
+    __HAL_TIM_SET_COUNTER(&TIM5_Handler,0);             //清空定时器的CNT
 	usmart_dev.runtime=0;	
 }
 //获得runtime时间
@@ -219,41 +219,41 @@ void usmart_reset_runtime(void)
 //需要根据所移植到的MCU的定时器参数进行修改
 u32 usmart_get_runtime(void)
 {
-	if(__HAL_TIM_GET_FLAG(&TIM4_Handler,TIM_FLAG_UPDATE)==SET)//在运行期间,产生了定时器溢出
+	if(__HAL_TIM_GET_FLAG(&TIM5_Handler,TIM_FLAG_UPDATE)==SET)//在运行期间,产生了定时器溢出
 	{
 		usmart_dev.runtime+=0XFFFF;
 	}
-	usmart_dev.runtime+=__HAL_TIM_GET_COUNTER(&TIM4_Handler);
+	usmart_dev.runtime+=__HAL_TIM_GET_COUNTER(&TIM5_Handler);
 	return usmart_dev.runtime;		//返回计数值
 }  
 //下面这两个函数,非USMART函数,放到这里,仅仅方便移植. 
 //定时器4中断服务程序	 
-void TIM4_IRQHandler(void)
+void TIM5_IRQHandler(void)
 { 		    		  			       
-    if(__HAL_TIM_GET_IT_SOURCE(&TIM4_Handler,TIM_IT_UPDATE)==SET)//溢出中断
+    if(__HAL_TIM_GET_IT_SOURCE(&TIM5_Handler,TIM_IT_UPDATE)==SET)//溢出中断
     {
         usmart_dev.scan();	//执行usmart扫描
-        __HAL_TIM_SET_COUNTER(&TIM4_Handler,0);;    //清空定时器的CNT
-        __HAL_TIM_SET_AUTORELOAD(&TIM4_Handler,100);//恢复原来的设置
+        __HAL_TIM_SET_COUNTER(&TIM5_Handler,0);;    //清空定时器的CNT
+        __HAL_TIM_SET_AUTORELOAD(&TIM5_Handler,100);//恢复原来的设置
     }
-    __HAL_TIM_CLEAR_IT(&TIM4_Handler, TIM_IT_UPDATE);//清除中断标志位
+    __HAL_TIM_CLEAR_IT(&TIM5_Handler, TIM_IT_UPDATE);//清除中断标志位
 }
 
 //使能定时器4,使能中断.
 void Timer4_Init(u16 arr,u16 psc)
 { 
     //定时器4
-    __HAL_RCC_TIM4_CLK_ENABLE();
-    HAL_NVIC_SetPriority(TIM4_IRQn,6,3);    //设置中断优先级，抢占优先级3，子优先级3
-    HAL_NVIC_EnableIRQ(TIM4_IRQn);          //开启ITM4中断    
+    __HAL_RCC_TIM5_CLK_ENABLE();
+    HAL_NVIC_SetPriority(TIM5_IRQn,6,3);    //设置中断优先级，抢占优先级3，子优先级3
+    HAL_NVIC_EnableIRQ(TIM5_IRQn);          //开启ITM4中断    
     
-    TIM4_Handler.Instance=TIM4;                          //通用定时器4
-    TIM4_Handler.Init.Prescaler=psc;                     //分频
-    TIM4_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
-    TIM4_Handler.Init.Period=arr;                        //自动装载值
-    TIM4_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
-    HAL_TIM_Base_Init(&TIM4_Handler);
-    HAL_TIM_Base_Start_IT(&TIM4_Handler); //使能定时器4和定时器4中断 					 
+    TIM5_Handler.Instance=TIM5;                          //通用定时器4
+    TIM5_Handler.Init.Prescaler=psc;                     //分频
+    TIM5_Handler.Init.CounterMode=TIM_COUNTERMODE_UP;    //向上计数器
+    TIM5_Handler.Init.Period=arr;                        //自动装载值
+    TIM5_Handler.Init.ClockDivision=TIM_CLOCKDIVISION_DIV1;
+    HAL_TIM_Base_Init(&TIM5_Handler);
+    HAL_TIM_Base_Start_IT(&TIM5_Handler); //使能定时器4和定时器4中断 					 
 }
  
 

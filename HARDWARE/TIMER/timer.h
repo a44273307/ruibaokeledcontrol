@@ -14,7 +14,7 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
 extern TIM_HandleTypeDef TIM3_Handler;      //定时器句柄 
-extern TIM_HandleTypeDef TIM1_Handler;      //定时器句柄
+extern TIM_HandleTypeDef TIM4_Handler;      //定时器句柄
 extern TIM_HandleTypeDef htim2;
 
 void TIM3_Init(u16 arr,u16 psc);
@@ -22,8 +22,8 @@ void TIM2_Init(u16 arr,u16 psc);
 
  
 
-void TIM1_Init(u16 arr,u16 psc);
-void TIM1_PWM_Init(u16 arr,u16 psc);
-void TIM_SetTIM1Compare1(u32 compare);
+void TIM4_Init(u16 arr,u16 psc);
+void TIM4_PWM_Init(u16 arr,u16 psc);
+void TIM_SetTIM4Compare1(u32 compare);
 #endif
 

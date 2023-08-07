@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\Template.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\Template.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Sun Aug 06 14:18:09 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060422: Last Updated: Mon Aug 07 19:28:34 2023
 <BR><P>
 <H3>Maximum Stack Usage =       1216 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -600,7 +600,7 @@ Global Symbols
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showzhi
 <LI><a href="#[182]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showcom1
 <LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jixi2
-<LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;com2jixi2
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteToPingmu
@@ -623,9 +623,9 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sputc
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showendu
-<LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdealread
+<BR>[Called By]<UL><LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdealread
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdeal
+<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;precom2check
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 <LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteToPingmu
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ShowInfoToDiannan
@@ -731,7 +731,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = strcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jiexi
-<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
+<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
 <LI><a href="#[130]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;com2jiexi
 </UL>
 
@@ -760,11 +760,11 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = __aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stm32_Clock_Init
-<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showendu
 <LI><a href="#[182]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showcom1
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdealread
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdeal
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
+<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;precom2check
 <LI><a href="#[13b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jiexi
 <LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealchuankou
@@ -1160,7 +1160,7 @@ Global Symbols
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[c5]"></a>EPPROMwrite</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.EPPROMwrite))
@@ -1218,7 +1218,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Adc
 </UL>
-<BR>[Called By]<UL><LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
+<BR>[Called By]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getavergyjisuan
 </UL>
 
 <P><STRONG><a name="[d1]"></a>HAL_ADCEx_Calibration_Start</STRONG> (Thumb, 256 bytes, Stack size 24 bytes, stm32f1xx_hal_adc_ex.o(i.HAL_ADCEx_Calibration_Start))
@@ -1318,7 +1318,7 @@ Global Symbols
 <P><STRONG><a name="[d5]"></a>HAL_GPIO_Init</STRONG> (Thumb, 790 bytes, Stack size 36 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
+<BR>[Called By]<UL><LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Init
 <LI><a href="#[150]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exitinit
 <LI><a href="#[d4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_MspInit
@@ -1327,10 +1327,10 @@ Global Symbols
 <LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 </UL>
 
-<P><STRONG><a name="[15d]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
+<P><STRONG><a name="[15e]"></a>HAL_GPIO_WritePin</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, stm32f1xx_hal_gpio.o(i.HAL_GPIO_WritePin))
 <BR><BR>[Called By]<UL><LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_w5500
-<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
-<LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
+<LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
+<LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
 </UL>
 
 <P><STRONG><a name="[c0]"></a>HAL_GetTick</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f1xx_hal.o(i.HAL_GetTick))
@@ -1358,7 +1358,7 @@ Global Symbols
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_MspInit
 <LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriorityGrouping
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[dd]"></a>HAL_InitTick</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, stm32f1xx_hal.o(i.HAL_InitTick))
@@ -1397,7 +1397,7 @@ Global Symbols
 
 <P><STRONG><a name="[dc]"></a>HAL_NVIC_SetPriorityGrouping</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, stm32f1xx_hal_cortex.o(i.HAL_NVIC_SetPriorityGrouping))
 <BR><BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-<LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[d2]"></a>HAL_RCCEx_GetPeriphCLKFreq</STRONG> (Thumb, 324 bytes, Stack size 48 bytes, stm32f1xx_hal_rcc_ex.o(i.HAL_RCCEx_GetPeriphCLKFreq))
@@ -1472,7 +1472,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[eb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_MspInit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
+<BR>[Called By]<UL><LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
 </UL>
 
 <P><STRONG><a name="[eb]"></a>HAL_SPI_MspInit</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f1xx_hal_spi.o(i.HAL_SPI_MspInit))
@@ -1549,7 +1549,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[f9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_SetConfig
 <LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_MspInit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<BR>[Called By]<UL><LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
 </UL>
 
 <P><STRONG><a name="[f8]"></a>HAL_UART_MspInit</STRONG> (Thumb, 512 bytes, Stack size 48 bytes, usart.o(i.HAL_UART_MspInit))
@@ -1565,7 +1565,7 @@ Global Symbols
 <P><STRONG><a name="[184]"></a>HAL_UART_Receive_IT</STRONG> (Thumb, 134 bytes, Stack size 12 bytes, stm32f1xx_hal_uart.o(i.HAL_UART_Receive_IT))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = HAL_UART_Receive_IT
 </UL>
-<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<BR>[Called By]<UL><LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
 </UL>
 
 <P><STRONG><a name="[121]"></a>HAL_UART_RxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, usart.o(i.HAL_UART_RxCpltCallback))
@@ -1577,9 +1577,9 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Called By]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send3
-<LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send2
-<LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send1
+<BR>[Called By]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send3
+<LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send2
+<LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send1
 </UL>
 
 <P><STRONG><a name="[120]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f1xx_hal_uart.o(i.HAL_UART_TxCpltCallback))
@@ -1602,7 +1602,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[fe]"></a>IIC_NAck</STRONG> (Thumb, 66 bytes, Stack size 8 bytes, myiic.o(i.IIC_NAck))
@@ -1717,7 +1717,7 @@ Global Symbols
 <LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADCEx_Calibration_Start
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_ADC_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[14]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f1xx_it.o(i.MemManage_Handler))
@@ -1822,7 +1822,7 @@ Global Symbols
 <LI><a href="#[e7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_ClockConfig
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[1a]"></a>SysTick_Handler</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, stm32f1xx_it.o(i.SysTick_Handler))
@@ -1849,7 +1849,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[38]"></a>TIM3_IRQHandler</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, timer.o(i.TIM3_IRQHandler))
@@ -1865,7 +1865,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[11c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Start_IT
 <LI><a href="#[ee]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_Base_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[39]"></a>TIM4_IRQHandler</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, usmart.o(i.TIM4_IRQHandler))
@@ -1928,7 +1928,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getemptyindex2
 </UL>
 <BR>[Called By]<UL><LI><a href="#[16c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;orderFetchToPingmu
-<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delawanglkouorder
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealDiannaoOrder
 </UL>
@@ -1948,15 +1948,16 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[126]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getemptyindex2
 </UL>
 <BR>[Called By]<UL><LI><a href="#[169]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jixi2
+<LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
 <LI><a href="#[133]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;com2jixi2
 <LI><a href="#[12b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;baojincheck
 </UL>
 
-<P><STRONG><a name="[129]"></a>WriteToPingmu</STRONG> (Thumb, 46 bytes, Stack size 48 bytes, main.o(i.WriteToPingmu))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
+<P><STRONG><a name="[129]"></a>WriteToPingmu</STRONG> (Thumb, 50 bytes, Stack size 56 bytes, main.o(i.WriteToPingmu))
+<BR><BR>[Stack]<UL><LI>Max Depth = 200 + Unknown Stack Size
 <LI>Call Chain = WriteToPingmu &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print3
+<BR>[Calls]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printToPingmu
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -1978,13 +1979,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_exit_exit
 </UL>
 
-<P><STRONG><a name="[12b]"></a>baojincheck</STRONG> (Thumb, 58 bytes, Stack size 8 bytes, main.o(i.baojincheck))
+<P><STRONG><a name="[12b]"></a>baojincheck</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, main.o(i.baojincheck))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = baojincheck &rArr; VectorPush
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;push
 <LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VectorPush
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[157]"></a>bubbleSortAndGetMiddle</STRONG> (Thumb, 82 bytes, Stack size 20 bytes, main.o(i.bubbleSortAndGetMiddle))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = bubbleSortAndGetMiddle
+</UL>
+<BR>[Called By]<UL><LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getavergyjisuan
 </UL>
 
 <P><STRONG><a name="[122]"></a>chuankou1jisuuan</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, main.o(i.chuankou1jisuuan))
@@ -2135,7 +2142,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[142]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SYSTICK_CLKSourceConfig
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[4]"></a>delay_ms</STRONG> (Thumb, 24 bytes, Stack size 12 bytes, delay.o(i.delay_ms))
@@ -2148,7 +2155,9 @@ Global Symbols
 <LI><a href="#[146]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;do_tcp_server
 <LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Adc_Average
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 <LI><a href="#[136]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getnowaitiicguang
+<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getavergyjisuan
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delawanglkouorder
 <LI><a href="#[138]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealipset
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealDiannaoOrder
@@ -2175,13 +2184,13 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 200 + Unknown Stack Size
 <LI>Call Chain = dianliusendtokongzhiban &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print1
+<BR>[Calls]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printTokongzhiban
 <LI><a href="#[143]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jisuandianliu
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
+<BR>[Called By]<UL><LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
 <LI><a href="#[140]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delawanglkouorder
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealorder
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealDiannaoOrder
@@ -2235,7 +2244,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_EnableIRQ
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[5b]"></a>fputc</STRONG> (Thumb, 24 bytes, Stack size 0 bytes, usart.o(i.fputc))
@@ -2310,8 +2319,18 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[176]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 </UL>
 
-<P><STRONG><a name="[158]"></a>getdianzu</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.getdianzu))
-<BR><BR>[Called By]<UL><LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
+<P><STRONG><a name="[156]"></a>getavergyjisuan</STRONG> (Thumb, 44 bytes, Stack size 48 bytes, main.o(i.getavergyjisuan))
+<BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = getavergyjisuan &rArr; Get_Adc_Average &rArr; Get_Adc &rArr; HAL_ADC_PollForConversion &rArr; HAL_RCCEx_GetPeriphCLKFreq &rArr; HAL_RCC_GetSysClockFreq
+</UL>
+<BR>[Calls]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Adc_Average
+<LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;bubbleSortAndGetMiddle
+</UL>
+<BR>[Called By]<UL><LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
+</UL>
+
+<P><STRONG><a name="[15a]"></a>getdianzu</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(i.getdianzu))
+<BR><BR>[Called By]<UL><LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
 </UL>
 
 <P><STRONG><a name="[14f]"></a>getemptyindex</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, tongxin.o(i.getemptyindex))
@@ -2328,13 +2347,14 @@ Global Symbols
 <LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VectorGet
 </UL>
 
-<P><STRONG><a name="[156]"></a>getlogstr</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, main.o(i.getlogstr))
+<P><STRONG><a name="[158]"></a>getlogstr</STRONG> (Thumb, 56 bytes, Stack size 16 bytes, main.o(i.getlogstr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 28<LI>Call Chain = getlogstr &rArr; strcpy
 </UL>
 <BR>[Calls]<UL><LI><a href="#[132]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strcpy
 </UL>
 <BR>[Called By]<UL><LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdealread
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdeal
+<LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;precom2check
 </UL>
 
 <P><STRONG><a name="[136]"></a>getnowaitiicguang</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, main.o(i.getnowaitiicguang))
@@ -2348,19 +2368,18 @@ Global Symbols
 <LI><a href="#[134]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealDiannaoOrder
 </UL>
 
-<P><STRONG><a name="[157]"></a>getwendu</STRONG> (Thumb, 36 bytes, Stack size 16 bytes, main.o(i.getwendu))
-<BR><BR>[Stack]<UL><LI>Max Depth = 192 + Unknown Stack Size
-<LI>Call Chain = getwendu &rArr; showendu &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
+<P><STRONG><a name="[159]"></a>getwendu</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, main.o(i.getwendu))
+<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = getwendu &rArr; getavergyjisuan &rArr; Get_Adc_Average &rArr; Get_Adc &rArr; HAL_ADC_PollForConversion &rArr; HAL_RCCEx_GetPeriphCLKFreq &rArr; HAL_RCC_GetSysClockFreq
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Get_Adc_Average
-<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showendu
-<LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jisuanwendu
-<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getdianzu
+<BR>[Calls]<UL><LI><a href="#[128]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VectorPush
+<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;jisuanwendu
+<LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getdianzu
+<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getavergyjisuan
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[15b]"></a>getzhiandchange</STRONG> (Thumb, 44 bytes, Stack size 24 bytes, main.o(i.getzhiandchange))
+<P><STRONG><a name="[15c]"></a>getzhiandchange</STRONG> (Thumb, 44 bytes, Stack size 24 bytes, main.o(i.getzhiandchange))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224 + Unknown Stack Size
 <LI>Call Chain = getzhiandchange &rArr; dianliusendtokongzhiban &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -2370,20 +2389,20 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[15c]"></a>gpio_for_w5500_config</STRONG> (Thumb, 302 bytes, Stack size 24 bytes, w5500_conf.o(i.gpio_for_w5500_config))
+<P><STRONG><a name="[15d]"></a>gpio_for_w5500_config</STRONG> (Thumb, 302 bytes, Stack size 24 bytes, w5500_conf.o(i.gpio_for_w5500_config))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = gpio_for_w5500_config &rArr; HAL_GPIO_Init
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 <LI><a href="#[ea]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_SPI_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[105]"></a>iinchip_csoff</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, w5500_conf.o(i.iinchip_csoff))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = iinchip_csoff &rArr; wiz_cs
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
+<BR>[Calls]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
 </UL>
 <BR>[Called By]<UL><LI><a href="#[179]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_write_buf
 <LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_read_buf
@@ -2394,7 +2413,7 @@ Global Symbols
 <P><STRONG><a name="[107]"></a>iinchip_cson</STRONG> (Thumb, 10 bytes, Stack size 8 bytes, w5500_conf.o(i.iinchip_cson))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = iinchip_cson &rArr; wiz_cs
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
+<BR>[Calls]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_cs
 </UL>
 <BR>[Called By]<UL><LI><a href="#[179]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_write_buf
 <LI><a href="#[152]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wiz_read_buf
@@ -2402,34 +2421,27 @@ Global Symbols
 <LI><a href="#[104]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IINCHIP_READ
 </UL>
 
-<P><STRONG><a name="[15f]"></a>init</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, main.o(i.init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = init &rArr; Stm32_Clock_Init &rArr; HAL_RCC_ClockConfig &rArr; HAL_InitTick &rArr; HAL_NVIC_SetPriority &rArr; NVIC_SetPriority
+<P><STRONG><a name="[160]"></a>initall</STRONG> (Thumb, 168 bytes, Stack size 8 bytes, main.o(i.initall))
+<BR><BR>[Stack]<UL><LI>Max Depth = 568 + Unknown Stack Size
+<LI>Call Chain = initall &rArr; set_w5500_ip &rArr; print2 &rArr; __c89vsprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
-<LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
+<BR>[Calls]<UL><LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;uart_init
+<LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_buf_init
+<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_w5500_mac
+<LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_w5500_ip
+<LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_w5500
+<LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
+<LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
+<LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[141]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_init
 <LI><a href="#[11e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_Init
 <LI><a href="#[11b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM2_Init
 <LI><a href="#[118]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Stm32_Clock_Init
-<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriorityGrouping
-<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
-</UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
-</UL>
-
-<P><STRONG><a name="[162]"></a>initall</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, main.o(i.initall))
-<BR><BR>[Stack]<UL><LI>Max Depth = 568 + Unknown Stack Size
-<LI>Call Chain = initall &rArr; set_w5500_ip &rArr; print2 &rArr; __c89vsprintf &rArr; _printf_char_common &rArr; __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[166]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;socket_buf_init
-<LI><a href="#[164]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_w5500_mac
-<LI><a href="#[165]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_w5500_ip
-<LI><a href="#[163]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_w5500
-<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_for_w5500_config
 <LI><a href="#[10a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MY_ADC_Init
 <LI><a href="#[fd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Init
+<LI><a href="#[dc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_NVIC_SetPriorityGrouping
+<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
-<LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
 <LI><a href="#[150]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exitinit
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EPPROMinit
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -2437,13 +2449,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[161]"></a>initio</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, io.o(i.initio))
+<P><STRONG><a name="[162]"></a>initio</STRONG> (Thumb, 12 bytes, Stack size 8 bytes, io.o(i.initio))
 <BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = initio &rArr; outset &rArr; HAL_GPIO_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[168]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;outset
 <LI><a href="#[167]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;inset
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[175]"></a>isCanSetWeizhi</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, main.o(i.isCanSetWeizhi))
@@ -2451,7 +2463,7 @@ Global Symbols
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdeal
 </UL>
 
-<P><STRONG><a name="[114]"></a>iserror</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, main.o(i.iserror))
+<P><STRONG><a name="[114]"></a>iserror</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, main.o(i.iserror))
 <BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ShowInfoToDiannan
 </UL>
@@ -2476,10 +2488,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 </UL>
 
-<P><STRONG><a name="[159]"></a>jisuanwendu</STRONG> (Thumb, 84 bytes, Stack size 12 bytes, main.o(i.jisuanwendu))
+<P><STRONG><a name="[15b]"></a>jisuanwendu</STRONG> (Thumb, 84 bytes, Stack size 12 bytes, main.o(i.jisuanwendu))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = jisuanwendu
 </UL>
-<BR>[Called By]<UL><LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
+<BR>[Called By]<UL><LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
 </UL>
 
 <P><STRONG><a name="[169]"></a>jixi2</STRONG> (Thumb, 94 bytes, Stack size 32 bytes, main.o(i.jixi2))
@@ -2512,9 +2524,9 @@ Global Symbols
 <LI><a href="#[16b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;shoumingjilu
 <LI><a href="#[16c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;orderFetchToPingmu
 <LI><a href="#[114]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iserror
-<LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
-<LI><a href="#[15b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
-<LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
+<LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<LI><a href="#[15c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getzhiandchange
+<LI><a href="#[159]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
 <LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealorder
 <LI><a href="#[13a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealchuankou
 <LI><a href="#[12e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;com2checkrun
@@ -2548,7 +2560,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[16c]"></a>orderFetchToPingmu</STRONG> (Thumb, 66 bytes, Stack size 24 bytes, main.o(i.orderFetchToPingmu))
-<BR><BR>[Stack]<UL><LI>Max Depth = 216 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 224 + Unknown Stack Size
 <LI>Call Chain = orderFetchToPingmu &rArr; WriteToPingmu &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[125]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;VectorGet
@@ -2573,30 +2585,25 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[13d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dealorder
 </UL>
 
-<P><STRONG><a name="[145]"></a>precom2check</STRONG> (Thumb, 88 bytes, Stack size 16 bytes, main.o(i.precom2check))
-<BR><BR>[Stack]<UL><LI>Max Depth = 568 + Unknown Stack Size
+<P><STRONG><a name="[145]"></a>precom2check</STRONG> (Thumb, 154 bytes, Stack size 80 bytes, main.o(i.precom2check))
+<BR><BR>[Stack]<UL><LI>Max Depth = 632 + Unknown Stack Size
 <LI>Call Chain = precom2check &rArr; print2 &rArr; __c89vsprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fuwei
 <LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
 <LI><a href="#[16d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;mystrstr
+<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
+<LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
+<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;diannaoinputset
-</UL>
-
-<P><STRONG><a name="[144]"></a>print1</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.print1))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = print1 &rArr; send1 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send1
-</UL>
-<BR>[Called By]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 </UL>
 
 <P><STRONG><a name="[115]"></a>print2</STRONG> (Thumb, 60 bytes, Stack size 432 bytes, main.o(i.print2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 552 + Unknown Stack Size
 <LI>Call Chain = print2 &rArr; __c89vsprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send2
+<BR>[Calls]<UL><LI><a href="#[170]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send2
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__c89vsprintf
 </UL>
@@ -2604,18 +2611,25 @@ Global Symbols
 <LI><a href="#[139]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdealread
 <LI><a href="#[137]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;selfdeal
 <LI><a href="#[145]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;precom2check
-<LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 <LI><a href="#[12f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;diannaoinputset
 <LI><a href="#[111]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ShowInfoToDiannan
 </UL>
 
-<P><STRONG><a name="[12a]"></a>print3</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.print3))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = print3 &rArr; send3 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[12a]"></a>printToPingmu</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.printToPingmu))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = printToPingmu &rArr; send3 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send3
+<BR>[Calls]<UL><LI><a href="#[171]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send3
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;showendu
-<LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteToPingmu
+<BR>[Called By]<UL><LI><a href="#[129]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WriteToPingmu
+</UL>
+
+<P><STRONG><a name="[144]"></a>printTokongzhiban</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.printTokongzhiban))
+<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = printTokongzhiban &rArr; send1 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[172]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send1
+</UL>
+<BR>[Called By]<UL><LI><a href="#[135]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dianliusendtokongzhiban
 </UL>
 
 <P><STRONG><a name="[b]"></a>push</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, tongxin.o(i.push))
@@ -2662,10 +2676,10 @@ Global Symbols
 <P><STRONG><a name="[163]"></a>reset_w5500</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, w5500_conf.o(i.reset_w5500))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = reset_w5500 &rArr; delay_ms &rArr; delay_us
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 <LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[137]"></a>selfdeal</STRONG> (Thumb, 90 bytes, Stack size 216 bytes, main.o(i.selfdeal))
@@ -2674,7 +2688,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isCanSetWeizhi
-<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
+<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
 <LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EPPROMwrite
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
@@ -2688,7 +2702,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
 <LI><a href="#[175]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;isCanSetWeizhi
-<LI><a href="#[156]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
+<LI><a href="#[158]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getlogstr
 <LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
@@ -2710,15 +2724,15 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[116]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendwangkoutodiannao
 </UL>
 
-<P><STRONG><a name="[170]"></a>send1</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send1))
+<P><STRONG><a name="[172]"></a>send1</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send1))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = send1 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print1
+<BR>[Called By]<UL><LI><a href="#[144]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printTokongzhiban
 </UL>
 
-<P><STRONG><a name="[171]"></a>send2</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send2))
+<P><STRONG><a name="[170]"></a>send2</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send2))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = send2 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
@@ -2726,12 +2740,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[115]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print2
 </UL>
 
-<P><STRONG><a name="[172]"></a>send3</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send3))
+<P><STRONG><a name="[171]"></a>send3</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, main.o(i.send3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = send3 &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print3
+<BR>[Called By]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printToPingmu
 </UL>
 
 <P><STRONG><a name="[178]"></a>send_data_processing</STRONG> (Thumb, 116 bytes, Stack size 24 bytes, w5500.o(i.send_data_processing))
@@ -2816,7 +2830,7 @@ Global Symbols
 <LI><a href="#[17d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setSIPR
 <LI><a href="#[17b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setGAR
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[164]"></a>set_w5500_mac</STRONG> (Thumb, 32 bytes, Stack size 8 bytes, w5500_conf.o(i.set_w5500_mac))
@@ -2825,7 +2839,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[17c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setSHAR
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[7]"></a>settime</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, main.o(i.settime))
@@ -2868,17 +2882,6 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[11a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;time02msjisuan
 </UL>
 
-<P><STRONG><a name="[15a]"></a>showendu</STRONG> (Thumb, 34 bytes, Stack size 40 bytes, main.o(i.showendu))
-<BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
-<LI>Call Chain = showendu &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[12a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;print3
-<LI><a href="#[112]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
-</UL>
-<BR>[Called By]<UL><LI><a href="#[157]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getwendu
-</UL>
-
 <P><STRONG><a name="[c6]"></a>showzhi</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, main.o(i.showzhi))
 <BR><BR>[Stack]<UL><LI>Max Depth = 160 + Unknown Stack Size
 <LI>Call Chain = showzhi &rArr; __2printf &rArr; _printf_char_file &rArr; _printf_char_common &rArr; __printf
@@ -2903,7 +2906,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IINCHIP_WRITE
 </UL>
-<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[11a]"></a>time02msjisuan</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, main.o(i.time02msjisuan))
@@ -2921,13 +2924,13 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM3_IRQHandler
 </UL>
 
-<P><STRONG><a name="[160]"></a>uart_init</STRONG> (Thumb, 158 bytes, Stack size 8 bytes, usart.o(i.uart_init))
+<P><STRONG><a name="[161]"></a>uart_init</STRONG> (Thumb, 158 bytes, Stack size 8 bytes, usart.o(i.uart_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = uart_init &rArr; HAL_UART_Init &rArr; HAL_UART_MspInit &rArr; HAL_NVIC_SetPriority &rArr; NVIC_SetPriority
 </UL>
 <BR>[Calls]<UL><LI><a href="#[184]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive_IT
 <LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[15f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init
+<BR>[Called By]<UL><LI><a href="#[160]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initall
 </UL>
 
 <P><STRONG><a name="[e]"></a>usmart_cmd_rec</STRONG> (Thumb, 170 bytes, Stack size 96 bytes, usmart.o(i.usmart_cmd_rec))
@@ -3063,10 +3066,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[10]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;usmart_scan
 </UL>
 
-<P><STRONG><a name="[15e]"></a>wiz_cs</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, w5500_conf.o(i.wiz_cs))
+<P><STRONG><a name="[15f]"></a>wiz_cs</STRONG> (Thumb, 34 bytes, Stack size 8 bytes, w5500_conf.o(i.wiz_cs))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = wiz_cs
 </UL>
-<BR>[Calls]<UL><LI><a href="#[15d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
+<BR>[Calls]<UL><LI><a href="#[15e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[107]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iinchip_cson
 <LI><a href="#[105]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;iinchip_csoff
@@ -3262,7 +3265,7 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
+<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
 </UL>
 
 <P><STRONG><a name="[168]"></a>outset</STRONG> (Thumb, 56 bytes, Stack size 24 bytes, io.o(i.outset))
@@ -3270,7 +3273,7 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[161]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
+<BR>[Called By]<UL><LI><a href="#[162]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;initio
 </UL>
 
 <P><STRONG><a name="[5a]"></a>_printf_input_char</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, _printf_char_common.o(.text))

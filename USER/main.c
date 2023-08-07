@@ -546,7 +546,7 @@ void baojincheck()
 		push(4,0);  
 		VectorPush(VectorToPingmu,11,1);//风扇异常告警码
 	}
-	if(g_wendu>600)
+	if(g_wendu>650)
 	{
 		push(4,0);
 		VectorPush(VectorToPingmu,12,1);//温度
@@ -662,17 +662,28 @@ int weizhi2=0;
 
 int precom2check(char *input)
 {
+	int i;
 	char *p;
+	char outstr[30]={0};
+	char outstr2[30]={0};
+
 	p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
 	if(p!=NULL)
 	{
 		print2("passwd checkpass,you can set now\n");
 		print2("\n");
-		print2("初始电流值 20\n");
-		print2("已使用寿命 21\n");
-		print2("总寿命 22\n");
-		print2("最大电流值 23\n");
-		print2("使用方式 set:20-601;20-601;end\n");
+		print2("初始电流值地址 20\n");
+		print2("已使用寿命地址 21\n");
+		print2("总寿命地址 22\n");
+		print2("最大电流值地址 23\n");
+		print2("使用方式 设定地址+值\n");
+		print2("以设定初始电流为例 发送[set:20-601;20-601;end] 其中20代表地址,601代表值\n");
+		for(i=indexAdddianliu;i<indexAdddianliu+4;i++)
+		{
+			getlogstr(i,outstr);
+			sprintf(outstr2,"%s:%d\n",outstr,g_reg[i]);
+			print2(outstr2);
+		}
 		flag_canset=1;
 		return 1;
 	}

@@ -118,7 +118,7 @@ void printtoDianao(const char *fmt, ...)
 	p = (unsigned char *)buf;
 	while (*p != '\0')
 	{
-		sendbyte1(*p);
+		sendbyte2(*p);
 		p++;
 	}
 }
@@ -194,6 +194,7 @@ void delay10x(int i)
 		Delay10us();
 	}
 }
+int flag_error=0;
 void showpre(int num)
 {
 	int i;
@@ -203,12 +204,32 @@ void showpre(int num)
 
 	a[2] = num % 100 / 10;
 	a[3] = num % 10;
-
+	
 	for (i = 0; i < 4; i++)
 	{
 		yout_closeall();
 		yout_set(i, 0);
-		P0 = ~duanzhi[a[i]];
+		if(flag_error==1)
+		{
+			if(i==0 )
+			{
+				P0 = ~0x79;
+			}
+			if(i==1 ||i==2)
+			{
+				P0 = ~0x50;
+			}
+			if(i==3)
+			{
+				P0 = ~duanzhi[1];
+			}
+		}
+		else
+		{
+			P0 = ~duanzhi[a[i]];
+		}
+		
+		
 		Delay10us();
 		yout_closeall();
 		P0 = 0xff;
@@ -605,22 +626,51 @@ int  com2jiexi(char* input)
 	}
 	return 0;
 }
-
+void getlogstr(int weizhi,char* input)
+{
+	if(weizhi==indexAdddianliu)
+	{
+		strcpy(input,"初始电流");
+	}
+	if(weizhi==indexAdddianliu+1)
+	{
+		strcpy(input,"已用寿命");
+	}
+	if(weizhi==indexAdddianliu+2)
+	{
+		strcpy(input,"总的寿命");
+	}
+	if(weizhi==indexAdddianliu+3)
+	{
+		strcpy(input,"风扇速度");
+	}
+}
 
 int flag_canset=0;
 int precom2check(char *input)
 {
+	int i;
 	char *p;
+	char outstr[30]={0};
+	char outstr2[30]={0};
+
 	p=mystrstr(input,"ruibaokesettingmimaflag"); //找有没有下一个的)
 	if(p!=NULL)
 	{
 		printtoDianao("passwd checkpass,you can set now\n");
 		printtoDianao("\n");
-		printtoDianao("初始电流值 20\n");
-		printtoDianao("已使用寿命 21\n");
-		printtoDianao("总寿命 22\n");
-		printtoDianao("最大电流值 23\n");
-		printtoDianao("使用方式 set:20-601;20-601;end\n");
+		printtoDianao("初始电流值地址 20\n");
+		printtoDianao("已使用寿命地址 21\n");
+		printtoDianao("总寿命地址 22\n");
+		printtoDianao("风扇速度地址 23\n");
+		printtoDianao("使用方式 设定地址+值\n");
+		printtoDianao("以设定初始电流为例 发送[set:20-601;20-601;end] 其中20代表地址,601代表值\n");
+		for(i=indexAdddianliu;i<indexAdddianliu+4;i++)
+		{
+			getlogstr(i,outstr);
+			sprintf(outstr2,"%s:%d\n",outstr,g_reg[i]);
+			printtoDianao(outstr2);
+		}
 		flag_canset=1;
 		return 1;
 	}
@@ -630,6 +680,7 @@ int precom2check(char *input)
 		fuwei();
 	}
 	return 0;
+
 }
 
 
@@ -676,8 +727,7 @@ void dianliusendtokongzhiban(int zhi)
 {
 	char out[30]={0};
 	int weizhi=4;
-	formatdianliu();
-	zhi=jisuandianliu(g_dianliu);
+	zhi=jisuandianliu(zhi);
 	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
 	printfTopingmu(out);
 	printf("%s",out);
@@ -693,25 +743,7 @@ int isCanSetWeizhi(int weizhi)
 	}
 	return 0;
 }
-void getlogstr(int weizhi,char* input)
-{
-	if(weizhi==indexAdddianliu)
-	{
-		strcpy(input,"初始电流");
-	}
-	if(weizhi==indexAdddianliu+1)
-	{
-		strcpy(input,"已用寿命");
-	}
-	if(weizhi==indexAdddianliu+2)
-	{
-		strcpy(input,"总的寿命");
-	}
-	if(weizhi==indexAdddianliu+3)
-	{
-		strcpy(input,"最大寿命");
-	}
-}
+
 
 // push 指令相关的计算。。
 int selfdeal(int weizhi,int zhi)
@@ -782,7 +814,7 @@ void dealDiannaoOrder()
 }
 sbit keywendu1=P2^4;
 sbit keywendu2=P2^5;
-int flag_error=0;
+
 int iserror()
 {
 	if(keywendu1==0)
@@ -874,6 +906,27 @@ void diannaocheck()
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
+// 65536 小时
+char flagwrie=1;
+void shoumingrun()
+{
+	static long miao=0;
+	miao++;
+	if(miao>60*60)
+	{
+		flagwrie=1;
+		miao=0;
+	}
+}
+void shoumingjilu()
+{
+	if(flagwrie==1)
+	{
+		flagwrie=0;
+		g_reg[indexTImeuse]++;
+		EPPROMwrite();
+	}
+}
 void main(void)
 {
 	int i=0;
@@ -889,7 +942,7 @@ void main(void)
 	flaginit=1;
 	delay_ms(40);
 	EPPROMinit();
-	setzhione(4,0);
+	push(4,0);
 	systemshowkaiji();
 	// test3();
 	// 没有什么时序时序要求，，指点函数里面做算了。。
@@ -906,6 +959,7 @@ void main(void)
 		dealorder();//取缓冲区里面的命令进行发送
 		diannaocheck();
 		iserror();
+		shoumingjilu();
 		if(i++>10000)
 		{
 			i=0;
@@ -913,7 +967,8 @@ void main(void)
 			{
 				setledisok(0);
 				ShowInfoToDiannan();
-				setzhione(4,0);
+				delay_ms(10);
+				push(4,0);
 				printf1("system error");
 			}
 			else
@@ -1006,12 +1061,19 @@ void dealorder()
 		pop2(&get);
 		if(get.weizhi==4)
 		{
+			// printf("dealorder %d",get.zhi);
 			dianliusendtokongzhiban(get.zhi);
 		}
 	}
 }
 void Timer0() interrupt 1
 {
+	static int times=0;
+	if(times++>1000)
+	{
+		times=0;
+		shoumingrun();
+	}
 	timereport++;
 	shurulvbo();
 	chuankou1time();
@@ -1079,30 +1141,6 @@ void dealchuankou()
 
 }
 
-void UARTInterrupt(void) interrupt 4
-{
-	char ans;
-	if (RI)
-	{
-		RI = 0;
-		ans = SBUF;
-		get1[weizhi1++]=ans;
-		if(weizhi1>80)
-		{
-			weizhi1=0;
-		}
-		// chuliguankji(get1);
-		chuankou1put(ans);
-	}
-	else
-	{
-		TI = 0;
-	}
-	if (TI) // 发送中断..
-	{
-		TI = 0;
-	}
-}
 void Uart3() interrupt 17 using 1
 {
 	char temp3; 
@@ -1117,6 +1155,31 @@ void Uart3() interrupt 17 using 1
         busy3 = 0;      // 清忙标志
     }
 }
+
+void UARTInterrupt(void) interrupt 4
+{
+	char ans;
+	if (RI)
+	{
+		RI = 0;
+		ans = SBUF;
+		get1[weizhi1++]=ans;
+		if(weizhi1>80)
+		{
+			weizhi1=0;
+		}
+		// chuliguankji(get1);
+		// chuankou1put(ans);
+	}
+	else
+	{
+		TI = 0;
+	}
+	if (TI) // 发送中断..
+	{
+		TI = 0;
+	}
+}
 void uart2(void) interrupt 8
 {
 	char ans;
@@ -1124,7 +1187,7 @@ void uart2(void) interrupt 8
 	{
 		S2CON &= ~S2RI;
 		ans = S2BUF;
-		// chuankou1put(ans);
+		chuankou1put(ans);
 	}
 	if (S2CON & S2TI)
 	{

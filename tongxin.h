@@ -13,5 +13,6 @@ extern void show();
 extern void push(int weizhi,int zhi);
 extern void pushshow(int weizhi,int zhi);
 extern int pop();
-int pop2(  Alltongxininfo *get);
+extern int pop2(  Alltongxininfo *get);
+extern int empty();
 #endif

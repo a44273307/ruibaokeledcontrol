@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  tongxin2                                                           06/08/23  14:51:20  PAGE 1   
+C251 COMPILER V5.60.0,  tongxin2                                                           07/08/23  20:41:03  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE tongxin2
@@ -66,7 +66,7 @@ stmt  level    source
    56   1          // 有就更新
    57   1          for(i = 0; i < dizhi; i++)
    58   1          {
-C251 COMPILER V5.60.0,  tongxin2                                                           06/08/23  14:51:20  PAGE 2   
+C251 COMPILER V5.60.0,  tongxin2                                                           07/08/23  20:41:03  PAGE 2   
 
    59   2              if(Vectorbase[i].weizhi == weizhi)
    60   2              {

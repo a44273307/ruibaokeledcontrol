@@ -42,6 +42,7 @@ char rec2[200]={0};
 int weizhi2=0;
 // 01 是用力啊检查地址的，，默认55
 u16 g_reg[40]={0};
+#define indexdianniunow 19
 #define indexAdddianliu 20
 #define indexTImeuse 21
 #define indexTImeAll 22
@@ -117,7 +118,7 @@ void printtoDianao(const char *fmt, ...)
 	p = (unsigned char *)buf;
 	while (*p != '\0')
 	{
-		sendbyte2(*p);
+		sendbyte1(*p);
 		p++;
 	}
 }
@@ -215,11 +216,7 @@ void showpre(int num)
 	}
 }
 
-void testmain()
-{
-	int a, b;
-	int times = 0;
-}
+
 
 
 
@@ -332,26 +329,6 @@ void setzhione(int dizhi,int zhi)
 
 
 
-int setprezhi;
-
-int dianliusettime=0;
-char flagdianliuset=0;
-void setdianliusettime(int zhi)
-{
-	if(dianliusettime!=0)
-	{
-		return ;
-	}
-	dianliusettime=zhi;
-}
-void changedainliuzhi()
-{
-	if(setprezhi!=g_dianliu)
-	{
-		setprezhi=g_dianliu;
-		setdianliusettime(250);
-	}
-}
 
 
 
@@ -424,7 +401,8 @@ void shurulvbo(void)
 	}
 }
 char flagsetliangdu=0;
-void writebuf();
+
+void EPPROMwrite();
 void keydown(int i) // 按键按下的处理、、、
 {
 	printf1("keydown %d",i);
@@ -435,7 +413,8 @@ void keydown(int i) // 按键按下的处理、、、
 		if(flagsetliangdu==1)//保存记录的值
 		{
 			printf1("flagsetliangdusetzhi %d",g_dianliu);
-			writebuf();		
+			g_reg[indexdianniunow]=g_dianliu;
+			EPPROMwrite();
 		}
 		flagsetliangdu=1-flagsetliangdu;
 	}
@@ -498,15 +477,7 @@ void getdianliupre()
 int timereport=0;
 
 int errpromdizhi=0x000040;
-void writebuf()
-{
-	u8 get[10];
-	get[0]=55;
-	get[1]=g_dianliu/100;
-	get[2]=g_dianliu%100;
-	EEPROM_SectorErase(errpromdizhi);
-	EEPROM_write_n(errpromdizhi,get,3);
-}
+
 void showzhi()
 {
 	int i;
@@ -519,6 +490,17 @@ void showzhi()
 		{
 			printf("[%d-%d]",i,g_reg[i]);
 		}
+	}
+}
+void formatdianliu()
+{
+	if (g_dianliu>2047)
+	{
+		g_dianliu=2047;
+	}
+	if (g_dianliu<0)
+	{
+		g_dianliu=0;
 	}
 }
 void EPPROMinit()
@@ -535,6 +517,8 @@ void EPPROMinit()
 	{
 		printf("not First record");
 	}
+	g_dianliu=g_reg[indexdianniunow];
+	formatdianliu();
 	showzhi();
 }
 void systemshowkaiji()
@@ -687,26 +671,13 @@ int jisuandianliu(int predianliu)
 	}
 	return shoumingjisuan(predianliu);
 }
-int formatzhi(int zhi)
-{
-	if (zhi>2047)
-	{
-		zhi=2047;
-	}
-	if (zhi<0)
-	{
-		zhi=0;
-	}
-	return zhi;
-	
-}
+
 void dianliusendtokongzhiban(int zhi)
 {
 	char out[30]={0};
 	int weizhi=4;
-	zhi=formatzhi(zhi);
-	g_dianliu=zhi;
-	zhi=jisuandianliu(zhi);
+	formatdianliu();
+	zhi=jisuandianliu(g_dianliu);
 	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
 	printfTopingmu(out);
 	printf("%s",out);
@@ -798,7 +769,9 @@ void dealDiannaoOrder()
 	if(weizhi==4)//电流设置，等待设置完成后再处理。。。其他设置不用管。。
 	{
 		delay_ms(10);
-		dianliusendtokongzhiban(zhi);
+		g_dianliu=zhi;
+		formatdianliu();
+		dianliusendtokongzhiban(g_dianliu);
 		delay_ms(10);
 	}
 	else
@@ -1020,12 +993,8 @@ void chuliguankji(char *get1)
 
 void addgetsetzhi(int i)
 {
-	int ans;
-	ans=g_dianliu+i;
-	if(ans>=0 && ans<=2047)
-	{
-		g_dianliu=ans;
-	}
+	g_dianliu=g_dianliu+i;
+	formatdianliu(g_dianliu);
 }
 static int timepush=0;
 void dealorder()
@@ -1112,7 +1081,7 @@ void dealchuankou()
 
 void UARTInterrupt(void) interrupt 4
 {
-	unsigned char ans;
+	char ans;
 	if (RI)
 	{
 		RI = 0;
@@ -1122,7 +1091,8 @@ void UARTInterrupt(void) interrupt 4
 		{
 			weizhi1=0;
 		}
-		chuliguankji(get1);
+		// chuliguankji(get1);
+		chuankou1put(ans);
 	}
 	else
 	{
@@ -1154,7 +1124,7 @@ void uart2(void) interrupt 8
 	{
 		S2CON &= ~S2RI;
 		ans = S2BUF;
-		chuankou1put(ans);
+		// chuankou1put(ans);
 	}
 	if (S2CON & S2TI)
 	{

@@ -803,6 +803,8 @@ void dealDiannaoOrder()
 		delay_ms(10);
 		g_dianliu=zhi;
 		formatdianliu();
+		g_reg[indexdianniunow]=g_dianliu;
+		EPPROMwrite();
 		dianliusendtokongzhiban(g_dianliu);
 		delay_ms(10);
 	}

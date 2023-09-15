@@ -629,7 +629,7 @@ void test2()
 	AUXR |= 0x40; // 定时器时钟1T模式
 	AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
 	TMOD &= 0x0F; // 设置定时器模式
-	TL1 = 0xCC;	  // 设置定时初始值
+	TL1 = 0xB8;	  // 设置定时初始值
 	TH1 = 0xFF;	  // 设置定时初始值
 	ET1 = 0;	  // 禁止定时器%d中断
 	TR1 = 1;	  // 定时器1开始计时
@@ -686,7 +686,7 @@ void main(void)
 	XOSCCR = 0xc0;        //启动外部晶振
 	while(!(XOSCCR&1));   //等待时钟稳定
 	CLKDIV = 0x00;        //时钟不分频
-	CLKSEL = 0x01;        //选择外部时钟		
+	CLKSEL = 0x0;        //选择外部时钟		
 	GPIO_confibase();
 	SYS_Init();
 	test2();

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_SPI                                                         31/07/23  22:33:10  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_SPI                                                         15/09/23  14:22:53  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_SPI
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        else
    57   1        {
    58   2          MSTR = 1;   //使能 SPI 主机模式
-C251 COMPILER V5.60.0,  STC32G_SPI                                                         31/07/23  22:33:10  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_SPI                                                         15/09/23  14:22:53  PAGE 2   
 
    59   2          SSIG = 1;   //忽略SS引脚功能
    60   2        }

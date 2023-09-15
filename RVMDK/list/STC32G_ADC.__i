@@ -1,0 +1,1 @@
+"..\Driver\src\STC32G_ADC.c" LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_ADC.lst) TABS (2) OBJECT(.\list\STC32G_ADC.obj)

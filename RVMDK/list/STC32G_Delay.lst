@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Delay                                                       31/07/23  22:33:08  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Delay                                                       15/09/23  14:22:52  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Delay
@@ -43,7 +43,7 @@ stmt  level    source
    33          {
    34   1        unsigned int i;
    35   1        do{
-   36   2          i = MAIN_Fosc/20/ 6030;
+   36   2          i = MAIN_Fosc /2/ 6030/10;
    37   2          while(--i);
    38   2        }while(--ms);
    39   1      }
@@ -67,7 +67,7 @@ Module Information          Static   Overlayable
   huge data size       =    ------     ------
   const size           =    ------     ------
   hconst size          =    ------     ------
-C251 COMPILER V5.60.0,  STC32G_Delay                                                       31/07/23  22:33:08  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Delay                                                       15/09/23  14:22:52  PAGE 2   
 
 End of Module Information.
 

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  22:33:12  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         15/09/23  14:22:55  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_CAN
@@ -66,7 +66,7 @@ stmt  level    source
    56          // 描述: CAN 初始化程序.
    57          // 参数: CAN: 结构参数,请参考CAN.h里的定义.
    58          // 返回: none.
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  22:33:12  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         15/09/23  14:22:55  PAGE 2   
 
    59          // 版本: V1.0, 2021-06-02
    60          //========================================================================
@@ -134,7 +134,7 @@ stmt  level    source
   122          // 版本: VER2.0
   123          // 日期: 2023-01-31
   124          // 备注: 
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  22:33:12  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         15/09/23  14:22:55  PAGE 3   
 
   125          //========================================================================
   126          void CanReadFifo(CAN_DataDef *CAN)
@@ -202,7 +202,7 @@ stmt  level    source
   187          // 描述: CAN发送标准帧函数。
   188          // 参数: *CANx: 存放CAN总线发送数据..
   189          // 返回: none.
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  22:33:12  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         15/09/23  14:22:55  PAGE 4   
 
   190          // 版本: VER1.0
   191          // 日期: 2020-11-19
@@ -270,7 +270,7 @@ stmt  level    source
   249   2              B_Can2Send = 1;     //设置CAN2发送忙标志
   250   2          }
   251   1          else
-C251 COMPILER V5.60.0,  STC32G_CAN                                                         31/07/23  22:33:12  PAGE 5   
+C251 COMPILER V5.60.0,  STC32G_CAN                                                         15/09/23  14:22:55  PAGE 5   
 
   252   1          {
   253   2              B_Can1Send = 1;     //设置CAN1发送忙标志

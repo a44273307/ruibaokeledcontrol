@@ -1,0 +1,1 @@
+"..\Driver\isr\STC32G_SPI_Isr.c" LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\STC32G_SPI_Isr.lst) TABS (2) OBJECT(.\list\STC32G_SPI_Isr.obj)

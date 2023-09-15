@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Exti_Isr                                                    31/07/23  22:33:13  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Exti_Isr                                                    15/09/23  14:22:56  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Exti_Isr
@@ -66,7 +66,7 @@ stmt  level    source
    56          void INT2_ISR_Handler (void) interrupt INT2_VECTOR    //进中断时已经清除标志
    57          {
    58   1        // TODO: 在此处添加用户代码
-C251 COMPILER V5.60.0,  STC32G_Exti_Isr                                                    31/07/23  22:33:13  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Exti_Isr                                                    15/09/23  14:22:56  PAGE 2   
 
    59   1      //  P02 = ~P02;
    60   1        WakeUpSource = 3;

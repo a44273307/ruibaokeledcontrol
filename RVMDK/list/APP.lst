@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  APP                                                                31/07/23  22:33:07  PAGE 1   
+C251 COMPILER V5.60.0,  APP                                                                15/09/23  14:22:52  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE APP
@@ -21,10 +21,10 @@ stmt  level    source
    11          /*---------------------------------------------------------------------*/
    12          
    13          #include  "APP.h"
-*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
-*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
-*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
-*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
+*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
+*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
+*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
+*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
    14          
    15          //========================================================================
    16          //                               本地常量声明 
@@ -66,7 +66,7 @@ stmt  level    source
    52   1      //  EEPROM_init();
    53   1      //  WDT_init();
    54   1      //  PWMA_Output_init();
-C251 COMPILER V5.60.0,  APP                                                                31/07/23  22:33:07  PAGE 2   
+C251 COMPILER V5.60.0,  APP                                                                15/09/23  14:22:52  PAGE 2   
 
    55   1      //  PWMB_Output_init();
    56   1      //  DMA_AD_init();

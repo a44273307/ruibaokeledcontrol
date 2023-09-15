@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Timer                                                       31/07/23  22:33:10  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Timer                                                       15/09/23  14:22:54  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Timer
@@ -66,7 +66,7 @@ stmt  level    source
    54   1        {
    55   2          Timer2_Stop();  //停止计数
    56   2          Timer2_CLK_Select(TIMx->TIM_ClkSource); //对外计数或分频, 定时12T/1T
-C251 COMPILER V5.60.0,  STC32G_Timer                                                       31/07/23  22:33:10  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Timer                                                       15/09/23  14:22:54  PAGE 2   
 
    57   2          Timer2_CLK_Output(TIMx->TIM_ClkOut);    //输出时钟使能
    58   2      

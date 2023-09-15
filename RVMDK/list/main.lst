@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 1   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE main
@@ -33,10 +33,10 @@ stmt  level    source
    22          #include  "Task.h"
    23          #include  "System_init.h"
    24          #include  "APP.h"
-*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
-*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
-*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
-*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\Synthetical_Programme\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
+*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
+*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
+*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
+*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
    25          
    26          #include  "config.h"
    27          #include  "STC32G_GPIO.h"
@@ -47,6 +47,7 @@ stmt  level    source
    32          #include "uart.h"
 *** WARNING C317 IN LINE 17 OF ..\User\uart.h: attempt to redefine macro 'CLR_TI4'
 *** WARNING C317 IN LINE 18 OF ..\User\uart.h: attempt to redefine macro 'CLR_RI4'
+*** WARNING C317 IN LINE 24 OF ..\User\uart.h: attempt to redefine macro 'MAIN_Fosc'
    33          #include "tongxin2.h"
    34          #include "tongxin.h"
    35          #include "STC32G_EEPROM.h"
@@ -65,9 +66,9 @@ stmt  level    source
    48          sbit X3 = P3 ^ 4;
    49          sbit X2 = P3 ^ 6;
    50          sbit X1 = P4 ^ 1;
-   51          
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 2   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 2   
 
+   51          
    52          sbit LED1 = P4 ^ 2;
    53          sbit LED2 = P3 ^ 7;
    54          
@@ -133,9 +134,9 @@ stmt  level    source
   110          void dealorder()
   111          {
   112   1        char out[30]={0};
-  113   1        Alltongxininfo get;
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 3   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 3   
 
+  113   1        Alltongxininfo get;
   114   1        if(timepush>45)
   115   1        {
   116   2          timepush=0;
@@ -201,9 +202,9 @@ stmt  level    source
   174          
   175          
   176          void setzhichange(int a)
-  177          {
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 4   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 4   
 
+  177          {
   178   1        if (flagcanset == 0)
   179   1          return;
   180   1        if (g_dianliu + a < 0)
@@ -269,9 +270,9 @@ stmt  level    source
   240   2          return;
   241   2        }
   242   1        if (i == keyup)
-  243   1        {
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 5   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 5   
 
+  243   1        {
   244   2          setzhichange(1);
   245   2          return;
   246   2        }
@@ -337,9 +338,9 @@ stmt  level    source
   306   1      }
   307          void ledclose(int weizhi)
   308          {
-  309   1        if (weizhi == keyon || weizhi == keyok)
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 6   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 6   
 
+  309   1        if (weizhi == keyon || weizhi == keyok)
   310   1        {
   311   2          return;
   312   2        }
@@ -405,9 +406,9 @@ stmt  level    source
   370   1          0xFF,
   371   1          0xFF,
   372   1        }; // 矩阵按键扫描缓冲区 8ms
-  373   1        unsigned char i;
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 7   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 7   
 
+  373   1        unsigned char i;
   374   1        i = X0;
   375   1        keybuf[0] = (keybuf[0] << 1) | i;
   376   1        i = X1;
@@ -473,9 +474,9 @@ stmt  level    source
   436   1        // char dataxx[40];
   437   1        // sprintf(dataxx,"NOW:%05d",nowzhi);
   438   1        // LCD_ShowString(0,40,dataxx,WHITE,BLACK,32,0);
-  439   1      }
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 8   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 8   
 
+  439   1      }
   440          
   441          #define maxjindu 16
   442          #define qidian 0
@@ -541,9 +542,9 @@ stmt  level    source
   502   1        char dataxx[40];
   503   1        sprintf(dataxx, "SET:        %04d    ", g_dianliu);
   504   1        LCD_ShowString(0, 120, dataxx, WHITE, BLACK, 32, 0);
-  505   1        showjindtiao();
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 9   
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 9   
 
+  505   1        showjindtiao();
   506   1      }
   507          void showdata()
   508          {
@@ -609,9 +610,9 @@ stmt  level    source
   568   1        int rumtimes = 0;
   569   1        LED0 = ~LED0;
   570   1        readbuf();
-  571   1        // writedizhi(2,0);
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 10  
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 10  
 
+  571   1        // writedizhi(2,0);
   572   1        writedizhi(4,0);
   573   1        while (1)
   574   1        {
@@ -672,14 +673,14 @@ stmt  level    source
   629   1        AUXR |= 0x40; // 定时器时钟1T模式
   630   1        AUXR &= 0xFE; // 串口1选择定时器1为波特率发生器
   631   1        TMOD &= 0x0F; // 设置定时器模式
-  632   1        TL1 = 0xCC;   // 设置定时初始值
+  632   1        TL1 = 0xB8;   // 设置定时初始值
   633   1        TH1 = 0xFF;   // 设置定时初始值
   634   1        ET1 = 0;    // 禁止定时器%d中断
   635   1        TR1 = 1;    // 定时器1开始计时
   636   1        ES = 1;
-  637   1        EA = 1;
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 11  
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 11  
 
+  637   1        EA = 1;
   638   1        P_SW1 = 0x00; // RXD/P3.0, TXD/P3.1
   639   1      
   640   1      }
@@ -731,7 +732,7 @@ stmt  level    source
   686   1        XOSCCR = 0xc0;        //启动外部晶振
   687   1        while(!(XOSCCR&1));   //等待时钟稳定
   688   1        CLKDIV = 0x00;        //时钟不分频
-  689   1        CLKSEL = 0x01;        //选择外部时钟    
+  689   1        CLKSEL = 0x0;        //选择外部时钟   
   690   1        GPIO_confibase();
   691   1        SYS_Init();
   692   1        test2();
@@ -745,9 +746,9 @@ stmt  level    source
   700   1        LCD_Init();
   701   1        delay_ms(50);
   702   1        LCD_Fill(0, 0, 320, 240, BLACK);
-  703   1        delay_ms(50);
-C251 COMPILER V5.60.0,  main                                                               06/08/23  19:45:02  PAGE 12  
+C251 COMPILER V5.60.0,  main                                                               15/09/23  14:25:37  PAGE 12  
 
+  703   1        delay_ms(50);
   704   1        pingmuclear();
   705   1        delay_ms(50);
   706   1        mainrun();
@@ -759,7 +760,7 @@ stmt  level    source
 Module Information          Static   Overlayable
 ------------------------------------------------
   code size            =        12     ------
-  ecode size           =      2988     ------
+  ecode size           =      2986     ------
   data size            =    ------     ------
   idata size           =    ------     ------
   pdata size           =    ------     ------
@@ -777,4 +778,4 @@ Module Information          Static   Overlayable
 End of Module Information.
 
 
-C251 COMPILATION COMPLETE.  13 WARNING(S),  0 ERROR(S)
+C251 COMPILATION COMPLETE.  14 WARNING(S),  0 ERROR(S)

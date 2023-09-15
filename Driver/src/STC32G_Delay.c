@@ -33,7 +33,7 @@ void delay_ms2(unsigned int ms)
 {
 	unsigned int i;
 	do{
-		i = MAIN_Fosc/20/ 6030;
+		i = MAIN_Fosc /2/ 6030/10;
 		while(--i);
 	}while(--ms);
 }

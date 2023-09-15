@@ -176,13 +176,13 @@ void LCD_Fill(u16 sx,u16 sy,u16 ex,u16 ey,u16 color)
 void Test_Color(void)
 {
 	LCD_Fill(0,0,lcddev.width,lcddev.height,WHITE);
-	Show_Str(20,30,BLUE,YELLOW,"LCM Test",16,1);delay_ms(800);
+	Show_Str(20,30,BLUE,YELLOW,"LCM Test",16,1);delay_ms2(800);
 	LCD_Fill(0,0,lcddev.width,lcddev.height,RED);
-	Show_Str(20,30,BLUE,YELLOW,"RED ",16,1);delay_ms(800);
+	Show_Str(20,30,BLUE,YELLOW,"RED ",16,1);delay_ms2(800);
 	LCD_Fill(0,0,lcddev.width,lcddev.height,GREEN);
-	Show_Str(20,30,BLUE,YELLOW,"GREEN ",16,1);delay_ms(800);
+	Show_Str(20,30,BLUE,YELLOW,"GREEN ",16,1);delay_ms2(800);
 	LCD_Fill(0,0,lcddev.width,lcddev.height,BLUE);
-	Show_Str(20,30,RED,YELLOW,"BLUE ",16,1);delay_ms(800);
+	Show_Str(20,30,RED,YELLOW,"BLUE ",16,1);delay_ms2(800);
 }
 
 /*****************************************************************************
@@ -280,11 +280,11 @@ void LCD_DrawPoint(u16 x,u16 y)
 void LCDReset(void)
 {
 	LCD_CS=1;
-	delay_ms(50);	
+	delay_ms2(50);	
 	LCD_RESET=0;
-	delay_ms(150);
+	delay_ms2(150);
 	LCD_RESET=1;
-	delay_ms(50);
+	delay_ms2(50);
 }
 
 /*****************************************************************************
@@ -338,7 +338,7 @@ void LCD_direction(u8 direction)
 void LCD_Init(void)
 {
 	LCDReset(); //初始化之前复位
-//	delay_ms(150);                     //根据不同晶振速度可以调整延时，保障稳定显示
+//	delay_ms2(150);                     //根据不同晶振速度可以调整延时，保障稳定显示
 //*************2.4inch ILI9341初始化**********//	
 	LCD_WR_REG(0xCF);  
 	LCD_WR_DATA(0x00); 
@@ -430,7 +430,7 @@ void LCD_Init(void)
 	LCD_WR_DATA(0x00);
 	LCD_WR_DATA(0xef);	 
 	LCD_WR_REG(0x11); //Exit Sleep
-	delay_ms(120);
+	delay_ms2(120);
 	LCD_WR_REG(0x29); //display on	
 
 	//设置LCD属性参数

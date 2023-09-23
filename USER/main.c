@@ -144,6 +144,10 @@ void run()
 void dealchuankou();
 // 屏幕过来的指令，，，下发下去。。。
 void dianliusendtokongzhiban(int zhi);
+#define modekey 0
+#define mode232 1
+#define modeTCP 2
+int g_setmode = modekey;
 void getzhiandchange()
 {
     int weizhi,zhi;
@@ -158,6 +162,11 @@ void getzhiandchange()
 	if(get.weizhi==4)
 	{
 		dianliusendtokongzhiban(zhi);
+	}
+	if(get.weizhi==101)
+	{
+		printf("get pingmu g_setmode%d",g_setmode);
+		g_setmode=get.zhi;
 	}
 }
 // 定义printf函数
@@ -325,7 +334,7 @@ int jisuandianliu(int predianliu)
 	}
 	return shoumingjisuan(predianliu);
 }
-int g_dianliu=0;
+int g_dianliu=0;   
 
 
 void dianliusendtokongzhiban(int zhi)
@@ -336,7 +345,7 @@ void dianliusendtokongzhiban(int zhi)
 	zhi=jisuandianliu(zhi);
 	sprintf(out,"set:%d-%d;%d-%d;end",weizhi,zhi,weizhi,zhi);
 	printTokongzhiban(out);
-	printf("%s",out);
+	printf("TO kongzhiban %s",out);
 }
 void dealorder()
 {
@@ -735,8 +744,14 @@ void com2checkrun()
 		return;
 	}
 	delay_ms(2); // 等待收完
-	
-	diannaoinputset();
+	if(g_setmode==mode232)
+	{
+		diannaoinputset();
+	}
+	else
+	{
+		print2("now crontrol mode is not mode232,pleas check\n");
+	}
 	memset(rec2, 0, sizeof(rec2));
 	weizhi2 = 0;
 }
@@ -801,6 +816,11 @@ void delaFromwangkou(char *buf)
 {
 	int i;
 	com2jiexi(buf);
+	if(g_setmode!=modeTCP)
+	{
+		sendwangkoutodiannao("now crontrol mode is not modeTCP,pleas check\n");
+		return ;
+	}
 	if(VectorIsEmpty(VectorDiannao))
 	{
 		sendwangkoutodiannao("oder format error,pleas check\n");
@@ -809,10 +829,35 @@ void delaFromwangkou(char *buf)
 	delawanglkouorder();
 	ShowInfoToDiannan(2);
 }
+//sbit out2 = P3 ^ 2;
+int isokser(char *str)
+{
+    int len,contentlen;
+    int index1,index2;
+    len=strlen(str);
+    
+    if(len<8)
+    {
+        return 0;
+    }
+    // 检查字符串是否以 "set:" 开头
+    if (strncmp(str, "set:", 4) != 0) {
+        return 0; // 不以 "set:" 开头，返回假
+    }
+    if (strncmp(str + len - 3, "end", 3) != 0) {
+        return 0; // 不以 "end" 结尾，返回假
+    }
+    contentlen=(len-4-3)/2;
+    if (strncmp(str+4,str+contentlen+4,contentlen) != 0) {
+        return 0; // 不以 "end" 结尾，返回假
+    }
+    return 1;
+}
 int main(void)
 {
 	int i, j, k;
 	initall();
+	
 	while (1)
 	{
 		do_tcp_server();                  /*TCP_Client 数据回环测试程序*/

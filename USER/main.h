@@ -54,6 +54,7 @@ void chuankou2jisuuan();
 void settime(int zhi);
  extern char  buf[30] ;
  extern char Recv_Flag4 ;  //接受数据标志 起始标志到后
+ extern int isokser(char *str);
 #endif /* __MAIN_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

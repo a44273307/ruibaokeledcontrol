@@ -42,7 +42,7 @@ void do_tcp_server(void)
 	{
 		case SOCK_CLOSED:	
 		{
-			printf("%s\r\n","SOCK_CLOSED");
+			// printf("%s\r\n","SOCK_CLOSED");
 			socket(SOCK_TCPS ,Sn_MR_TCP,local_port,Sn_MR_ND);	        /*打开socket*/
 		}												                  /*socket处于关闭状态*/
 		  break;     

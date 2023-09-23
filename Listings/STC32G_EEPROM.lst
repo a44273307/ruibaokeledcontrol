@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      07/08/23  20:41:04  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      19/09/23  21:22:47  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_EEPROM
@@ -66,7 +66,7 @@ stmt  level    source
    56          // 函数: void EEPROM_read_n(u32 EE_address,u8 *DataAddress,u16 number)
    57          // 描述: 从指定EEPROM首地址读出n个字节放指定的缓冲.
    58          // 参数: EE_address:  读出EEPROM的首地址.
-C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      07/08/23  20:41:04  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      19/09/23  21:22:47  PAGE 2   
 
    59          //       DataAddress: 读出数据放缓冲的首地址.
    60          //       number:      读出的字节长度.
@@ -134,7 +134,7 @@ stmt  level    source
   122   2          EE_address++;                     //下一个地址
   123   2          DataAddress++;                    //下一个数据
   124   2        }while(--number);                   //直到结束
-C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      07/08/23  20:41:04  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_EEPROM                                                      19/09/23  21:22:47  PAGE 3   
 
   125   1        DisableEEPROM();
   126   1      }

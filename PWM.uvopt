@@ -87,8 +87,8 @@
         <TargetDlgDllArguments>-p251</TargetDlgDllArguments>
       </DllOpt>
       <DebugOpt>
-        <uSim>1</uSim>
-        <uTrg>0</uTrg>
+        <uSim>0</uSim>
+        <uTrg>1</uTrg>
         <sLdApp>1</sLdApp>
         <sGomain>1</sGomain>
         <sRbreak>1</sRbreak>
@@ -116,8 +116,15 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile></tIfile>
-        <pMon></pMon>
+        <pMon>BIN\STCMON251.DLL</pMon>
       </DebugOpt>
+      <TargetDriverDllRegistry>
+        <SetRegEntry>
+          <Number>0</Number>
+          <Key>STCMON251</Key>
+          <Name>-S256 -B0 -O775</Name>
+        </SetRegEntry>
+      </TargetDriverDllRegistry>
       <DebugFlag>
         <trace>0</trace>
         <periodic>0</periodic>
@@ -160,10 +167,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -174,10 +181,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\MAX7219.c</PathWithFileName>
       <FilenameWithoutPath>MAX7219.c</FilenameWithoutPath>
@@ -188,10 +195,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\uart.c</PathWithFileName>
       <FilenameWithoutPath>uart.c</FilenameWithoutPath>
@@ -202,10 +209,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\tongxin.c</PathWithFileName>
       <FilenameWithoutPath>tongxin.c</FilenameWithoutPath>
@@ -216,10 +223,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\func.c</PathWithFileName>
       <FilenameWithoutPath>func.c</FilenameWithoutPath>
@@ -230,10 +237,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\tongxin2.c</PathWithFileName>
       <FilenameWithoutPath>tongxin2.c</FilenameWithoutPath>
@@ -244,10 +251,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>1916499</ColumnNumber>
+      <ColumnNumber>13516371</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>50601200</TopLine>
-      <CurrentLine>13836696</CurrentLine>
+      <TopLine>50279592</TopLine>
+      <CurrentLine>4005928</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\STC32G_EEPROM.c</PathWithFileName>
       <FilenameWithoutPath>STC32G_EEPROM.c</FilenameWithoutPath>

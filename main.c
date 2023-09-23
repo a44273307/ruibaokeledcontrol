@@ -10,7 +10,7 @@
 
 
 
-
+#define  maxdianliu 1023
 
 #include <string.h>
 #include "stc32g.h"
@@ -26,7 +26,9 @@
 #include "tongxin.h"
 #include "tongxin2.h"
 #include "STC32G_EEPROM.h"
+#include "ntc10k3950.h"
 
+int g_wendu=0;
 void SYS_Ini();		// STC32初始化设置
 void EC11_Handle(); // EC11数据处理
 					// 数码管显示
@@ -515,9 +517,9 @@ void showzhi()
 }
 void formatdianliu()
 {
-	if (g_dianliu>2047)
+	if (g_dianliu>maxdianliu)
 	{
-		g_dianliu=2047;
+		g_dianliu=maxdianliu;
 	}
 	if (g_dianliu<0)
 	{
@@ -716,9 +718,9 @@ int jisuandianliu(int predianliu)
 		return 0;
 	}
 	predianliu=predianliu+g_reg[indexAdddianliu];
-	if(predianliu>2047)
+	if(predianliu>maxdianliu)
 	{
-		predianliu=2047;
+		predianliu=maxdianliu;
 	}
 	return shoumingjisuan(predianliu);
 }
@@ -829,23 +831,37 @@ int iserror()
 		flag_error=1;
 		return 1;
 	}
+	if(g_wendu>650)
+	{
+		return 1;
+	}
 	return 0;
 }
 void ShowInfoToDiannan()
 {
 	char out[200]={0};
+	char out2[50]={0};
 	if(g_dianliu>0)
 	sprintf(out,"begin;open:%d;",g_dianliu);
 	else
 	sprintf(out,"begin;close:%d;",g_dianliu);
-	if(iserror())
-		{
-			strcat(out,"tmp:error;");	
-		}
-		else
-		{
-			strcat(out,"tmp:ok;");
-		}
+	// 没温度值，就显示状态，有就显示温度
+	// if(g_wendu==0)
+	// {
+	// 	if(iserror())
+	// 	{
+	// 		strcat(out,"tmp:error;");	
+	// 	}
+	// 	else
+	// 	{
+	// 		strcat(out,"tmp:ok;");
+	// 	}
+	// }
+	// else
+	{
+		sprintf(out2,"Tmp:%d.%d;",g_wendu/10,g_wendu%10);
+	}
+	strcat(out,out2);
 	if(iserror())
 	{
 		strcat(out,"Stat:error;");
@@ -929,20 +945,92 @@ void shoumingjilu()
 		EPPROMwrite();
 	}
 }
+int getadczhi(int weizhi)
+{
+	    int ans,ans1;
+		if(weizhi==0)
+		{
+			ADC_CONTR = 0x80;
+		}
+		else
+		{
+			ADC_CONTR = 0x84;
+		}
+	// ADC_CONTR |=weizhi;
+	ADC_CONTR |= 0x40;                      //启动AD转换
+	
+		_nop_();
+		_nop_();
+		while (!(ADC_CONTR & 0x20));            //查询ADC完成标志
+		ADC_CONTR &= ~ 0X20;            //标志位需要手动清0
+		
+		ans=ADC_RES;
+		ans=ans<<2;
+		ans1=ADC_RESL;
+		ans1=ans1>>6;
+		 //( *4)+ ADC_RESL>>6;
+		 ADC_RES=0;
+		 ADC_RESL=0;
+		ans=ans+ans1;
+	return ans;
+}
+
+long getdianzu(long dianya)
+{
+	if(dianya==1023)
+	{
+		return 4700; 
+	}
+	return 4700*dianya/(1023-dianya);
+}
+
+int jisuanwendu(int R)
+{
+	int p,T;
+	unsigned long Ac = 0;
+        for ( p=1; p<sizeof(NTC10K3950)/sizeof(NTC); p++ ) {
+      if ( R >= NTC10K3950[p].R ) 
+	  {
+        Ac = R - NTC10K3950[p].R; // delta resistance
+        Ac *= 50; //multiply by 5.0 degrees celsius step of table
+        Ac /= NTC10K3950[p-1].R - NTC10K3950[p].R; // divide by range of resistence 
+        T = NTC10K3950[p].t*10 - Ac; // temperature offset
+        break;
+      }
+    }
+	return T;
+}
+
+void getwendu()
+{
+	int dianya;
+	long dianzu;
+	dianya=getadczhi(1);
+	// printf1("dianya %d",dianya);
+	if(dianya>1000 || dianya <10)
+	{
+		return ; 
+	}
+	dianzu=getdianzu(dianya);
+	g_wendu=jisuanwendu(dianzu);
+	// printf1("g_wendu %d",g_wendu);
+}
 void main(void)
 {
+	int runtimes=0;
 	int i=0;
+	int adczhi=0;
 	SYS_Ini();	  // STC32初始化设置
 	PWM_Config(); // PWM初始化设置
 	EA = 1;		  // 使能EA总中断
-
+	ADC_CONTR = 0x80;
 	UartInit();
 	Uart23Init();
 	printf1("system is ok");
 	Timer0Init();
 	keyallchuli();
 	flaginit=1;
-	delay_ms(40);
+	delay_ms(100);
 	EPPROMinit();
 	push(4,0);
 	systemshowkaiji();
@@ -962,6 +1050,11 @@ void main(void)
 		diannaocheck();
 		iserror();
 		shoumingjilu();
+		runtimes=runtimes+1;
+		if(runtimes%1000==0)
+		{
+			getwendu();
+		}
 		if(i++>10000)
 		{
 			i=0;
@@ -1051,7 +1144,7 @@ void chuliguankji(char *get1)
 void addgetsetzhi(int i)
 {
 	g_dianliu=g_dianliu+i;
-	formatdianliu(g_dianliu);
+	formatdianliu();
 }
 static int timepush=0;
 void dealorder()

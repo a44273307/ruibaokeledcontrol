@@ -1351,3 +1351,101 @@ Log at : 2023/8/7|20:22:20|GMT+0800
 	at Generator.next (<anonymous>)
 	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
 	at process.processTicksAndRejections (node:internal/process/task_queues:96:5)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:96:5)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:96:5)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:96:5)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:96:5)]
+Log at : 2023/9/18|14:58:17|GMT+0800
+
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:95:5)]
+Log at : 2023/9/19|21:12:05|GMT+0800
+
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)]
+[TypeError: Cannot read properties of undefined (reading 'C51')
+	at b.getIncString (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:13625)
+	at b.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10429)
+	at Generator.next (<anonymous>)
+	at c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4542
+	at new Promise (<anonymous>)
+	at r (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4287)
+	at b.load (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:10382)
+	at x.<anonymous> (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:8182)
+	at Generator.next (<anonymous>)
+	at a (c:\Users\dali\.vscode\extensions\cl.keil-assistant-1.6.2\dist\extension.js:1:4344)
+	at process.processTicksAndRejections (node:internal/process/task_queues:95:5)]

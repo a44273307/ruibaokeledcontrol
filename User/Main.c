@@ -171,7 +171,7 @@ void Uart3() interrupt 17
 
 char flag_show = 0;
 // 是否能够设置值的状态。。。  ok键按下 即可。。。
-char flagcanset = 0;
+char flagKeyCanSet = 0;
 void setdianliu(int zhi)
 {
 	push(4,zhi);
@@ -179,9 +179,9 @@ void setdianliu(int zhi)
 
 
 
-void setzhichange(int a)
+void keySetDianliu(int a)
 {
-	if (flagcanset == 0)
+	if (flagKeyCanSet == 0)
 		return;
 	if (g_dianliu + a < 0)
 	{
@@ -239,7 +239,7 @@ void keylowdeal()
 	}
 	else
 	{
-		setzhichange(-1);
+		keySetDianliu(-1);
 	}
 	
 }
@@ -251,7 +251,7 @@ void keyupdeal()
 	}
 	else
 	{
-		setzhichange(1);
+		keySetDianliu(1);
 	}
 	
 }
@@ -259,6 +259,7 @@ void modeshowandsend();
 void showbak();
 void keyokdeal()
 {
+	// mode 界面设置，232等。。。
 	if(g_showset==showmodeset)
 	{
 		// 这里设置了值。。。
@@ -276,15 +277,36 @@ void keyokdeal()
 	}
 	else
 	{
-		if(flagcanset==1)
+		if(g_setmode!=modekey)
+		{
+			return;
+		}
+		if(flagKeyCanSet==1)
 		{
 			writebuf();
 		}
-		flagcanset = 1 - flagcanset;
-		LED2 = ~LED2;
+		flagKeyCanSet = 1 - flagKeyCanSet;
+		// LED2 = ~LED2;
 	}
 
 }
+void flagKeyDeal()
+{
+	if(g_setmode!=modekey)
+	{
+		flagKeyCanSet=0;
+	}
+	if(flagKeyCanSet==1)
+	{
+		LED2=0;
+	}
+	else
+	{
+		LED2=1;
+	}
+
+}
+
 void keydown(int i) // 按键按下的处理、、、
 {
 	printf("key down%d",i);
@@ -316,7 +338,7 @@ void keydown(int i) // 按键按下的处理、、、
 			IAP_CONTR = 0x60;
 		}
 	}
-	if (flagcanset)
+	if (flagKeyCanSet)
 	{
 		ledopen(i);
 	}
@@ -418,12 +440,12 @@ void dolongtimes(int i, int times)
 	}
 	if (i == keylow)
 	{
-		setzhichange(-xielv);
+		keySetDianliu(-xielv);
 		return;
 	}
 	if (i == keyup)
 	{
-		setzhichange(xielv);
+		keySetDianliu(xielv);
 		return;
 	}
 }
@@ -721,10 +743,12 @@ void mainrun()
 
 	writedizhi(4,0);
 	modeshowandsend();
-	keydown(0);
+	// keydown(0);
+	
 	while (1)
 	{
 		delay_ms2(1);
+		flagKeyDeal();
 		shurulvbo();
 		keyallchuli(); 
 		dealorder();

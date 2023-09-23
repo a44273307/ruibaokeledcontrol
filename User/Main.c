@@ -743,7 +743,7 @@ void mainrun()
 
 	writedizhi(4,0);
 	modeshowandsend();
-	// keydown(0);
+	
 	
 	while (1)
 	{

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   15/09/23  14:22:53  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   19/09/23  21:23:35  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_Soft_UART
@@ -66,7 +66,7 @@ stmt  level    source
    56   1        P_TXD = 0;
    57   1        BitTime();
    58   1        for(i=0; i<8; i++)
-C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   15/09/23  14:22:53  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_Soft_UART                                                   19/09/23  21:23:35  PAGE 2   
 
    59   1        {
    60   2          if(dat & 1)   P_TXD = 1;

@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  system_init                                                        15/09/23  14:22:51  PAGE 1   
+C251 COMPILER V5.60.0,  system_init                                                        19/09/23  21:23:32  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE system_init
@@ -34,10 +34,10 @@ stmt  level    source
    24          #include  "STC32G_WDT.h"
    25          #include  "STC32G_NVIC.h"
    26          #include  "app.h"
-*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
-*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
-*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
-*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
+*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
+*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
+*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
+*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
    27          
    28          #include  "STC32G_Soft_UART.h"
    29          
@@ -66,7 +66,7 @@ stmt  level    source
    52   1        TIM_InitStructure.TIM_Mode      = TIM_16BitAutoReload;  //指定工作模式,   TIM_16BitAutoReload,TIM_16Bit,T
              -IM_8BitAutoReload,TIM_16BitAutoReloadNoMask
    53   1        TIM_InitStructure.TIM_ClkSource = TIM_CLOCK_1T;   //指定时钟源,     TIM_CLOCK_1T,TIM_CLOCK_12T,TIM_CLOCK_
-C251 COMPILER V5.60.0,  system_init                                                        15/09/23  14:22:51  PAGE 2   
+C251 COMPILER V5.60.0,  system_init                                                        19/09/23  21:23:32  PAGE 2   
 
              -Ext
    54   1        TIM_InitStructure.TIM_ClkOut    = DISABLE;        //是否输出高速脉冲, ENABLE或DISABLE
@@ -134,7 +134,7 @@ stmt  level    source
   108   1        ADC_InitStructure.ADC_Speed     = ADC_SPEED_2X1T;   //设置 ADC 工作时钟频率 ADC_SPEED_2X1T~ADC_SPEED_2X16
              -T
   109   1        ADC_InitStructure.ADC_AdjResult = ADC_RIGHT_JUSTIFIED;  //ADC结果调整,  ADC_LEFT_JUSTIFIED,ADC_RIGHT_JUSTI
-C251 COMPILER V5.60.0,  system_init                                                        15/09/23  14:22:51  PAGE 3   
+C251 COMPILER V5.60.0,  system_init                                                        19/09/23  21:23:32  PAGE 3   
 
              -FIED
   110   1        ADC_Inilize(&ADC_InitStructure);    //初始化
@@ -202,7 +202,7 @@ stmt  level    source
   164   1        SPI_InitStructure.SPI_CPHA      = SPI_CPHA_2Edge;   //数据边沿   SPI_CPHA_1Edge,  SPI_CPHA_2Edge
   165   1        SPI_InitStructure.SPI_Speed     = SPI_Speed_4;      //SPI速度    SPI_Speed_4, SPI_Speed_8, SPI_Speed_16, SP
              -I_Speed_2
-C251 COMPILER V5.60.0,  system_init                                                        15/09/23  14:22:51  PAGE 4   
+C251 COMPILER V5.60.0,  system_init                                                        19/09/23  21:23:32  PAGE 4   
 
   166   1        SPI_Init(&SPI_InitStructure);
   167   1        NVIC_SPI_Init(DISABLE,Priority_3);    //中断使能, ENABLE/DISABLE; 优先级(低到高) Priority_0,Priority_1,Pri
@@ -270,7 +270,7 @@ stmt  level    source
   222   1      //  COMP_SW(CMP_OUT_P34);     //CMP_OUT_P34,CMP_OUT_P41
   223   1      //  SPI_SW(SPI_P22_P23_P24_P25);  //SPI_P54_P13_P14_P15,SPI_P22_P23_P24_P25,SPI_P54_P40_P41_P43,SPI_P35_P34
              -_P33_P32
-C251 COMPILER V5.60.0,  system_init                                                        15/09/23  14:22:51  PAGE 5   
+C251 COMPILER V5.60.0,  system_init                                                        19/09/23  21:23:32  PAGE 5   
 
   224   1      
   225   1      //  LCM_CTRL_SW(LCM_CTRL_P45_P44_P42);  //LCM_CTRL_P45_P44_P42,LCM_CTRL_P45_P37_P36,LCM_CTRL_P40_P44_P42,LC

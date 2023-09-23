@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 1   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE uart
@@ -66,7 +66,7 @@ stmt  level    source
    52   1        TF0 = 0;    // 清除TF0标志
    53   1        TR0 = 1;    // 定时器0开始计时
    54   1        TR0 = 1;    // 定时器0开始计时
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 2   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 2   
 
    55   1        ET0 = 1;    // 使能定时器0中断
    56   1        PT0 = 1;
@@ -134,7 +134,7 @@ stmt  level    source
   118          /*----------------------------
   119          通过串口1发送串口数据
   120          ----------------------------*/
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 3   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 3   
 
   121          //void SendData(unsigned char ch)
   122          //{
@@ -202,7 +202,7 @@ stmt  level    source
   184          通过串口4发送串口数据
   185          ----------------------------*/
   186          void sendbyte4(unsigned char ch)
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 4   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 4   
 
   187          {
   188   1          while (busy4);               //等待前面的数据发送完成
@@ -270,7 +270,7 @@ stmt  level    source
   250   1      }
   251          void jiexi(char* input);
   252          
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 5   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 5   
 
   253          char* mystrstr(const char* haystack, const char* needle) {
   254   1          if (*needle == '\0') {
@@ -338,7 +338,7 @@ stmt  level    source
   316   1        for( i=0;i<100;i++)
   317   1        {
   318   2          p1=myaddstrstr(p,";"); //找有没有下一个的
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 6   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 6   
 
   319   2          if(p1==NULL)
   320   2          {
@@ -406,7 +406,7 @@ stmt  level    source
   379   1        // {
   380   1        //  delay_ms(2);
   381   1        //  printf(buf1);
-C251 COMPILER V5.60.0,  uart                                                               15/09/23  14:22:51  PAGE 7   
+C251 COMPILER V5.60.0,  uart                                                               19/09/23  21:23:33  PAGE 7   
 
   382   1        // }
   383   1      

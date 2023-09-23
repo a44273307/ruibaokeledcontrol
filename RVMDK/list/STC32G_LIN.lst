@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_LIN
@@ -66,7 +66,7 @@ stmt  level    source
    56          void LinReadMsg(u8 *pdat)
    57          {
    58   1        u8 i;
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 2   
 
    59   1      
    60   1        LinWriteReg(LSEL,0x80); //地址自增，从0开始
@@ -134,7 +134,7 @@ stmt  level    source
   122          // 版本: VER1.0
   123          // 日期: 2021-01-05
   124          // 备注: 
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 3   
 
   125          //========================================================================
   126          u8 WaitLinReady(void)
@@ -202,7 +202,7 @@ stmt  level    source
   188          void ResponseTxCmd(void)
   189          {
   190   1        u8 lcr_val;
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 4   
 
   191   1        lcr_val = 0x02+(LIN_MODE<<6)+(FRAME_LEN<<2);
   192   1        LinWriteReg(LCR,lcr_val);
@@ -270,7 +270,7 @@ stmt  level    source
   254          //========================================================================
   255          void LinSendFrame(u8 lid, u8 *pdat)
   256          {
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 5   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 5   
 
   257   1        LinSetID(lid);            //设置总线ID
   258   1        LinSendMsg(pdat);
@@ -338,7 +338,7 @@ stmt  level    source
   320          {
   321   1        u16 tmp;
   322   1        tmp = (MAIN_Fosc * base_ms) / 1000;
-C251 COMPILER V5.60.0,  STC32G_LIN                                                         15/09/23  14:22:55  PAGE 6   
+C251 COMPILER V5.60.0,  STC32G_LIN                                                         19/09/23  21:23:36  PAGE 6   
 
   323   1        LinWriteReg(HDRH,(u8)(tmp>>8));
   324   1        LinWriteReg(HDRL,(u8)tmp);    //设置帧头延时计数

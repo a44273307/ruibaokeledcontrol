@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  Task                                                               15/09/23  14:22:51  PAGE 1   
+C251 COMPILER V5.60.0,  Task                                                               19/09/23  21:23:32  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE Task
@@ -22,10 +22,10 @@ stmt  level    source
    12          
    13          #include  "Task.h"
    14          #include  "app.h"
-*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
-*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
-*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
-*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_24\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
+*** WARNING C317 IN LINE 89 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'WHITE'
+*** WARNING C317 IN LINE 91 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'BLUE'
+*** WARNING C317 IN LINE 95 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'RED'
+*** WARNING C317 IN LINE 97 OF \瑞宝科\new2\lcd显示屏_33.1776\App\inc\APP_Lamp.h: attempt to redefine macro 'GREEN'
    15          
    16          //========================================================================
    17          //                               本地变量声明
@@ -66,7 +66,7 @@ stmt  level    source
    52          // 描述: 任务标记回调函数.
    53          // 参数: None.
    54          // 返回: None.
-C251 COMPILER V5.60.0,  Task                                                               15/09/23  14:22:51  PAGE 2   
+C251 COMPILER V5.60.0,  Task                                                               19/09/23  21:23:32  PAGE 2   
 
    55          // 版本: V1.0, 2012-10-22
    56          //========================================================================

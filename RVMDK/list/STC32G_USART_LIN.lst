@@ -1,4 +1,4 @@
-C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   15/09/23  14:22:55  PAGE 1   
+C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   19/09/23  21:23:36  PAGE 1   
 
 
 C251 COMPILER V5.60.0, COMPILATION OF MODULE STC32G_USART_LIN
@@ -66,7 +66,7 @@ stmt  level    source
    56          // 备注: 
    57          //========================================================================
    58          void UsartLinSendData(u8 USARTx, u8 *pdat, u8 len)
-C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   15/09/23  14:22:55  PAGE 2   
+C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   19/09/23  21:23:36  PAGE 2   
 
    59          {
    60   1        u8 i;
@@ -134,7 +134,7 @@ stmt  level    source
   122          // 描述: ID码加上校验符，转成PID码并发送。
   123          // 参数: USARTx: USART组号，取值：USART1或者USART2
   124          // 参数: ID码.
-C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   15/09/23  14:22:55  PAGE 3   
+C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   19/09/23  21:23:36  PAGE 3   
 
   125          // 返回: none.
   126          // 版本: VER1.0
@@ -202,7 +202,7 @@ stmt  level    source
   188          //========================================================================
   189          void UsartLinBaudrate(u8 USARTx, u16 brt)
   190          {
-C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   15/09/23  14:22:55  PAGE 4   
+C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   19/09/23  21:23:36  PAGE 4   
 
   191   1        u16 tmp;
   192   1        
@@ -270,7 +270,7 @@ stmt  level    source
   253   2        }
   254   1        return FAIL;  //错误
   255   1      }
-C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   15/09/23  14:22:55  PAGE 5   
+C251 COMPILER V5.60.0,  STC32G_USART_LIN                                                   19/09/23  21:23:36  PAGE 5   
 
   256          
   257          /*********************************************************/

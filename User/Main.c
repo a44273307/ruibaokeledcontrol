@@ -36,7 +36,7 @@
 
 void showhenxiang();
 void ledopen(int weizhi);
-
+void pingmuclear2();
 int keyon = 0;
 int keylow = 1;
 int keyok = 2;
@@ -44,6 +44,12 @@ int keyup = 3;
 
 int nowzhi = 0;
 int g_dianliu = 0;
+
+#define modekey 0
+#define mode232 1
+#define modeTCP 2
+int g_setmode = modekey;
+
 sbit X0 = P4 ^ 0;
 sbit X3 = P3 ^ 4;
 sbit X2 = P3 ^ 6;
@@ -65,7 +71,7 @@ sbit Y0 =  P3 ^ 3;
 
 
 char flagsystemrun = 0;
-#define maxsetzhi 2047
+#define maxsetzhi 1023
 
 
 void	GPIO_confibase(void)
@@ -200,6 +206,85 @@ int writedizhi(int dizhi, int zhi)
 	push(dizhi,zhi);
 }
 void writebuf();
+#define showmodeset 1
+#define showkeyset 0
+// 初始的按键设置状态。。。
+int g_showset=showkeyset;
+// 用来显示游标处理的。。。就是mode设置的界面
+int g_showyoubiao=0;
+void g_showyoubiao_set(int zhi)
+{
+	int i;
+	if(g_showyoubiao<0 && zhi>0)
+	{
+		g_showyoubiao=0;	
+	}
+	g_showyoubiao+=zhi;
+	if(g_showyoubiao<=0)
+	g_showyoubiao=0;
+	if(g_showyoubiao>=3)
+	g_showyoubiao=3;
+	printf("g_showyoubiao-%d",g_showyoubiao);
+	for(i=0;i<4;i++)
+	LCD_ShowString(160, i*40,"      ", WHITE, BLACK, 32, 0);
+
+	LCD_ShowString(160, g_showyoubiao*40,"<---  ", WHITE, BLACK, 32, 0);
+}
+
+void keylowdeal()
+{
+	if(g_showset==showmodeset)
+	{
+		g_showyoubiao_set(-1);
+	}
+	else
+	{
+		setzhichange(-1);
+	}
+	
+}
+void keyupdeal()
+{
+	if(g_showset==showmodeset)
+	{
+		g_showyoubiao_set(1);
+	}
+	else
+	{
+		setzhichange(1);
+	}
+	
+}
+void modeshowandsend();
+void showbak();
+void keyokdeal()
+{
+	if(g_showset==showmodeset)
+	{
+		// 这里设置了值。。。
+		if(g_showyoubiao<=2)
+		{
+			g_setmode=g_showyoubiao;
+			writebuf();
+		}
+		if(g_showyoubiao>=0)
+		{
+			showbak();
+			modeshowandsend();
+			g_showset=showkeyset;
+		}
+	}
+	else
+	{
+		if(flagcanset==1)
+		{
+			writebuf();
+		}
+		flagcanset = 1 - flagcanset;
+		LED2 = ~LED2;
+	}
+
+}
 void keydown(int i) // 按键按下的处理、、、
 {
 	printf("key down%d",i);
@@ -211,6 +296,7 @@ void keydown(int i) // 按键按下的处理、、、
 		{
 			flagsystemrun = 1;
 			LCD_ShowString(0, 0, "Circle TAC", WHITE, BLACK, 32, 0);
+			
 			showhenxiang();
 			writedizhi(2,1);
 			delay_ms(30);
@@ -236,22 +322,17 @@ void keydown(int i) // 按键按下的处理、、、
 	}
 	if (i == keylow)
 	{
-		setzhichange(-1);
+		keylowdeal();
 		return;
 	}
 	if (i == keyup)
 	{
-		setzhichange(1);
+		keyupdeal();
 		return;
 	}
 	if (i == keyok)
 	{
-		if(flagcanset==1)
-		{
-			writebuf();
-		}
-		flagcanset = 1 - flagcanset;
-		LED2 = ~LED2;
+		keyokdeal();
 	}
 }
 int keyshi = 3;
@@ -268,19 +349,72 @@ int setbizhi(int times)
 	}
 	return 100;
 }
+void modeshowandsend()
+{
+	if(g_setmode==modekey)
+		LCD_ShowString(200, 0, "KEY  ", WHITE, BLACK, 32, 0);
+	if(g_setmode==mode232)
+		LCD_ShowString(200, 0, "232  ", WHITE, BLACK, 32, 0);
+	if(g_setmode==modeTCP)
+		LCD_ShowString(200, 0, "TCP  ", WHITE, BLACK, 32, 0);
+	push(101,g_setmode);
+}
+void pingmuclear();
+void lcdinitshowmode()
+{
+	pingmuclear2();
+    LCD_ShowString(0, 0,"KEY", WHITE, BLACK, 32, 0);
+    LCD_ShowString(0, 40,"232", WHITE, BLACK, 32, 0);
+    LCD_ShowString(0, 80,"TCP", WHITE, BLACK, 32, 0);
+	LCD_ShowString(0, 120,"ESC", WHITE, BLACK, 32, 0);
+	LCD_ShowString(160, 0, "<---  ", WHITE, BLACK, 32, 0);
+	g_showyoubiao=-1;
+}
+void showhenxiangbase();
+void showbak()
+{
+	pingmuclear2();
+	LCD_ShowString(0, 0, "Circle TAC", WHITE, BLACK, 32, 0);
+	showhenxiangbase();
+	g_showyoubiao=0;
+}
+
+void chulikeyok(int times)
+{
+	if(times > 10000)
+	{
+		if(g_showset==showkeyset)
+		{
+			g_showset=showmodeset;
+			printf("chulikeyok over");
+			lcdinitshowmode();
+		}
+	}
+}
 // 2ms 一次的话，那300ms一次ok的吧。。
 void dolongtimes(int i, int times)
 {
 	int xielv;
 	times = times - 150;
+	
 	if (times < 0)
 	{
+		return;
+	}
+	// printf("times %d",times);
+	if(i== keyok)
+	{
+		chulikeyok(times);
 		return;
 	}
 	xielv = setbizhi(times);
 	if (times % keyshi != 0)
 	{
 		return;
+	}
+	if(g_showset==showmodeset)
+	{
+		return ;
 	}
 	if (i == keylow)
 	{
@@ -423,7 +557,7 @@ void shownwendu()
 {
 	char dataxx[40];
 	// 记得复位
-	if (flagsystemrun == 0)
+	if (flagsystemrun == 0 || g_showset!= showkeyset)
 	{
 		return;
 	}
@@ -439,18 +573,12 @@ void shownow()
 }
 
 #define maxjindu 16
-#define qidian 0
-
-void pingmuclear()
+#define qidian 07
+void pingmuclear2()
 {
 	char dataxx[60] = {0};
-	static int runflag2 = 0;
+
 	int i;
-	if (runflag2 == 1)
-	{
-		return;
-	}
-	runflag2 = 1;
 	// LCD_Clear(BLACK);
 
 	sprintf(dataxx, "                     ", 1);
@@ -459,6 +587,29 @@ void pingmuclear()
 		LCD_ShowString(0, i * 30, dataxx, WHITE, BLACK, 32, 0);
 		// delay_ms(1);
 	}
+}
+void pingmuclear()
+{
+	static int runflag2 = 0;
+	if (runflag2 == 1)
+	{
+		return;
+	}
+	runflag2 = 1;
+	pingmuclear2();
+}
+
+void showhenxiangbase()
+{
+	int i;
+	char dataxx[60] = {0};
+	for (i = 0; i < maxjindu; i++)
+	{
+		dataxx[i] = '-';
+	}
+	LCD_ShowString(qidian, 140, dataxx, WHITE, BLACK, 32, 0);
+	LCD_ShowString(qidian, 140 + 40, dataxx, WHITE, BLACK, 32, 0);
+	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          1023", WHITE, BLACK, 16, 0);
 }
 void showhenxiang()
 {
@@ -475,10 +626,9 @@ void showhenxiang()
 	{
 		dataxx[i] = '-';
 	}
-
 	LCD_ShowString(qidian, 140, dataxx, WHITE, BLACK, 32, 0);
 	LCD_ShowString(qidian, 140 + 40, dataxx, WHITE, BLACK, 32, 0);
-	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          2047", WHITE, BLACK, 16, 0);
+	LCD_ShowString(qidian, 140 + 40 + 30, "0            12bit          1023", WHITE, BLACK, 16, 0);
 }
 
 void showjindtiao()
@@ -507,7 +657,7 @@ void showsetzhi()
 void showdata()
 {
 	// 记得复位
-	if (flagsystemrun == 0)
+	if (flagsystemrun == 0 || g_showset!= showkeyset)
 	{
 		return;
 	}
@@ -518,7 +668,7 @@ void showdata()
 void showfen(int error)
 {
 	// 记得复位
-	if (flagsystemrun == 0)
+	if (flagsystemrun == 0 || g_showset!= showkeyset)
 	{
 		return;
 	}
@@ -568,8 +718,10 @@ void mainrun()
 	int rumtimes = 0;
 	LED0 = ~LED0;
 	readbuf();
-	// writedizhi(2,0);
+
 	writedizhi(4,0);
+	modeshowandsend();
+	keydown(0);
 	while (1)
 	{
 		delay_ms2(1);
@@ -646,28 +798,33 @@ void writebuf()
 	get[0]=55;
 	get[1]=g_dianliu/100;
 	get[2]=g_dianliu%100;
+	get[3]=g_setmode%100;
 	EEPROM_SectorErase(errpromdizhi);
-	EEPROM_write_n(errpromdizhi,get,3);
+	EEPROM_write_n(errpromdizhi,get,4);
 }
 
 void readbuf()
 {
-	u8 get[10];
-
-    EEPROM_read_n(errpromdizhi,get,3);
+	u8 get[10]={0};
+    EEPROM_read_n(errpromdizhi,get,4);
     if(get[0]==55)
     {
         printf("has init\n");
 		g_dianliu=get[1]*100+get[2];
-		if(g_dianliu>=2047)
+		if(g_dianliu>=1023)
 		{
-			g_dianliu=2047;
+			g_dianliu=1023;
 		}
 		if(g_dianliu<=0)
 		{
 			g_dianliu=0;
 		}
-		printf("has init %d-%d\n",get[1],get[2]);
+		g_setmode=get[3];
+		if(g_setmode<0 || g_setmode>=3)
+		{
+			g_setmode=0;
+		}
+		printf("has init %d-%d-%d\n",get[1],get[2],get[3]);
     }
     else
     {

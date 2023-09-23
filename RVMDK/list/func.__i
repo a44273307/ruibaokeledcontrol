@@ -1,1 +1,0 @@
-"..\User\func.c" LARGE INTR2 ROM(HUGE) BROWSE INCDIR(..\Driver\inc;..\User;..\App\inc) DEBUG PRINT(.\list\func.lst) TABS (2) OBJECT(.\list\func.obj)

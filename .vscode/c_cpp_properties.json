@@ -4,7 +4,7 @@
             "name": "Target 1",
             "includePath": [
                 "C:\\Keil2\\C51\\INC",
-                "d:\\瑞宝科\\合一板卡\\modbusces2"
+                "d:\\瑞宝科\\new2\\电流控制板子_11.0592"
             ],
             "defines": [
                 "__C51__",

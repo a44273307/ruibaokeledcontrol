@@ -103,7 +103,7 @@ void jixi2(char* input)
 	unsigned int weizhi;
 	unsigned int zhi;
 	//554-2234;333-4;end
-    printf("input %s",input);
+    
 	for( i=0;i<100;i++)
 	{
 		p1=myaddstrstr(p,";"); //找有没有下一个的
@@ -135,17 +135,24 @@ void jixi2(char* input)
 		
 	}
 }
+int isokser(char *str);
 void jiexi(char* input)
 {
-	char par[100]={0};
+	char par[60]={0};
 	char *begin;
 	char *end;
+    
 	begin=myaddstrstr(input,"set:");
-	// printf("input begin%s",begin);
 	end=myaddstrstr(begin,"end");
-	// printf("input end%s",end);
 	if(begin!=NULL && end!=NULL)
 	{
+        *end=0;
+        *(end+4)=0;
+        if(0==isokser(input))
+        {
+            printf("failedcheck %s",input);
+            return ;
+        }
 		strcpy(par,begin);
 		jixi2(par);
 	}
@@ -179,6 +186,7 @@ char* my_strstr(const char* haystack, const char* needle) {
 void dealchuankou()
 {
     chuliguankji();
+    buf3[58]=0;
 	jiexi(buf3);
 	memset(buf3, 0, sizeof(buf3));
 	weishu3 = 0;
@@ -426,6 +434,33 @@ void getzhiandchange()
 }
 
 //sbit out2 = P3 ^ 2;
+int isokser(char *str)
+{
+    int len,contentlen;
+    int index1,index2;
+    char *str1,*str2,*str3;
+    len=strlen(str);
+    
+    if(len<8)
+    {
+        return 0;
+    }
+    // 检查字符串是否以 "set:" 开头
+    if (strncmp(str, "set:", 4) != 0) {
+        return 0; // 不以 "set:" 开头，返回假
+    }
+    str1=str + len - 3;
+    if (strncmp(str1, "end", 3) != 0) {
+        return 0; // 不以 "end" 结尾，返回假
+    }
+    contentlen=(len-4-3)/2;
+   
+    if (strncmp(str+4,str+contentlen+4,contentlen) != 0) {
+        return 0; // 不以 "end" 结尾，返回假
+    }
+    
+    return 1;
+}
 void main()		                                       
 {
 	io_inint();
@@ -441,18 +476,24 @@ void main()
 	Modbus_ClearBuff();
     deanyan();
 	delay_ms(100);
-    printf("system init ok\n");
+    printf("system restart\n");
     initbuf();
     buffchecktongbu();
     printf("system init ok1");
     HoldingReg[2]=1;
     com1clearbuf();
     P3M0 = 0x06;
-  P3M1 = 0x08;
-  out2 = 1;
+    P3M1 = 0x08;
+    out2 = 1;
     while (1)
 	{
-        runreport();
+        delay_ms(5);
+        // isokser("set:4-30;4-30;end");
+        if(weishu3>0)
+        {
+            delay_ms(2);
+            dealchuankou();	
+        }
         getzhiandchange();
 	}
 } 
@@ -468,7 +509,7 @@ void delay_ms(int m)
 }
 void Timer0() interrupt 1
 {
-    chuankou1time();
+    // chuankou1time();
 	delay_mszhi++;
     timereport++;
 }

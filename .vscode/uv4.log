@@ -1,11 +1,21 @@
 Build target 'Target 1'
 compiling main.c...
+MAIN.C(440): warning C280: 'index1': unreferenced local variable
+MAIN.C(440): warning C280: 'index2': unreferenced local variable
+MAIN.C(441): warning C280: 'str2': unreferenced local variable
+MAIN.C(441): warning C280: 'str3': unreferenced local variable
 linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CHUANKOU1TIME?MAIN
+
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_MY_STRSTR?MAIN
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?ISBUFFCHECKFAILED?MAIN
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?RUNREPORT?MAIN
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?READBUF?MAIN
@@ -70,11 +80,6 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?ISFULL2?TONGXIN2
 
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?PRINTF?PRINTF
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TIMER0?MAIN
-
-Program Size: data=21.6 xdata=548 code=8154
+Program Size: data=15.5 xdata=465 code=8609
 creating hex file from "ILI9341_4SPI"...
-"ILI9341_4SPI" - 0 Error(s), 24 Warning(s).
+"ILI9341_4SPI" - 0 Error(s), 29 Warning(s).

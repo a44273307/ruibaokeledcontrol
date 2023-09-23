@@ -96,10 +96,15 @@ void deanyanpreadddeal(int dianliu)
 
 void deanyanpre()
  {  
-  uint sw1=2047;
+  uint sw1=4095;
   uint sw2=3000;
 //   sw1=HoldingReg[3];
-  sw2=HoldingReg[4];
+  sw2=HoldingReg[4]*4;
+  if(sw2>4095 && sw2< 6000)
+  {
+     sw2=4095;
+  }
+  
 //   printf("***%d-%d***\n",sw2/256,sw2%256);
   deanyanpreadddeal(sw2);
 
